@@ -1,5 +1,6 @@
 import { firestore } from 'firebase-admin';
 import { DecodedIdToken } from 'firebase-admin/lib/auth/token-verifier';
+
 import { gql } from 'graphql-tag';
 import { createSchema, createYoga } from 'graphql-yoga';
 
