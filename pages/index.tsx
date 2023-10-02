@@ -1,10 +1,10 @@
 import React from 'react';
-import NavBar from '@/components/Navbar';
-import PreFace from '@/components/PreFace';
+import NavBar from '@/components/indexPage/Navbar';
+import PreFace from '@/components/indexPage/PreFace';
 
 
 export default function Home() {
-  
+
   return (
     <div>
       <NavBar />
@@ -12,8 +12,8 @@ export default function Home() {
       <main>
         <div>fefef</div>
       </main>
-      
+
     </div>
   );
-            
+
 }

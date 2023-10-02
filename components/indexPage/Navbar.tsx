@@ -23,8 +23,9 @@ const MyNavBar: React.FC = () => {
         setAnchorElNav(null);
     };
 
-    const logoAndButtonStyle = {
-        marginLeft: '10em',
+    const logoAndButtonStyle:React.CSSProperties = {
+        left: '15%',
+        position : 'relative',
 
         display: 'flex',
         alignItems: 'center',
@@ -32,7 +33,7 @@ const MyNavBar: React.FC = () => {
     };
 
     return (
-        <AppBar sx={{ backgroundColor: '#EB19A0' }} position="static">
+        <AppBar sx={{ backgroundColor: '#DA1AAD' }} position="static">
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
                     <div style={logoAndButtonStyle}>
@@ -55,7 +56,40 @@ const MyNavBar: React.FC = () => {
 
                     </div>
 
-                    <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+                   
+
+                    <Box sx={{position:'relative', left: '40%',marginRight:'50%', flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+                        {pages.map((page, index) => (
+                            <Button
+                                key={page}
+                                onClick={handleCloseNavMenu}
+                                sx={{
+                                    my: 2,          
+                                    marginRight: '2.5em',
+                                    color: 'white',
+                                    display: 'block',
+                                    fontWeight: 'bold',
+                                    fontSize: '1rem',
+                                    position: 'relative',
+                                }}
+                            >
+                                {page}
+                                <span
+                                    className="bottom-border"
+                                    style={{
+                                        position: 'absolute',
+                                        bottom: '-0px',
+                                        left: '0',
+                                        right: '0',
+                                        height: '5px',
+                                        borderRadius: '5px 5px 5px 5px',
+                                        backgroundColor: 'white',
+                                    }}
+                                ></span>
+                            </Button>
+                        ))}
+                    </Box>
+                    <Box sx={{position:'relative', marginLeft:'55%', marginRight:'10%', flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
                         <IconButton
                             size="large"
                             aria-label="account of current user"
@@ -91,48 +125,16 @@ const MyNavBar: React.FC = () => {
                             ))}
                         </Menu>
                     </Box>
-
-                    <Box sx={{ marginLeft: '20%', flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                        {pages.map((page, index) => (
-                            <Button
-                                key={page}
-                                onClick={handleCloseNavMenu}
-                                sx={{
-                                    my: 2,
-                                    marginRight: '2.5em',
-                                    color: 'white',
-                                    display: 'block',
-                                    fontWeight: 'bold',
-                                    fontSize: '1rem',
-                                    position: 'relative',
-                                }}
-                            >
-                                {page}
-                                <span
-                                    className="bottom-border"
-                                    style={{
-                                        position: 'absolute',
-                                        bottom: '-0px',
-                                        left: '0',
-                                        right: '0',
-                                        height: '5px',
-                                        borderRadius: '5px 5px 5px 5px',
-                                        backgroundColor: 'white',
-                                    }}
-                                ></span>
-                            </Button>
-                        ))}
-                    </Box>
                     <Button
                         sx={{
                             position: 'relative',
-                            right: '0',
+                            right: '15%',
                             backgroundColor: 'white',
                             borderRadius: '30px',
                             padding: '6px 16px',
-                            marginRight: '10em',
-                            width: '100px', // Pevná šířka tlačítka
-                            height: '40px', // Pevná výška tlačítka
+                            marginLeft: '20px',
+                            width: '100px', 
+                            height: '40px', 
                         }}
                         variant="contained"
                     >
