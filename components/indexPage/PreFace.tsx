@@ -6,7 +6,7 @@ import arrowRight from '../../public/arrow-right.png';
 const PreFace = () => {
     const imageContainerStyle: React.CSSProperties = {
         width: '100%',
-        height: '100vh',
+        height: 'auto',
         display: 'flex',
         alignItems: 'center',
         position: 'relative',
@@ -32,11 +32,11 @@ const PreFace = () => {
         marginTop: '0%',
         textAlign: 'left',
         padding: '1em',
-        top: '15%',
+        top: '10%',
     };
 
     const bigTextStyle: React.CSSProperties = {
-        fontSize: '3vw', 
+        fontSize: '4vw',
         fontWeight: 'bold',
         color: 'white',
         textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
@@ -44,35 +44,36 @@ const PreFace = () => {
     };
 
     const smallTextStyle: React.CSSProperties = {
-        fontSize: '1.2vw',
+        fontSize: '1.3vw',
         color: 'white',
     };
 
     const arrowRightPicture: React.CSSProperties = {
         height: '8%',
         width: '8%',
-        marginRight : '2%',
+        marginRight: '2%',
     };
 
     const smallTextStyle2: React.CSSProperties = {
-        fontSize: '1.2vw', 
+        fontSize: '1.4vw',
         color: 'black',
         display: 'flex',
-        marginTop:'10%',
-        marginLeft:'10%',
-        alignItems: 'center', 
-        fontWeight: 'bold',        
+        marginTop: '20%',
+        width: '100%',
+        marginLeft: '10%',
+        alignItems: 'center',
+        fontWeight: 'bold',
         paddingRight: '10%',
     };
-    
+
     const seeFeaturesStyle: React.CSSProperties = {
-        fontSize: '1.2vw',
+        fontSize: '1.5vw',
         color: 'white',
         paddingLeft: '10%',
     };
 
     const appPreviewStyle: React.CSSProperties = {
-        width: '30%',
+        width: '32%',
         maxWidth: '100%',
         height: 'auto',
         position: 'absolute',
@@ -95,9 +96,9 @@ const PreFace = () => {
                     accumsan leegestas leo.
                 </div>
                 <div style={smallTextStyle2}>
-               <img src={arrowRight.src} alt='arrowRight' style={arrowRightPicture}/>  OBJEV VÝHODY
-                <div style={seeFeaturesStyle}>See features</div>
-            </div>
+                    <img src={arrowRight.src} alt='arrowRight' style={arrowRightPicture} />  OBJEV VÝHODY
+                    <div style={seeFeaturesStyle}>See features</div>
+                </div>
             </div>
             <div style={appPreviewStyle}>
                 <img src={pictureAppPreviewForBackground.src} alt="Popis obrázku" style={imgStyle} />
