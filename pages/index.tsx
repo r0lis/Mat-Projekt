@@ -3,7 +3,7 @@ import NavBar from '@/components/indexPage/Navbar';
 import PreFace from '@/components/indexPage/PreFace';
 import AppContent from '@/components/indexPage/AppContent';
 import ImageCarousel from '@/components/indexPage/ImageCarousel';
-
+import HowToUse from '@/components/indexPage/HowToUse';
 
 export default function Home() {
 
@@ -14,6 +14,7 @@ export default function Home() {
       <main>
         <AppContent />
         <ImageCarousel />
+        <HowToUse/>
       </main>
 
     </div>

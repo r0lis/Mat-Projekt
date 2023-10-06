@@ -23,6 +23,7 @@ function AppContent() {
     const divAppContent: React.CSSProperties = {
         borderLeft: '7px solid #B71DDE',
         position: 'relative',
+        zIndex: '-999',
         marginLeft: '10%',
         alignItems: 'center',
     };

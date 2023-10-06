@@ -138,7 +138,7 @@ const MyNavBar: React.FC = () => {
                         }}
                         variant="contained"
                     >
-                        <Typography sx={{ color: 'black', fontWeight: 'bold', fontSize: '1rem', lineHeight: '20px' }}>
+                        <Typography sx={{ color: 'black', fontWeight: 'bold', fontSize: '1.2vw', lineHeight: '20px' }}>
                             Try IT
                         </Typography>
                     </Button>

@@ -61,7 +61,7 @@ function SwipeableTextMobileStepper() {
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'column',
-        
+
         backgroundColor: '#EBEBEB',
         paddingTop: '6%',
         paddingBottom: '4%',
@@ -69,7 +69,6 @@ function SwipeableTextMobileStepper() {
         height: '100%',
         marginLeft: 'auto',
         marginRight: 'auto',
-        marginBottom: '10%',
         borderRadius: '10px',
     };
 
@@ -82,24 +81,24 @@ function SwipeableTextMobileStepper() {
         position: 'relative',
         paddingLeft: '5%',
         paddingTop: '5%',
-        marginLeft:'auto',
-        marginRight:'auto',
+        marginLeft: 'auto',
+        marginRight: 'auto',
 
     };
 
-    const leftBorderDiv : React.CSSProperties = {
+    const leftBorderDiv: React.CSSProperties = {
         marginLeft: '10%',
         borderLeft: '7px solid #B71DDE',
     };
 
     return (
         <><div style={leftBorderDiv}><div style={appContentText}>
-            <Typography sx={{ display:'block', marginLeft:'30%', fontSize: '2.2vw',paddingTop:'6%',paddingBottom:'5%', fontWeight: 'bold' }}>
+            <Typography sx={{ display: 'block', marginLeft: '30%', fontSize: '2.2vw', paddingTop: '6%', paddingBottom: '5%', fontWeight: 'bold' }}>
                 Ukázky z <span style={{ color: '#B71DDE' }}>aplikace</span>
             </Typography></div>
         </div><div style={divCarousel}>
                 <Box sx={{ maxWidth: '70%', flexGrow: 1 }}>
-                    
+
                     <AutoPlaySwipeableViews
                         sx={{ color: 'purple' }}
                         axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}

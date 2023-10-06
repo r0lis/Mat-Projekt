@@ -1,0 +1,22 @@
+#howToUseDiv {
+    marginBottom: 8%;
+    width: 50%;
+    margin-left: 1.5%;
+    margin-right: 0;
+    border: 3px solid black;
+    border-radius: 30px;
+    font-weight: bold;
+    text-align: center;
+    font-size: 1.8vw;
+    background: linear-gradient(to bottom, #B71DDE 20%, #EBEBEB 20%);
+    height: 250px; /* Výchozí výška */
+}
+
+/* Responsivní styl pro menší obrazovky */
+@media (max-width: 768px) {
+    #howToUseDiv {
+        background: linear-gradient(to bottom, #B71DDE 10%, #EBEBEB 10%); /* Úprava pozadí */
+        height: 125px; /* Úprava výšky */
+    }
+}
+
