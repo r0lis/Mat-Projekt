@@ -4,6 +4,8 @@ import PreFace from '@/components/indexPage/PreFace';
 import AppContent from '@/components/indexPage/AppContent';
 import ImageCarousel from '@/components/indexPage/ImageCarousel';
 import HowToUse from '@/components/indexPage/HowToUse';
+import FooterImg from '@/components/indexPage/FooterImg';
+import Footer from '@/components/indexPage/Footer';
 
 export default function Home() {
 
@@ -16,6 +18,10 @@ export default function Home() {
         <ImageCarousel />
         <HowToUse/>
       </main>
+      <footer>
+        <FooterImg/>
+        <Footer />
+      </footer>
 
     </div>
   );
