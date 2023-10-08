@@ -1,14 +1,35 @@
 import React, { useState } from 'react';
 import { authUtils } from '../firebase/auth.utils';
+import { useMutation, gql } from '@apollo/client';
+
+const REGISTER_USER = gql`
+  mutation RegisterUser($input: RegisterInput!) {
+    registerUser(input: $input) {
+      id
+      email
+      # Další údaje o uživateli
+    }
+  }
+`;
 
 const RegistrationPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [registerUser] = useMutation(REGISTER_USER);
 
   const handleRegister = async () => {
     try {
       await authUtils.register(email, password);
-      // Registrace byla úspěšná, můžete přesměrovat uživatele na jinou stránku nebo provést další akce.
+      const { data } = await registerUser({
+        variables: {
+          input: {
+            email,
+            password,
+          },
+        },
+      });
+
+      console.log('Registrace proběhla úspěšně:', data.registerUser);
     } catch (error) {
       console.error('Chyba při registraci:', error);
     }
