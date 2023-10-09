@@ -1,6 +1,5 @@
 import { firestore } from 'firebase-admin';
 import { DecodedIdToken } from 'firebase-admin/lib/auth/token-verifier';
-
 import { gql } from 'graphql-tag';
 import { createSchema, createYoga } from 'graphql-yoga';
 
@@ -10,68 +9,87 @@ type Context = {
   user?: DecodedIdToken | undefined;
 };
 
+type User = {
+  IdUser: string;
+  IdTeam: string;
+  Email: string;
+};
+
+type Mutation = {
+  createUser(input: CreateUserInput): User;
+};
+
+type CreateUserInput = {
+  IdUser: string;
+  IdTeam: string;
+  Email: string;
+};
+
 const db = firestore();
 
-const typeDefs = gql`
-  type User {
-    id: ID!
-    email: String!
-    # Další údaje o uživateli
-  }
-
-  type Mutation {
-    registerUser(input: RegisterInput!): User
-  }
-
-  input RegisterInput {
-    email: String!
-    password: String!
-    # Další údaje potřebné pro registraci
-  }
-
-  type Query {
-    # Definice vašich dotazů zde, pokud je potřebujete
-  }
-`;
-
 const resolvers = {
+  Query: {
+    user: async (_: any, { id }: { id: string }, context: Context) => {
+      // Provádějte dotaz na databázi nebo jiný úložiště dat, aby se získaly údaje o uživateli
+      // V tomto příkladu používáme konstantní data pro ilustraci
+      const userData = {
+        IdUser: id,
+        // Další uživatelské údaje získané z databáze
+      };
+
+      return userData;
+    },
+  },
   Mutation: {
-    registerUser: async (_: any, { input }: any, context: any) => {
+    createUser: async (_: any, { input }: { input: CreateUserInput }, context: Context) => {
       try {
-        const { email, password } = input;
-        // Vygenerujte unikátní ID pro nového uživatele pomocí Firestore
-        const userRef = db.collection('User');
-        const newUserDoc = userRef.doc(); // Firestore vygeneruje unikátní ID
+        // Firestore vygeneruje unikátní ID pro nového uživatele
+        const newUserDoc = db.collection('User').doc();
         const userId = newUserDoc.id;
+        const teamId = newUserDoc.id; // Použijeme stejné ID pro IdTeam
   
-        // Nastavte pole "idTeam" na hodnotu 10 pro nového uživatele
-        const idTeam = 10;
-  
-        // Registrujte uživatele a použijte userId při vytváření záznamu v databázi
-        await newUserDoc.set({
+        // Použijte získaná userId a teamId pro vytvoření nového uživatele
+        const newUser = {
           IdUser: userId,
-          idTeam,
-          Email: email,
-          // Další údaje o novém uživateli, pokud existují
-        });
-  
-        // Vraťte informace o nově zaregistrovaném uživateli s přiděleným ID
-        return {
-          IdUser: userId,
-          idTeam,
-          Email: email,
-          // Další údaje o novém uživateli
+          IdTeam: teamId,
+          Email: input.Email,
+          // Další údaje o uživateli získané z input parametrů
         };
+  
+        // Uložte nového uživatele do Firestore
+        await newUserDoc.set(newUser);
+  
+        return newUser;
       } catch (error) {
-        console.error('Chyba při registraci:', error);
-        throw new Error('Chyba při registraci');
+        console.error('Chyba při vytváření uživatele:', error);
+        throw error; // Volitelně můžete chybu předat zpět
       }
     },
   },
-  Query: {
-    // Definice vašich dotazů zde, pokud je potřebujete
-  },
+  // ... Další resolvery pro vaše typy a mutace
 };
+
+const typeDefs = gql`
+  type User {
+    IdUser: String!
+    IdTeam: String!
+    Email: String!
+  }
+
+  input CreateUserInput {
+    IdUser: String!
+    IdTeam: String!
+    Email: String!
+  }
+
+  type Query {
+    user(id: String): User
+  }
+
+  type Mutation {
+    createUser(input: CreateUserInput): User
+  }
+`;
 
 const schema = createSchema({
   typeDefs,

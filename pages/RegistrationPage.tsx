@@ -2,34 +2,42 @@ import React, { useState } from 'react';
 import { authUtils } from '../firebase/auth.utils';
 import { useMutation, gql } from '@apollo/client';
 
-const REGISTER_USER = gql`
-  mutation RegisterUser($input: RegisterInput!) {
-    registerUser(input: $input) {
-      id
-      email
-      # Další údaje o uživateli
+// Definujte mutaci GraphQL
+const CREATE_USER_MUTATION = gql`
+  mutation CreateUser($Email: String!, $IdUser: String!, $IdTeam: String!) {
+    createUser(input: { Email: $Email, IdUser: $IdUser, IdTeam: $IdTeam }) {
+      IdUser
+      IdTeam
+      Email
+      # Další údaje, které chcete získat
     }
   }
 `;
 
+
+
 const RegistrationPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [registerUser] = useMutation(REGISTER_USER);
+
+  // Použijte useMutation k definici mutace createUser
+  const [createUser] = useMutation(CREATE_USER_MUTATION);
 
   const handleRegister = async () => {
     try {
+      // Registrujte uživatele pomocí authUtils
       await authUtils.register(email, password);
-      const { data } = await registerUser({
-        variables: {
-          input: {
-            email,
-            password,
-          },
-        },
-      });
 
-      console.log('Registrace proběhla úspěšně:', data.registerUser);
+      const response = await createUser({
+        variables: { Email: email, IdUser: '123', IdTeam: '456' },
+      });
+  
+
+      // Získání výsledku z mutace
+      const newUser = response.data.createUser;
+
+      // Nyní máte nového uživatele dostupného v newUser
+
     } catch (error) {
       console.error('Chyba při registraci:', error);
     }
