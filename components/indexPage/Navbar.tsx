@@ -9,6 +9,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
+import Link from 'next/link'
 
 const pages = ['Info', 'Features', 'About'];
 
@@ -23,9 +24,9 @@ const MyNavBar: React.FC = () => {
         setAnchorElNav(null);
     };
 
-    const logoAndButtonStyle:React.CSSProperties = {
+    const logoAndButtonStyle: React.CSSProperties = {
         left: '15%',
-        position : 'relative',
+        position: 'relative',
 
         display: 'flex',
         alignItems: 'center',
@@ -56,15 +57,15 @@ const MyNavBar: React.FC = () => {
 
                     </div>
 
-                   
 
-                    <Box sx={{position:'relative', left: '40%',marginRight:'50%', flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+
+                    <Box sx={{ position: 'relative', left: '40%', marginRight: '50%', flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                         {pages.map((page, index) => (
                             <Button
                                 key={page}
                                 onClick={handleCloseNavMenu}
                                 sx={{
-                                    my: 2,          
+                                    my: 2,
                                     marginRight: '2.5em',
                                     color: 'white',
                                     display: 'block',
@@ -89,7 +90,7 @@ const MyNavBar: React.FC = () => {
                             </Button>
                         ))}
                     </Box>
-                    <Box sx={{position:'relative', marginLeft:'55%', marginRight:'10%', flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+                    <Box sx={{ position: 'relative', marginLeft: '55%', marginRight: '10%', flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
                         <IconButton
                             size="large"
                             aria-label="account of current user"
@@ -125,7 +126,8 @@ const MyNavBar: React.FC = () => {
                             ))}
                         </Menu>
                     </Box>
-                    <Button
+                    <Link href="/RegistrationPage">
+                                          <Button
                         sx={{
                             position: 'relative',
                             right: '15%',
@@ -133,15 +135,16 @@ const MyNavBar: React.FC = () => {
                             borderRadius: '30px',
                             padding: '6px 16px',
                             marginLeft: '20px',
-                            width: '100px', 
-                            height: '40px', 
+                            width: '100px',
+                            height: '40px',
                         }}
                         variant="contained"
                     >
                         <Typography sx={{ color: 'black', fontWeight: 'bold', fontSize: '1.2vw', lineHeight: '20px' }}>
-                            Try IT
+                            TEAM
                         </Typography>
                     </Button>
+                    </Link>  
                 </Toolbar>
             </Container>
         </AppBar>

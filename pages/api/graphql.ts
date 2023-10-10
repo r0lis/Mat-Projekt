@@ -9,17 +9,18 @@ type Context = {
   user?: DecodedIdToken | undefined;
 };
 
-type User = {
+type Admin = {
   IdUser: string;
   IdTeam: string;
+  IsAdmin: boolean;
   Email: string;
 };
 
 type Mutation = {
-  createUser(input: CreateUserInput): User;
+  createUser(input: CreateAdminInput): Admin;
 };
 
-type CreateUserInput = {
+type CreateAdminInput = {
   IdUser: string;
   IdTeam: string;
   Email: string;
@@ -41,25 +42,27 @@ const resolvers = {
     },
   },
   Mutation: {
-    createUser: async (_: any, { input }: { input: CreateUserInput }, context: Context) => {
+    createUser: async (_: any, { input }: { input: CreateAdminInput }, context: Context) => {
       try {
         // Firestore vygeneruje unikátní ID pro nového uživatele
-        const newUserDoc = db.collection('User').doc();
-        const userId = newUserDoc.id;
-        const teamId = newUserDoc.id; // Použijeme stejné ID pro IdTeam
+        const newAdminDoc = db.collection('User').doc();
+        
+        const teamId = newAdminDoc.id;
+        const IsAdmin = 1; 
   
         // Použijte získaná userId a teamId pro vytvoření nového uživatele
-        const newUser = {
-          IdUser: userId,
+        const newAdmin = {
+          IdUser: input.IdUser,
           IdTeam: teamId,
           Email: input.Email,
+          IsAdmin: IsAdmin,
           // Další údaje o uživateli získané z input parametrů
         };
   
         // Uložte nového uživatele do Firestore
-        await newUserDoc.set(newUser);
+        await newAdminDoc.set(newAdmin);
   
-        return newUser;
+        return newAdmin;
       } catch (error) {
         console.error('Chyba při vytváření uživatele:', error);
         throw error; // Volitelně můžete chybu předat zpět
@@ -70,24 +73,24 @@ const resolvers = {
 };
 
 const typeDefs = gql`
-  type User {
+  type Admin {
     IdUser: String!
     IdTeam: String!
     Email: String!
   }
 
-  input CreateUserInput {
+  input CreateAdminInput {
     IdUser: String!
     IdTeam: String!
     Email: String!
   }
 
   type Query {
-    user(id: String): User
+    user(id: String): Admin
   }
 
   type Mutation {
-    createUser(input: CreateUserInput): User
+    createUser(input: CreateAdminInput): Admin
   }
 `;
 
