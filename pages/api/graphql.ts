@@ -26,30 +26,40 @@ type CreateAdminInput = {
   Email: string;
 };
 
+type Query = {
+  user(id: String): Admin
+  checkDuplicateEmail(email: String): Boolean  
+}
+
 const db = firestore();
 
 const resolvers = {
   Query: {
     user: async (_: any, { id }: { id: string }, context: Context) => {
-      // Provádějte dotaz na databázi nebo jiný úložiště dat, aby se získaly údaje o uživateli
-      // V tomto příkladu používáme konstantní data pro ilustraci
-      const userData = {
-        IdUser: id,
-        // Další uživatelské údaje získané z databáze
-      };
+      // ...
+    },
+    checkDuplicateEmail: async (_: any, { email }: { email: string }, context: Context) => {
+      // Implementace kontroly existence e-mailu v databázi
+      // Vrací true, pokud e-mail existuje, nebo false, pokud neexistuje
 
-      return userData;
+      // Příklad implementace:
+      const userSnapshot = await db.collection('User').where('Email', '==', email).get();
+      const emailExists = !userSnapshot.empty;
+
+      return emailExists;
     },
   },
+ 
+
   Mutation: {
     createUser: async (_: any, { input }: { input: CreateAdminInput }, context: Context) => {
       try {
         // Firestore vygeneruje unikátní ID pro nového uživatele
         const newAdminDoc = db.collection('User').doc();
-        
+
         const teamId = newAdminDoc.id;
-        const IsAdmin = 1; 
-  
+        const IsAdmin = 1;
+
         // Použijte získaná userId a teamId pro vytvoření nového uživatele
         const newAdmin = {
           IdUser: input.IdUser,
@@ -58,10 +68,10 @@ const resolvers = {
           IsAdmin: IsAdmin,
           // Další údaje o uživateli získané z input parametrů
         };
-  
+
         // Uložte nového uživatele do Firestore
         await newAdminDoc.set(newAdmin);
-  
+
         return newAdmin;
       } catch (error) {
         console.error('Chyba při vytváření uživatele:', error);
@@ -87,6 +97,7 @@ const typeDefs = gql`
 
   type Query {
     user(id: String): Admin
+    checkDuplicateEmail(email: String): Boolean  
   }
 
   type Mutation {

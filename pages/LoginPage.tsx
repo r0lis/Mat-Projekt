@@ -17,7 +17,7 @@ const LoginPage: React.FC = () => {
       // Přihlášení bylo úspěšné.
       setIsLoggedIn(true);
       setError(null); // Vymaže případnou předchozí chybovou zprávu.
-      
+
       // Přesměrování na stránku /demoUserPage po úspěšném přihlášení
       router.push('/demoUserPage');
     } catch (error) {
@@ -43,7 +43,8 @@ const LoginPage: React.FC = () => {
         onChange={(e) => setPassword(e.target.value)}
       />
       <button onClick={handleLogin}>Přihlásit</button>
-      <Link href="/RegistrationPage">Registrovat</Link> {/* Tlačítko pro přihlášení */}
+      <Link href="/">Zpět</Link> {/* Tlačítko pro přihlášení */}
+
 
       {error && <p style={{ color: 'red' }}>{error}</p>} {/* Zobrazení chyby */}
       {isLoggedIn && <p style={{ color: 'green' }}>Přihlášení úspěšné.</p>} {/* Informace o úspěšném přihlášení */}

@@ -10,6 +10,7 @@ import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import Link from 'next/link'
+import LoginIcon from '../../public/user.png'
 
 const pages = ['Info', 'Features', 'About'];
 
@@ -25,7 +26,7 @@ const MyNavBar: React.FC = () => {
     };
 
     const logoAndButtonStyle: React.CSSProperties = {
-        left: '15%',
+        left: '10%',
         position: 'relative',
 
         display: 'flex',
@@ -59,7 +60,7 @@ const MyNavBar: React.FC = () => {
 
 
 
-                    <Box sx={{ position: 'relative', left: '40%', marginRight: '50%', flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+                    <Box sx={{ position: 'relative', left: '30%', marginRight: '20%', flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                         {pages.map((page, index) => (
                             <Button
                                 key={page}
@@ -70,7 +71,7 @@ const MyNavBar: React.FC = () => {
                                     color: 'white',
                                     display: 'block',
                                     fontWeight: 'bold',
-                                    fontSize: '1rem',
+                                    fontSize: '1.2vw',
                                     position: 'relative',
                                 }}
                             >
@@ -90,7 +91,7 @@ const MyNavBar: React.FC = () => {
                             </Button>
                         ))}
                     </Box>
-                    <Box sx={{ position: 'relative', marginLeft: '55%', marginRight: '10%', flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+                    <Box sx={{ position: 'relative', marginLeft: '45%', marginRight: '5%', flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
                         <IconButton
                             size="large"
                             aria-label="account of current user"
@@ -126,25 +127,32 @@ const MyNavBar: React.FC = () => {
                             ))}
                         </Menu>
                     </Box>
-                    <Link href="/RegistrationPage">
-                                          <Button
-                        sx={{
-                            position: 'relative',
-                            right: '15%',
-                            backgroundColor: 'white',
-                            borderRadius: '30px',
-                            padding: '6px 16px',
-                            marginLeft: '20px',
-                            width: '100px',
-                            height: '40px',
-                        }}
-                        variant="contained"
-                    >
-                        <Typography sx={{ color: 'black', fontWeight: 'bold', fontSize: '1.2vw', lineHeight: '20px' }}>
-                            TEAM
-                        </Typography>
-                    </Button>
-                    </Link>  
+                    <Link href="/LoginPage">
+                        <Box sx={{height:'6%', width:'6%',position:'relative',}}>
+                            <img style={{ height: '50px', width: '50px', color:'white',  }} src={LoginIcon.src} alt="login" />
+                        </Box>
+                    </Link>
+                    <Box sx={{marginRight:'10%', marginLeft:'3%'}}>
+                    <Link href="/AdminRegistration">
+                        <Button
+                            sx={{
+                                position: 'relative',
+                                backgroundColor: 'white',
+                                borderRadius: '15px',
+                                maxWidth: '100%',
+                                padding: '6px 16px',
+                                width: 'auto', // Toto umožní tlačítku zmenšovat se při zmenšování okna
+                                height: '3rem'
+                            }}
+                            variant="contained"
+                        >
+                            <Typography sx={{ color: 'black', fontWeight: 'bold', fontSize: '1.2vw', lineHeight: '20px' }}>
+                                CREATE TEAM
+                            </Typography>
+                        </Button>
+                    </Link>
+                    </Box>
+                    
                 </Toolbar>
             </Container>
         </AppBar>
