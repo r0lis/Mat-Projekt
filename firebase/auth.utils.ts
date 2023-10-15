@@ -15,6 +15,17 @@ export const authUtils = {
   logout: async () => {
     await auth.signOut();
   },
+  sendEmailVerification: async () => {
+    try {
+      const user = auth.currentUser;
+
+      if (user) {
+        await sendEmailVerification(user);
+      }
+    } catch (error) {
+      throw error;
+    }
+  },
   register: async (email: string, password: string) => {
     try {
       await createUserWithEmailAndPassword(auth, email, password);

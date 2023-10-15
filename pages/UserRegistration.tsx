@@ -4,8 +4,6 @@ import { useMutation, gql, useQuery } from '@apollo/client';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { Box } from '@mui/material';
-import { sendEmailVerification } from '@firebase/auth';
-import { auth } from 'firebase-admin';
 
 const CREATE_USER_MUTATION = gql`
   mutation CreateUser($Name: String!, $Surname: String!, $Email: String!, $IdUser: String!, $IdTeam: String!) {
@@ -62,12 +60,6 @@ const RegistrationPage: React.FC = () => {
       }
   
       const user = authUtils.getCurrentUser();
-
-      if (user) {
-        await sendEmailVerification(user);
-      } else {
-        throw new Error('Uživatel nebyl přihlášen.');
-      }
   
       setRegistrationSuccess(true);
   
@@ -103,6 +95,7 @@ const RegistrationPage: React.FC = () => {
           setEmail(e.target.value);
         }}
       />
+     
       <input
         type="password"
         placeholder="Heslo"
