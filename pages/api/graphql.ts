@@ -9,7 +9,9 @@ type Context = {
   user?: DecodedIdToken | undefined;
 };
 
-type Admin = {
+type User = {
+  Name: string;
+  Surname: string;
   IdUser: string;
   IdTeam: string;
   IsAdmin: boolean;
@@ -17,18 +19,20 @@ type Admin = {
 };
 
 type Mutation = {
-  createUser(input: CreateAdminInput): Admin;
+  createUser(input: CreateUserInput): User;
 };
 
-type CreateAdminInput = {
+type CreateUserInput = {
+  Name: string;
+  Surname: string;
   IdUser: string;
   IdTeam: string;
   Email: string;
 };
 
 type Query = {
-  user(id: String): Admin
-  checkDuplicateEmail(email: String): Boolean  
+  user(id: String): User
+  
 }
 
 const db = firestore();
@@ -38,31 +42,24 @@ const resolvers = {
     user: async (_: any, { id }: { id: string }, context: Context) => {
       // ...
     },
-    checkDuplicateEmail: async (_: any, { email }: { email: string }, context: Context) => {
-      // Implementace kontroly existence e-mailu v databázi
-      // Vrací true, pokud e-mail existuje, nebo false, pokud neexistuje
-
-      // Příklad implementace:
-      const userSnapshot = await db.collection('User').where('Email', '==', email).get();
-      const emailExists = !userSnapshot.empty;
-
-      return emailExists;
-    },
+   
   },
  
 
   Mutation: {
-    createUser: async (_: any, { input }: { input: CreateAdminInput }, context: Context) => {
+    createUser: async (_: any, { input }: { input: CreateUserInput }, context: Context) => {
       try {
         // Firestore vygeneruje unikátní ID pro nového uživatele
-        const newAdminDoc = db.collection('User').doc();
-
-        const teamId = newAdminDoc.id;
-        const IsAdmin = 1;
+        const newUserDoc = db.collection('User').doc();
+        const userId = newUserDoc.id;
+        const teamId = "";
+        const IsAdmin = 0;
 
         // Použijte získaná userId a teamId pro vytvoření nového uživatele
-        const newAdmin = {
-          IdUser: input.IdUser,
+        const newUser = {
+          Name: input.Name,
+          Surname: input.Surname,
+          IdUser: userId,
           IdTeam: teamId,
           Email: input.Email,
           IsAdmin: IsAdmin,
@@ -70,9 +67,9 @@ const resolvers = {
         };
 
         // Uložte nového uživatele do Firestore
-        await newAdminDoc.set(newAdmin);
+        await newUserDoc.set(newUser);
 
-        return newAdmin;
+        return newUser;
       } catch (error) {
         console.error('Chyba při vytváření uživatele:', error);
         throw error; // Volitelně můžete chybu předat zpět
@@ -83,25 +80,29 @@ const resolvers = {
 };
 
 const typeDefs = gql`
-  type Admin {
+  type User {
+    Name: String!
+    Surname: String!
     IdUser: String!
     IdTeam: String!
     Email: String!
   }
 
-  input CreateAdminInput {
+  input CreateUserInput {
+    Name: String!
+    Surname: String!
     IdUser: String!
     IdTeam: String!
     Email: String!
   }
 
   type Query {
-    user(id: String): Admin
-    checkDuplicateEmail(email: String): Boolean  
+    user(id: String): User
+    
   }
 
   type Mutation {
-    createUser(input: CreateAdminInput): Admin
+    createUser(input: CreateUserInput): User
   }
 `;
 

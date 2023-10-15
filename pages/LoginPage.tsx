@@ -19,7 +19,7 @@ const LoginPage: React.FC = () => {
       setError(null); // Vymaže případnou předchozí chybovou zprávu.
 
       // Přesměrování na stránku /demoUserPage po úspěšném přihlášení
-      router.push('/demoUserPage');
+      router.push('/');
     } catch (error) {
       console.error('Chyba při přihlašování:', error);
       setError('Přihlášení selhalo. Zkontrolujte e-mail a heslo.'); // Nastavení chybové zprávy.
@@ -30,6 +30,7 @@ const LoginPage: React.FC = () => {
   return (
     <div>
       <h2>Přihlášení</h2>
+     
       <input
         type="email"
         placeholder="E-mail"
@@ -43,6 +44,8 @@ const LoginPage: React.FC = () => {
         onChange={(e) => setPassword(e.target.value)}
       />
       <button onClick={handleLogin}>Přihlásit</button>
+      <Link href="/UserRegistration">Registrovat</Link> {/* Tlačítko pro přihlášení */}
+
       <Link href="/">Zpět</Link> {/* Tlačítko pro přihlášení */}
 
 

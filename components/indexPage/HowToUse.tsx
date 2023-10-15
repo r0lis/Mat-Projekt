@@ -139,7 +139,7 @@ function HowToUse() {
                             <Typography sx={{fontSize:'1.2vw', textAlign:'center', justifyContent:'center'}}>
                                 popis ffefefefefefefefefeeeeeeeeeeeeeeeeeeeeeeeeeeef fef efefe fe fe fe edwdwdwdwdwdwdwdwdwdw
                             </Typography>
-                        </div>
+                        </div>s
                     </div>
                     <img style={RightDownArrStyle} src={RightDownArr.src} alt="arrow" />
                 </div>

@@ -1,6 +1,7 @@
 import {
   createUserWithEmailAndPassword,
   getAuth,
+  sendEmailVerification,
   signInWithEmailAndPassword,
 } from 'firebase/auth';
 
@@ -15,7 +16,21 @@ export const authUtils = {
     await auth.signOut();
   },
   register: async (email: string, password: string) => {
-    await createUserWithEmailAndPassword(auth, email, password);
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
+      const user = auth.currentUser;
+
+      if (user) {
+        // Send email verification
+        sendEmailVerification(user);
+
+        
+        
+      }
+    } catch (error) {
+      // Handle any registration errors
+      throw error;
+    }
   },
   getCurrentUser: () => auth.currentUser,
 };

@@ -3,10 +3,15 @@ import { authUtils } from '../firebase/auth.utils';
 import { useMutation, gql, useQuery } from '@apollo/client';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { Box } from '@mui/material';
+import { sendEmailVerification } from '@firebase/auth';
+import { auth } from 'firebase-admin';
 
 const CREATE_USER_MUTATION = gql`
-  mutation CreateUser($Email: String!, $IdUser: String!, $IdTeam: String!) {
-    createUser(input: { Email: $Email, IdUser: $IdUser, IdTeam: $IdTeam }) {
+  mutation CreateUser($Name: String!, $Surname: String!, $Email: String!, $IdUser: String!, $IdTeam: String!) {
+    createUser(input: { Name: $Name, Surname: $Surname, Email: $Email, IdUser: $IdUser, IdTeam: $IdTeam }) {
+      Name
+      Surname
       IdUser
       IdTeam
       Email
@@ -15,67 +20,58 @@ const CREATE_USER_MUTATION = gql`
   }
 `;
 
-const CHECK_EMAIL_EXISTENCE_QUERY = gql`
-  query CheckDuplicateEmail($email: String!) {
-    checkDuplicateEmail(email: $email)
-  }
-`;
-
 const RegistrationPage: React.FC = () => {
+  const [name, setName] = useState('');
+  const [surname, setSurname] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [registrationSuccess, setRegistrationSuccess] = useState(false);
-  const [isEmailDuplicate, setIsEmailDuplicate] = useState(false);
-  const [isCheckingEmail, setIsCheckingEmail] = useState(false); // Nový stav pro označení, zda probíhá kontrola e-mailu
   const router = useRouter();
 
   const [createUser] = useMutation(CREATE_USER_MUTATION);
-  const { data: emailCheckData } = useQuery(CHECK_EMAIL_EXISTENCE_QUERY, {
-    variables: { email },
-    skip: !isCheckingEmail, // Přeskočit dotaz, pokud není aktivní kontrola e-mailu
-  });
+ 
 
   const isEmailValid = email.includes('@');
   const isPasswordValid = password.length >= 6;
 
   const handleRegister = async () => {
-    setIsCheckingEmail(true); // Aktivace kontroly e-mailu při kliknutí na tlačítko "Registrovat"
 
     try {
       if (!isEmailValid || !isPasswordValid) {
         throw new Error('Neplatný e-mail nebo heslo.');
       }
-
+  
       if (password !== confirmPassword) {
         throw new Error('Hesla se neshodují.');
       }
-
-      if (isEmailDuplicate) {
-        throw new Error('E-mail již existuje.');
+  
+      const response = await createUser({
+        variables: { Name: name, Surname: surname, Email: email, IdUser: "fefefef", IdTeam: 'fefefe' },
+      });
+  
+      const newUser = response.data.createUser;
+  
+      // Zde přidáme podmínku pro volání authUtils.register pouze pokud bylo vytvoření uživatele úspěšné
+      if (newUser) {
+        await authUtils.register(email, password);
+      } else {
+        // V případě neúspěchu vytvoření uživatele můžete vrátit chybovou zprávu nebo provést další obsluhu chyby
+        throw new Error('Chyba při vytváření uživatele.');
       }
-
-      await authUtils.register(email, password);
-
+  
       const user = authUtils.getCurrentUser();
-      
 
       if (user) {
-        const userId = user.uid;
-
-        const response = await createUser({
-          variables: { Email: email, IdUser: userId, IdTeam: '456' },
-        });
-
-        const newUser = response.data.createUser;
-
-        setRegistrationSuccess(true);
-
-        router.push('/CreateTeam');
+        await sendEmailVerification(user);
       } else {
-        throw new Error('Uživatel není přihlášen.');
+        throw new Error('Uživatel nebyl přihlášen.');
       }
+  
+      setRegistrationSuccess(true);
+  
+      router.push('/');
     } catch (error: any) {
       setError(error.message);
       setRegistrationSuccess(false);
@@ -85,17 +81,28 @@ const RegistrationPage: React.FC = () => {
   return (
     <div>
       <h2>Registrace</h2>
+
+      <input
+        type="nane"
+        placeholder="Name"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+      />
+      <input
+        type="surname"
+        placeholder="Surname"
+        value={surname}
+        onChange={(e) => setSurname(e.target.value)}
+      />
+
       <input
         type="email"
         placeholder="E-mail"
         value={email}
         onChange={(e) => {
           setEmail(e.target.value);
-          setIsCheckingEmail(false); // Při změně e-mailu zrušte aktivaci kontroly e-mailu
         }}
       />
-      {isCheckingEmail && <p style={{ color: 'gray' }}>Kontroluji e-mail...</p>}
-      {isEmailDuplicate && <p style={{ color: 'red' }}>E-mail již existuje.</p>}
       <input
         type="password"
         placeholder="Heslo"
@@ -111,8 +118,10 @@ const RegistrationPage: React.FC = () => {
       {error && <p style={{ color: 'red' }}>{error}</p>}
       {registrationSuccess && <p style={{ color: 'green' }}>Registrace úspěšná. Můžete se přihlásit.</p>}
       <button onClick={handleRegister}>Registrovat</button>
-
-      <Link href="/LoginPage">Přihlásit</Link>
+      <Box>      <Link href="/LoginPage">Přihlásit</Link>
+      </Box>
+      <Box>      <Link href="/">Zpět</Link>
+      </Box>
     </div>
   );
 };
