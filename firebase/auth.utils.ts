@@ -1,5 +1,6 @@
 import {
   createUserWithEmailAndPassword,
+  deleteUser,
   getAuth,
   sendEmailVerification,
   signInWithEmailAndPassword,
@@ -33,7 +34,7 @@ export const authUtils = {
 
       if (user) {
         // Send email verification
-        sendEmailVerification(user);
+        await sendEmailVerification(user);
 
         
         
@@ -44,4 +45,15 @@ export const authUtils = {
     }
   },
   getCurrentUser: () => auth.currentUser,
+  deleteUser: async () => {
+    try {
+      const user = auth.currentUser;
+
+      if (user) {
+        await deleteUser(user);
+      }
+    } catch (error) {
+      throw error;
+    }
+  },
 };

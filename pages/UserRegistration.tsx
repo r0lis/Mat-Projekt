@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { authUtils } from '../firebase/auth.utils';
-import { useMutation, gql, useQuery } from '@apollo/client';
+import { useMutation, gql } from '@apollo/client';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { Box } from '@mui/material';
@@ -29,44 +29,52 @@ const RegistrationPage: React.FC = () => {
   const router = useRouter();
 
   const [createUser] = useMutation(CREATE_USER_MUTATION);
- 
 
   const isEmailValid = email.includes('@');
   const isPasswordValid = password.length >= 6;
 
   const handleRegister = async () => {
-
     try {
       if (!isEmailValid || !isPasswordValid) {
         throw new Error('Neplatný e-mail nebo heslo.');
       }
-  
+
       if (password !== confirmPassword) {
         throw new Error('Hesla se neshodují.');
       }
-  
+
+      // Nejprve provádíme registraci uživatele
+      await authUtils.register(email, password);
+
+      // Pokud registrace byla úspěšná, pokračujeme vytvořením uživatele v databázi
       const response = await createUser({
         variables: { Name: name, Surname: surname, Email: email, IdUser: "fefefef", IdTeam: 'fefefe' },
       });
-  
+
       const newUser = response.data.createUser;
-  
-      // Zde přidáme podmínku pro volání authUtils.register pouze pokud bylo vytvoření uživatele úspěšné
+
       if (newUser) {
-        await authUtils.register(email, password);
+        setRegistrationSuccess(true);
       } else {
-        // V případě neúspěchu vytvoření uživatele můžete vrátit chybovou zprávu nebo provést další obsluhu chyby
         throw new Error('Chyba při vytváření uživatele.');
       }
-  
-      const user = authUtils.getCurrentUser();
-  
-      setRegistrationSuccess(true);
-  
-      router.push('/');
     } catch (error: any) {
       setError(error.message);
       setRegistrationSuccess(false);
+
+     
+    }
+  };
+
+  const handleEmailVerification = async () => {
+    try {
+      await authUtils.sendEmailVerification(); // Odešleme e-mailové ověření
+      router.push('/'); // Pokud je ověření úspěšné, provedeme přesměrování
+    } catch (error: any) {
+      setError(error.message);
+
+      // Pokud dojde k chybě ověření e-mailu, zavolejte funkci pro smazání uživatele
+      await authUtils.deleteUser();
     }
   };
 
@@ -109,8 +117,13 @@ const RegistrationPage: React.FC = () => {
         onChange={(e) => setConfirmPassword(e.target.value)}
       />
       {error && <p style={{ color: 'red' }}>{error}</p>}
-      {registrationSuccess && <p style={{ color: 'green' }}>Registrace úspěšná. Můžete se přihlásit.</p>}
-      <button onClick={handleRegister}>Registrovat</button>
+      {registrationSuccess && (
+        <div>
+          <p style={{ color: 'green' }}>Registrace úspěšná. Ověřte svůj e-mail, abyste mohli pokračovat.</p>
+          <button onClick={handleEmailVerification}>Ověřit E-mail</button>
+        </div>
+      )}
+      {!registrationSuccess && <button onClick={handleRegister}>Registrovat</button>}
       <Box>      <Link href="/LoginPage">Přihlásit</Link>
       </Box>
       <Box>      <Link href="/">Zpět</Link>
