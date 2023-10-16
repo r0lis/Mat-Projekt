@@ -73,7 +73,6 @@ const RegistrationPage: React.FC = () => {
     } catch (error: any) {
       setError(error.message);
 
-      // Pokud dojde k chybě ověření e-mailu, zavolejte funkci pro smazání uživatele
       await authUtils.deleteUser();
     }
   };

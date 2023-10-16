@@ -19,7 +19,8 @@ type User = {
 };
 
 type Mutation = {
-  createUser(input: CreateUserInput): User;
+  createUser(input: CreateUserInput): User
+  deleteUserByEmail(email: String): Boolean 
 };
 
 type CreateUserInput = {
@@ -30,8 +31,15 @@ type CreateUserInput = {
   Email: string;
 };
 
+type NameAndSurname = {
+  Name: String
+  Surname: String
+}
+
 type Query = {
   user(id: String): User
+  getUserByNameAndSurname(email: String): NameAndSurname
+
   
 }
 
@@ -41,6 +49,20 @@ const resolvers = {
   Query: {
     user: async (_: any, { id }: { id: string }, context: Context) => {
       // ...
+    },
+    getUserByNameAndSurname: async (_: any, { email }: { email: string }, context: Context) => {
+      if (context.user) {
+        const userQuery = db.collection('User').where('Email', '==', email);
+        const userSnapshot = await userQuery.get();
+        if (!userSnapshot.empty) {
+          const userData = userSnapshot.docs[0].data() as User;
+          return {
+            Name: userData.Name,
+            Surname: userData.Surname,
+          };
+        }
+      }
+      return null;
     },
    
   },
@@ -75,36 +97,56 @@ const resolvers = {
         throw error; // Volitelně můžete chybu předat zpět
       }
     },
+  
+  deleteUserByEmail: async (_: any, { email }: { email: string }, context: Context) => {
+    try {
+      if (context.user) {
+        const userQuery = db.collection('User').where('Email', '==', email);
+        const userSnapshot = await userQuery.get();
+        if (!userSnapshot.empty) {
+          const userDoc = userSnapshot.docs[0];
+          await userDoc.ref.delete();
+          return true;
+        }
+      }
+      return false;
+    } catch (error) {
+      console.error('Chyba při mazání uživatele:', error);
+      throw error;
+    }
   },
-  // ... Další resolvery pro vaše typy a mutace
+},
 };
 
+
 const typeDefs = gql`
-  type User {
-    Name: String!
-    Surname: String!
-    IdUser: String!
-    IdTeam: String!
-    Email: String!
-  }
+type User {
+  Name: String!
+  Surname: String!
+  IdUser: String!
+  IdTeam: String!
+  Email: String!
+}
 
-  input CreateUserInput {
-    Name: String!
-    Surname: String!
-    IdUser: String!
-    IdTeam: String!
-    Email: String!
-  }
+input CreateUserInput {
+  Name: String!
+  Surname: String!
+  IdUser: String!
+  IdTeam: String!
+  Email: String!
+}
 
-  type Query {
-    user(id: String): User
-    
-  }
+type Query {
+  user(id: String): User
+  getUserByNameAndSurname(email: String): User
+}
 
-  type Mutation {
-    createUser(input: CreateUserInput): User
-  }
+type Mutation {
+  createUser(input: CreateUserInput): User
+  deleteUserByEmail(email: String): Boolean
+}
 `;
+
 
 const schema = createSchema({
   typeDefs,

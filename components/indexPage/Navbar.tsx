@@ -11,8 +11,20 @@ import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import Link from 'next/link';
 import LoginIcon from '../../public/user.png';
-import { authUtils } from '../../firebase/auth.utils';
+import LoginIcon2 from '../../public/user2.png';
 
+import { authUtils } from '../../firebase/auth.utils';
+import { useQuery } from '@apollo/client';
+import { gql } from 'graphql-tag';
+
+const GET_USER_INFO = gql`
+  query GetUserInfo($email: String!) {
+    getUserByNameAndSurname(email: $email) {
+      Name
+      Surname
+    }
+  }
+`;
 
 const pages = ['Info', 'Features', 'About'];
 const menuItems = ['Přihlasit se', 'Vytvořit účet'];
@@ -22,6 +34,12 @@ const MyNavBar: React.FC = () => {
     const [menuOpen, setMenuOpen] = useState(false);
     const [anchorEl2, setAnchorEl2] = useState<null | HTMLElement>(null);
     const user = authUtils.getCurrentUser();
+
+
+    const { loading, error, data } = useQuery(GET_USER_INFO, {
+        variables: { email: user?.email || '' },
+        skip: !user,
+    });
 
 
     const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -189,7 +207,7 @@ const MyNavBar: React.FC = () => {
                         >
                             <img
                                 style={{ height: '50px', width: '50px', color: 'white' }}
-                                src={LoginIcon.src}
+                                src={user ? LoginIcon2.src : LoginIcon.src}
                                 alt="login"
                             />
                         </Box>
@@ -209,17 +227,24 @@ const MyNavBar: React.FC = () => {
                         >
 
 
-                            <Box sx={{ width: '15rem', height: "15rem", backgroundColor: 'whitesmoke' }}>
-                                <Box sx={{ alignItems: 'center', textAlign: 'center', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'center', marginBottom: '2em', marginTop: '2em' }}>
-                                    <Typography sx={{ color: 'black', fontWeight: 'bold', fontSize: '1.7vw', lineHeight: '20px' }}>
-                                        LOGO
-                                    </Typography>
+                            <Box sx={{ width: '18rem', height: "auto" }}>
 
-                                </Box>
-                                <Box sx={{ borderBottom: '7px solid #b71dde ', marginBottom: '1em' }} ></Box>
                                 {user ? (
-                                    <><Box><><Typography sx={{ color: 'black' }}>{user.email}</Typography>
+                                    <><Box><>
+                                        <Box>
+                                            <Typography sx={{ color: 'black', textAlign: 'center', fontSize: '1.2em', fontWeight: 'bold' }}>
+                                                {loading ? 'Načítání...' : error ? 'Chyba' : data?.getUserByNameAndSurname.Name + ' ' + data?.getUserByNameAndSurname.Surname}
+                                            </Typography>
+                                        </Box>
+
+                                        <Box sx={{ borderBottom: '7px solid #b71dde ', marginBottom: '1em' }} ></Box>
+
                                         <Box sx={{ alignItems: 'center', textAlign: 'center', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                                            <Button onClick={handleLogout} style={buttonStyle}>
+                                                <Typography
+                                                    sx={{ color: 'black', fontWeight: 'bold', fontSize: '1 vw', lineHeight: '20px', padding: '5px' }}
+                                                >Správa účtu</Typography>
+                                            </Button>
                                             <Button onClick={handleLogout} style={buttonStyle2}>
                                                 <Typography
                                                     sx={{ color: 'black', fontWeight: 'bold', fontSize: '1 vw', lineHeight: '20px', padding: '5px' }}
@@ -227,14 +252,23 @@ const MyNavBar: React.FC = () => {
                                             </Button>
                                         </Box></></Box></>
                                 ) : (
-                                    <><Box sx={{ alignItems: 'center', textAlign: 'center', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                                        <Link href="/LoginPage">
-                                            <Button sx={buttonStyle2}>
-                                                <Typography
-                                                    sx={{ color: 'black', fontWeight: 'bold', fontSize: '1 vw', lineHeight: '20px', padding: '5px' }}
-                                                >Přihlásit se</Typography></Button>
-                                        </Link>
-                                    </Box><Box sx={{ alignItems: 'center', textAlign: 'center', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                                    <>
+                                        <Box sx={{ alignItems: 'center', textAlign: 'center', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'center', marginBottom: '2em', marginTop: '2em' }}>
+                                            <Typography sx={{ color: 'black', fontWeight: 'bold', fontSize: '1.7vw', lineHeight: '20px' }}>
+                                                LOGO
+                                            </Typography>
+
+                                        </Box>
+                                        <Box sx={{ borderBottom: '7px solid #b71dde '}} ></Box>
+
+                                        <Box sx={{ alignItems: 'center', textAlign: 'center', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                                            <Link href="/LoginPage">
+                                                <Button sx={buttonStyle2}>
+                                                    <Typography
+                                                        sx={{ color: 'black', fontWeight: 'bold', fontSize: '1 vw', lineHeight: '20px', padding: '5px' }}
+                                                    >Přihlásit se</Typography></Button>
+                                            </Link>
+                                        </Box><Box sx={{ alignItems: 'center', textAlign: 'center', position: 'relative', display: 'flex', flexDirection: 'column', marginBottom:'1em', justifyContent: 'center' }}>
                                             <Link href="/UserRegistration">
                                                 <Button sx={buttonStyle}>
                                                     <Typography
@@ -249,7 +283,7 @@ const MyNavBar: React.FC = () => {
                     </div>
 
                     <Box sx={{ marginRight: '5%', marginLeft: '3%' }}>
-                        <Link href="/LoginPage">
+                        <Link href="/CreateTeam">
                             <Button
                                 sx={{
                                     position: 'relative',
@@ -257,7 +291,7 @@ const MyNavBar: React.FC = () => {
                                     borderRadius: '15px',
                                     maxWidth: '100%',
                                     padding: '6px 16px',
-                                    width: 'auto', 
+                                    width: 'auto',
                                     height: '3rem',
                                 }}
                                 variant="contained"
