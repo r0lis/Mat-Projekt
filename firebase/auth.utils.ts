@@ -33,10 +33,7 @@ export const authUtils = {
       const user = auth.currentUser;
 
       if (user) {
-        // Send email verification
         await sendEmailVerification(user);
-
-        
         
       }
     } catch (error) {

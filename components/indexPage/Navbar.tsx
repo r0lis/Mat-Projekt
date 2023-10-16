@@ -11,6 +11,8 @@ import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import Link from 'next/link';
 import LoginIcon from '../../public/user.png';
+import { authUtils } from '../../firebase/auth.utils';
+
 
 const pages = ['Info', 'Features', 'About'];
 const menuItems = ['Přihlasit se', 'Vytvořit účet'];
@@ -18,14 +20,16 @@ const menuItems = ['Přihlasit se', 'Vytvořit účet'];
 const MyNavBar: React.FC = () => {
     const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
     const [menuOpen, setMenuOpen] = useState(false);
-    const [anchorEl2, setAnchorEl2] = useState<null | HTMLElement>(null); // Oprava zde
+    const [anchorEl2, setAnchorEl2] = useState<null | HTMLElement>(null);
+    const user = authUtils.getCurrentUser();
+
 
     const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElNav(event.currentTarget);
     };
 
     const handleOpenMenu = (event: React.MouseEvent<HTMLElement>) => {
-        setAnchorEl2(event.currentTarget); // Oprava zde
+        setAnchorEl2(event.currentTarget);
     };
 
     const handleCloseNavMenu = () => {
@@ -35,6 +39,15 @@ const MyNavBar: React.FC = () => {
     const handleCloseMenu = () => {
         setMenuOpen(false);
         setAnchorEl2(null);
+    };
+
+    const handleLogout = async () => {
+        try {
+            await authUtils.logout();
+            window.location.reload();
+        } catch (error) {
+            console.error("Chyba při odhlašování: ", error);
+        }
     };
 
     const logoAndButtonStyle: React.CSSProperties = {
@@ -60,9 +73,9 @@ const MyNavBar: React.FC = () => {
         width: '10em',
         '&:hover': {
             backgroundColor: '#b71dde',
-            
+
         },
-        
+
     };
 
     return (
@@ -201,25 +214,35 @@ const MyNavBar: React.FC = () => {
                                     <Typography sx={{ color: 'black', fontWeight: 'bold', fontSize: '1.7vw', lineHeight: '20px' }}>
                                         LOGO
                                     </Typography>
-                                    
+
                                 </Box>
-                                <Box sx={{borderBottom:'7px solid #b71dde ', marginBottom:'1em'}} ></Box>
-                                <Box sx={{ alignItems: 'center', textAlign: 'center', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                                    <Link href="/LoginPage">
-                                        <Button sx={buttonStyle2}>
-                                            <Typography
-                                                sx={{ color: 'black', fontWeight: 'bold', fontSize: '1 vw', lineHeight: '20px', padding: '5px' }}
-                                            >Přihlásit se</Typography></Button>
-                                    </Link>
-                                </Box>
-                                <Box sx={{ alignItems: 'center', textAlign: 'center', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                                    <Link href="/UserRegistration">
-                                        <Button sx={buttonStyle}>
-                                            <Typography
-                                                sx={{ color: 'black', fontWeight: 'bold', fontSize: '1vw', lineHeight: '20px', padding: '5px' }}>Vytvořit účet</Typography></Button>
-                                    </Link>
-                                </Box>
-                               
+                                <Box sx={{ borderBottom: '7px solid #b71dde ', marginBottom: '1em' }} ></Box>
+                                {user ? (
+                                    <><Box><><Typography sx={{ color: 'black' }}>{user.email}</Typography>
+                                        <Box sx={{ alignItems: 'center', textAlign: 'center', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                                            <Button onClick={handleLogout} style={buttonStyle2}>
+                                                <Typography
+                                                    sx={{ color: 'black', fontWeight: 'bold', fontSize: '1 vw', lineHeight: '20px', padding: '5px' }}
+                                                >Odhlásit se</Typography>
+                                            </Button>
+                                        </Box></></Box></>
+                                ) : (
+                                    <><Box sx={{ alignItems: 'center', textAlign: 'center', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                                        <Link href="/LoginPage">
+                                            <Button sx={buttonStyle2}>
+                                                <Typography
+                                                    sx={{ color: 'black', fontWeight: 'bold', fontSize: '1 vw', lineHeight: '20px', padding: '5px' }}
+                                                >Přihlásit se</Typography></Button>
+                                        </Link>
+                                    </Box><Box sx={{ alignItems: 'center', textAlign: 'center', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                                            <Link href="/UserRegistration">
+                                                <Button sx={buttonStyle}>
+                                                    <Typography
+                                                        sx={{ color: 'black', fontWeight: 'bold', fontSize: '1 vw', lineHeight: '20px', padding: '5px' }}>Vytvořit účet</Typography></Button>
+                                            </Link>
+                                        </Box></>
+                                )}
+
                             </Box>
 
                         </Menu>
@@ -234,7 +257,7 @@ const MyNavBar: React.FC = () => {
                                     borderRadius: '15px',
                                     maxWidth: '100%',
                                     padding: '6px 16px',
-                                    width: 'auto', // Toto umožní tlačítku zmenšovat se při zmenšování okna
+                                    width: 'auto', 
                                     height: '3rem',
                                 }}
                                 variant="contained"

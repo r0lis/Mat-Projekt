@@ -4,3 +4,7 @@ body{
 
 
 
+*::selection {
+  background-color: transparent;
+  color: inherit;
+}
