@@ -13,22 +13,37 @@ type User = {
   Name: string;
   Surname: string;
   IdUser: string;
-  IdTeam: string;
+  IdTeam: [String];
   IsAdmin: boolean;
   Email: string;
 };
 
+type Team = {
+  Name: string;
+  teamId: string;
+  MembersEmails: [String];
+  AdminEmail: string;
+};
+
 type Mutation = {
   createUser(input: CreateUserInput): User
-  deleteUserByEmail(email: String): Boolean 
+  creteTeam(input: CreateTeamInput): Team
+  deleteUserByEmail(email: String): Boolean
 };
 
 type CreateUserInput = {
   Name: string;
   Surname: string;
   IdUser: string;
-  IdTeam: string;
+  IdTeam: [String];
   Email: string;
+};
+
+type CreateTeamInput = {
+  Name: string;
+  teamId: string;
+  MembersEmails: [String];
+  AdminEmail: string;
 };
 
 type NameAndSurname = {
@@ -39,8 +54,6 @@ type NameAndSurname = {
 type Query = {
   user(id: String): User
   getUserByNameAndSurname(email: String): NameAndSurname
-
-  
 }
 
 const db = firestore();
@@ -74,7 +87,7 @@ const resolvers = {
         // Firestore vygeneruje unikátní ID pro nového uživatele
         const newUserDoc = db.collection('User').doc();
         const userId = newUserDoc.id;
-        const teamId = "";
+        const teamId: never[] = [];
         const IsAdmin = 0;
 
         // Použijte získaná userId a teamId pro vytvoření nového uživatele
@@ -97,6 +110,32 @@ const resolvers = {
         throw error; // Volitelně můžete chybu předat zpět
       }
     },
+   
+      createTeam: async (_: any, { input }: { input: CreateTeamInput }, context: Context) => {
+        try {
+          // Firestore vygeneruje unikátní ID pro nový tým
+          const newTeamDoc = db.collection('Team').doc();
+          const teamId = newTeamDoc.id;
+    
+          // Použijte získaný teamId pro vytvoření nového týmu
+          const newTeam = {
+            Name: input.Name,
+            teamId: teamId,
+            AdminEmail: input.AdminEmail,
+            MembersEmails: input.MembersEmails,
+            // Další údaje o týmu získané z input parametrů
+          };
+    
+          // Uložte nový tým do Firestore
+          await newTeamDoc.set(newTeam);
+    
+          return newTeam;
+        } catch (error) {
+          console.error('Chyba při vytváření týmu:', error);
+          throw error; // Volitelně můžete chybu předat zpět
+        }
+      },
+   
   
   deleteUserByEmail: async (_: any, { email }: { email: string }, context: Context) => {
     try {
@@ -118,34 +157,58 @@ const resolvers = {
 },
 };
 
-
 const typeDefs = gql`
-type User {
-  Name: String!
-  Surname: String!
-  IdUser: String!
-  IdTeam: String!
-  Email: String!
-}
+  type User {
+    Name: String!
+    Surname: String!
+    IdUser: String!
+    IdTeam: [String]!
+    Email: String!
+  }
 
-input CreateUserInput {
-  Name: String!
-  Surname: String!
-  IdUser: String!
-  IdTeam: String!
-  Email: String!
-}
+  input CreateUserInput {
+    Name: String!
+    Surname: String!
+    IdUser: String!
+    IdTeam: [String]!
+    Email: String!
+  }
 
-type Query {
-  user(id: String): User
-  getUserByNameAndSurname(email: String): User
-}
+  input CreateTeamInput {
+    Name: String!
+    AdminEmail: String!
+    MembersEmails: [String]!
+    teamId: String!
+  }
 
-type Mutation {
-  createUser(input: CreateUserInput): User
-  deleteUserByEmail(email: String): Boolean
-}
+  type Team {
+    Name: String!
+    teamId: String!
+    MembersEmails: [String]!
+    AdminEmail: String!
+  }
+
+  type NameAndSurname {
+    Name: String
+    Surname: String
+  }
+
+  type Query {
+    user(id: String): User
+    getUserByNameAndSurname(email: String): NameAndSurname
+  }
+
+  type Mutation {
+    createUser(input: CreateUserInput): User
+    createTeam(input: CreateTeamInput): Team
+    deleteUserByEmail(email: String): Boolean
+  }
 `;
+
+
+
+
+
 
 
 const schema = createSchema({

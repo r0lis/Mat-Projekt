@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { authUtils } from '../firebase/auth.utils';
 import { useMutation, gql } from '@apollo/client';
 import Link from 'next/link';
@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import { Box } from '@mui/material';
 
 const CREATE_USER_MUTATION = gql`
-  mutation CreateUser($Name: String!, $Surname: String!, $Email: String!, $IdUser: String!, $IdTeam: String!) {
+  mutation CreateUser($Name: String!, $Surname: String!, $Email: String!, $IdUser: String!, $IdTeam: [String]!) {
     createUser(input: { Name: $Name, Surname: $Surname, Email: $Email, IdUser: $IdUser, IdTeam: $IdTeam }) {
       Name
       Surname
@@ -26,6 +26,8 @@ const RegistrationPage: React.FC = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [registrationSuccess, setRegistrationSuccess] = useState(false);
+  const [verificationSuccess, setverificationSuccess] = useState(false);
+
   const router = useRouter();
 
   const [createUser] = useMutation(CREATE_USER_MUTATION);
@@ -47,13 +49,10 @@ const RegistrationPage: React.FC = () => {
       await authUtils.register(email, password);
 
       // Pokud registrace byla úspěšná, pokračujeme vytvořením uživatele v databázi
-      const response = await createUser({
-        variables: { Name: name, Surname: surname, Email: email, IdUser: "fefefef", IdTeam: 'fefefe' },
-      });
+     
+      const user = authUtils.getCurrentUser();
 
-      const newUser = response.data.createUser;
-
-      if (newUser) {
+      if (user) {
         setRegistrationSuccess(true);
       } else {
         throw new Error('Chyba při vytváření uživatele.');
@@ -68,14 +67,34 @@ const RegistrationPage: React.FC = () => {
 
   const handleEmailVerification = async () => {
     try {
-      await authUtils.sendEmailVerification(); // Odešleme e-mailové ověření
-      router.push('/'); // Pokud je ověření úspěšné, provedeme přesměrování
+      await authUtils.sendEmailVerification(); // Send email verification
+      const user = authUtils.getCurrentUser();
+      setverificationSuccess(true);
+
+  
+      if (user) {
+        await user.reload(); // Refresh the user's data
+  
+        if (user.emailVerified) {
+          const response = await createUser({
+            variables: { Name: name, Surname: surname, Email: email, IdUser: "fefefef", IdTeam: ['fefefe'] },          });
+          setverificationSuccess(true);
+    
+          router.push('/'); // If verification is successful, perform redirection
+        } else {
+          await authUtils.deleteUser();
+          throw new Error('E-mailová adresa není ověřena.');
+
+        }
+      } else {
+        throw new Error('Uživatel nebyl nalezen.');
+      }
     } catch (error: any) {
       setError(error.message);
-
       await authUtils.deleteUser();
     }
   };
+
 
   return (
     <div>
@@ -122,8 +141,11 @@ const RegistrationPage: React.FC = () => {
           <button onClick={handleEmailVerification}>Ověřit E-mail</button>
         </div>
       )}
+     
       {!registrationSuccess && <button onClick={handleRegister}>Registrovat</button>}
       <Box>      <Link href="/LoginPage">Přihlásit</Link>
+      </Box>
+      <Box>      <Link href="/UserRegistration">Zkusit znovu</Link>
       </Box>
       <Box>      <Link href="/">Zpět</Link>
       </Box>
