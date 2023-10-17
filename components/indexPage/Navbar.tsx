@@ -26,6 +26,12 @@ const GET_USER_INFO = gql`
   }
 `;
 
+const GET_TEAM_NAME = gql`
+  query GetTeamName($teamIds: [String]!) {
+    getTeamNamesByIds(teamIds: $teamIds)
+  }
+`;
+
 const pages = ['Info', 'Features', 'About'];
 const menuItems = ['Přihlasit se', 'Vytvořit účet'];
 
@@ -36,11 +42,14 @@ const MyNavBar: React.FC = () => {
     const user = authUtils.getCurrentUser();
 
 
-    const { loading, error, data } = useQuery(GET_USER_INFO, {
+    const { loading: userInfoLoading, error: userInfoError, data: userInfoData } = useQuery(GET_USER_INFO, {
         variables: { email: user?.email || '' },
         skip: !user,
     });
 
+    const { loading: teamNameLoading, error: teamNameError, data: teamNameData } = useQuery(GET_TEAM_NAME, {
+        variables: { teamIds: ['kbvfgx1KpT1jCt51kigd', 'kbvfgx1KpT1jCt51kigd'] },
+      });
 
     const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElNav(event.currentTarget);
@@ -233,11 +242,17 @@ const MyNavBar: React.FC = () => {
                                     <><Box><>
                                         <Box>
                                             <Typography sx={{ color: 'black', textAlign: 'center', fontSize: '1.2em', fontWeight: 'bold' }}>
-                                                {loading ? 'Načítání...' : error ? 'Chyba' : data?.getUserByNameAndSurname.Name + ' ' + data?.getUserByNameAndSurname.Surname}
+                                                {userInfoLoading ? 'Načítání...' : userInfoError ? 'Chyba' : userInfoData?.getUserByNameAndSurname.Name + ' ' + userInfoData?.getUserByNameAndSurname.Surname}
                                             </Typography>
                                         </Box>
 
                                         <Box sx={{ borderBottom: '7px solid #b71dde ', marginBottom: '1em' }} ></Box>
+
+                                        <Box>
+                                            <Typography sx={{ color: 'black', textAlign: 'center', fontSize: '1.2em', fontWeight: 'bold' }}>
+                                                {teamNameLoading ? 'Načítání...' : teamNameError ? 'Chyba' : teamNameData?.getTeamNamesByIds}
+                                            </Typography>
+                                        </Box>
 
                                         <Box sx={{ alignItems: 'center', textAlign: 'center', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                                             <Button onClick={handleLogout} style={buttonStyle}>
