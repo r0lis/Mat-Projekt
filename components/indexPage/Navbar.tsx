@@ -26,11 +26,13 @@ const GET_USER_INFO = gql`
   }
 `;
 
-const GET_TEAM_NAME = gql`
-  query GetTeamName($teamIds: [String]!) {
-    getTeamNamesByIds(teamIds: $teamIds)
+const GET_TEAM_NAMES = gql`
+  query GetTeamNames($email: String!) {
+    getUserTeamsByEmail(email: $email)
   }
 `;
+
+
 
 const pages = ['Info', 'Features', 'About'];
 const menuItems = ['Přihlasit se', 'Vytvořit účet'];
@@ -47,10 +49,11 @@ const MyNavBar: React.FC = () => {
         skip: !user,
     });
 
-    const { loading: teamNameLoading, error: teamNameError, data: teamNameData } = useQuery(GET_TEAM_NAME, {
-        variables: { teamIds: ['kbvfgx1KpT1jCt51kigd', 'kbvfgx1KpT1jCt51kigd'] },
-      });
+    const { loading: userIdLoading, error: userIdError, data: userTeamsData } = useQuery(GET_TEAM_NAMES, {
+        variables: { email: user?.email || '' },
+    });
 
+    console.log(userTeamsData)
     const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElNav(event.currentTarget);
     };
@@ -250,7 +253,14 @@ const MyNavBar: React.FC = () => {
 
                                         <Box>
                                             <Typography sx={{ color: 'black', textAlign: 'center', fontSize: '1.2em', fontWeight: 'bold' }}>
-                                                {teamNameLoading ? 'Načítání...' : teamNameError ? 'Chyba' : teamNameData?.getTeamNamesByIds}
+                                                {userIdLoading
+                                                    ? 'Načítání...'
+                                                    : userIdError
+                                                        ? 'Chyba'
+                                                        : userTeamsData.getUserTeamsByEmail.map((teamName: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | React.PromiseLikeOfReactNode | null | undefined, index: React.Key | null | undefined) => (
+                                                            <div key={index}>{teamName}</div>
+                                                        ))
+                                                }
                                             </Typography>
                                         </Box>
 
@@ -274,7 +284,7 @@ const MyNavBar: React.FC = () => {
                                             </Typography>
 
                                         </Box>
-                                        <Box sx={{ borderBottom: '7px solid #b71dde '}} ></Box>
+                                        <Box sx={{ borderBottom: '7px solid #b71dde ' }} ></Box>
 
                                         <Box sx={{ alignItems: 'center', textAlign: 'center', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                                             <Link href="/LoginPage">
@@ -283,7 +293,7 @@ const MyNavBar: React.FC = () => {
                                                         sx={{ color: 'black', fontWeight: 'bold', fontSize: '1 vw', lineHeight: '20px', padding: '5px' }}
                                                     >Přihlásit se</Typography></Button>
                                             </Link>
-                                        </Box><Box sx={{ alignItems: 'center', textAlign: 'center', position: 'relative', display: 'flex', flexDirection: 'column', marginBottom:'1em', justifyContent: 'center' }}>
+                                        </Box><Box sx={{ alignItems: 'center', textAlign: 'center', position: 'relative', display: 'flex', flexDirection: 'column', marginBottom: '1em', justifyContent: 'center' }}>
                                             <Link href="/UserRegistration">
                                                 <Button sx={buttonStyle}>
                                                     <Typography

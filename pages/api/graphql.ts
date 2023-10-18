@@ -54,8 +54,9 @@ type NameAndSurname = {
 type Query = {
   user(id: String): User
   getUserByNameAndSurname(email: String): NameAndSurname
-  getTeamNamesByIds(teamIds: [String]): [String]
+  getUserTeamsByEmail(email: String): [String]
 
+ 
 }
 
 const db = firestore();
@@ -66,10 +67,10 @@ async function addUserToTeam(adminEmail: any, teamId: String) {
   if (!userSnapshot.empty) {
     const userDoc = userSnapshot.docs[0];
     const userData = userDoc.data() as User;
-    
+
     // Přidat teamId do pole IdTeam
     userData.IdTeam.push(teamId);
-    
+
     // Aktualizovat záznam uživatele v databázi
     await userDoc.ref.update({ IdTeam: userData.IdTeam });
   }
@@ -80,23 +81,7 @@ const resolvers = {
     user: async (_: any, { id }: { id: string }, context: Context) => {
       // ...
     },
-    getTeamNamesByIds: async (_: any, { teamIds }: any, context: { user: any }) => {
-      if (context.user) {
-        const teamNames = [];
-        for (const teamId of teamIds) {
-          const teamQuery = db.collection('Team').where('teamId', '==', teamId);
-          const teamSnapshot = await teamQuery.get();
-          if (!teamSnapshot.empty) {
-            const teamData = teamSnapshot.docs[0].data() as Team;
-            teamNames.push(teamData.Name);
-          }
-        }
-        return teamNames;
-      } else {
-        throw new Error('Uživatel není přihlášen.');
-      }
-    },
-  
+
     getUserByNameAndSurname: async (_: any, { email }: { email: string }, context: Context) => {
       if (context.user) {
         const userQuery = db.collection('User').where('Email', '==', email);
@@ -111,9 +96,34 @@ const resolvers = {
       }
       return null;
     },
-   
+
+    getUserTeamsByEmail: async (_: any, { email }: { email: string }, context: Context) => {
+      if (context.user) {
+        const userQuery = db.collection('User').where('Email', '==', email);
+        const userSnapshot = await userQuery.get();
+        if (!userSnapshot.empty) {
+          const userData = userSnapshot.docs[0].data() as User;
+
+          // Získání týmů na základě IdTeam
+          const teamIds = userData.IdTeam;
+          const teamNames = [];
+
+          for (const teamId of teamIds) {
+            const teamQuery = db.collection('Team').where('teamId', '==', teamId);
+            const teamSnapshot = await teamQuery.get();
+            if (!teamSnapshot.empty) {
+              const teamData = teamSnapshot.docs[0].data() as Team;
+              teamNames.push(teamData.Name);
+            }
+          }
+
+          return teamNames;
+        }
+      }
+      return null;
+    },
   },
- 
+
 
   Mutation: {
     createUser: async (_: any, { input }: { input: CreateUserInput }, context: Context) => {
@@ -144,53 +154,53 @@ const resolvers = {
         throw error; // Volitelně můžete chybu předat zpět
       }
     },
-   
-     createTeam: async (_: any, { input }: { input: CreateTeamInput }, context: Context) => {
-      try {
-          // Firestore vygeneruje unikátní ID pro nový tým
-          const newTeamDoc = db.collection('Team').doc();
-          const teamId = newTeamDoc.id;
-          await addUserToTeam(input.AdminEmail, teamId);
 
-    
-          // Použijte získaný teamId pro vytvoření nového týmu
-          const newTeam = {
-            Name: input.Name,
-            teamId: teamId,
-            AdminEmail: input.AdminEmail,
-            MembersEmails: input.MembersEmails,
-            // Další údaje o týmu získané z input parametrů
-          };
-    
-          // Uložte nový tým do Firestore
-          await newTeamDoc.set(newTeam);
-    
-          return newTeam;
-        } catch (error) {
-          console.error('Chyba při vytváření týmu:', error);
-          throw error; // Volitelně můžete chybu předat zpět
-        }
-      },
-   
-  
-  deleteUserByEmail: async (_: any, { email }: { email: string }, context: Context) => {
-    try {
-      if (context.user) {
-        const userQuery = db.collection('User').where('Email', '==', email);
-        const userSnapshot = await userQuery.get();
-        if (!userSnapshot.empty) {
-          const userDoc = userSnapshot.docs[0];
-          await userDoc.ref.delete();
-          return true;
-        }
+    createTeam: async (_: any, { input }: { input: CreateTeamInput }, context: Context) => {
+      try {
+        // Firestore vygeneruje unikátní ID pro nový tým
+        const newTeamDoc = db.collection('Team').doc();
+        const teamId = newTeamDoc.id;
+        await addUserToTeam(input.AdminEmail, teamId);
+
+
+        // Použijte získaný teamId pro vytvoření nového týmu
+        const newTeam = {
+          Name: input.Name,
+          teamId: teamId,
+          AdminEmail: input.AdminEmail,
+          MembersEmails: input.MembersEmails,
+          // Další údaje o týmu získané z input parametrů
+        };
+
+        // Uložte nový tým do Firestore
+        await newTeamDoc.set(newTeam);
+
+        return newTeam;
+      } catch (error) {
+        console.error('Chyba při vytváření týmu:', error);
+        throw error; // Volitelně můžete chybu předat zpět
       }
-      return false;
-    } catch (error) {
-      console.error('Chyba při mazání uživatele:', error);
-      throw error;
-    }
+    },
+
+
+    deleteUserByEmail: async (_: any, { email }: { email: string }, context: Context) => {
+      try {
+        if (context.user) {
+          const userQuery = db.collection('User').where('Email', '==', email);
+          const userSnapshot = await userQuery.get();
+          if (!userSnapshot.empty) {
+            const userDoc = userSnapshot.docs[0];
+            await userDoc.ref.delete();
+            return true;
+          }
+        }
+        return false;
+      } catch (error) {
+        console.error('Chyba při mazání uživatele:', error);
+        throw error;
+      }
+    },
   },
-},
 };
 
 const typeDefs = gql`
@@ -232,8 +242,7 @@ const typeDefs = gql`
   type Query {
     user(id: String): User
     getUserByNameAndSurname(email: String): NameAndSurname
-    getTeamNamesByIds(teamIds: [String]!): [String]
-
+    getUserTeamsByEmail(email: String): [String]
   }
 
   type Mutation {
