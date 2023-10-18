@@ -257,9 +257,11 @@ const MyNavBar: React.FC = () => {
                                                     ? 'Načítání...'
                                                     : userIdError
                                                         ? 'Chyba'
-                                                        : userTeamsData.getUserTeamsByEmail.map((teamName: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | React.PromiseLikeOfReactNode | null | undefined, index: React.Key | null | undefined) => (
-                                                            <div key={index}>{teamName}</div>
-                                                        ))
+                                                        : userTeamsData.getUserTeamsByEmail.length > 0
+                                                            ? userTeamsData.getUserTeamsByEmail.map((teamName: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | React.PromiseLikeOfReactNode | null | undefined, index: React.Key | null | undefined) => (
+                                                                <div key={index}>{teamName}</div>
+                                                            ))
+                                                            : 'Nemáte žádný tým'
                                                 }
                                             </Typography>
                                         </Box>

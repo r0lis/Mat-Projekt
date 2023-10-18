@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { authUtils } from '../firebase/auth.utils';
 import Link from 'next/link';
-import { useRouter } from 'next/router'; // Import router z Next.js
+import { useRouter } from 'next/router';
+import { Box, Button, TextField, Typography } from '@mui/material';
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -9,49 +10,78 @@ const LoginPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const router = useRouter(); // Inicializace routeru
+  const router = useRouter();
 
   const handleLogin = async () => {
     try {
       await authUtils.login(email, password);
-      // Přihlášení bylo úspěšné.
-      setIsLoggedIn(true);
-      setError(null); // Vymaže případnou předchozí chybovou zprávu.
 
-      // Přesměrování na stránku /demoUserPage po úspěšném přihlášení
+      setIsLoggedIn(true);
+      setError(null);
+
+
       router.push('/');
     } catch (error) {
       console.error('Chyba při přihlašování:', error);
-      setError('Přihlášení selhalo. Zkontrolujte e-mail a heslo.'); // Nastavení chybové zprávy.
+      setError('Přihlášení selhalo. Zkontrolujte e-mail a heslo.');
       setIsLoggedIn(false);
     }
   };
 
   return (
-    <div>
-      <h2>Přihlášení</h2>
-     
-      <input
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        width: '40%',
+        margin: '0 auto',
+      }}
+    >
+      <Typography variant="h4">Přihlášení</Typography>
+
+      <TextField
         type="email"
-        placeholder="E-mail"
+        label="E-mail"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
+        fullWidth
+        margin="normal"
       />
-      <input
+      <TextField
         type="password"
-        placeholder="Heslo"
+        label="Heslo"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
+        fullWidth
+        margin="normal"
       />
-      <button onClick={handleLogin}>Přihlásit</button>
-      <Link href="/UserRegistration">Registrovat</Link> {/* Tlačítko pro přihlášení */}
+      <Button variant="contained" color="primary" onClick={handleLogin} sx={{ marginTop: '1rem' }}>
+        Přihlásit
+      </Button>
+      <Box sx={{ marginTop: '1rem' }}>
+        <Link href="/UserRegistration">
+          Registrovat
+        </Link>
+      </Box>
+      <Box sx={{ marginTop: '1rem' }}>
+        <Link href="/">
+          Zpět
+        </Link>
+      </Box>
 
-      <Link href="/">Zpět</Link> {/* Tlačítko pro přihlášení */}
 
-
-      {error && <p style={{ color: 'red' }}>{error}</p>} {/* Zobrazení chyby */}
-      {isLoggedIn && <p style={{ color: 'green' }}>Přihlášení úspěšné.</p>} {/* Informace o úspěšném přihlášení */}
-    </div>
+      {error && (
+        <Typography variant="body1" color="error" sx={{ marginTop: '1rem' }}>
+          {error}
+        </Typography>
+      )}
+      {isLoggedIn && (
+        <Typography variant="body1" color="success" sx={{ marginTop: '1rem' }}>
+          Přihlášení úspěšné.
+        </Typography>
+      )}
+    </Box>
   );
 };
 

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { authUtils } from '../firebase/auth.utils';
 import { useMutation, gql } from '@apollo/client';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { Box } from '@mui/material';
+import { Box, Button, TextField, Typography, Link } from '@mui/material';
+
 
 const CREATE_USER_MUTATION = gql`
   mutation CreateUser($Name: String!, $Surname: String!, $Email: String!, $IdUser: String!, $IdTeam: [String]!) {
@@ -45,11 +45,9 @@ const RegistrationPage: React.FC = () => {
         throw new Error('Hesla se neshodují.');
       }
 
-      // Nejprve provádíme registraci uživatele
       await authUtils.register(email, password);
 
-      // Pokud registrace byla úspěšná, pokračujeme vytvořením uživatele v databázi
-     
+
       const user = authUtils.getCurrentUser();
 
       if (user) {
@@ -60,31 +58,28 @@ const RegistrationPage: React.FC = () => {
     } catch (error: any) {
       setError(error.message);
       setRegistrationSuccess(false);
-
-     
     }
   };
 
   const handleEmailVerification = async () => {
     try {
-      await authUtils.sendEmailVerification(); // Send email verification
+      await authUtils.sendEmailVerification();
       const user = authUtils.getCurrentUser();
       setverificationSuccess(true);
 
-  
       if (user) {
-        await user.reload(); // Refresh the user's data
-  
+        await user.reload();
+
         if (user.emailVerified) {
           const response = await createUser({
-            variables: { Name: name, Surname: surname, Email: email, IdUser: "fefefef", IdTeam: ['fefefe'] },          });
+            variables: { Name: name, Surname: surname, Email: email, IdUser: "fefefef", IdTeam: ['fefefe'] },
+          });
           setverificationSuccess(true);
-    
-          router.push('/'); // If verification is successful, perform redirection
+
+          router.push(`/`);
         } else {
           await authUtils.deleteUser();
           throw new Error('E-mailová adresa není ověřena.');
-
         }
       } else {
         throw new Error('Uživatel nebyl nalezen.');
@@ -95,61 +90,76 @@ const RegistrationPage: React.FC = () => {
     }
   };
 
-
   return (
-    <div>
-      <h2>Registrace</h2>
+    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <Typography variant="h4" sx={{ margin: '1rem' }}>Registrace</Typography>
 
-      <input
-        type="nane"
-        placeholder="Name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-      />
-      <input
-        type="surname"
-        placeholder="Surname"
-        value={surname}
-        onChange={(e) => setSurname(e.target.value)}
-      />
+      <Box sx={{ width: '40%', position: 'relative' }}>
+        <TextField
+          type="text"
+          label="Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          fullWidth
+          margin="normal"
+        />
+        <TextField
+          type="text"
+          label="Surname"
+          value={surname}
+          onChange={(e) => setSurname(e.target.value)}
+          fullWidth
+          margin="normal"
+        />
 
-      <input
-        type="email"
-        placeholder="E-mail"
-        value={email}
-        onChange={(e) => {
-          setEmail(e.target.value);
-        }}
-      />
-     
-      <input
-        type="password"
-        placeholder="Heslo"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <input
-        type="password"
-        placeholder="Potvrzení hesla"
-        value={confirmPassword}
-        onChange={(e) => setConfirmPassword(e.target.value)}
-      />
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      {registrationSuccess && (
-        <div>
-          <p style={{ color: 'green' }}>Registrace úspěšná. Ověřte svůj e-mail, abyste mohli pokračovat.</p>
-          <button onClick={handleEmailVerification}>Ověřit E-mail</button>
-        </div>
-      )}
-     
-      {!registrationSuccess && <button onClick={handleRegister}>Registrovat</button>}
-      <Box>      <Link href="/LoginPage">Přihlásit</Link>
+        <TextField
+          type="email"
+          label="E-mail"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          fullWidth
+          margin="normal"
+        />
+
+        <TextField
+          type="password"
+          label="Heslo"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          fullWidth
+          margin="normal"
+        />
+        <TextField
+          type="password"
+          label="Potvrzení hesla"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+          fullWidth
+          margin="normal"
+        />
+        {error && <Typography variant="body1" color="error" sx={{ marginTop: '1rem' }}>{error}</Typography>}
+        {registrationSuccess && (
+          <div>
+            <Typography variant="body1" color="success" sx={{ marginTop: '1rem' }}>
+              Registrace úspěšná. Ověřte svůj e-mail, abyste mohli pokračovat.
+            </Typography>
+            <Button variant="contained" color="primary" onClick={handleEmailVerification} sx={{ marginTop: '1rem' }}>
+              Ověřit E-mail
+            </Button>
+          </div>
+        )}
+
+        {!registrationSuccess && (
+          <Button variant="contained" color="primary" onClick={handleRegister} sx={{ marginTop: '1rem' }}>
+            Registrovat
+          </Button>
+        )}
       </Box>
-      <Box>      <Link href="/UserRegistration">Zkusit znovu</Link>
-      </Box>
-      <Box>      <Link href="/">Zpět</Link>
-      </Box>
-    </div>
+
+      <Link href="/LoginPage" sx={{ marginTop: '1rem' }}>Přihlásit</Link>
+      <Link href="/UserRegistration" sx={{ marginTop: '1rem' }}>Zkusit znovu</Link>
+      <Link href="/" sx={{ marginTop: '1rem' }}>Zpět</Link>
+    </Box>
   );
 };
 
