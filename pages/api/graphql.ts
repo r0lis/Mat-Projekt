@@ -51,6 +51,11 @@ type NameAndSurname = {
   Surname: String
 }
 
+type TeamDetails = {
+  Name: String
+  Members: [String]
+}
+
 type Query = {
   user(id: String): User
   getUserByNameAndSurname(email: String): NameAndSurname
@@ -68,10 +73,8 @@ async function addUserToTeam(adminEmail: any, teamId: String) {
     const userDoc = userSnapshot.docs[0];
     const userData = userDoc.data() as User;
 
-    // Přidat teamId do pole IdTeam
     userData.IdTeam.push(teamId);
 
-    // Aktualizovat záznam uživatele v databázi
     await userDoc.ref.update({ IdTeam: userData.IdTeam });
   }
 }
@@ -81,6 +84,22 @@ const resolvers = {
     user: async (_: any, { id }: { id: string }, context: Context) => {
       // ...
     },
+
+    getTeamDetails: async (_: any, { teamId }: { teamId: string }, context: Context) => {
+  if (context.user) {
+    const teamQuery = db.collection('Team').where('teamId', '==', teamId);
+    const teamSnapshot = await teamQuery.get();
+    if (!teamSnapshot.empty) {
+      const teamData = teamSnapshot.docs[0].data() as Team;
+      return {
+        Name: teamData.Name,
+        Members: teamData.MembersEmails,
+      };
+    }
+  }
+  return null;
+},
+  
 
     getUserByNameAndSurname: async (_: any, { email }: { email: string }, context: Context) => {
       if (context.user) {
@@ -103,21 +122,20 @@ const resolvers = {
         const userSnapshot = await userQuery.get();
         if (!userSnapshot.empty) {
           const userData = userSnapshot.docs[0].data() as User;
-
-          // Získání týmů na základě IdTeam
+    
           const teamIds = userData.IdTeam;
-          const teamNames = [];
-
+          const teams = [];
+    
           for (const teamId of teamIds) {
             const teamQuery = db.collection('Team').where('teamId', '==', teamId);
             const teamSnapshot = await teamQuery.get();
             if (!teamSnapshot.empty) {
               const teamData = teamSnapshot.docs[0].data() as Team;
-              teamNames.push(teamData.Name);
+              teams.push({ teamId: teamData.teamId, Name: teamData.Name }); 
             }
           }
-
-          return teamNames;
+    
+          return teams; 
         }
       }
       return null;
@@ -128,13 +146,11 @@ const resolvers = {
   Mutation: {
     createUser: async (_: any, { input }: { input: CreateUserInput }, context: Context) => {
       try {
-        // Firestore vygeneruje unikátní ID pro nového uživatele
         const newUserDoc = db.collection('User').doc();
         const userId = newUserDoc.id;
         const teamId: never[] = [];
         const IsAdmin = 0;
 
-        // Použijte získaná userId a teamId pro vytvoření nového uživatele
         const newUser = {
           Name: input.Name,
           Surname: input.Surname,
@@ -142,43 +158,37 @@ const resolvers = {
           IdTeam: teamId,
           Email: input.Email,
           IsAdmin: IsAdmin,
-          // Další údaje o uživateli získané z input parametrů
         };
 
-        // Uložte nového uživatele do Firestore
         await newUserDoc.set(newUser);
 
         return newUser;
       } catch (error) {
         console.error('Chyba při vytváření uživatele:', error);
-        throw error; // Volitelně můžete chybu předat zpět
+        throw error; 
       }
     },
 
     createTeam: async (_: any, { input }: { input: CreateTeamInput }, context: Context) => {
       try {
-        // Firestore vygeneruje unikátní ID pro nový tým
         const newTeamDoc = db.collection('Team').doc();
         const teamId = newTeamDoc.id;
         await addUserToTeam(input.AdminEmail, teamId);
 
 
-        // Použijte získaný teamId pro vytvoření nového týmu
         const newTeam = {
           Name: input.Name,
           teamId: teamId,
           AdminEmail: input.AdminEmail,
           MembersEmails: input.MembersEmails,
-          // Další údaje o týmu získané z input parametrů
         };
 
-        // Uložte nový tým do Firestore
         await newTeamDoc.set(newTeam);
 
         return newTeam;
       } catch (error) {
         console.error('Chyba při vytváření týmu:', error);
-        throw error; // Volitelně můžete chybu předat zpět
+        throw error; 
       }
     },
 
@@ -242,13 +252,19 @@ const typeDefs = gql`
   type Query {
     user(id: String): User
     getUserByNameAndSurname(email: String): NameAndSurname
-    getUserTeamsByEmail(email: String): [String]
+    getUserTeamsByEmail(email: String!): [Team]
+    getTeamDetails(teamId: String!): TeamDetails 
   }
 
   type Mutation {
     createUser(input: CreateUserInput): User
     createTeam(input: CreateTeamInput): Team
     deleteUserByEmail(email: String): Boolean
+  }
+
+  type TeamDetails {
+    Name: String!
+    Members: [String]!
   }
 `;
 

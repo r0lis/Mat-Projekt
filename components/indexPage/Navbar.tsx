@@ -28,7 +28,10 @@ const GET_USER_INFO = gql`
 
 const GET_TEAM_NAMES = gql`
   query GetTeamNames($email: String!) {
-    getUserTeamsByEmail(email: $email)
+    getUserTeamsByEmail(email: $email) {
+      teamId
+      Name
+    }
   }
 `;
 
@@ -53,7 +56,7 @@ const MyNavBar: React.FC = () => {
         variables: { email: user?.email || '' },
     });
 
-    console.log(userTeamsData)
+    console.log(userIdError)
     const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElNav(event.currentTarget);
     };
@@ -244,7 +247,7 @@ const MyNavBar: React.FC = () => {
                                 {user ? (
                                     <><Box><>
                                         <Box>
-                                            <Typography sx={{ color: 'black', textAlign: 'center', fontSize: '1.2em', fontWeight: 'bold' }}>
+                                            <Typography sx={{ color: 'black', textAlign: 'center', fontSize: '1.2em', fontWeight: 'bold', marginTop: '0.5em', marginBottom: '0.5em' }}>
                                                 {userInfoLoading ? 'Načítání...' : userInfoError ? 'Chyba' : userInfoData?.getUserByNameAndSurname.Name + ' ' + userInfoData?.getUserByNameAndSurname.Surname}
                                             </Typography>
                                         </Box>
@@ -258,13 +261,19 @@ const MyNavBar: React.FC = () => {
                                                     : userIdError
                                                         ? 'Chyba'
                                                         : userTeamsData.getUserTeamsByEmail.length > 0
-                                                            ? userTeamsData.getUserTeamsByEmail.map((teamName: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | React.PromiseLikeOfReactNode | null | undefined, index: React.Key | null | undefined) => (
-                                                                <div key={index}>{teamName}</div>
+                                                            ? userTeamsData.getUserTeamsByEmail.map((team: any, index: React.Key | null | undefined) => (
+                                                                <Link key={index} href={`/Team/${team.teamId}`}>
+                                                                    <Box sx={{ marginBottom: '1em', cursor: 'pointer', color: 'black', textDecoration: 'underline' }}>
+                                                                        {team.Name}
+                                                                    </Box>
+                                                                </Link>
                                                             ))
                                                             : 'Nemáte žádný tým'
                                                 }
                                             </Typography>
                                         </Box>
+                                        <Box sx={{ borderBottom: '7px solid #b71dde ', marginTop: '1em', marginBottom: '1em' }} ></Box>
+
 
                                         <Box sx={{ alignItems: 'center', textAlign: 'center', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                                             <Button onClick={handleLogout} style={buttonStyle}>
