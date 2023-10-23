@@ -16,6 +16,7 @@ import LoginIcon2 from '../../public/user2.png';
 import { authUtils } from '../../firebase/auth.utils';
 import { useQuery } from '@apollo/client';
 import { gql } from 'graphql-tag';
+import TeamLogoImg from '../../public/logotym.png'
 
 const GET_USER_INFO = gql`
   query GetUserInfo($email: String!) {
@@ -56,6 +57,10 @@ const MyNavBar: React.FC = () => {
         variables: { email: user?.email || '' },
     });
 
+    const name = userInfoData?.getUserByNameAndSurname.Name || '';
+    const surname = userInfoData?.getUserByNameAndSurname.Surname || '';
+    const initials = name[0] + surname[0];
+
     console.log(userIdError)
     const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElNav(event.currentTarget);
@@ -92,7 +97,7 @@ const MyNavBar: React.FC = () => {
     };
 
     const buttonStyle = {
-        backgroundColor: 'grey',
+        backgroundColor: '#FFE0FE',
         width: '10em',
         '&:hover': {
             backgroundColor: '#b71dde',
@@ -100,7 +105,7 @@ const MyNavBar: React.FC = () => {
     };
 
     const buttonStyle2 = {
-        backgroundColor: 'grey',
+        backgroundColor: '#FFE0FE',
         marginBottom: '1em',
         marginTop: '1em',
         width: '10em',
@@ -242,31 +247,40 @@ const MyNavBar: React.FC = () => {
                         >
 
 
-                            <Box sx={{ width: '18rem', height: "auto" }}>
+                            <Box sx={{ width: '20rem', height: "auto" }}>
 
                                 {user ? (
                                     <><Box><>
                                         <Box>
-                                            <Typography sx={{ color: 'black', textAlign: 'center', fontSize: '1.2em', fontWeight: 'bold', marginTop: '0.5em', marginBottom: '0.5em' }}>
-                                                {userInfoLoading ? 'Načítání...' : userInfoError ? 'Chyba' : userInfoData?.getUserByNameAndSurname.Name + ' ' + userInfoData?.getUserByNameAndSurname.Surname}
-                                            </Typography>
+                                            <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', }}>
+                                                <Typography sx={{
+                                                    color: 'black',
+                                                    fontSize: '1.2em',
+                                                    fontWeight: 'bold',
+                                                    marginBottom: '0.5em',
+                                                    textAlign: 'center',
+                                                }}>
+                                                    {userInfoLoading ? 'Načítání...' : userInfoError ? 'Chyba' : userInfoData?.getUserByNameAndSurname.Name + ' ' + userInfoData?.getUserByNameAndSurname.Surname}
+                                                </Typography>
+                                            </Box>
                                         </Box>
-
                                         <Box sx={{ borderBottom: '7px solid #b71dde ', marginBottom: '1em' }} ></Box>
 
-                                        <Box>
-                                            <Typography sx={{ color: 'black', textAlign: 'center', fontSize: '1.2em', fontWeight: 'bold' }}>
+                                        <Box sx={{ marginLeft: '7%', marginRight: '7%' }}>
+                                            <Typography sx={{ color: 'black', textAlign: 'center', fontSize: '1.2em', fontWeight: 'bold', textDecoration: 'none' }}>
                                                 {userIdLoading
                                                     ? 'Načítání...'
                                                     : userIdError
                                                         ? 'Chyba'
                                                         : userTeamsData.getUserTeamsByEmail.length > 0
                                                             ? userTeamsData.getUserTeamsByEmail.map((team: any, index: React.Key | null | undefined) => (
-                                                                <Link key={index} href={`/Team/${team.teamId}`}>
-                                                                    <Box sx={{ marginBottom: '1em', cursor: 'pointer', color: 'black', textDecoration: 'underline' }}>
-                                                                        {team.Name}
-                                                                    </Box>
-                                                                </Link>
+                                                                <Box sx={{ marginBottom: '1em', backgroundColor: 'lightgray', padding: '3%', borderRadius: '10px' }}>
+                                                                    <Link key={index} href={`/Team/${team.teamId}`} style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
+                                                                        <img src={TeamLogoImg.src} alt="Team Logo" style={{ width: '50px', height: '50px', marginRight: '1em' }} />
+                                                                        <div style={{ color: 'black' }}>{team.Name}</div>
+                                                                    </Link>
+                                                                </Box>
+
                                                             ))
                                                             : 'Nemáte žádný tým'
                                                 }
