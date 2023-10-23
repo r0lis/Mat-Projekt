@@ -2,6 +2,7 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import { useQuery } from '@apollo/client';
 import { gql } from 'graphql-tag';
+import Navbar from '@/components/teamPage/Navbar';
 
 const GET_TEAM_DETAILS = gql`
 query GetTeamDetails($teamId: String!) {
@@ -23,9 +24,12 @@ function Team() {
   if (loading) return <p>Načítání...</p>;
   if (error) return <p>Chyba: {error.message}</p>;
 
-  const team = data.getTeamDetails;   
+  const team = data.getTeamDetails;
+  const teamName = team ? team.Name : '';
+
   return (
     <div>
+      <Navbar teamName={teamName} /> 
       <h1>Tým</h1>
       {team && (
         <div>

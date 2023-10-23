@@ -88,6 +88,13 @@ const MyNavBar: React.FC = () => {
         }
     };
 
+    const hoverStyle = {
+        backgroundColor: 'lightgray',
+        '&:hover': {
+            backgroundColor: 'lightblue',
+        },
+    };
+
     const logoAndButtonStyle: React.CSSProperties = {
         left: '5%',
         position: 'relative',
@@ -252,10 +259,10 @@ const MyNavBar: React.FC = () => {
                                 {user ? (
                                     <><Box><>
                                         <Box>
-                                            <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', }}>
+                                            <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '4%', marginBottom: '4%' }}>
                                                 <Typography sx={{
                                                     color: 'black',
-                                                    fontSize: '1.2em',
+                                                    fontSize: '1.3em',
                                                     fontWeight: 'bold',
                                                     marginBottom: '0.5em',
                                                     textAlign: 'center',
@@ -274,13 +281,12 @@ const MyNavBar: React.FC = () => {
                                                         ? 'Chyba'
                                                         : userTeamsData.getUserTeamsByEmail.length > 0
                                                             ? userTeamsData.getUserTeamsByEmail.map((team: any, index: React.Key | null | undefined) => (
-                                                                <Box sx={{ marginBottom: '1em', backgroundColor: 'lightgray', padding: '3%', borderRadius: '10px' }}>
+                                                                <Box sx={{ marginBottom: '1em', padding: '3%', borderRadius: '10px', ...hoverStyle }}>
                                                                     <Link key={index} href={`/Team/${team.teamId}`} style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
                                                                         <img src={TeamLogoImg.src} alt="Team Logo" style={{ width: '50px', height: '50px', marginRight: '1em' }} />
                                                                         <div style={{ color: 'black' }}>{team.Name}</div>
                                                                     </Link>
                                                                 </Box>
-
                                                             ))
                                                             : 'Nemáte žádný tým'
                                                 }
