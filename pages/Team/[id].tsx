@@ -2,7 +2,7 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import { useQuery } from '@apollo/client';
 import { gql } from 'graphql-tag';
-import Navbar from '@/components/teamPage/Navbar';
+import SideBar from '@/components/teamPage/SideBar';
 
 const GET_TEAM_DETAILS = gql`
 query GetTeamDetails($teamId: String!) {
@@ -25,16 +25,14 @@ function Team() {
   if (error) return <p>Chyba: {error.message}</p>;
 
   const team = data.getTeamDetails;
-  const teamName = team ? team.Name : '';
 
   return (
     <div>
-      <Navbar teamName={teamName} /> 
-      <h1>Tým</h1>
+      
       {team && (
         <div>
-          <h2>Team Name: {team.Name}</h2>
-          <h2>Members: {team.Members.join(', ')}</h2>
+          <SideBar items={["Přehled", "Členové", "Týmy a zdi", "Soupisky", "Nominace", "Platby", "Události", "Oprávnění", "Nastavení"]} />
+          
         </div>
       )}
     </div>
