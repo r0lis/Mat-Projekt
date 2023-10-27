@@ -110,7 +110,7 @@ const Sidebar: React.FC<SidebarProps> = ({ items }) => {
 
                 </Toolbar>
             </AppBar>
-            <div style={{ display: 'block', alignItems: 'center', backgroundColor: 'white', paddingTop: 'px', maxWidth: '15em', minHeight: '100%', position: 'absolute', borderRight: '4px solid lightgray', padding: '0' }}>
+            <div style={{ display: 'block', alignItems: 'center', backgroundColor: 'white', paddingTop: 'px', maxWidth: '20em',width:'15%', minHeight: '100%', position: 'absolute', borderRight: '4px solid lightgray', padding: '0' }}>
                 {items.map((item, index) => (
                     <Box
                         key={index}
