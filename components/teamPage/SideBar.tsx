@@ -117,6 +117,7 @@ const Sidebar: React.FC<SidebarProps> = ({ items }) => {
                         sx={{
                             padding: '10px',
                             left: '0px',
+                            
                             display: 'flex',
                             alignItems: 'center',
                             verticalAlign: 'center',
@@ -129,7 +130,7 @@ const Sidebar: React.FC<SidebarProps> = ({ items }) => {
                     </Box>
                 ))}
             </div>
-            <div style={{ marginLeft: '15em' }}>ahoj</div>
+            <div style={{ marginLeft: '20em' }}>ahoj</div>
         </div>
     );
 };
