@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import GroupImg from '@/public/people.png';
@@ -14,6 +14,7 @@ import ChatIcon from '@mui/icons-material/Chat';
 import CircleNotificationsIcon from '@mui/icons-material/CircleNotifications';
 import demoUser from '@/public/demoUser.png';
 import { authUtils } from '../../firebase/auth.utils';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 
 
@@ -44,6 +45,9 @@ const Sidebar: React.FC<SidebarProps> = ({ items }) => {
     const router = useRouter();
     const { id } = router.query;
     const user = authUtils.getCurrentUser();
+    const [showOnlyIcon, setShowOnlyIcon] = useState(false);
+
+
 
 
     const { loading, error, data } = useQuery(GET_TEAM_DETAILS, {
@@ -65,24 +69,34 @@ const Sidebar: React.FC<SidebarProps> = ({ items }) => {
     const surname = userInfoData?.getUserByNameAndSurname.Surname || '';
     const initials = name[0] + surname[0];
 
+    const toggleContentVisibility = () => {
+        setShowOnlyIcon(!showOnlyIcon); // Toggles the state on button click
+    };
+
     return (
         <div>
             <AppBar position="static" sx={{ backgroundColor: '#A020F0', display: 'flex', justifyContent: 'space-between', minHeight: '5em' }}>
                 <Toolbar>
-                    <IconButton color="inherit" aria-label="open sidebar">
+                    <IconButton
+                        color="inherit"
+                        aria-label="open sidebar"
+                        onClick={toggleContentVisibility} // Trigger the function on click
+                    >
                         <Box sx={{ marginTop: '18px' }}>
-                            <Link href={`/`}>
-                                <MenuIcon sx={{ color: 'white' }} />
-                            </Link>
+                            <MenuIcon sx={{ color: 'white' }} />
                         </Box>
                     </IconButton>
-                    <Box sx={{ display: 'flex', alignItems: 'center', marginLeft: '20%', }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', marginLeft: { xs: 'auto', md: '20%' } }}>
+
                         <img src={LogoTeam.src} alt="Team Logo" style={{ width: '3.5em', height: '3.5em', marginRight: '30px', marginTop: '12px' }} />
-                        <Typography sx={{ color: 'white', fontWeight: 'bold', fontSize: '1.7em', marginLeft: '%', marginTop: '12px' }}>{teamName}</Typography>
+                        <Box sx={{ display: 'inline-block' }}>
+                            <Typography sx={{ color: 'white', fontWeight: 'bold', fontSize: '1.7vw', marginLeft: '%', marginTop: '12px' }}>{teamName}</Typography>
+
+                        </Box>
                     </Box>
 
-                    <Box sx={{ display: 'flex', alignItems: 'center', marginLeft: '20%', }}>
-                        <Typography sx={{ color: 'white', fontWeight: 'bold', fontSize: '1.4em', marginLeft: '%', marginTop: '12px' }}>Management</Typography>
+                    <Box sx={{ display: 'flex', alignItems: 'center', marginLeft: { xs: '2%', md: '20%' } }}>
+                        <Typography sx={{ color: 'white', fontWeight: 'bold', fontSize: '1.4vw', marginLeft: '%', marginTop: '12px' }}>Management</Typography>
                     </Box>
 
                     <IconButton color="inherit" aria-label="open sidebar" sx={{ display: 'flex', marginLeft: '3%', fontSize: '24px' }}>
@@ -93,32 +107,31 @@ const Sidebar: React.FC<SidebarProps> = ({ items }) => {
                         </Box>
                     </IconButton>
 
-                    <IconButton color="inherit" aria-label="open sidebar" sx={{ display: 'flex', marginLeft: '0.5%', fontSize: '24px' }}>
+                    <IconButton color="inherit" aria-label="open sidebar" sx={{ display: 'flex', marginLeft: { xs: '0.1%', md: '0.5%' }, fontSize: '24px' }}>
                         <Box sx={{ display: 'flex', marginTop: '18px' }}>
                             <Link href={`/`}>
                                 <CircleNotificationsIcon sx={{ color: 'white' }} />
                             </Link>
                         </Box>
                     </IconButton>
-                    <Box sx={{ display: 'flex', alignItems: 'center', marginLeft: '3%', marginTop: '12px' }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', marginLeft: { xs: '0.1%', md: '3%' }, marginTop: '12px' }}>
                         <Avatar alt="Remy Sharp" src={demoUser.src} />
                     </Box>
 
                     <Box sx={{ display: 'flex', alignItems: 'center', marginLeft: '1%', }}>
-                        <Typography sx={{ color: 'white', fontWeight: 'bold', fontSize: '1.4em', marginLeft: '%', marginTop: '12px' }}>{name} {surname}</Typography>
+                        <Typography sx={{ color: 'white', fontWeight: 'bold', fontSize: '1.4vw', marginLeft: '%', marginTop: '12px' }}>{name} {surname}</Typography>
                     </Box>
 
                 </Toolbar>
             </AppBar>
-            <div style={{ display: 'block', alignItems: 'center', backgroundColor: 'white', paddingTop: 'px', maxWidth: '20em',width:'15%', minHeight: '100%', position: 'absolute', borderRight: '4px solid lightgray', padding: '0' }}>
+            <div style={{ display: 'block', alignItems: 'center', backgroundColor: 'white', paddingTop: 'px', maxWidth: '20em', width: '15%', minHeight: '100%', position: 'absolute', borderRight: '4px solid lightgray', padding: '0' }}>
                 {items.map((item, index) => (
                     <Box
                         key={index}
                         sx={{
                             padding: '10px',
                             left: '0px',
-                            
-                            display: 'flex',
+                            display: showOnlyIcon ? 'none' : 'flex', // Merge both conditions into a single 'display' property
                             alignItems: 'center',
                             verticalAlign: 'center',
                         }}
