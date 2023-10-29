@@ -78,6 +78,8 @@ function Team() {
   const [activeLink, setActiveLink] = useState('Přehled');
   const [menuOpen, setMenuOpen] = useState(false);
   const [anchorEl2, setAnchorEl2] = useState<null | HTMLElement>(null);
+  const [menuOpen2, setMenuOpen2] = useState(false);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
 
   useEffect(() => {
@@ -153,6 +155,16 @@ const handleCloseMenu = () => {
     setAnchorEl2(null);
 };
 
+const handleOpenMenu2 = (event: React.MouseEvent<HTMLElement>) => {
+  setAnchorEl(event.currentTarget);
+};
+
+
+const handleCloseMenu2 = () => {
+  setMenuOpen2(false);
+  setAnchorEl(null);
+};
+
 const handleLogout = async () => {
     try {
         await authUtils.logout();
@@ -162,20 +174,6 @@ const handleLogout = async () => {
     }
 };
 
-const hoverStyle = {
-    backgroundColor: 'lightgray',
-    '&:hover': {
-        backgroundColor: 'lightblue',
-    },
-};
-
-const logoAndButtonStyle: React.CSSProperties = {
-    left: '5%',
-    position: 'relative',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-};
 
 const buttonStyle = {
     backgroundColor: '#FFE0FE',
@@ -235,14 +233,101 @@ const buttonStyle2 = {
                 </Box>
               </IconButton>
 
+              <Box>
+              <Box onClick={handleOpenMenu2}> 
               <IconButton color="inherit" aria-label="open sidebar" sx={{ display: 'flex', marginLeft: { xs: '0.1%', md: '0.5%' }, fontSize: '24px', }}>
-                <Box sx={{ display: 'flex', marginTop: '14px' }}>
-                  <Link href={`/`}>
+                <Box   sx={{ display: 'flex', marginTop: '8px' }}>
                     <CircleNotificationsIcon sx={{ color: 'white' }} />
-                  </Link>
                 </Box>
               </IconButton>
+              </Box> 
+              <Menu
+                            id="menu-appbar2"
+                            anchorEl={anchorEl}
+                            open={Boolean(anchorEl)}
+                            onClose={handleCloseMenu2}
+                            sx={{
+                                display: { xs: 'block', marginTop: '1em', marginLeft: '2em', },
 
+                            }}
+                            transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'center',
+                            }}
+                        >
+
+
+                            <Box sx={{ width: '20rem', height: "auto" }}>
+
+                                {user ? (
+                                    <><Box><>
+                                        <Box>
+                                            <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '4%', marginBottom: '4%' }}>
+                                                <Typography sx={{
+                                                    color: 'black',
+                                                    fontSize: '1.3em',
+                                                    fontWeight: 'bold',
+                                                    marginBottom: '0.5em',
+                                                    textAlign: 'center',
+                                                }}>
+                                                    {userInfoLoading ? 'Načítání...' : userInfoError ? 'Chyba' : userInfoData?.getUserByNameAndSurname.Name + ' ' + userInfoData?.getUserByNameAndSurname.Surname}
+                                                </Typography>
+                                            </Box>
+                                        </Box>
+                                        <Box sx={{ borderBottom: '7px solid #b71dde ', marginBottom: '1em' }} ></Box>
+
+                                        <Box sx={{ marginLeft: '7%', marginRight: '7%' }}>
+                                            <Typography sx={{ color: 'black', textAlign: 'center', fontSize: '1.2em', fontWeight: 'bold', textDecoration: 'none' }}>
+                                                notifikace
+                                            </Typography>
+                                        </Box>
+                                        <Box sx={{ borderBottom: '7px solid #b71dde ', marginTop: '1em', marginBottom: '1em' }} ></Box>
+
+
+                                        <Box sx={{ alignItems: 'center', textAlign: 'center', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                                            <Button onClick={handleLogout} style={buttonStyle}>
+                                                <Typography
+                                                    sx={{ color: 'black', fontWeight: 'bold', fontSize: '1 vw', lineHeight: '20px', padding: '5px' }}
+                                                >Správa účtu</Typography>
+                                            </Button>
+                                            <Button onClick={handleLogout} style={buttonStyle2}>
+                                                <Typography
+                                                    sx={{ color: 'black', fontWeight: 'bold', fontSize: '1 vw', lineHeight: '20px', padding: '5px' }}
+                                                >Odhlásit se</Typography>
+                                            </Button>
+                                        </Box></></Box></>
+                                ) : (
+                                    <>
+                                        <Box sx={{ alignItems: 'center', textAlign: 'center', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'center', marginBottom: '2em', marginTop: '2em' }}>
+                                            <Typography sx={{ color: 'black', fontWeight: 'bold', fontSize: '1.7vw', lineHeight: '20px' }}>
+                                                LOGO
+                                            </Typography>
+
+                                        </Box>
+                                        <Box sx={{ borderBottom: '7px solid #b71dde ' }} ></Box>
+
+                                        <Box sx={{ alignItems: 'center', textAlign: 'center', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                                            <Link href="/LoginPage">
+                                                <Button sx={buttonStyle2}>
+                                                    <Typography
+                                                        sx={{ color: 'black', fontWeight: 'bold', fontSize: '1 vw', lineHeight: '20px', padding: '5px' }}
+                                                    >Přihlásit se</Typography></Button>
+                                            </Link>
+                                        </Box><Box sx={{ alignItems: 'center', textAlign: 'center', position: 'relative', display: 'flex', flexDirection: 'column', marginBottom: '1em', justifyContent: 'center' }}>
+                                            <Link href="/UserRegistration">
+                                                <Button sx={buttonStyle}>
+                                                    <Typography
+                                                        sx={{ color: 'black', fontWeight: 'bold', fontSize: '1 vw', lineHeight: '20px', padding: '5px' }}>Vytvořit účet</Typography></Button>
+                                            </Link>
+                                        </Box></>
+                                )}
+
+                            </Box>
+
+                        </Menu>
+
+              </Box>
+              
               <Box>
               <Box onClick={handleOpenMenu} sx={{ display: 'flex', alignItems: 'center', marginLeft: { xs: '0.1%', md: '2.5em' }, marginTop: '8px' }}>
                 <Avatar alt="Remy Sharp" src={demoUser.src} />
