@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import GroupImg from '@/public/people.png';
@@ -9,7 +9,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import LogoTeam from '@/public/logotym.png';
 import { useRouter } from 'next/router';
 import { gql, useQuery } from '@apollo/client';
-import { Typography, CircularProgress, Avatar } from '@mui/material'; // Importujte CircularProgress z MUI
+import { Typography, CircularProgress, Avatar, useMediaQuery, Theme } from '@mui/material'; // Importujte CircularProgress z MUI
 import ChatIcon from '@mui/icons-material/Chat';
 import CircleNotificationsIcon from '@mui/icons-material/CircleNotifications';
 import demoUser from '@/public/demoUser.png';
@@ -46,6 +46,8 @@ const Sidebar: React.FC<SidebarProps> = ({ items }) => {
     const { id } = router.query;
     const user = authUtils.getCurrentUser();
     const [showOnlyIcon, setShowOnlyIcon] = useState(false);
+    const [windowSize, setWindowSize] = useState(window.innerWidth);
+
 
 
 
@@ -72,6 +74,27 @@ const Sidebar: React.FC<SidebarProps> = ({ items }) => {
     const toggleContentVisibility = () => {
         setShowOnlyIcon(!showOnlyIcon); // Toggles the state on button click
     };
+
+    useEffect(() => {
+        const handleResize = () => {
+            setWindowSize(window.innerWidth);
+        };
+
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
+    useEffect(() => {
+        // Adjust the condition for XS window size as per your requirement
+        if (windowSize < 700) {
+            setShowOnlyIcon(true); // Set the state to change opacity when window size is extra small (XS)
+        } else {
+            setShowOnlyIcon(false);
+        }
+    }, [windowSize]);
 
     return (
         <div>
@@ -124,26 +147,52 @@ const Sidebar: React.FC<SidebarProps> = ({ items }) => {
 
                 </Toolbar>
             </AppBar>
-            <div style={{ display: 'block', alignItems: 'center', backgroundColor: 'white', paddingTop: 'px', maxWidth: '20em', width: '15%', minHeight: '100%', position: 'absolute', borderRight: '4px solid lightgray', padding: '0' }}>
+            <div style={{
+                  display: 'block',
+                  alignItems: 'center',
+                  backgroundColor: 'white',
+                  paddingTop: 'px',
+                  width: showOnlyIcon ? '4.5em' : '12em', // Adjust the width based on showOnlyIcon state
+                  maxWidth: '20em',
+                  minHeight: '100%',
+                  position: 'absolute',
+                  borderRight: '4px solid lightgray',
+                  padding: '0',
+                  transition: 'width 0.5s ease-in-out' 
+            }}>
                 {items.map((item, index) => (
                     <Box
                         key={index}
                         sx={{
                             padding: '10px',
                             left: '0px',
-                            display: showOnlyIcon ? 'none' : 'flex', // Merge both conditions into a single 'display' property
+                            display: 'flex',
                             alignItems: 'center',
                             verticalAlign: 'center',
                         }}
                     >
                         <Link href={`/Team/${item}`} style={{ textDecoration: 'none', display: 'flex', padding: '0' }}>
                             <img src={GroupImg.src} alt="Group" style={{ width: '35px', height: '35px', marginRight: '10px', marginLeft: '10px' }} />
-                            <span style={{ fontSize: '1.2em', color: 'black', verticalAlign: 'center', marginTop: '5px', marginLeft: '10px', marginRight: '10px' }}>{item}</span>
+                            <span
+                                style={{
+                                    fontSize: '1.2em',
+                                    color: 'black',
+                                    verticalAlign: 'center',
+                                    marginTop: '5px',
+                                    marginLeft: '10px',
+                                    marginRight: '10px',
+                                    opacity: showOnlyIcon ? 0 : 1,
+                                    transition: 'opacity 0.5s ease',
+
+                                }}
+                            >
+                                {item}
+                            </span>
                         </Link>
                     </Box>
                 ))}
             </div>
-            <div style={{ marginLeft: '20em' }}>ahoj</div>
+            <div style={{ marginLeft: showOnlyIcon ? '5em' : '15em', }}>ahoj</div>
         </div>
     );
 };
