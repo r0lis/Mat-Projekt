@@ -9,3 +9,6 @@ body {
 
 
 
+.sidebarContainer:hover {
+  border-right: 4px solid rgba(160, 32, 240, 1);
+}
