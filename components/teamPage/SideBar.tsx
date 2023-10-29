@@ -88,9 +88,8 @@ const Sidebar: React.FC<SidebarProps> = ({ items }) => {
     }, []);
 
     useEffect(() => {
-        // Adjust the condition for XS window size as per your requirement
-        if (windowSize < 700) {
-            setShowOnlyIcon(true); // Set the state to change opacity when window size is extra small (XS)
+        if (windowSize < 1000) {
+            setShowOnlyIcon(true); 
         } else {
             setShowOnlyIcon(false);
         }
@@ -98,7 +97,7 @@ const Sidebar: React.FC<SidebarProps> = ({ items }) => {
 
     return (
         <div>
-            <AppBar position="static" sx={{ backgroundColor: '#A020F0', display: 'flex', justifyContent: 'space-between', minHeight: '5em' }}>
+            <AppBar position="static" sx={{ backgroundColor: '#A020F0', display: 'flex', justifyContent: 'space-between', minHeight: '4.5em' }}>
                 <Toolbar>
                     <IconButton
                         color="inherit"
@@ -111,19 +110,19 @@ const Sidebar: React.FC<SidebarProps> = ({ items }) => {
                     </IconButton>
                     <Box sx={{ display: 'flex', alignItems: 'center', marginLeft: { xs: 'auto', md: '20%' } }}>
 
-                        <img src={LogoTeam.src} alt="Team Logo" style={{ width: '3.5em', height: '3.5em', marginRight: '30px', marginTop: '12px' }} />
+                        <img src={LogoTeam.src} alt="Team Logo" style={{ width: '3.5em', height: '3.5em', marginRight: '30px', marginTop: '8px' }} />
                         <Box sx={{ display: 'inline-block' }}>
-                            <Typography sx={{ color: 'white', fontWeight: 'bold', fontSize: '1.7vw', marginLeft: '%', marginTop: '12px' }}>{teamName}</Typography>
+                            <Typography sx={{ color: 'white', fontWeight: 'bold', fontSize: '1.7vw', marginLeft: '%', marginTop: '8px' }}>{teamName}</Typography>
 
                         </Box>
                     </Box>
 
                     <Box sx={{ display: 'flex', alignItems: 'center', marginLeft: { xs: '2%', md: '20%' } }}>
-                        <Typography sx={{ color: 'white', fontWeight: 'bold', fontSize: '1.4vw', marginLeft: '%', marginTop: '12px' }}>Management</Typography>
+                        <Typography sx={{ color: 'white', fontWeight: 'bold', fontSize: '1.4vw', marginLeft: '%', marginTop: '8px' }}>Management</Typography>
                     </Box>
 
                     <IconButton color="inherit" aria-label="open sidebar" sx={{ display: 'flex', marginLeft: '3%', fontSize: '24px' }}>
-                        <Box sx={{ display: 'flex', marginTop: '18px' }}>
+                        <Box sx={{ display: 'flex', marginTop: '14px' }}>
                             <Link href={`/`}>
                                 <ChatIcon sx={{ color: 'white' }} />
                             </Link>
@@ -131,18 +130,18 @@ const Sidebar: React.FC<SidebarProps> = ({ items }) => {
                     </IconButton>
 
                     <IconButton color="inherit" aria-label="open sidebar" sx={{ display: 'flex', marginLeft: { xs: '0.1%', md: '0.5%' }, fontSize: '24px' }}>
-                        <Box sx={{ display: 'flex', marginTop: '18px' }}>
+                        <Box sx={{ display: 'flex', marginTop: '14px' }}>
                             <Link href={`/`}>
                                 <CircleNotificationsIcon sx={{ color: 'white' }} />
                             </Link>
                         </Box>
                     </IconButton>
-                    <Box sx={{ display: 'flex', alignItems: 'center', marginLeft: { xs: '0.1%', md: '3%' }, marginTop: '12px' }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', marginLeft: { xs: '0.1%', md: '3%' }, marginTop: '8px' }}>
                         <Avatar alt="Remy Sharp" src={demoUser.src} />
                     </Box>
 
                     <Box sx={{ display: 'flex', alignItems: 'center', marginLeft: '1%', }}>
-                        <Typography sx={{ color: 'white', fontWeight: 'bold', fontSize: '1.4vw', marginLeft: '%', marginTop: '12px' }}>{name} {surname}</Typography>
+                        <Typography sx={{ color: 'white', fontWeight: 'bold', fontSize: '1.4vw', marginLeft: '%', marginTop: '8px' }}>{name} {surname}</Typography>
                     </Box>
 
                 </Toolbar>
@@ -152,7 +151,7 @@ const Sidebar: React.FC<SidebarProps> = ({ items }) => {
                   alignItems: 'center',
                   backgroundColor: 'white',
                   paddingTop: 'px',
-                  width: showOnlyIcon ? '4.5em' : '12em', // Adjust the width based on showOnlyIcon state
+                  width: showOnlyIcon ? '4.5em' : '12em', 
                   maxWidth: '20em',
                   minHeight: '100%',
                   position: 'absolute',
@@ -182,7 +181,7 @@ const Sidebar: React.FC<SidebarProps> = ({ items }) => {
                                     marginLeft: '10px',
                                     marginRight: '10px',
                                     opacity: showOnlyIcon ? 0 : 1,
-                                    transition: 'opacity 0.5s ease',
+                                    transition: 'opacity 0.4s ease',
 
                                 }}
                             >

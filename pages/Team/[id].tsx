@@ -31,7 +31,7 @@ function Team() {
       
       {team && (
         <div>
-          <SideBar items={["Přehled", "Členové", "Týmy a zdi", "Soupisky", "Nominace", "Platby", "Události", "Oprávnění", "Nastavení"]} />
+          <SideBar items={["Přehled", "Tréninky",  "Kalendář", "Soupisky", "Nominace", "Platby", "Události", "Členové","Oprávnění", "Správa"]} />
           
         </div>
       )}
