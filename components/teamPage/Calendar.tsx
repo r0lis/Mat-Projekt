@@ -25,7 +25,7 @@ const CalendarComponent: React.FC = () => {
     
       // Vykreslení kalendáře FullCalendar
       return (
-        <div style={{maxWidth:'1000px'}}>
+        <div style={{maxWidth:'1000px', marginTop:'2em', marginLeft:'auto', marginRight:'auto'}}>
           <FullCalendar
             plugins={[dayGridPlugin, interactionPlugin]}
             initialView="dayGridMonth"

@@ -10,7 +10,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import LogoTeam from '@/public/logotym.png';
 import { useRouter } from 'next/router';
 import { gql, useQuery } from '@apollo/client';
-import { Typography, CircularProgress, Avatar, useMediaQuery, Theme } from '@mui/material'; // Importujte CircularProgress z MUI
+import { Typography, CircularProgress, Avatar, useMediaQuery, Theme, Button, Menu } from '@mui/material'; // Importujte CircularProgress z MUI
 import ChatIcon from '@mui/icons-material/Chat';
 import CircleNotificationsIcon from '@mui/icons-material/CircleNotifications';
 import demoUser from '@/public/demoUser.png';
@@ -41,8 +41,8 @@ const items = [
   { label: 'Přehled', image: Overview },
   { label: 'Tréninky', image: Trainings },
   { label: 'Kalendář', image: Calendar },
+  { label: 'Zápasy', image: Nominations },
   { label: 'Soupisky', image: Rousters },
-  { label: 'Nominace', image: Nominations },
   { label: 'Platby', image: Pay },
   { label: 'Události', image: Events },
   { label: 'Členové', image: Members },
@@ -76,6 +76,8 @@ function Team() {
   const [isHovered, setIsHovered] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [activeLink, setActiveLink] = useState('Přehled');
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [anchorEl2, setAnchorEl2] = useState<null | HTMLElement>(null);
 
 
   useEffect(() => {
@@ -141,6 +143,62 @@ function Team() {
   };
 
 
+const handleOpenMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl2(event.currentTarget);
+};
+
+
+const handleCloseMenu = () => {
+    setMenuOpen(false);
+    setAnchorEl2(null);
+};
+
+const handleLogout = async () => {
+    try {
+        await authUtils.logout();
+        window.location.reload();
+    } catch (error) {
+        console.error("Chyba při odhlašování: ", error);
+    }
+};
+
+const hoverStyle = {
+    backgroundColor: 'lightgray',
+    '&:hover': {
+        backgroundColor: 'lightblue',
+    },
+};
+
+const logoAndButtonStyle: React.CSSProperties = {
+    left: '5%',
+    position: 'relative',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+};
+
+const buttonStyle = {
+    backgroundColor: '#FFE0FE',
+    width: '10em',
+    '&:hover': {
+        backgroundColor: '#b71dde',
+    },
+};
+
+const buttonStyle2 = {
+    backgroundColor: '#FFE0FE',
+    marginBottom: '1em',
+    marginTop: '1em',
+    width: '10em',
+    '&:hover': {
+        backgroundColor: '#b71dde',
+
+    },
+
+};
+
+
+
   return (
     <div>
       {team && (
@@ -152,7 +210,7 @@ function Team() {
                 aria-label="open sidebar"
                 onClick={toggleContentVisibility} 
               >
-                <Box sx={{ marginTop: '18px' }}>
+                <Box  sx={{ marginTop: '18px' }}>
                   <MenuIcon sx={{ color: 'white' }} />
                 </Box>
               </IconButton>
@@ -177,15 +235,102 @@ function Team() {
                 </Box>
               </IconButton>
 
-              <IconButton color="inherit" aria-label="open sidebar" sx={{ display: 'flex', marginLeft: { xs: '0.1%', md: '0.5%' }, fontSize: '24px' }}>
+              <IconButton color="inherit" aria-label="open sidebar" sx={{ display: 'flex', marginLeft: { xs: '0.1%', md: '0.5%' }, fontSize: '24px', }}>
                 <Box sx={{ display: 'flex', marginTop: '14px' }}>
                   <Link href={`/`}>
                     <CircleNotificationsIcon sx={{ color: 'white' }} />
                   </Link>
                 </Box>
               </IconButton>
-              <Box sx={{ display: 'flex', alignItems: 'center', marginLeft: { xs: '0.1%', md: '3%' }, marginTop: '8px' }}>
+
+              <Box>
+              <Box onClick={handleOpenMenu} sx={{ display: 'flex', alignItems: 'center', marginLeft: { xs: '0.1%', md: '2.5em' }, marginTop: '8px' }}>
                 <Avatar alt="Remy Sharp" src={demoUser.src} />
+              </Box>
+              <Menu
+                            id="menu-appbar2"
+                            anchorEl={anchorEl2}
+                            open={Boolean(anchorEl2)}
+                            onClose={handleCloseMenu}
+                            sx={{
+                                display: { xs: 'block', marginTop: '1em', marginLeft: '2em', },
+
+                            }}
+                            transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'center',
+                            }}
+                        >
+
+
+                            <Box sx={{ width: '20rem', height: "auto" }}>
+
+                                {user ? (
+                                    <><Box><>
+                                        <Box>
+                                            <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '4%', marginBottom: '4%' }}>
+                                                <Typography sx={{
+                                                    color: 'black',
+                                                    fontSize: '1.3em',
+                                                    fontWeight: 'bold',
+                                                    marginBottom: '0.5em',
+                                                    textAlign: 'center',
+                                                }}>
+                                                    {userInfoLoading ? 'Načítání...' : userInfoError ? 'Chyba' : userInfoData?.getUserByNameAndSurname.Name + ' ' + userInfoData?.getUserByNameAndSurname.Surname}
+                                                </Typography>
+                                            </Box>
+                                        </Box>
+                                        <Box sx={{ borderBottom: '7px solid #b71dde ', marginBottom: '1em' }} ></Box>
+
+                                        <Box sx={{ marginLeft: '7%', marginRight: '7%' }}>
+                                            <Typography sx={{ color: 'black', textAlign: 'center', fontSize: '1.2em', fontWeight: 'bold', textDecoration: 'none' }}>
+                                                demo
+                                            </Typography>
+                                        </Box>
+                                        <Box sx={{ borderBottom: '7px solid #b71dde ', marginTop: '1em', marginBottom: '1em' }} ></Box>
+
+
+                                        <Box sx={{ alignItems: 'center', textAlign: 'center', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                                            <Button onClick={handleLogout} style={buttonStyle}>
+                                                <Typography
+                                                    sx={{ color: 'black', fontWeight: 'bold', fontSize: '1 vw', lineHeight: '20px', padding: '5px' }}
+                                                >Správa účtu</Typography>
+                                            </Button>
+                                            <Button onClick={handleLogout} style={buttonStyle2}>
+                                                <Typography
+                                                    sx={{ color: 'black', fontWeight: 'bold', fontSize: '1 vw', lineHeight: '20px', padding: '5px' }}
+                                                >Odhlásit se</Typography>
+                                            </Button>
+                                        </Box></></Box></>
+                                ) : (
+                                    <>
+                                        <Box sx={{ alignItems: 'center', textAlign: 'center', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'center', marginBottom: '2em', marginTop: '2em' }}>
+                                            <Typography sx={{ color: 'black', fontWeight: 'bold', fontSize: '1.7vw', lineHeight: '20px' }}>
+                                                LOGO
+                                            </Typography>
+
+                                        </Box>
+                                        <Box sx={{ borderBottom: '7px solid #b71dde ' }} ></Box>
+
+                                        <Box sx={{ alignItems: 'center', textAlign: 'center', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                                            <Link href="/LoginPage">
+                                                <Button sx={buttonStyle2}>
+                                                    <Typography
+                                                        sx={{ color: 'black', fontWeight: 'bold', fontSize: '1 vw', lineHeight: '20px', padding: '5px' }}
+                                                    >Přihlásit se</Typography></Button>
+                                            </Link>
+                                        </Box><Box sx={{ alignItems: 'center', textAlign: 'center', position: 'relative', display: 'flex', flexDirection: 'column', marginBottom: '1em', justifyContent: 'center' }}>
+                                            <Link href="/UserRegistration">
+                                                <Button sx={buttonStyle}>
+                                                    <Typography
+                                                        sx={{ color: 'black', fontWeight: 'bold', fontSize: '1 vw', lineHeight: '20px', padding: '5px' }}>Vytvořit účet</Typography></Button>
+                                            </Link>
+                                        </Box></>
+                                )}
+
+                            </Box>
+
+                        </Menu>
               </Box>
 
               <Box sx={{ display: 'flex', alignItems: 'center', marginLeft: '1%', }}>
@@ -209,7 +354,7 @@ function Team() {
               position: 'absolute',
               borderRight: `4px solid ${isHovered ? 'rgba(160, 32, 240, 1)' : 'rgba(160, 32, 240, 0.4)'}`,
               padding: '0',
-              transition: 'width 0.5s ease-in-out',
+              transition: 'width 0.1s ease-in-out',
             }}>
             {items.map((item, index) => (
               <Box
@@ -229,7 +374,7 @@ function Team() {
                     alt={item.label}
                     width={30}
                     height={30}
-                    style={{ marginRight: '10px', marginLeft: '10px' }}
+                    style={{ marginRight: '10px', marginLeft: '10px',  }}
                   />
                   <span
                     style={{
@@ -240,7 +385,7 @@ function Team() {
                       marginLeft: '10px',
                       marginRight: '10px',
                       opacity: showOnlyIcon ? 0 : 1,
-                      transition: 'opacity 0.5s ease',
+                      transition: 'opacity 0.1s ease',
                       cursor: 'pointer',
                     }}
 
@@ -252,12 +397,12 @@ function Team() {
               </Box>
             ))}
           </div>
-          <div style={{ marginLeft: showOnlyIcon ? '5em' : '15em' }}>
+          <div style={{ marginLeft: showOnlyIcon ? '5em' : '12em' }}>
           {activeLink === 'Přehled' && <OverviewComponent />}
           {activeLink === 'Tréninky' && <TrainingsComponent />}
           {activeLink === 'Kalendář' && <CalendarComponent />}
           {activeLink === 'Soupisky' && <RoustersComponent />}
-          {activeLink === 'Nominace' && <NominationsComponent />}
+          {activeLink === 'Zápasy' && <NominationsComponent />}
           {activeLink === 'Platby' && <PayComponent />}
           {activeLink === 'Události' && <EventsComponent />}
           {activeLink === 'Členové' && <MembersComponent />}
