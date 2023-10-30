@@ -12,11 +12,11 @@ import MenuItem from '@mui/material/MenuItem';
 import Link from 'next/link';
 import LoginIcon from '../../public/user.png';
 import LoginIcon2 from '../../public/user2.png';
-
 import { authUtils } from '../../firebase/auth.utils';
 import { useQuery } from '@apollo/client';
 import { gql } from 'graphql-tag';
 import TeamLogoImg from '../../public/logotym.png'
+import { CircularProgress } from '@mui/material';
 
 const GET_USER_INFO = gql`
   query GetUserInfo($email: String!) {
@@ -56,6 +56,8 @@ const MyNavBar: React.FC = () => {
     const { loading: userIdLoading, error: userIdError, data: userTeamsData } = useQuery(GET_TEAM_NAMES, {
         variables: { email: user?.email || '' },
     });
+
+    
 
     const name = userInfoData?.getUserByNameAndSurname.Name || '';
     const surname = userInfoData?.getUserByNameAndSurname.Surname || '';
@@ -276,7 +278,8 @@ const MyNavBar: React.FC = () => {
                                         <Box sx={{ marginLeft: '7%', marginRight: '7%' }}>
                                             <Typography sx={{ color: 'black', textAlign: 'center', fontSize: '1.2em', fontWeight: 'bold', textDecoration: 'none' }}>
                                                 {userIdLoading
-                                                    ? 'Načítání...'
+                                                    ? <CircularProgress color="primary" size={50} style={{ position: 'absolute', top: '50%', left: '50%' }} /> // Zobrazí CircularProgress místo načítání
+
                                                     : userIdError
                                                         ? 'Chyba'
                                                         : userTeamsData.getUserTeamsByEmail.length > 0
