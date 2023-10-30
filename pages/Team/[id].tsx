@@ -432,7 +432,6 @@ const buttonStyle2 = {
               display: 'block',
               alignItems: 'center',
               backgroundColor: 'white',
-              paddingTop: 'px',
               width: showOnlyIcon ? '4.5em' : '11em',
               maxWidth: '20em',
               height: '100%',
