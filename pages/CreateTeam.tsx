@@ -7,6 +7,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Alert from '@mui/material/Alert';
+import Stepper from '../components/createTeam/Stepper';
 
 const CREATE_TEAM_MUTATION = gql`
   mutation CreateTeam($Name: String!, $AdminEmail: String!, $teamId: String!, $MembersEmails: [String]!) {
@@ -48,7 +49,7 @@ function CreateTeam() {
   }
 
   return (
-    <Box sx={{ maxWidth: 400, margin: '0 auto', marginTop: 4 }}>
+    <><Box sx={{ maxWidth: 400, margin: '0 auto', marginTop: 4 }}>
       <Typography variant="h4" gutterBottom>
         Vytvořit tým
       </Typography>
@@ -61,8 +62,7 @@ function CreateTeam() {
             value={name}
             onChange={(e) => setName(e.target.value)}
             fullWidth
-            margin="normal"
-          />
+            margin="normal" />
         </div>
 
         {error && <Alert severity="error">{error}</Alert>}
@@ -70,7 +70,11 @@ function CreateTeam() {
           Vytvořit tým
         </Button>
       </form>
-    </Box>
+
+    </Box><Box>
+        <Stepper />
+      </Box></>
+    
   );
 }
 
