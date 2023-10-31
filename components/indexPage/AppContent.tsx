@@ -1,11 +1,11 @@
 import { Typography } from '@mui/material'
 import { features } from 'process';
 import React from 'react'
-import comunicationImg from '../../public/message.png';
-import teamImg from '../../public/network.png';
-import listHospitalImg from '../../public/patient.png';
-import teamPayImg from '../../public/pay.png';
-import trainingPlanImg from '../../public/training.png';
+import comunicationImg from '../../public/assets/message.png';
+import teamImg from '../../public/assets/network.png';
+import listHospitalImg from '../../public/assets/patient.png';
+import teamPayImg from '../../public/assets/pay.png';
+import trainingPlanImg from '../../public/assets/training.png';
 
 
 

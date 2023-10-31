@@ -1,7 +1,7 @@
 import { Typography } from '@mui/material';
 import React from 'react';
-import LeftDownArr from '../../public/arrowLeftDown.png';
-import RightDownArr from '../../public/arrowRightDown.png';
+import LeftDownArr from '../../public/assets/arrowLeftDown.png';
+import RightDownArr from '../../public/assets/arrowRightDown.png';
 
 
 

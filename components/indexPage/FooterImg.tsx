@@ -1,5 +1,5 @@
 import React from 'react'
-import FooterImage from './../../public/teamphoto.jpg'
+import FooterImage from './../../public/assets/teamphoto.jpg'
 
 const containerStyle: React.CSSProperties = {
     position: 'relative',

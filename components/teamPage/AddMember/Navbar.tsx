@@ -4,13 +4,13 @@ import Box from '@mui/material/Box';
 import Link from 'next/link';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
-import LogoTeam from '@/public/logotym.png';
+import LogoTeam from '@/public/assets/logotym.png';
 import { useRouter } from 'next/router';
 import { gql, useQuery } from '@apollo/client';
 import { Typography, CircularProgress, Avatar, useMediaQuery, Theme, Button, Menu, Toolbar } from '@mui/material'; // Importujte CircularProgress z MUI
 import ChatIcon from '@mui/icons-material/Chat';
 import CircleNotificationsIcon from '@mui/icons-material/CircleNotifications';
-import demoUser from '@/public/demoUser.png';
+import demoUser from '@/public/assets/demoUser.png';
 import { authUtils } from '../../../firebase/auth.utils';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
@@ -98,21 +98,25 @@ const handleBackClick = () => {
 
 const buttonStyle = {
     backgroundColor: '#FFE0FE',
-    width: '10em',
+    width: '11em',
     '&:hover': {
         backgroundColor: '#b71dde',
     },
+    border:'1px solid #ff96fc',
+
 };
 
 const buttonStyle2 = {
     backgroundColor: '#FFE0FE',
     marginBottom: '1em',
     marginTop: '1em',
-    width: '10em',
+    width: '11em',
     '&:hover': {
         backgroundColor: '#b71dde',
 
     },
+    border:'1px solid #ff96fc',
+
 
 };
 

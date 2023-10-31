@@ -2,28 +2,28 @@
 import React, { useEffect, useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
-import GroupImg from '@/public/people.png';
+import GroupImg from '@/public/assets/people.png';
 import Box from '@mui/material/Box';
 import Link from 'next/link';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
-import LogoTeam from '@/public/logotym.png';
+import LogoTeam from '@/public/assets/logotym.png';
 import { useRouter } from 'next/router';
 import { gql, useQuery } from '@apollo/client';
 import { Typography, CircularProgress, Avatar, useMediaQuery, Theme, Button, Menu } from '@mui/material'; // Importujte CircularProgress z MUI
 import ChatIcon from '@mui/icons-material/Chat';
 import CircleNotificationsIcon from '@mui/icons-material/CircleNotifications';
-import demoUser from '@/public/demoUser.png';
+import demoUser from '@/public/assets/demoUser.png';
 import { authUtils } from '../../firebase/auth.utils';
-import Overview from '../../public/Overview.png';
-import Trainings from '../../public/training.png';
-import Calendar from '../../public/Kalendar.png';
-import Rousters from '../../public/network.png';
-import Nominations from '../../public/Nomination.png';
-import Pay from '../../public/pay.png';
-import Events from '../../public/Event.png';
-import Members from '../../public/Members.png';
-import Settings from '../../public/Settings.png';
+import Overview from '../../public/assets/Overview.png';
+import Trainings from '../../public/assets/training.png';
+import Calendar from '../../public/assets/Kalendar.png';
+import Rousters from '../../public/assets/network.png';
+import Nominations from '../../public/assets/Nomination.png';
+import Pay from '../../public/assets/pay.png';
+import Events from '../../public/assets/Event.png';
+import Members from '../../public/assets/Members.png';
+import Settings from '../../public/assets/Settings.png';
 import type { StaticImageData } from 'next/image';
 import Image from 'next/image';
 import OverviewComponent from '@/components/teamPage/Overview';
@@ -35,6 +35,7 @@ import PayComponent from '@/components/teamPage/Paying';
 import EventsComponent from '@/components/teamPage/Events';
 import MembersComponent from '@/components/teamPage/Members';
 import SettingsComponent from '@/components/teamPage/Settings';
+import TeamIcon from '@/public/assets/people.png';
 
 
 const items = [
@@ -45,6 +46,7 @@ const items = [
   { label: 'Soupisky', image: Rousters },
   { label: 'Platby', image: Pay },
   { label: 'Události', image: Events },
+  { label: 'Váš tým', image: TeamIcon },
   { label: 'Členové', image: Members },
   { label: 'Správa', image: Settings },
 ];
@@ -177,21 +179,25 @@ const handleLogout = async () => {
 
 const buttonStyle = {
     backgroundColor: '#FFE0FE',
-    width: '10em',
+    width: '11em',
     '&:hover': {
         backgroundColor: '#b71dde',
     },
+    border:'1px solid #ff96fc',
+
 };
 
 const buttonStyle2 = {
     backgroundColor: '#FFE0FE',
     marginBottom: '1em',
     marginTop: '1em',
-    width: '10em',
+    width: '11em',
     '&:hover': {
         backgroundColor: '#b71dde',
 
     },
+    border:'1px solid #ff96fc',
+
 
 };
 

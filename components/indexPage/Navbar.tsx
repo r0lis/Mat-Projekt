@@ -10,12 +10,12 @@ import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import Link from 'next/link';
-import LoginIcon from '../../public/user.png';
-import LoginIcon2 from '../../public/user2.png';
+import LoginIcon from '../../public/assets/user.png';
+import LoginIcon2 from '../../public/assets/user2.png';
 import { authUtils } from '../../firebase/auth.utils';
 import { useQuery } from '@apollo/client';
 import { gql } from 'graphql-tag';
-import TeamLogoImg from '../../public/logotym.png'
+import TeamLogoImg from '../../public/assets/logotym.png'
 import { CircularProgress } from '@mui/material';
 
 const GET_USER_INFO = gql`

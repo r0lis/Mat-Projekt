@@ -1,7 +1,7 @@
 import React from 'react';
-import FacebookIcon from '../../public/facebook.png';
-import InstagramIcon from '../../public/instagram.png';
-import TwitterIcon from '../../public/twitter.png';
+import FacebookIcon from '../../public/assets/facebook.png';
+import InstagramIcon from '../../public/assets/instagram.png';
+import TwitterIcon from '../../public/assets/twitter.png';
 
 function Footer() {
     const footerContainerStyle: React.CSSProperties = {

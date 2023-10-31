@@ -1,7 +1,7 @@
 import React from 'react';
-import pictureBackground from '../../public/uvodni1.jpg';
-import pictureAppPreviewForBackground from '../../public/pictuteappforbackground.png';
-import arrowRight from '../../public/arrow-right.png';
+import pictureBackground from '../../public/assets/uvodni1.jpg';
+import pictureAppPreviewForBackground from '../../public/assets/pictuteappforbackground.png';
+import arrowRight from '../../public/assets/arrow-right.png';
 
 const PreFace = () => {
     const imageContainerStyle: React.CSSProperties = {

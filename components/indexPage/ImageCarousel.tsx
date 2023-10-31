@@ -10,10 +10,10 @@ import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 //ts-ignore
 import SwipeableViews from 'react-swipeable-views';
 import { autoPlay } from 'react-swipeable-views-utils';
-import pictureForCarousel from '../../public/AppPreview.jpg';
-import pictureForCarousel2 from '../../public/AppPreview2.png';
-import pictureForCarousel3 from '../../public/AppPreview3.jpg';
-import pictureForCarousel4 from '../../public/AppPreview4.jpg';
+import pictureForCarousel from '../../public/assets/AppPreview.jpg';
+import pictureForCarousel2 from '../../public/assets/AppPreview2.png';
+import pictureForCarousel3 from '../../public/assets/AppPreview3.jpg';
+import pictureForCarousel4 from '../../public/assets/AppPreview4.jpg';
 
 
 
