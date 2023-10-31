@@ -459,6 +459,7 @@ const buttonStyle2 = {
                     width={30}
                     height={30}
                     style={{ marginRight: '10px', marginLeft: '10px',  }}
+                    
                   />
                   <span
                     style={{

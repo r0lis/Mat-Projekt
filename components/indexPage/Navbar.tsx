@@ -37,9 +37,7 @@ const GET_TEAM_NAMES = gql`
 `;
 
 
-
-const pages = ['Info', 'Features', 'About'];
-const menuItems = ['Přihlasit se', 'Vytvořit účet'];
+const pages = ['Obsah', 'Ukázky', 'Použití', 'Kontakt'];
 
 const MyNavBar: React.FC = () => {
     const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
@@ -126,7 +124,7 @@ const MyNavBar: React.FC = () => {
     };
 
     return (
-        <AppBar sx={{ backgroundColor: '#DA1AAD' }} position="static">
+        <AppBar sx={{ backgroundColor: '#DA1AAD',height: '4.5em' }} position="static">
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
                     <div style={logoAndButtonStyle}>
@@ -141,6 +139,7 @@ const MyNavBar: React.FC = () => {
                                 letterSpacing: '.3rem',
                                 color: 'white',
                                 textDecoration: 'none',
+                                marginTop: '0.5em',
                             }}
                         >
                             LOGO
@@ -150,7 +149,7 @@ const MyNavBar: React.FC = () => {
                     <Box
                         sx={{
                             position: 'relative',
-                            left: '30%',
+                            left: '25%',
                             marginRight: '20%',
                             flexGrow: 1,
                             display: { xs: 'none', md: 'flex' },
@@ -168,6 +167,7 @@ const MyNavBar: React.FC = () => {
                                     fontWeight: 'bold',
                                     fontSize: '1.2vw',
                                     position: 'relative',
+                                    lineHeight: '20px',
                                 }}
                             >
                                 {page}
@@ -175,12 +175,12 @@ const MyNavBar: React.FC = () => {
                                     className="bottom-border"
                                     style={{
                                         position: 'absolute',
-                                        bottom: '-0px',
+                                        bottom: '-3px',
                                         left: '0',
                                         right: '0',
                                         height: '5px',
                                         borderRadius: '5px 5px 5px 5px',
-                                        backgroundColor: 'white',
+                                        backgroundColor: 'whiteSmoke',
                                     }}
                                 ></span>
                             </Button>
@@ -190,8 +190,8 @@ const MyNavBar: React.FC = () => {
                     <Box
                         sx={{
                             position: 'relative',
-                            marginLeft: '45%',
-                            marginRight: '5%',
+                            marginLeft: '40%',
+                            marginRight: '0',
                             flexGrow: 1,
                             display: { xs: 'flex', md: 'none' },
                         }}
@@ -231,7 +231,7 @@ const MyNavBar: React.FC = () => {
 
                     <div>
                         <Box
-                            sx={{ height: '6%', width: '6%', position: 'relative' }}
+                            sx={{ height: '6%', width: '6%', position: 'relative',  marginTop: '0.5em', }}
                             onClick={handleOpenMenu}
                         >
                             <img
@@ -255,8 +255,7 @@ const MyNavBar: React.FC = () => {
                             }}
                         >
 
-
-                            <Box sx={{ width: '20rem', height: "auto" }}>
+                            <Box sx={{ width: '20rem', height: "auto", }}>
 
                                 {user ? (
                                     <><Box><>
@@ -269,7 +268,7 @@ const MyNavBar: React.FC = () => {
                                                     marginBottom: '0.5em',
                                                     textAlign: 'center',
                                                 }}>
-                                                    {userInfoLoading ? 'Načítání...' : userInfoError ? 'Chyba' : userInfoData?.getUserByNameAndSurname.Name + ' ' + userInfoData?.getUserByNameAndSurname.Surname}
+                                                    {userInfoLoading ?<CircularProgress color="primary" size={30} style={{ position: 'absolute', top: '10%', left: '50%' }} />: userInfoError ? 'Chyba' : userInfoData?.getUserByNameAndSurname.Name + ' ' + userInfoData?.getUserByNameAndSurname.Surname}
                                                 </Typography>
                                             </Box>
                                         </Box>
@@ -278,7 +277,7 @@ const MyNavBar: React.FC = () => {
                                         <Box sx={{ marginLeft: '7%', marginRight: '7%' }}>
                                             <Typography sx={{ color: 'black', textAlign: 'center', fontSize: '1.2em', fontWeight: 'bold', textDecoration: 'none' }}>
                                                 {userIdLoading
-                                                    ? <CircularProgress color="primary" size={50} style={{ position: 'absolute', top: '50%', left: '50%' }} /> // Zobrazí CircularProgress místo načítání
+                                                    ? <CircularProgress color="primary" size={30} style={{ position: 'absolute', top: '10%', left: '50%' }} /> // Zobrazí CircularProgress místo načítání
 
                                                     : userIdError
                                                         ? 'Chyba'
@@ -335,13 +334,12 @@ const MyNavBar: React.FC = () => {
                                             </Link>
                                         </Box></>
                                 )}
-
                             </Box>
 
                         </Menu>
                     </div>
 
-                    <Box sx={{ marginRight: '5%', marginLeft: '3%' }}>
+                    <Box sx={{ marginRight: '5%', marginLeft: '3%',  marginTop: '0.5em', }}>
                         <Link href="/CreateTeam">
                             <Button
                                 sx={{
@@ -356,7 +354,7 @@ const MyNavBar: React.FC = () => {
                                 variant="contained"
                             >
                                 <Typography
-                                    sx={{ color: 'black', fontWeight: 'bold', fontSize: '1.2vw', lineHeight: '20px' }}
+                                    sx={{ color: 'black', fontWeight: 'bold', fontSize: {xs:"0.8em", md:'1.3em'}, lineHeight: '15px' }}
                                 >
                                     CREATE TEAM
                                 </Typography>
