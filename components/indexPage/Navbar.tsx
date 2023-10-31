@@ -105,21 +105,24 @@ const MyNavBar: React.FC = () => {
 
     const buttonStyle = {
         backgroundColor: '#FFE0FE',
-        width: '10em',
+        width: '11em',
         '&:hover': {
             backgroundColor: '#b71dde',
         },
+        border:'1px solid #ff96fc',
+        
     };
 
     const buttonStyle2 = {
         backgroundColor: '#FFE0FE',
         marginBottom: '1em',
         marginTop: '1em',
-        width: '10em',
+        width: '11em',
         '&:hover': {
             backgroundColor: '#b71dde',
 
         },
+        border:'1px solid #ff96fc',
 
     };
 
@@ -283,7 +286,7 @@ const MyNavBar: React.FC = () => {
                                                         ? 'Chyba'
                                                         : userTeamsData.getUserTeamsByEmail.length > 0
                                                             ? userTeamsData.getUserTeamsByEmail.map((team: any, index: React.Key | null | undefined) => (
-                                                                <Box sx={{ marginBottom: '1em', padding: '3%', borderRadius: '10px', ...hoverStyle }}>
+                                                                <Box sx={{ marginBottom: '1em', padding: '3%', borderRadius: '10px', ...hoverStyle, border: '1px solid gray' }}>
                                                                     <Link key={index} href={`/Team/${team.teamId}`} style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
                                                                         <img src={TeamLogoImg.src} alt="Team Logo" style={{ width: '50px', height: '50px', marginRight: '1em' }} />
                                                                         <div style={{ color: 'black' }}>{team.Name}</div>
@@ -319,7 +322,7 @@ const MyNavBar: React.FC = () => {
                                         </Box>
                                         <Box sx={{ borderBottom: '7px solid #b71dde ' }} ></Box>
 
-                                        <Box sx={{ alignItems: 'center', textAlign: 'center', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                                        <Box sx={{ alignItems: 'center', textAlign: 'center', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'center', }}>
                                             <Link href="/LoginPage">
                                                 <Button sx={buttonStyle2}>
                                                     <Typography
@@ -350,6 +353,8 @@ const MyNavBar: React.FC = () => {
                                     padding: '6px 16px',
                                     width: 'auto',
                                     height: '3rem',
+                                    border:'1px solid #940372',
+                                    
                                 }}
                                 variant="contained"
                             >
