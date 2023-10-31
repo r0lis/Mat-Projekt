@@ -73,7 +73,7 @@ const StepperComponent: React.FC = () => {
   };
 
   return (
-    <Box sx={{ width: '100%' }}>
+    <Box sx={{ width: '80%', marginLeft:'auto', marginRight:'auto' }}>
       <div style={{ marginBottom: '20px' }}>
         {getStepContent(activeStep)}
       </div>
