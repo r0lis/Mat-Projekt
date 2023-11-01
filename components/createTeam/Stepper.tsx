@@ -10,7 +10,7 @@ import Step2 from './StepperComponent/Step2';
 import Step3 from './StepperComponent/Step3';
 import Navbar from './StepperComponent/Navbar';
 
-const steps: string[] = ['Step 1', 'Step 2', 'Step 3'];
+const steps: string[] = ['Vyplňte potřebné informace', 'Nastavení práv', 'Kontrola údajů'];
 
 const StepperComponent: React.FC = () => {
   const [activeStep, setActiveStep] = React.useState<number>(0);
@@ -58,6 +58,15 @@ const StepperComponent: React.FC = () => {
   const handleReset = (): void => {
     setActiveStep(0);
     setCompleted({});
+  };
+
+  const handleStepCompletion = (step: number, isStepCompleted: boolean) => {
+    const newCompleted = { ...completed };
+    newCompleted[step] = isStepCompleted;
+    setCompleted(newCompleted);
+    if (isStepCompleted) {
+      handleNext();
+    }
   };
 
   const getStepContent = (step: number): JSX.Element => {
@@ -110,9 +119,7 @@ const StepperComponent: React.FC = () => {
               </React.Fragment>
             ) : (
               <React.Fragment>
-                <Typography sx={{ mt: 2, mb: 1, py: 1 }}>
-                  Step {activeStep + 1}
-                </Typography>
+                
                 <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
                   <Button
                     color="inherit"

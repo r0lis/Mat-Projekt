@@ -117,6 +117,12 @@ const buttonStyle2 = {
                 </Box>
               </IconButton>
 
+              <Box sx={{ marginLeft: '7%', marginRight: '7%', marginTop:'6px',  }}>
+                                            <Typography sx={{ color: 'white', textAlign: 'center', fontSize:{xs: '1.0em', md:'2em'}, fontWeight: 'bold', textDecoration: 'none' }}>
+                                                Vytvořte tým
+                                            </Typography>
+                                        </Box>
+
               <Box sx={{ display: 'flex', alignItems: 'center', marginLeft: { xs: 'auto', md: 'auto' } }}>
                 <Typography sx={{ color: 'white', fontWeight: 'bold', fontSize: '1.4vw', marginLeft: '%', marginTop: '8px' }}>Management</Typography>
               </Box>
