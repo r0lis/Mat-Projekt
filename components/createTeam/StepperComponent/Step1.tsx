@@ -68,7 +68,239 @@ const Step1: React.FC = () => {
         </Button>
       </form>
 
+      <Typography variant="h4" gutterBottom>
+        Vytvořit tým
+      </Typography>
+      <form>
+        <div>
+          <TextField
+            id="name"
+            label="Název týmu"
+            variant="outlined"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            fullWidth
+            margin="normal" />
+        </div>
+
+        {error && <Alert severity="error">{error}</Alert>}
+        <Button variant="contained" onClick={handleCreateTeam} sx={{ marginTop: 2 }}>
+          Vytvořit tým
+        </Button>
+      </form>
+
+      <Typography variant="h4" gutterBottom>
+        Vytvořit tým
+      </Typography>
+      <form>
+        <div>
+          <TextField
+            id="name"
+            label="Název týmu"
+            variant="outlined"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            fullWidth
+            margin="normal" />
+        </div>
+
+        {error && <Alert severity="error">{error}</Alert>}
+        <Button variant="contained" onClick={handleCreateTeam} sx={{ marginTop: 2 }}>
+          Vytvořit tým
+        </Button>
+      </form>
+
+      <Typography variant="h4" gutterBottom>
+        Vytvořit tým
+      </Typography>
+      <form>
+        <div>
+          <TextField
+            id="name"
+            label="Název týmu"
+            variant="outlined"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            fullWidth
+            margin="normal" />
+        </div>
+
+        {error && <Alert severity="error">{error}</Alert>}
+        <Button variant="contained" onClick={handleCreateTeam} sx={{ marginTop: 2 }}>
+          Vytvořit tým
+        </Button>
+      </form>
+
+      <Typography variant="h4" gutterBottom>
+        Vytvořit tým
+      </Typography>
+      <form>
+        <div>
+          <TextField
+            id="name"
+            label="Název týmu"
+            variant="outlined"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            fullWidth
+            margin="normal" />
+        </div>
+
+        {error && <Alert severity="error">{error}</Alert>}
+        <Button variant="contained" onClick={handleCreateTeam} sx={{ marginTop: 2 }}>
+          Vytvořit tým
+        </Button>
+      </form>
+
+      <Typography variant="h4" gutterBottom>
+        Vytvořit tým
+      </Typography>
+      <form>
+        <div>
+          <TextField
+            id="name"
+            label="Název týmu"
+            variant="outlined"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            fullWidth
+            margin="normal" />
+        </div>
+
+        {error && <Alert severity="error">{error}</Alert>}
+        <Button variant="contained" onClick={handleCreateTeam} sx={{ marginTop: 2 }}>
+          Vytvořit tým
+        </Button>
+      </form>
+
+      <Typography variant="h4" gutterBottom>
+        Vytvořit tým
+      </Typography>
+      <form>
+        <div>
+          <TextField
+            id="name"
+            label="Název týmu"
+            variant="outlined"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            fullWidth
+            margin="normal" />
+        </div>
+
+        {error && <Alert severity="error">{error}</Alert>}
+        <Button variant="contained" onClick={handleCreateTeam} sx={{ marginTop: 2 }}>
+          Vytvořit tým
+        </Button>
+      </form>
+
+      <Typography variant="h4" gutterBottom>
+        Vytvořit tým
+      </Typography>
+      <form>
+        <div>
+          <TextField
+            id="name"
+            label="Název týmu"
+            variant="outlined"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            fullWidth
+            margin="normal" />
+        </div>
+
+        {error && <Alert severity="error">{error}</Alert>}
+        <Button variant="contained" onClick={handleCreateTeam} sx={{ marginTop: 2 }}>
+          Vytvořit tým
+        </Button>
+      </form>
+
+      <Typography variant="h4" gutterBottom>
+        Vytvořit tým
+      </Typography>
+      <form>
+        <div>
+          <TextField
+            id="name"
+            label="Název týmu"
+            variant="outlined"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            fullWidth
+            margin="normal" />
+        </div>
+
+        {error && <Alert severity="error">{error}</Alert>}
+        <Button variant="contained" onClick={handleCreateTeam} sx={{ marginTop: 2 }}>
+          Vytvořit tým
+        </Button>
+      </form>
+
+      <Typography variant="h4" gutterBottom>
+        Vytvořit tým
+      </Typography>
+      <form>
+        <div>
+          <TextField
+            id="name"
+            label="Název týmu"
+            variant="outlined"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            fullWidth
+            margin="normal" />
+        </div>
+
+        {error && <Alert severity="error">{error}</Alert>}
+        <Button variant="contained" onClick={handleCreateTeam} sx={{ marginTop: 2 }}>
+          Vytvořit tým
+        </Button>
+      </form>
+
+      <Typography variant="h4" gutterBottom>
+        Vytvořit tým
+      </Typography>
+      <form>
+        <div>
+          <TextField
+            id="name"
+            label="Název týmu"
+            variant="outlined"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            fullWidth
+            margin="normal" />
+        </div>
+
+        {error && <Alert severity="error">{error}</Alert>}
+        <Button variant="contained" onClick={handleCreateTeam} sx={{ marginTop: 2 }}>
+          Vytvořit tým
+        </Button>
+      </form>
+
+      <Typography variant="h4" gutterBottom>
+        Vytvořit tým
+      </Typography>
+      <form>
+        <div>
+          <TextField
+            id="name"
+            label="Název týmu"
+            variant="outlined"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            fullWidth
+            margin="normal" />
+        </div>
+
+        {error && <Alert severity="error">{error}</Alert>}
+        <Button variant="contained" onClick={handleCreateTeam} sx={{ marginTop: 2 }}>
+          Vytvořit tým
+        </Button>
+      </form>
+
     </Box>
+    
   );
 };
 

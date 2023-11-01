@@ -271,7 +271,7 @@ const MyNavBar: React.FC = () => {
                                                     marginBottom: '0.5em',
                                                     textAlign: 'center',
                                                 }}>
-                                                    {userInfoLoading ?<CircularProgress color="primary" size={30} style={{ position: 'absolute', top: '10%', left: '50%' }} />: userInfoError ? 'Chyba' : userInfoData?.getUserByNameAndSurname.Name + ' ' + userInfoData?.getUserByNameAndSurname.Surname}
+                                                    {userInfoLoading ?<CircularProgress color="primary" size={30} style={{ position: 'absolute', top: '2%', left: '40%' }} />: userInfoError ? 'Chyba' : userInfoData?.getUserByNameAndSurname.Name + ' ' + userInfoData?.getUserByNameAndSurname.Surname}
                                                 </Typography>
                                             </Box>
                                         </Box>
@@ -280,7 +280,7 @@ const MyNavBar: React.FC = () => {
                                         <Box sx={{ marginLeft: '7%', marginRight: '7%' }}>
                                             <Typography sx={{ color: 'black', textAlign: 'center', fontSize: '1.2em', fontWeight: 'bold', textDecoration: 'none' }}>
                                                 {userIdLoading
-                                                    ? <CircularProgress color="primary" size={30} style={{ position: 'absolute', top: '10%', left: '50%' }} /> // Zobrazí CircularProgress místo načítání
+                                                    ? <CircularProgress color="primary" size={30} style={{ position: 'absolute', top: '2%', left: '40%' }} /> // Zobrazí CircularProgress místo načítání
 
                                                     : userIdError
                                                         ? 'Chyba'
