@@ -33,11 +33,11 @@ const GET_USER_INFO = gql`
   }
 `;
 
-function Navbar() {
-    const router = useRouter();
-    const { id } = router.query;
-    const user = authUtils.getCurrentUser();
-    const [menuOpen, setMenuOpen] = useState(false);
+const Navbar: React.FC = () => {
+  const router = useRouter();    
+  const { id } = router.query;
+  const user = authUtils.getCurrentUser();
+  const [menuOpen, setMenuOpen] = useState(false);
   const [anchorEl2, setAnchorEl2] = useState<null | HTMLElement>(null);
   const [menuOpen2, setMenuOpen2] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);

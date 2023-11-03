@@ -11,7 +11,7 @@ import trainingPlanImg from '../../public/assets/training.png';
 
 
 
-function AppContent() {
+const AppContent: React.FC = () => {
 
     const appContentText: React.CSSProperties = {
         fontSize: '1.2vw',

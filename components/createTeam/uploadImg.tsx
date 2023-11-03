@@ -18,7 +18,7 @@ const UploadImageToStorage = () => {
     }
   };
 
-  const handleUploadFile = () => {
+  const handleUploadFile: React.FC = () => {
     if (imageFile) {
       const name = imageFile.name;
       //const storageRef = ref(storage, `image/${name}`);
