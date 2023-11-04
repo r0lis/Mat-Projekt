@@ -10,40 +10,48 @@ import trainingPlanImg from '../../public/assets/training.png';
 const AppContent: React.FC = () => {
 
     return (
-        <div className='divAppContent'>
-            <div className='appContentText'>
-                <Typography sx={{ fontSize: '2.2vw', fontWeight: 'bold' }}>
-                    Co aplikace <span style={{ color: '#B71DDE' }}>poskytuje</span> ?
-                </Typography>
-            </div>
-            <div className='leftBorderDiv'>
-                <div className='leftBorderPseudoElement'></div>
-                <div className='DivBlock'>
-                    <div className='featuresDiv'>
-                        <img className='iconStyle' src={comunicationImg.src} />
-                        Skvělá komunikace v týmu
+        <div style={{zIndex:'-999', backgroundColor:'#F0F2F5'}} >
+
+            <div className='mainDiv'>
+                <div style={{ backgroundColor: '#F0F2F5' }} className='divAppContent2'>
+                    <div className='appContentTextContent'>
+                        <Typography sx={{ fontSize: '2.2vw', fontWeight: 'bold' }}>
+                            Co aplikace <span style={{ color: '#B71DDE' }}>poskytuje</span> ?
+                        </Typography>
+                    </div>
+                    <div style={{ backgroundColor: '#F0F2F5' }} className='leftBorderDiv'>
+                        <div className='leftBorderPseudoElement'></div>
+                        <div className='DivBlock'>
+                            <div className='featuresDiv'>
+                                <img className='iconStyle' src={comunicationImg.src} />
+                                Skvělá komunikace v týmu
+                            </div>
+                        </div>
+                    </div>
+                    <div className='leftBorderDiv'>
+                        <div className='leftBorderPseudoElement'></div>
+                        <div className='featuresDiv'><img className='iconStyle' src={teamPayImg.src} /> Správa plateb a členských příspěvků</div>
+                    </div>
+                    <div className='leftBorderDiv'>
+                        <div className='leftBorderPseudoElement'></div>
+                        <div className='featuresDiv'><img className='iconStyle' src={teamImg.src} /> Tvoření soupisek, přehled docházky</div>
+                    </div>
+                    <div className='leftBorderDiv'>
+                        <div className='leftBorderPseudoElement'></div>
+                        <div className='featuresDiv'><img className='iconStyle' src={trainingPlanImg.src} /> Tvoření treninkových plánů</div>
+                    </div>
+                    <div className='leftBorderDiv'>
+                        <div className='leftBorderPseudoElement'></div>
+                        <div className='lastfeaturesDiv'><img className='iconStyle' src={listHospitalImg.src} /> Zdravotní prohlídky a dokumentace</div>
+
+
                     </div>
                 </div>
             </div>
-            <div className='leftBorderDiv'>
-                <div className='leftBorderPseudoElement'></div>
-                <div className='featuresDiv'><img className='iconStyle' src={teamPayImg.src} /> Správa plateb a členských příspěvků</div>
-            </div>
-            <div className='leftBorderDiv'>
-                <div className='leftBorderPseudoElement'></div>
-                <div className='featuresDiv'><img className='iconStyle' src={teamImg.src} /> Tvoření soupisek, přehled docházky</div>
-            </div>
-            <div className='leftBorderDiv'>
-                <div className='leftBorderPseudoElement'></div>
-                <div className='featuresDiv'><img className='iconStyle' src={trainingPlanImg.src} /> Tvoření treninkových plánů</div>
-            </div>
-            <div className='leftBorderDiv'>
-                <div className='leftBorderPseudoElement'></div>
-                <div className='lastfeaturesDiv'><img className='iconStyle' src={listHospitalImg.src} /> Zdravotní prohlídky a dokumentace</div>
-            
 
         </div>
-        </div>
+
+
     )
 }
 

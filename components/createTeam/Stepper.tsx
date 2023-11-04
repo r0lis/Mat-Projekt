@@ -83,10 +83,13 @@ const StepperComponent: React.FC = () => {
   };
 
   return (
-    <Box sx={{ width: '100%', margin: 'auto', }}>
+    <Box sx={{ width: '100%', margin: 'auto', backgroundColor:'#F0F2F5' }}>
       
-      <Box sx={{ position: 'fixed', top: 0, width: '100%', backgroundColor: 'white', zIndex: 100,  textAlign:'center',    }}>
+      <Box sx={{ position: 'fixed', top: 0, width: '100%', backgroundColor:'#F0F2F5', zIndex: 100,  textAlign:'center',    }}>
       <Navbar  />
+      <Box>
+        
+      </Box>
         <Box sx={{ width: '80%', marginLeft: 'auto', marginRight:'auto', paddingTop:'2em'}}>
           <Stepper nonLinear activeStep={activeStep}>
             {steps.map((label, index) => (

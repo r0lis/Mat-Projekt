@@ -10,16 +10,16 @@ import Footer from '@/components/indexPage/Footer';
 export default function Home() {
 
   return (
-    <div>
+    <div >
       <NavBar />
       <PreFace />
       <main>
-        <AppContent />
-        <ImageCarousel />
+        <AppContent />                            
+        <ImageCarousel />                                                                               
         <HowToUse/>
-      </main>
+      </main>                                        
       <footer>
-        <FooterImg/>
+        <FooterImg/>                         
         <Footer />
       </footer>
 

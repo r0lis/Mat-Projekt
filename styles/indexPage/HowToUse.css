@@ -1,18 +1,23 @@
 
-
 .appContentText2 {
     font-size: 1.2vw;
     color: black;
     padding-left: 5%;
     padding-top: 5%;
+
   }
   
   /* divAppContent */
-  .divAppContent {
+  .divAppContent2 {
     border-left: 7px solid #B71DDE;
     position: relative;
     margin-left: 10%;
+    background-color:#F0F2F5;
+   
+    
+
   }
+  
   
   /* howToUseDiv */
   .howToUseDiv {
@@ -26,6 +31,7 @@
     text-align: center;
     font-size: 1.8vw;
     background: linear-gradient(to bottom, #B71DDE 20%, #EBEBEB 20%);
+
   }
   
   /* howToUseDiv2 */
@@ -61,6 +67,7 @@
   .leftBorderDiv {
     position: relative;
     margin-left: 14%;
+    
   }
   
   /* StepDiv */

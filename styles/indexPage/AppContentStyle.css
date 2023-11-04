@@ -1,9 +1,16 @@
-.appContentText {
+.appContentTextContent {
   font-size: 1.2vw;
   color: black;
   padding-left: 5%;
   padding-top: 5%;
+  
 }
+.mainDiv{
+  z-index: 50;
+  
+
+}
+
 
 /* divAppContent */
 .divAppContent {
@@ -12,6 +19,8 @@
   z-index: -999;
   margin-left: 10%;
   align-items: center;
+  background-color:#F0F2F5;
+  
 }
 
 /* featuresDiv */
@@ -30,6 +39,7 @@
   font-size: 1.8vw;
   align-items: center;
   border: 1px solid #ff96fc;
+  
 }
 
 /* lastfeaturesDiv */
@@ -59,6 +69,9 @@
 .leftBorderDiv {
   position: relative;
   margin-left: 14%;
+
+  background-color:#F0F2F5;
+
 }
 
 /* leftBorderPseudoElement */
@@ -71,10 +84,12 @@
   width: 7px;
   background-color: #B71DDE;
   border-radius: 10px 10px 10px 10px;
+  
 }
 
 /* DivBlock */
 .DivBlock {
   text-align: center;
   justify-content: center;
+    background-color:#F0F2F5;
 }

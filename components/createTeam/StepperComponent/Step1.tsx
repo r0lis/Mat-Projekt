@@ -76,119 +76,126 @@ const Step1: React.FC = () => {
     setEmails(updatedEmails);
     setEditIndex(null);
   };
-  
+
   return (
-    <Box sx={{ maxWidth: 400, margin: '0 auto', marginTop: 4 }}>
-      <Typography variant="h4" gutterBottom>
-        Vytvořit tým
-      </Typography>
-      <form>
-        <div>
-          <TextField
-            id="name"
-            label="Název týmu"
-            variant="outlined"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            fullWidth
-            margin="normal" />
-        </div>
-
-        <div>
-          <TextField
-            id="email"
-            label="Týmový e-mail"
-            variant="outlined"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            fullWidth
-            margin="normal" />
-        </div>
-
-        <div>
-          <TextField
-            id="image"
-            label="Týmové logo"
-            variant="outlined"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            fullWidth
-            margin="normal" />
-        </div>
-
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-        <TextField
-          type="email"
-          value={emailValue}
-          onChange={(e) => setEmailValue(e.target.value)}
-          placeholder="Zadejte e-mail"
-          variant="outlined"
-        />
-        <Button variant="contained" onClick={addEmail} style={{ marginLeft: '10px' }}>
-          {editIndex !== null ? 'Upravit' : 'Přidat'}
-        </Button>
-      </div>
-      <div>
-        <h3>Seznam uživatelů:</h3>
-        <List>
-          {emails.map((email, index) => (
-            <ListItem key={index}>
-              <ListItemText primary={email} />
-              <ListItemSecondaryAction>
-                <IconButton edge="end" aria-label="edit" onClick={() => handleEdit(index)}>
-                  <EditIcon />
-                </IconButton>
-                <IconButton edge="end" aria-label="delete" onClick={() => handleDelete(index)}>
-                  <DeleteIcon />
-                </IconButton>
-              </ListItemSecondaryAction>
-            </ListItem>
-          ))}
-        </List>
-      </div>
-
-        <div>
-          <TextField
-            id="name"
-            label="Jméno vlastníka týmu"
-            variant="outlined"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            fullWidth
-            margin="normal" />
-        </div>
-
-        <div>
-          <TextField
-            id="surname"
-            label="Příjmení vlastníka týmu"
-            variant="outlined"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            fullWidth
-            margin="normal" />
-        </div>
-
-        <div>
-          <TextField
-            id="place"
-            label="Město týmu"
-            variant="outlined"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            fullWidth
-            margin="normal" />
-        </div>
-
-        {error && <Alert severity="error">{error}</Alert>}
-        <Button variant="contained" onClick={handleCreateTeam} sx={{ marginTop: 2 }}>
-          Potvrdit
-        </Button>
-      </form>
-
+    <Box sx={{ margin: '0 auto', marginTop: 4, }}>
+      <Box sx={{ backgroundColor: 'white', width: '65%', marginLeft: 'auto', marginRight: 'auto', padding:'5%', marginTop:'6em', borderRadius:'10px', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)' }}>
+      <Typography sx={{textAlign: 'center'}} variant="h4" gutterBottom>
+          Vytvořit tým
+        </Typography>
       
+        <Box sx={{width:'50%', marginLeft:'auto', marginRight:'auto'}}>
+          <form>
+            <div>
+              <TextField
+                id="name"
+                label="Název týmu"
+                variant="outlined"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                fullWidth
+                margin="normal" />
+            </div>
+
+            <div>
+              <TextField
+                id="email"
+                label="Týmový e-mail"
+                variant="outlined"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                fullWidth
+                margin="normal" />
+            </div>
+
+            <div>
+              <TextField
+                id="image"
+                label="Týmové logo"
+                variant="outlined"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                fullWidth
+                margin="normal" />
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <TextField
+                type="email"
+                value={emailValue}
+                onChange={(e) => setEmailValue(e.target.value)}
+                placeholder="Zadejte e-mail"
+                variant="outlined"
+              />
+              <Button variant="contained" onClick={addEmail} style={{ marginLeft: '10px' }}>
+                {editIndex !== null ? 'Upravit' : 'Přidat'}
+              </Button>
+            </div>
+            <div>
+              <h3>Seznam uživatelů:</h3>
+              <List>
+                {emails.map((email, index) => (
+                  <ListItem key={index}>
+                    <ListItemText primary={email} />
+                    <ListItemSecondaryAction>
+                      <IconButton edge="end" aria-label="edit" onClick={() => handleEdit(index)}>
+                        <EditIcon />
+                      </IconButton>
+                      <IconButton edge="end" aria-label="delete" onClick={() => handleDelete(index)}>
+                        <DeleteIcon />
+                      </IconButton>
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                ))}
+              </List>
+            </div>
+
+            <div>
+              <TextField
+                id="name"
+                label="Jméno vlastníka týmu"
+                variant="outlined"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                fullWidth
+                margin="normal" />
+            </div>
+
+            <div>
+              <TextField
+                id="surname"
+                label="Příjmení vlastníka týmu"
+                variant="outlined"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                fullWidth
+                margin="normal" />
+            </div>
+
+            <div>
+              <TextField
+                id="place"
+                label="Město týmu"
+                variant="outlined"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                fullWidth
+                margin="normal" />
+            </div>
+
+            {error && <Alert severity="error">{error}</Alert>}
+            <Button variant="contained" onClick={handleCreateTeam} sx={{ marginTop: 2 }}>
+              Potvrdit
+            </Button>
+          </form>
+        </Box>
+
+
+      </Box>
+
+
     </Box>
-    
+
   );
 };
 

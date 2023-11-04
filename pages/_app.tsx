@@ -22,6 +22,13 @@ export default function App({ Component, pageProps }: AppProps) {
     typography: {
       fontFamily: 'Alumni Sans Collegiate One, sans-serif',
     },
+    palette: {
+      background: {
+        default: "red"
+      }
+    },
+  
+   
   });
   return (
     <AuthContextProvider>

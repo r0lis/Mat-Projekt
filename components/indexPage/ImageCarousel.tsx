@@ -7,7 +7,6 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
-//ts-ignore
 import SwipeableViews from 'react-swipeable-views';
 import { autoPlay } from 'react-swipeable-views-utils';
 import pictureForCarousel from '../../public/assets/AppPreview.jpg';
@@ -58,12 +57,13 @@ const SwipeableTextMobileStepper: React.FC = () => {
 
 
     return (
-        <><div className="leftBorderDiv"><div className='leftBorderDivText'><div className="appContentText">
-        <Typography sx={{ display: 'block',  fontSize: '2.2vw', paddingTop: '6%', paddingBottom: '5%', fontWeight: 'bold', marginLeft:'30%' }}>
-            Ukázky z <span style={{ color: '#B71DDE' }}>aplikace</span>
-        </Typography></div>
-    </div></div><div className="divCarousel">
-                <Box sx={{ maxWidth: '70%', flexGrow: 1 }}>
+        <><div className='mainDiv2'>
+            <div className="leftBorderDivImg"><div className='leftBorderDivText'><div className="appContentTextCarousel">
+                <Typography sx={{ display: 'block', fontSize: '2.2vw', paddingTop: '6%', paddingBottom: '5%', fontWeight: 'bold', marginLeft: '30%' }}>
+                    Ukázky z <span style={{ color: '#B71DDE' }}>aplikace</span>
+                </Typography></div>
+            </div></div><div className="divCarousel">
+                <Box sx={{ maxWidth: '70%', flexGrow: 1, }}>
 
                     <AutoPlaySwipeableViews
                         style={{ color: 'purple' }}
@@ -116,7 +116,7 @@ const SwipeableTextMobileStepper: React.FC = () => {
                             Back
                         </Button>} />
                 </Box>
-            </div></>
+            </div> </div></>
 
     );
 }
