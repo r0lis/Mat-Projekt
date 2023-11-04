@@ -1,0 +1,42 @@
+.footerContainerStyle {
+    border-top: 7px solid #B71DDE;
+    margin-top: 5%;
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+  }
+  
+  /* columnStyle */
+  .columnStyle {
+    flex: 1;
+    text-align: left;
+    font-size: 1.4vw;
+    font-weight: bold;
+  }
+  
+  /* todoStyle */
+  .todoStyle {
+    display: flex;
+    margin-left: 15%;
+    margin-right: auto;
+    flex: 3;
+  }
+  
+  /* footerBarStyle */
+  .footerBarStyle {
+    background-color: #B71DDE;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: 1.4vw;
+  }
+  
+  /* socialIconStyle */
+  .socialIconStyle {
+    margin-right: 4%;
+    width: 2.5em;
+    height: 2.5em;
+  }

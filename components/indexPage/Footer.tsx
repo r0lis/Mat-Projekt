@@ -4,51 +4,12 @@ import InstagramIcon from '../../public/assets/instagram.png';
 import TwitterIcon from '../../public/assets/twitter.png';
 
 const Footer: React.FC = () => {
-    const footerContainerStyle: React.CSSProperties = {
-        borderTop: '7px solid #B71DDE',
-        marginTop: '5%',
-        display: 'flex',
-        justifyContent: 'space-between',
-        padding: '20px',
-    };
-
-    const columnStyle: React.CSSProperties = {
-        flex: '1',
-        textAlign: 'left',
-        fontSize: '1.4vw',
-        fontStyle: 'bold',
-        fontWeight: 'bold',
-    };
-
-    const todoStyle: React.CSSProperties = {
-        display: 'flex',
-        marginLeft: '15%',
-        marginRight: 'auto',
-        flex: '3',
-    };
-
-    const footerBarStyle: React.CSSProperties = {
-        backgroundColor: '#B71DDE',
-        height: '60px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        color: 'white',
-        fontWeight: 'bold',
-        fontSize: '1.4vw',
-    };
-
-    const socialIconStyle: React.CSSProperties = {
-        marginRight: '4%',
-        width: '2.5em',
-        height: '2.5em',
-    };
 
     return (
         <>
-            <div style={footerContainerStyle}>
-                <div style={todoStyle}>
-                    <div style={columnStyle}>
+            <div className='footerContainerStyle'>
+                <div className='todoStyle'>
+                    <div className='columnStyle'>
                         <p>LOGO NAZEV</p>
                         <span style={{ fontSize: '1.2vw' }}>
                             <p>eSports.cz, s.r.o.</p>
@@ -59,7 +20,7 @@ const Footer: React.FC = () => {
                         </span>
                     </div>
 
-                    <div style={columnStyle}>
+                    <div className='columnStyle'>
                         <p>Pro více informací nás kontaktujte</p>
                         <span style={{ fontSize: '1.2vw' }}>
                             <p>firma@esports.cz</p>
@@ -69,15 +30,15 @@ const Footer: React.FC = () => {
                         </span>
                     </div>
 
-                    <div style={columnStyle}>
+                    <div className='columnStyle'>
                         <p>Sledujte nás na sítích</p>
-                        <img src={FacebookIcon.src} alt="Facebook" style={socialIconStyle} />
-                        <img src={InstagramIcon.src} alt="Instagram" style={socialIconStyle} />
-                        <img src={TwitterIcon.src} alt="Twitter" style={socialIconStyle} />
+                        <img src={FacebookIcon.src} alt="Facebook" className='socialIconStyle' />
+                        <img src={InstagramIcon.src} alt="Instagram" className='socialIconStyle'/>
+                        <img src={TwitterIcon.src} alt="Twitter" className='socialIconStyle' />
                     </div>
                 </div>
             </div>
-            <div style={footerBarStyle}>LOGO</div>
+            <div className='footerBarStyle'>LOGO</div>
         </>
     );
 }
