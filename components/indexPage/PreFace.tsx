@@ -84,24 +84,24 @@ const PreFace : React.FC = () => {
     };
 
     return (
-        <div style={imageContainerStyle}>
-            <div style={imgContainerStyle}>
-                <img src={pictureBackground.src} alt="Popis obrázku" style={imgStyle} />
+        <div className="imageContainerStyle">
+            <div className='imageContainerStyle'>
+                <img src={pictureBackground.src} alt="Popis obrázku" className="imgStyle" />
             </div>
-            <div style={textBlockStyle}>
-                <div style={bigTextStyle}>WEBOVÁ APLIKACE PRO FLORBALOVÉ KLUBY</div>
-                <div style={smallTextStyle}>
+            <div className='textBlockStyle'>
+                <div className='bigTextStyle'>WEBOVÁ APLIKACE PRO FLORBALOVÉ KLUBY</div>
+                <div className='smallTextStyle'>
                     Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean vel massa quis
                     mauris vehicula lacinia. Curabitur sagittis hendrerit ante. Maecenas aliquet
                     accumsan leegestas leo.
                 </div>
-                <div style={smallTextStyle2}>
-                    <img src={arrowRight.src} alt='arrowRight' style={arrowRightPicture} />  OBJEV VÝHODY
-                    <div style={seeFeaturesStyle}>See features</div>
+                <div className='smallTextStyle2'>
+                    <img src={arrowRight.src} alt='arrowRight' className='arrowRightPicture' />  OBJEV VÝHODY
+                    <div className='seeFeaturesStyle'>See features</div>
                 </div>
             </div>
-            <div style={appPreviewStyle}>
-                <img src={pictureAppPreviewForBackground.src} alt="Popis obrázku" style={imgStyle} />
+            <div className='appPreviewStyle'>
+                <img src={pictureAppPreviewForBackground.src} alt="Popis obrázku" className="imgStyle" />
             </div>
         </div>
     );

@@ -1,0 +1,89 @@
+/* imageContainerStyle */
+.imageContainerStyle {
+    width: 100%;
+    height: auto;
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
+  
+  /* imgContainerStyle */
+  .imgContainerStyle {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+  
+  /* imgStyle */
+  .imgStyle {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+  }
+  
+  /* textBlockStyle */
+  .textBlockStyle {
+    width: 27%;
+    position: absolute;
+    left: 15%;
+    height: 50%;
+    margin-top: 0%;
+    text-align: left;
+    padding: 1em;
+    top: 10%;
+  }
+  
+  /* bigTextStyle */
+  .bigTextStyle {
+    font-size: 4vw;
+    font-weight: bold;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    margin-bottom: 10px;
+  }
+  
+  /* smallTextStyle */
+  .smallTextStyle {
+    font-size: 1.3vw;
+    color: white;
+  }
+  
+  /* arrowRightPicture */
+  .arrowRightPicture {
+    height: 8%;
+    width: 8%;
+    margin-right: 2%;
+  }
+  
+  /* smallTextStyle2 */
+  .smallTextStyle2 {
+    font-size: 1.4vw;
+    color: black;
+    display: flex;
+    margin-top: 20%;
+    width: 100%;
+    margin-left: 10%;
+    align-items: center;
+    font-weight: bold;
+    padding-right: 10%;
+  }
+  
+  /* seeFeaturesStyle */
+  .seeFeaturesStyle {
+    font-size: 1.5vw;
+    color: white;
+    padding-left: 10%;
+  }
+  
+  /* appPreviewStyle */
+  .appPreviewStyle {
+    width: 32%;
+    max-width: 100%;
+    height: auto;
+    position: absolute;
+    right: 15%;
+    top: 5%;
+    transform: translateY(0);
+    z-index: 1;
+  }
+  

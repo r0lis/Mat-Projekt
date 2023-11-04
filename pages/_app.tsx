@@ -12,6 +12,7 @@ import '../styles/indexPage/FooterImg.css'
 import '../styles/indexPage/HowToUse.css'
 import '../styles/indexPage/NavBar.css'
 import '../styles/indexPage/ImageCarousel.css'
+import '../styles/indexPage/PreFace.css'
 
 const client = getApolloClient({ forceNew: false });
 
