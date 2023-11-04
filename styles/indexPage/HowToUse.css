@@ -25,12 +25,12 @@
     width: 50%;
     height: 10em;
     margin-left: 1.5%;
-    border: 3px solid black;
-    border-radius: 30px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+    border-radius: 20px;
     font-weight: bold;
     text-align: center;
     font-size: 1.8vw;
-    background: linear-gradient(to bottom, #B71DDE 20%, #EBEBEB 20%);
+    background: linear-gradient(to bottom, #B71DDE 20%, white 20%);
 
   }
   
@@ -40,8 +40,8 @@
     width: 50%;
     height: 10em;
     margin-right: 0;
-    border: 3px solid black;
-    border-radius: 30px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+    border-radius: 20px;
     font-weight: bold;
     text-align: center;
     font-size: 1.8vw;
@@ -55,8 +55,8 @@
     height: 10em;
     margin-right: 0;
     margin-left: 37%;
-    border: 3px solid black;
-    border-radius: 30px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+    border-radius: 20px;
     font-weight: bold;
     text-align: center;
     font-size: 1.8vw;
@@ -73,7 +73,8 @@
   /* StepDiv */
   .StepDiv {
     display: block;
-    padding-top: 1.5%;
+    padding-top: 0.7em;
+    border-bottom: 2px solid black;
   }
   
   /* DecsDiv */

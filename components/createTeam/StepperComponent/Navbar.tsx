@@ -24,7 +24,7 @@ const GET_USER_INFO = gql`
   }
 `;
 
-function Navbar() {
+const Navbar: React.FC = () => {
     const router = useRouter();
     const { id } = router.query;
     const user = authUtils.getCurrentUser();
