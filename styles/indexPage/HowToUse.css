@@ -1,0 +1,97 @@
+
+
+.appContentText2 {
+    font-size: 1.2vw;
+    color: black;
+    padding-left: 5%;
+    padding-top: 5%;
+  }
+  
+  /* divAppContent */
+  .divAppContent {
+    border-left: 7px solid #B71DDE;
+    position: relative;
+    margin-left: 10%;
+  }
+  
+  /* howToUseDiv */
+  .howToUseDiv {
+    margin-bottom: 8%;
+    width: 50%;
+    height: 10em;
+    margin-left: 1.5%;
+    border: 3px solid black;
+    border-radius: 30px;
+    font-weight: bold;
+    text-align: center;
+    font-size: 1.8vw;
+    background: linear-gradient(to bottom, #B71DDE 20%, #EBEBEB 20%);
+  }
+  
+  /* howToUseDiv2 */
+  .howToUseDiv2 {
+    margin-bottom: 8%;
+    width: 50%;
+    height: 10em;
+    margin-right: 0;
+    border: 3px solid black;
+    border-radius: 30px;
+    font-weight: bold;
+    text-align: center;
+    font-size: 1.8vw;
+    background: linear-gradient(to bottom, #B71DDE 20%, #EBEBEB 20%);
+  }
+  
+  /* howToUseDiv3 */
+  .howToUseDiv3 {
+    margin-bottom: 8%;
+    width: 50%;
+    height: 10em;
+    margin-right: 0;
+    margin-left: 37%;
+    border: 3px solid black;
+    border-radius: 30px;
+    font-weight: bold;
+    text-align: center;
+    font-size: 1.8vw;
+    background: linear-gradient(to bottom, #B71DDE 20%, #EBEBEB 20%);
+  }
+  
+  /* leftBorderDiv */
+  .leftBorderDiv {
+    position: relative;
+    margin-left: 14%;
+  }
+  
+  /* StepDiv */
+  .StepDiv {
+    display: block;
+    padding-top: 1.5%;
+  }
+  
+  /* DecsDiv */
+  .DecsDiv {
+    padding-left: 5%;
+    padding-top: 10%;
+    padding-bottom: auto;
+    margin-right: 5%;
+    display: block;
+  }
+  
+  /* RightDownArrStyle */
+  .RightDownArrStyle {
+    width: 10%;
+    height: 10%;
+    left: 0;
+    margin-top: 20%;
+  }
+  
+  /* LeftDownArrStyle */
+  .LeftDownArrStyle {
+    width: 10%;
+    height: 10%;
+    left: 0;
+    margin-top: 20%;
+    margin-left: 25%;
+  }
+  

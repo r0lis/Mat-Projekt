@@ -5,7 +5,7 @@ import RightDownArr from '../../public/assets/arrowRightDown.png';
 
 
 
-function HowToUse() {
+const HowToUse: React.FC = () => {
     const appContentText: React.CSSProperties = {
         fontSize: '1.2vw',
         color: 'black',
@@ -97,33 +97,33 @@ function HowToUse() {
 
 
     return (
-        <div style={divAppContent}>
-            <div style={appContentText}>
+        <div className="divAppContent">
+            <div className="appContentText">
                 <Typography sx={{ display: 'block', marginLeft: '30%', fontSize: '2.2vw', paddingTop: '6%', paddingBottom: '5%', fontWeight: 'bold' }}>
                     Jak začít aplikaci <span style={{ color: '#B71DDE' }}>používat</span> ?
                 </Typography>
             </div>
-            <div style={leftBorderDiv}>
+            <div className="leftBorderDiv">
                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <div style={howToUseDiv}>
-                        <div style={StepDiv}>
+                    <div className="howToUseDiv">
+                        <div className="StepDiv">
                             <Typography sx={{ top: '0%',  color: 'white', fontSize: '1.5vw' }}>Step 1</Typography>
                         </div>
-                        <div style={DecsDiv}>
+                        <div className="DecsDiv">
                             <Typography sx={{fontSize:'1.2vw', textAlign:'center', justifyContent:'center'}}>
                                 popis ffefefefefefefefefeeeeeeeeeeeeeeeeeeeeeeeeeeef fef efefe fe fe fe edwdwdwdwdwdwdwdwdwdw
                             </Typography>
                         </div>
                     </div>
-                    <img style={RightDownArrStyle} src={RightDownArr.src} alt="arrow" />
+                    <img className="RightDownArrStyle" src={RightDownArr.src} alt="arrow" />
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                <img style={LeftDownArrStyle} src={LeftDownArr.src} alt="arrow" />
-                    <div style={howToUseDiv2}>
-                        <div style={StepDiv}>
+                <img className="LeftDownArrStyle" src={LeftDownArr.src} alt="arrow" />
+                    <div className="howToUseDiv2">
+                        <div className="StepDiv">
                             <Typography sx={{ top: '0%',  color: 'white', fontSize: '1.5vw' }}>Step 2</Typography>
                         </div>
-                        <div style={DecsDiv}>
+                        <div className="DecsDiv">
                             <Typography sx={{fontSize:'1.2vw', textAlign:'center', justifyContent:'center'}}>
                                 popis ffefefefefefefefefeeeeeeeeeeeeeeeeeeeeeeeeeeef fef efefe fe fe fe edwdwdwdwdwdwdwdwdwdw
                             </Typography>
@@ -131,24 +131,24 @@ function HowToUse() {
                     </div>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <div style={howToUseDiv}>
-                        <div style={StepDiv}>
+                    <div className="howToUseDiv">
+                        <div className="StepDiv">
                             <Typography sx={{ top: '0%',  color: 'white', fontSize: '1.5vw' }}>Step 3</Typography>
                         </div>
-                        <div style={DecsDiv}>
+                        <div className="DecsDiv">
                             <Typography sx={{fontSize:'1.2vw', textAlign:'center', justifyContent:'center'}}>
                                 popis ffefefefefefefefefeeeeeeeeeeeeeeeeeeeeeeeeeeef fef efefe fe fe fe edwdwdwdwdwdwdwdwdwdw
                             </Typography>
-                        </div>s
+                        </div>
                     </div>
-                    <img style={RightDownArrStyle} src={RightDownArr.src} alt="arrow" />
+                    <img className="RightDownArrStyle" src={RightDownArr.src} alt="arrow" />
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <div style={howToUseDiv3}>
-                        <div style={StepDiv}>
+                    <div className="howToUseDiv3">
+                        <div className="StepDiv">
                             <Typography sx={{ top: '0%',  color: 'white', fontSize: '1.5vw' }}>Last Step </Typography>
                         </div>
-                        <div style={DecsDiv}>
+                        <div className="DecsDiv">
                             <Typography sx={{fontSize:'1.2vw', textAlign:'center', justifyContent:'center'}}>
                                 popis ffefefefefefefefefeeeeeeeeeeeeeeeeeeeeeeeeeeef fef efefe fe fe fe edwdwdwdwdwdwdwdwdwdw
                             </Typography>

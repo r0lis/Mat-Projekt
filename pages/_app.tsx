@@ -9,6 +9,7 @@ import { getApolloClient } from '@/utility/apollo-client';
 import '../styles/indexPage/AppContentStyle.css'
 import '../styles/indexPage/Footer.css'
 import '../styles/indexPage/FooterImg.css'
+import '../styles/indexPage/HowToUse.css'
 
 const client = getApolloClient({ forceNew: false });
 
