@@ -49,5 +49,9 @@
     "tailwindcss": "3.3.3",
     "typescript": "5.2.2",
     "yet-another-react-lightbox": "^3.12.2"
+  },
+  "devDependencies": {
+    "@types/react-swipeable-views": "^0.13.4",
+    "@types/react-swipeable-views-utils": "^0.13.6"
   }
 }

@@ -1,0 +1,37 @@
+/* divCarousel */
+.divCarousel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: #EBEBEB;
+    padding-top: 6%;
+    padding-bottom: 4%;
+    width: 80%;
+    height: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 10px;
+  }
+  
+  /* mobileStepperStyle */
+  .mobileStepperStyle {
+    background-color: #EBEBEB;
+  }
+  
+  /* appContentText */
+  .appContentText {
+    font-size: 1.4vw;
+    color: black;
+    position: relative;
+    padding-left: 5%;
+    padding-top: 5%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  /* leftBorderDiv */
+  .leftBorderDivText {
+    margin-left: -4.62%;
+    border-left: 7px solid #B71DDE;
+  }

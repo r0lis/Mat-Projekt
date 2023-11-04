@@ -39,7 +39,7 @@ const images = [
     },
 ];
 
-function SwipeableTextMobileStepper() {
+const SwipeableTextMobileStepper: React.FC = () => {
     const theme = useTheme();
     const [activeStep, setActiveStep] = React.useState(0);
     const maxSteps = images.length;
@@ -56,51 +56,17 @@ function SwipeableTextMobileStepper() {
         setActiveStep(step);
     };
 
-    const divCarousel: React.CSSProperties = {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'column',
-
-        backgroundColor: '#EBEBEB',
-        paddingTop: '6%',
-        paddingBottom: '4%',
-        width: '80%',
-        height: '100%',
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        borderRadius: '10px',
-    };
-
-    const mobileStepperStyle: React.CSSProperties = {
-        backgroundColor: '#EBEBEB',
-    };
-    const appContentText: React.CSSProperties = {
-        fontSize: '1.4vw',
-        color: 'black',
-        position: 'relative',
-        paddingLeft: '5%',
-        paddingTop: '5%',
-        marginLeft: 'auto',
-        marginRight: 'auto',
-
-    };
-
-    const leftBorderDiv: React.CSSProperties = {
-        marginLeft: '10%',
-        borderLeft: '7px solid #B71DDE',
-    };
 
     return (
-        <><div style={leftBorderDiv}><div style={appContentText}>
-            <Typography sx={{ display: 'block', marginLeft: '30%', fontSize: '2.2vw', paddingTop: '6%', paddingBottom: '5%', fontWeight: 'bold' }}>
-                Ukázky z <span style={{ color: '#B71DDE' }}>aplikace</span>
-            </Typography></div>
-        </div><div style={divCarousel}>
+        <><div className="leftBorderDiv"><div className='leftBorderDivText'><div className="appContentText">
+        <Typography sx={{ display: 'block',  fontSize: '2.2vw', paddingTop: '6%', paddingBottom: '5%', fontWeight: 'bold', marginLeft:'30%' }}>
+            Ukázky z <span style={{ color: '#B71DDE' }}>aplikace</span>
+        </Typography></div>
+    </div></div><div className="divCarousel">
                 <Box sx={{ maxWidth: '70%', flexGrow: 1 }}>
 
                     <AutoPlaySwipeableViews
-                        sx={{ color: 'purple' }}
+                        style={{ color: 'purple' }}
                         axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
                         index={activeStep}
                         onChangeIndex={handleStepChange}
@@ -125,7 +91,7 @@ function SwipeableTextMobileStepper() {
                     </AutoPlaySwipeableViews>
                     <MobileStepper
                         steps={maxSteps}
-                        style={mobileStepperStyle}
+                        className="mobileStepperStyle"
                         position="static"
                         activeStep={activeStep}
                         nextButton={<Button

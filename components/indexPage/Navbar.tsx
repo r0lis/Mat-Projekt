@@ -95,42 +95,13 @@ const MyNavBar: React.FC = () => {
         },
     };
 
-    const logoAndButtonStyle: React.CSSProperties = {
-        left: '5%',
-        position: 'relative',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-    };
-
-    const buttonStyle = {
-        backgroundColor: '#FFE0FE',
-        width: '11em',
-        '&:hover': {
-            backgroundColor: '#b71dde',
-        },
-        border:'1px solid #ff96fc',
-        
-    };
-
-    const buttonStyle2 = {
-        backgroundColor: '#FFE0FE',
-        marginBottom: '1em',
-        marginTop: '1em',
-        width: '11em',
-        '&:hover': {
-            backgroundColor: '#b71dde',
-
-        },
-        border:'1px solid #ff96fc',
-
-    };
+    
 
     return (
         <AppBar sx={{ backgroundColor: '#DA1AAD',height: '4.5em' }} position="static">
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
-                    <div style={logoAndButtonStyle}>
+                    <div className="logoAndButtonStyle">
                         <Typography
                             variant="h6"
                             noWrap
@@ -301,12 +272,12 @@ const MyNavBar: React.FC = () => {
 
 
                                         <Box sx={{ alignItems: 'center', textAlign: 'center', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                                            <Button onClick={handleLogout} style={buttonStyle}>
+                                            <Button onClick={handleLogout} className='buttonStyle'>
                                                 <Typography
                                                     sx={{ color: 'black', fontWeight: 'bold', fontSize: '1 vw', lineHeight: '20px', padding: '5px' }}
                                                 >Správa účtu</Typography>
                                             </Button>
-                                            <Button onClick={handleLogout} style={buttonStyle2}>
+                                            <Button onClick={handleLogout} className='buttonStyle2'>
                                                 <Typography
                                                     sx={{ color: 'black', fontWeight: 'bold', fontSize: '1 vw', lineHeight: '20px', padding: '5px' }}
                                                 >Odhlásit se</Typography>
@@ -324,14 +295,14 @@ const MyNavBar: React.FC = () => {
 
                                         <Box sx={{ alignItems: 'center', textAlign: 'center', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'center', }}>
                                             <Link href="/LoginPage">
-                                                <Button sx={buttonStyle2}>
+                                                <Button className='buttonStyle2'>
                                                     <Typography
                                                         sx={{ color: 'black', fontWeight: 'bold', fontSize: '1 vw', lineHeight: '20px', padding: '5px' }}
                                                     >Přihlásit se</Typography></Button>
                                             </Link>
                                         </Box><Box sx={{ alignItems: 'center', textAlign: 'center', position: 'relative', display: 'flex', flexDirection: 'column', marginBottom: '1em', justifyContent: 'center' }}>
                                             <Link href="/UserRegistration">
-                                                <Button sx={buttonStyle}>
+                                                <Button className='buttonStyle'>
                                                     <Typography
                                                         sx={{ color: 'black', fontWeight: 'bold', fontSize: '1 vw', lineHeight: '20px', padding: '5px' }}>Vytvořit účet</Typography></Button>
                                             </Link>
@@ -345,17 +316,7 @@ const MyNavBar: React.FC = () => {
                     <Box sx={{ marginRight: '5%', marginLeft: '3%',  marginTop: '0.5em', }}>
                         <Link href="/CreateTeam">
                             <Button
-                                sx={{
-                                    position: 'relative',
-                                    backgroundColor: 'white',
-                                    borderRadius: '15px',
-                                    maxWidth: '100%',
-                                    padding: '6px 16px',
-                                    width: 'auto',
-                                    height: '3rem',
-                                    border:'1px solid #940372',
-                                    
-                                }}
+                               className="CreateTeamButton"
                                 variant="contained"
                             >
                                 <Typography

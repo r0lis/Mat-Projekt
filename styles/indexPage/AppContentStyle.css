@@ -29,6 +29,7 @@
   display: flex;
   font-size: 1.8vw;
   align-items: center;
+  border: 1px solid #ff96fc;
 }
 
 /* lastfeaturesDiv */
@@ -45,6 +46,7 @@
   display: flex;
   font-size: 1.8vw;
   align-items: center;
+  border: 1px solid #ff96fc;
 }
 
 /* iconStyle */

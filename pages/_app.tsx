@@ -10,6 +10,8 @@ import '../styles/indexPage/AppContentStyle.css'
 import '../styles/indexPage/Footer.css'
 import '../styles/indexPage/FooterImg.css'
 import '../styles/indexPage/HowToUse.css'
+import '../styles/indexPage/NavBar.css'
+import '../styles/indexPage/ImageCarousel.css'
 
 const client = getApolloClient({ forceNew: false });
 

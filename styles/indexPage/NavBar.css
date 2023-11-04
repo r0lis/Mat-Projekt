@@ -1,0 +1,42 @@
+.logoAndButtonStyle {
+    left: 5%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  /* buttonStyle */
+  .buttonStyle {
+    background-color: #FFE0FE;
+    width: 11em;
+    border: 1px solid #ff96fc;
+  }
+  
+  .buttonStyle:hover {
+    background-color: #b71dde;
+  }
+  
+  /* buttonStyle2 */
+  .buttonStyle2 {
+    background-color: #FFE0FE;
+    margin-bottom: 1em;
+    margin-top: 1em;
+    width: 11em;
+    border: 1px solid #ff96fc;
+  }
+  
+  .buttonStyle2:hover {
+    background-color: #b71dde;
+  }
+
+  .CreateTeamButton {
+    position: relative;
+    background-color: white;
+    border-radius: 15px;
+    max-width: 100%;
+    padding: 6px 16px;
+    width: auto;
+    height: 3rem;
+    border: 1px solid #940372;
+  }
