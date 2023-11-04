@@ -17,6 +17,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "components/teamPage/AddMember"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "components/teamPage/AddMember", "components/createTeam"],
   "exclude": ["node_modules"]
 }

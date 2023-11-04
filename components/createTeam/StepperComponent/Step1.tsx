@@ -24,8 +24,13 @@ const Step1: React.FC = () => {
 
   const router = useRouter();
   const [name, setName] = useState('');
+  const [emailTeam, setEmail] = useState('');
+  const [img, setImg] = useState('');
+  const [nameOwner, setNameOwner] = useState('');
+  const [surnameOwner, setSurnameOwner] = useState('');
+  const [place, setPlace] = useState('');
   const [error, setError] = useState(null);
-  const [emails, setEmails] = useState<string[]>([]); // Stav pro uchování e-mailů
+  const [emails, setEmails] = useState<string[]>([]); 
   const [emailValue, setEmailValue] = useState('');
   const [editIndex, setEditIndex] = useState<number | null>(null);
 
@@ -79,7 +84,7 @@ const Step1: React.FC = () => {
 
   return (
     <Box sx={{ margin: '0 auto', marginTop: 4, }}>
-      <Box sx={{ backgroundColor: 'white', width: '65%', marginLeft: 'auto', marginRight: 'auto', padding:'5%', marginTop:'6em', borderRadius:'10px', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)' }}>
+      <Box sx={{ backgroundColor: 'white', width: '60%', marginLeft: 'auto', marginRight: 'auto', padding:'5%', marginTop:'6em', borderRadius:'10px', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)' }}>
       <Typography sx={{textAlign: 'center'}} variant="h4" gutterBottom>
           Vytvořit tým
         </Typography>
@@ -102,8 +107,8 @@ const Step1: React.FC = () => {
                 id="email"
                 label="Týmový e-mail"
                 variant="outlined"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                value={emailTeam}
+                onChange={(e) => setEmail(e.target.value)}
                 fullWidth
                 margin="normal" />
             </div>
@@ -113,8 +118,8 @@ const Step1: React.FC = () => {
                 id="image"
                 label="Týmové logo"
                 variant="outlined"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                value={img}
+                onChange={(e) => setImg(e.target.value)}
                 fullWidth
                 margin="normal" />
             </div>
@@ -132,7 +137,7 @@ const Step1: React.FC = () => {
               </Button>
             </div>
             <div>
-              <h3>Seznam uživatelů:</h3>
+              <h3>Seznam uživatelů které jste přidali:</h3>
               <List>
                 {emails.map((email, index) => (
                   <ListItem key={index}>
@@ -155,8 +160,8 @@ const Step1: React.FC = () => {
                 id="name"
                 label="Jméno vlastníka týmu"
                 variant="outlined"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                value={nameOwner}
+                onChange={(e) => setNameOwner(e.target.value)}
                 fullWidth
                 margin="normal" />
             </div>
@@ -166,8 +171,8 @@ const Step1: React.FC = () => {
                 id="surname"
                 label="Příjmení vlastníka týmu"
                 variant="outlined"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                value={surnameOwner}
+                onChange={(e) => setSurnameOwner(e.target.value)}
                 fullWidth
                 margin="normal" />
             </div>
@@ -177,8 +182,8 @@ const Step1: React.FC = () => {
                 id="place"
                 label="Město týmu"
                 variant="outlined"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                value={place}
+                onChange={(e) => setPlace(e.target.value)}
                 fullWidth
                 margin="normal" />
             </div>

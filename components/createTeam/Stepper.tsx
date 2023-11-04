@@ -83,14 +83,14 @@ const StepperComponent: React.FC = () => {
   };
 
   return (
-    <Box sx={{ width: '100%', margin: 'auto', backgroundColor:'#F0F2F5' }}>
+    <Box sx={{ width: '100%', margin: 'auto', backgroundColor:'#F0F2F5', paddingBottom:'5em' }}>
       
       <Box sx={{ position: 'fixed', top: 0, width: '100%', backgroundColor:'#F0F2F5', zIndex: 100,  textAlign:'center',    }}>
       <Navbar  />
       <Box>
         
       </Box>
-        <Box sx={{ width: '80%', marginLeft: 'auto', marginRight:'auto', paddingTop:'2em'}}>
+        <Box sx={{ width: '80%', marginLeft: 'auto', marginRight:'auto', paddingTop:'2em', paddingBottom:'2em'}}>
           <Stepper nonLinear activeStep={activeStep}>
             {steps.map((label, index) => (
               <Step key={label} completed={completed[index]}>
@@ -102,8 +102,8 @@ const StepperComponent: React.FC = () => {
           </Stepper>
         </Box>
       </Box>
-
-      <Box sx={{ marginTop: '5em' }}>
+     
+      <Box sx={{ marginTop: '2em' }}>
         <Box sx={{ paddingTop: '5em' }}>
           <div style={{ marginBottom: '20px' }}>
             {getStepContent(activeStep)}
@@ -122,13 +122,13 @@ const StepperComponent: React.FC = () => {
               </React.Fragment>
             ) : (
               <React.Fragment>
-                
+                 <Box sx={{ position: 'fixed',  width: '100%', bottom:'0px',  zIndex: 1, backgroundColor:'rgba(240, 242, 245, 0)',  }}>
                 <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
                   <Button
                     color="inherit"
                     disabled={activeStep === 0}
                     onClick={handleBack}
-                    sx={{ mr: 1 }}
+                    sx={{ marginLeft:'5px' }}
                   >
                     Back
                   </Button>
@@ -146,6 +146,7 @@ const StepperComponent: React.FC = () => {
                         {completedSteps() === totalSteps() - 1 ? 'Finish' : 'Complete Step'}
                       </Button>
                     ))}
+                </Box>
                 </Box>
               </React.Fragment>
             )}
