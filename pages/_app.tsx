@@ -6,7 +6,7 @@ import React from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { AuthContextProvider } from '@/components/AuthContextProvider';
 import { getApolloClient } from '@/utility/apollo-client';
-
+import '../styles/AppContentStyle.css'
 
 const client = getApolloClient({ forceNew: false });
 
