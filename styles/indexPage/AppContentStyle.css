@@ -14,7 +14,7 @@
 
 /* divAppContent */
 .divAppContent {
-  border-left: 7px solid #B71DDE;
+  border-left: 8px solid #B71DDE;
   position: relative;
   z-index: -999;
   margin-left: 10%;
@@ -22,6 +22,9 @@
   background-color:#F0F2F5;
   
 }
+
+
+
 
 /* featuresDiv */
 .featuresDiv {
@@ -83,8 +86,17 @@
   height: 100%;
   width: 7px;
   background-color: #B71DDE;
-  border-radius: 10px 10px 10px 10px;
-  
+  border-radius: 10px;
+}
+
+/* Media dotaz pro změnu šířky na 3px při malém okně */
+@media screen and (max-width: 768px) {
+  .leftBorderPseudoElement {
+    width: 4px;
+  }
+  .divAppContent{
+    border-left: 5px solid #B71DDE;
+  }
 }
 
 /* DivBlock */

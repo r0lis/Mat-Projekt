@@ -1,10 +1,16 @@
 .footerContainerStyle {
-    border-top: 7px solid #B71DDE;
+    border-top: 8px solid #B71DDE;
     margin-top: 5%;
     display: flex;
     justify-content: space-between;
     padding: 20px;
 
+  }
+
+  @media screen and (max-width: 768px) {
+    
+    .footerContainerStyle{
+      border-top: 5px solid #B71DDE;    }
   }
   
   /* columnStyle */

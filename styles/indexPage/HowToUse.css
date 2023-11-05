@@ -9,7 +9,7 @@
   
   /* divAppContent */
   .divAppContent2 {
-    border-left: 7px solid #B71DDE;
+    border-left: 8px solid #B71DDE;
     position: relative;
     margin-left: 10%;
     background-color:#F0F2F5;
@@ -18,6 +18,12 @@
 
   }
   
+  @media screen and (max-width: 768px) {
+    
+    .divAppContent2{
+      border-left: 5px solid #B71DDE;
+    }
+  }
   
   /* howToUseDiv */
   .howToUseDiv {
