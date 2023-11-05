@@ -6,6 +6,8 @@ import { authUtils } from '@/firebase/auth.utils';
 import { useRouter } from 'next/router';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { Table, TableBody, TableCell, TableContainer, TableRow, Paper } from '@mui/material';
+
 
 const CREATE_TEAM_MUTATION = gql`
   mutation CreateTeam($Name: String!, $AdminEmail: String!, $teamId: String!, $MembersEmails: [String]!) {
@@ -30,9 +32,12 @@ const Step1: React.FC = () => {
   const [surnameOwner, setSurnameOwner] = useState('');
   const [place, setPlace] = useState('');
   const [error, setError] = useState(null);
-  const [emails, setEmails] = useState<string[]>([]); 
+  const [emails, setEmails] = useState<string[]>([]);
   const [emailValue, setEmailValue] = useState('');
   const [editIndex, setEditIndex] = useState<number | null>(null);
+  const [error2, setError2] = useState<string | null>(null);
+  const [error3, setError3] = useState<string | null>(null);
+  const [isCreated, setIsCreated] = useState(false);
 
   const [createTeam] = useMutation(CREATE_TEAM_MUTATION);
 
@@ -44,20 +49,36 @@ const Step1: React.FC = () => {
         throw new Error('Název týmu a e-mail admina jsou povinné.');
       }
 
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(emailTeam)) {
+        throw new Error('Prosím, zadejte platný e-mail pro tým.');
+      }
+
+      if (!/^[A-Z].{1,}$/u.test(name)) {
+        throw new Error('Název týmu musí začínat velkým písmenem a být delší než 1 znak.');
+      }
+  
+      // Ověření jména a příjmení vlastníka týmu
+      if (!/^[A-Z].{2,}$/u.test(nameOwner) || !/^[A-Z].{2,}$/u.test(surnameOwner)) {
+        throw new Error('Jméno a příjmení vlastníka týmu musí začínat velkým písmenem a být delší než 2 znaky.');
+      }
+
       const response = await createTeam({
         variables: { Name: name, AdminEmail: currentUserEmail, teamId: "fefe", MembersEmails: [currentUserEmail] },
       });
 
       console.log('Tým byl úspěšně vytvořen', response);
 
-      router.push('/').then(() => window.location.reload());
+      //router.push('/').then(() => window.location.reload());
+      setIsCreated(true);
     } catch (error: any) {
       setError(error.message);
     }
   }
 
   const addEmail = () => {
-    if (emailValue.trim() !== '') {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (emailValue.trim() !== '' && emailRegex.test(emailValue)) {
       if (editIndex !== null) {
         const updatedEmails = [...emails];
         updatedEmails[editIndex] = emailValue;
@@ -67,8 +88,13 @@ const Step1: React.FC = () => {
         setEmails([...emails, emailValue]);
       }
       setEmailValue('');
+      setError2(null); // Clear the error state if input is valid
+    } else {
+      setError2('Please enter a valid email.'); // Set the error message for an invalid email
     }
   };
+
+
 
   const handleEdit = (index: number) => {
     setEditIndex(index);
@@ -84,12 +110,17 @@ const Step1: React.FC = () => {
 
   return (
     <Box sx={{ margin: '0 auto', marginTop: 4, }}>
-      <Box sx={{ backgroundColor: 'white', width: '60%', marginLeft: 'auto', marginRight: 'auto', padding:'5%', marginTop:'6em', borderRadius:'10px', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)' }}>
-      <Typography sx={{textAlign: 'center'}} variant="h4" gutterBottom>
-          Vytvořit tým
+      <Box sx={{ backgroundColor: 'white', width: '60%', marginLeft: 'auto', marginRight: 'auto', padding: '5%', marginTop: '6em', borderRadius: '10px', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)' }}>
+        <Typography sx={{ textAlign: 'center' }} variant="h4" gutterBottom>
+          Vytvoření týmu:
         </Typography>
-      
-        <Box sx={{width:'50%', marginLeft:'auto', marginRight:'auto'}}>
+
+        <Box sx={{ width: '50%', marginLeft: 'auto', marginRight: 'auto' }}>
+        {isCreated ? (
+            <Alert severity="success">
+              Tým byl úspěšně vytvořen!
+            </Alert>
+          ) : (
           <form>
             <div>
               <TextField
@@ -110,7 +141,10 @@ const Step1: React.FC = () => {
                 value={emailTeam}
                 onChange={(e) => setEmail(e.target.value)}
                 fullWidth
-                margin="normal" />
+                margin="normal"
+                error={error3 !== null}
+                helperText={error3}
+              />
             </div>
 
             <div>
@@ -136,23 +170,32 @@ const Step1: React.FC = () => {
                 {editIndex !== null ? 'Upravit' : 'Přidat'}
               </Button>
             </div>
+            <div style={{ marginBottom: '10px' }}>
+              {error2 && <Alert severity="error">{error2}</Alert>}
+            </div>
+
+
             <div>
               <h3>Seznam uživatelů které jste přidali:</h3>
-              <List>
-                {emails.map((email, index) => (
-                  <ListItem key={index}>
-                    <ListItemText primary={email} />
-                    <ListItemSecondaryAction>
-                      <IconButton edge="end" aria-label="edit" onClick={() => handleEdit(index)}>
-                        <EditIcon />
-                      </IconButton>
-                      <IconButton edge="end" aria-label="delete" onClick={() => handleDelete(index)}>
-                        <DeleteIcon />
-                      </IconButton>
-                    </ListItemSecondaryAction>
-                  </ListItem>
-                ))}
-              </List>
+              <TableContainer component={Paper}>
+                <Table>
+                  <TableBody>
+                    {emails.map((email, index) => (
+                      <TableRow key={index}>
+                        <TableCell >{email}</TableCell>
+                        <TableCell>
+                          <IconButton edge="end" aria-label="edit" onClick={() => handleEdit(index)}>
+                            <EditIcon />
+                          </IconButton>
+                          <IconButton edge="end" aria-label="delete" onClick={() => handleDelete(index)}>
+                            <DeleteIcon />
+                          </IconButton>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
             </div>
 
             <div>
@@ -193,6 +236,8 @@ const Step1: React.FC = () => {
               Potvrdit
             </Button>
           </form>
+          )}
+        
         </Box>
 
 

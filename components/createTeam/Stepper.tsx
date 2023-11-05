@@ -83,7 +83,7 @@ const StepperComponent: React.FC = () => {
   };
 
   return (
-    <Box sx={{ width: '100%', margin: 'auto', backgroundColor:'#F0F2F5', paddingBottom:'5em' }}>
+    <Box sx={{ width: '100%', margin: 'auto', backgroundColor:'#F0F2F5', paddingBottom:'15%' }}>
       
       <Box sx={{ position: 'fixed', top: 0, width: '100%', backgroundColor:'#F0F2F5', zIndex: 100,  textAlign:'center',    }}>
       <Navbar  />
