@@ -23,6 +23,12 @@ type Team = {
   teamId: string;
   MembersEmails: [String];
   AdminEmail: string;
+  Email: string;
+  Logo: string;
+  Place: string;
+  OwnerName: string;
+  OwnerSurname: string;
+
 };
 
 type Mutation = {
@@ -44,6 +50,11 @@ type CreateTeamInput = {
   teamId: string;
   MembersEmails: [String];
   AdminEmail: string;
+  Email: string;
+  Logo: string;
+  Place: string;
+  OwnerName: string;
+  OwnerSurname: string;
 };
 
 type NameAndSurname = {
@@ -60,8 +71,6 @@ type Query = {
   user(id: String): User
   getUserByNameAndSurname(email: String): NameAndSurname
   getUserTeamsByEmail(email: String): [String]
-
- 
 }
 
 const db = firestore();
@@ -181,6 +190,12 @@ const resolvers = {
           teamId: teamId,
           AdminEmail: input.AdminEmail,
           MembersEmails: input.MembersEmails,
+          Email: input.Email,
+          Logo: input.Logo,
+          Place: input.Place,
+          OwnerName: input.OwnerName,
+          OwnerSurname: input.OwnerSurname,
+
         };
 
         await newTeamDoc.set(newTeam);
@@ -235,6 +250,11 @@ const typeDefs = gql`
     AdminEmail: String!
     MembersEmails: [String]!
     teamId: String!
+    Email: String!
+    Logo: String!
+    Place: String!
+    OwnerName: String!
+    OwnerSurname: String!
   }
 
   type Team {
@@ -242,6 +262,11 @@ const typeDefs = gql`
     teamId: String!
     MembersEmails: [String]!
     AdminEmail: String!
+    Email: String!
+    Logo: String!
+    Place: String!
+    OwnerName: String!
+    OwnerSurname: String!
   }
 
   type NameAndSurname {

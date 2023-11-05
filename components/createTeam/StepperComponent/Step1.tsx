@@ -10,13 +10,17 @@ import { Table, TableBody, TableCell, TableContainer, TableRow, Paper } from '@m
 
 
 const CREATE_TEAM_MUTATION = gql`
-  mutation CreateTeam($Name: String!, $AdminEmail: String!, $teamId: String!, $MembersEmails: [String]!) {
-    createTeam(input: { Name: $Name, teamId: $teamId, AdminEmail: $AdminEmail, MembersEmails: $MembersEmails }) {
+  mutation CreateTeam($Name: String!, $AdminEmail: String!, $teamId: String!, $MembersEmails: [String]!, $Email: String!, $Logo: String!, $OwnerName: String!, $OwnerSurname: String!, $Place: String! ) {
+    createTeam(input: { Name: $Name, teamId: $teamId, AdminEmail: $AdminEmail, MembersEmails: $MembersEmails, Email: $Email, Logo: $Logo, OwnerName: $OwnerName, OwnerSurname: $OwnerSurname, Place: $Place }) {
       Name
       teamId
       AdminEmail
       MembersEmails
-      # Další údaje o týmu, které chcete získat
+      Email
+      Logo
+      OwnerName
+      OwnerSurname
+      Place
     }
   }
 `;
@@ -62,6 +66,10 @@ const Step1: React.FC = () => {
         throw new Error('Tým musí mít alespoň 2 uživatele.');
 
       }
+
+      if (!/^[A-Z].{1,}$/u.test(place)) {
+        throw new Error('Město týmu musí začínat velkým písmenem a být delší než 1 znak.');
+      }
   
       // Ověření jména a příjmení vlastníka týmu
       if (!/^[A-Z].{2,}$/u.test(nameOwner) || !/^[A-Z].{2,}$/u.test(surnameOwner)) {
@@ -71,7 +79,7 @@ const Step1: React.FC = () => {
       const allMembers = [currentUserEmail, ...emails];
 
       const response = await createTeam({
-        variables: { Name: name, AdminEmail: currentUserEmail, teamId: "fefe", MembersEmails: allMembers },
+        variables: { Name: name, AdminEmail: currentUserEmail, teamId: "fefe", MembersEmails: allMembers, Email: emailTeam, Logo: img, OwnerName: nameOwner, OwnerSurname: surnameOwner, Place: place },
       });
 
       console.log('Tým byl úspěšně vytvořen', response);
