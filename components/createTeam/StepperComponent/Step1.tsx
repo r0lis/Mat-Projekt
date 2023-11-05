@@ -57,14 +57,21 @@ const Step1: React.FC = () => {
       if (!/^[A-Z].{1,}$/u.test(name)) {
         throw new Error('Název týmu musí začínat velkým písmenem a být delší než 1 znak.');
       }
+
+      if (emails.length < 2) {
+        throw new Error('Tým musí mít alespoň 2 uživatele.');
+
+      }
   
       // Ověření jména a příjmení vlastníka týmu
       if (!/^[A-Z].{2,}$/u.test(nameOwner) || !/^[A-Z].{2,}$/u.test(surnameOwner)) {
         throw new Error('Jméno a příjmení vlastníka týmu musí začínat velkým písmenem a být delší než 2 znaky.');
       }
 
+      const allMembers = [currentUserEmail, ...emails];
+
       const response = await createTeam({
-        variables: { Name: name, AdminEmail: currentUserEmail, teamId: "fefe", MembersEmails: [currentUserEmail] },
+        variables: { Name: name, AdminEmail: currentUserEmail, teamId: "fefe", MembersEmails: allMembers },
       });
 
       console.log('Tým byl úspěšně vytvořen', response);
