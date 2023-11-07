@@ -25,8 +25,12 @@ const CREATE_TEAM_MUTATION = gql`
   }
 `;
 
+interface Step1Props {
+  onCompleteTeamCreation: () => void;
+}
 
-const Step1: React.FC = () => {
+
+const Step1: React.FC<Step1Props> = ({ onCompleteTeamCreation }) => {
 
   const router = useRouter();
   const [name, setName] = useState('');
@@ -46,6 +50,7 @@ const Step1: React.FC = () => {
   const [createTeam] = useMutation(CREATE_TEAM_MUTATION);
 
   const currentUserEmail = authUtils.getCurrentUser()?.email || '';
+
 
   const handleCreateTeam = async () => {
     try {
@@ -85,7 +90,9 @@ const Step1: React.FC = () => {
       console.log('Tým byl úspěšně vytvořen', response);
 
       //router.push('/').then(() => window.location.reload());
+      onCompleteTeamCreation();
       setIsCreated(true);
+      
     } catch (error: any) {
       setError(error.message);
     }
@@ -265,3 +272,7 @@ const Step1: React.FC = () => {
 };
 
 export default Step1;
+
+function useEffect(arg0: () => void, arg1: (boolean | (() => void))[]) {
+  throw new Error('Function not implemented.');
+}

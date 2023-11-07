@@ -9,6 +9,7 @@ import Step1 from './StepperComponent/Step1';
 import Step2 from './StepperComponent/Step2';
 import Step3 from './StepperComponent/Step3';
 import Navbar from './StepperComponent/Navbar';
+import Completed1 from './StepperComponent/Completed1';
 
 const steps: string[] = ['Vyplňte potřebné informace', 'Nastavení práv', 'Kontrola údajů'];
 
@@ -64,15 +65,13 @@ const StepperComponent: React.FC = () => {
     const newCompleted = { ...completed };
     newCompleted[step] = isStepCompleted;
     setCompleted(newCompleted);
-    if (isStepCompleted) {
-      handleNext();
-    }
+    
   };
 
   const getStepContent = (step: number): JSX.Element => {
     switch (step) {
       case 0:
-        return <Step1 />;
+        return completed[0] ? <Completed1 /> : <Step1 onCompleteTeamCreation={() => handleStepCompletion(0, true)} />;
       case 1:
         return <Step2 />;
       case 2:
@@ -106,6 +105,7 @@ const StepperComponent: React.FC = () => {
       <Box sx={{ marginTop: '2em' }}>
         <Box sx={{ paddingTop: '5em' }}>
           <div style={{ marginBottom: '20px' }}>
+
             {getStepContent(activeStep)}
           </div>
 
