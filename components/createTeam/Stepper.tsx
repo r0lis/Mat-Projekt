@@ -16,6 +16,7 @@ const steps: string[] = ['Vyplňte potřebné informace', 'Nastavení práv', 'K
 const StepperComponent: React.FC = () => {
   const [activeStep, setActiveStep] = React.useState<number>(0);
   const [completed, setCompleted] = React.useState<{ [k: number]: boolean }>({});
+  const [teamEmailNow, setTeamEmail] = React.useState<string>('');
 
   const totalSteps = (): number => {
     return steps.length;
@@ -61,19 +62,19 @@ const StepperComponent: React.FC = () => {
     setCompleted({});
   };
 
-  const handleStepCompletion = (step: number, isStepCompleted: boolean) => {
+  const handleStepCompletion = (step: number, isStepCompleted: boolean, teamEmail: string) => {
     const newCompleted = { ...completed };
     newCompleted[step] = isStepCompleted;
     setCompleted(newCompleted);
-    
+    setTeamEmail(teamEmail);
   };
 
   const getStepContent = (step: number): JSX.Element => {
     switch (step) {
       case 0:
-        return completed[0] ? <Completed1 /> : <Step1 onCompleteTeamCreation={() => handleStepCompletion(0, true)} />;
+        return completed[0] ? <Completed1 /> : <Step1 onCompleteTeamCreation={(teamEmail) => handleStepCompletion(0, true, teamEmail)} />;
       case 1:
-        return <Step2 />;
+        return <Step2 teamEmail={teamEmailNow} />;
       case 2:
         return <Step3 />;
       default:

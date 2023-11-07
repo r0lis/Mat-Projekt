@@ -26,7 +26,7 @@ const CREATE_TEAM_MUTATION = gql`
 `;
 
 interface Step1Props {
-  onCompleteTeamCreation: () => void;
+  onCompleteTeamCreation: (teamEmail: string) => void;
 }
 
 
@@ -90,7 +90,8 @@ const Step1: React.FC<Step1Props> = ({ onCompleteTeamCreation }) => {
       console.log('Tým byl úspěšně vytvořen', response);
 
       //router.push('/').then(() => window.location.reload());
-      onCompleteTeamCreation();
+      onCompleteTeamCreation(emailTeam);
+      console.log(emailTeam);
       setIsCreated(true);
       
     } catch (error: any) {
