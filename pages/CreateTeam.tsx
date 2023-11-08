@@ -9,8 +9,7 @@ import Box from '@mui/material/Box';
 import Alert from '@mui/material/Alert';
 import Stepper from '../components/createTeam/Stepper';
 
-
-function CreateTeam() {
+const CreateTeam: React.FC = () => {
 
   return (
     <>

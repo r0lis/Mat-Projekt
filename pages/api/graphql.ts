@@ -293,12 +293,6 @@ const typeDefs = gql`
   }
 `;
 
-
-
-
-
-
-
 const schema = createSchema({
   typeDefs,
   resolvers,
