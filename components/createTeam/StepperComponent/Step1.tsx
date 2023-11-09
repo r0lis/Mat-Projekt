@@ -76,7 +76,6 @@ const Step1: React.FC<Step1Props> = ({ onCompleteTeamCreation }) => {
         throw new Error('Město týmu musí začínat velkým písmenem a být delší než 1 znak.');
       }
   
-      // Ověření jména a příjmení vlastníka týmu
       if (!/^[A-Z].{2,}$/u.test(nameOwner) || !/^[A-Z].{2,}$/u.test(surnameOwner)) {
         throw new Error('Jméno a příjmení vlastníka týmu musí začínat velkým písmenem a být delší než 2 znaky.');
       }
@@ -111,9 +110,9 @@ const Step1: React.FC<Step1Props> = ({ onCompleteTeamCreation }) => {
         setEmails([...emails, emailValue]);
       }
       setEmailValue('');
-      setError2(null); // Clear the error state if input is valid
+      setError2(null);
     } else {
-      setError2('Please enter a valid email.'); // Set the error message for an invalid email
+      setError2('Please enter a valid email.'); 
     }
   };
 
@@ -197,7 +196,6 @@ const Step1: React.FC<Step1Props> = ({ onCompleteTeamCreation }) => {
               {error2 && <Alert severity="error">{error2}</Alert>}
             </div>
 
-
             <div>
               <h3>Seznam uživatelů které jste přidali:</h3>
               <TableContainer component={Paper}>
@@ -262,13 +260,8 @@ const Step1: React.FC<Step1Props> = ({ onCompleteTeamCreation }) => {
           )}
         
         </Box>
-
-
       </Box>
-
-
     </Box>
-
   );
 };
 
