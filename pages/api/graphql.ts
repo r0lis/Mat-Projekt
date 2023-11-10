@@ -71,6 +71,8 @@ type Query = {
   user(id: String): User
   getUserByNameAndSurname(email: String): NameAndSurname
   getUserTeamsByEmail(email: String): [String]
+  getTeamMembersByEmail(teamEmail: String): [String]
+
 }
 
 const db = firestore();
@@ -95,20 +97,32 @@ const resolvers = {
     },
 
     getTeamDetails: async (_: any, { teamId }: { teamId: string }, context: Context) => {
-  if (context.user) {
-    const teamQuery = db.collection('Team').where('teamId', '==', teamId);
-    const teamSnapshot = await teamQuery.get();
-    if (!teamSnapshot.empty) {
-      const teamData = teamSnapshot.docs[0].data() as Team;
-      return {
-        Name: teamData.Name,
-        Members: teamData.MembersEmails,
-      };
-    }
-  }
-  return null;
-},
-  
+      if (context.user) {
+        const teamQuery = db.collection('Team').where('teamId', '==', teamId);
+        const teamSnapshot = await teamQuery.get();
+        if (!teamSnapshot.empty) {
+          const teamData = teamSnapshot.docs[0].data() as Team;
+          return {
+            Name: teamData.Name,
+            Members: teamData.MembersEmails,
+          };
+        }
+      }
+      return null;
+    },
+
+    getTeamMembersByEmail: async (_: any, { teamEmail }: { teamEmail: string }, context: Context) => {
+      if (context.user) {
+        const teamQuery = db.collection('Team').where('Email', '==', teamEmail);
+        const teamSnapshot = await teamQuery.get();
+        if (!teamSnapshot.empty) {
+          const teamData = teamSnapshot.docs[0].data() as Team;
+          return teamData.MembersEmails;
+        }
+      }
+      return null;
+    },
+
 
     getUserByNameAndSurname: async (_: any, { email }: { email: string }, context: Context) => {
       if (context.user) {
@@ -131,20 +145,20 @@ const resolvers = {
         const userSnapshot = await userQuery.get();
         if (!userSnapshot.empty) {
           const userData = userSnapshot.docs[0].data() as User;
-    
+
           const teamIds = userData.IdTeam;
           const teams = [];
-    
+
           for (const teamId of teamIds) {
             const teamQuery = db.collection('Team').where('teamId', '==', teamId);
             const teamSnapshot = await teamQuery.get();
             if (!teamSnapshot.empty) {
               const teamData = teamSnapshot.docs[0].data() as Team;
-              teams.push({ teamId: teamData.teamId, Name: teamData.Name }); 
+              teams.push({ teamId: teamData.teamId, Name: teamData.Name });
             }
           }
-    
-          return teams; 
+
+          return teams;
         }
       }
       return null;
@@ -174,7 +188,7 @@ const resolvers = {
         return newUser;
       } catch (error) {
         console.error('Chyba při vytváření uživatele:', error);
-        throw error; 
+        throw error;
       }
     },
 
@@ -203,7 +217,7 @@ const resolvers = {
         return newTeam;
       } catch (error) {
         console.error('Chyba při vytváření týmu:', error);
-        throw error; 
+        throw error;
       }
     },
 
