@@ -72,6 +72,7 @@ type Query = {
   getUserByNameAndSurname(email: String): NameAndSurname
   getUserTeamsByEmail(email: String): [String]
   getTeamMembersByEmail(teamEmail: String): [String]
+  checkTeamEmailExistence(email: String): Boolean
 
 }
 
@@ -94,6 +95,20 @@ const resolvers = {
   Query: {
     user: async (_: any, { id }: { id: string }, context: Context) => {
       // ...
+    },
+
+    checkTeamEmailExistence: async (_: any, { email }: { email: string }, context: Context) => {
+      try {
+        if (context.user) {
+          const teamQuery = db.collection('Team').where('Email', '==', email);
+          const teamSnapshot = await teamQuery.get();
+          return !teamSnapshot.empty; // Returns true if the email is found in any team
+        }
+        return false;
+      } catch (error) {
+        console.error('Chyba při kontrole e-mailu v kolekci Team:', error);
+        throw error;
+      }
     },
 
     getTeamDetails: async (_: any, { teamId }: { teamId: string }, context: Context) => {
@@ -293,6 +308,8 @@ const typeDefs = gql`
     getUserByNameAndSurname(email: String): NameAndSurname
     getUserTeamsByEmail(email: String!): [Team]
     getTeamDetails(teamId: String!): TeamDetails 
+    getTeamMembersByEmail(teamEmail: String!): [String] 
+    checkTeamEmailExistence(email: String!): Boolean
   }
 
   type Mutation {

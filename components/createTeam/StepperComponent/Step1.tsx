@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import TextField from '@mui/material/TextField';
 import { Alert, Box, Button, IconButton, List, ListItem, ListItemSecondaryAction, ListItemText, Typography } from '@mui/material';
-import { gql, useMutation } from '@apollo/client';
+import { gql, useMutation, useQuery } from '@apollo/client';
 import { authUtils } from '@/firebase/auth.utils';
 import { useRouter } from 'next/router';
 import EditIcon from '@mui/icons-material/Edit';
@@ -22,6 +22,12 @@ const CREATE_TEAM_MUTATION = gql`
       OwnerSurname
       Place
     }
+  }
+`;
+
+const CHECK_TEAM_EMAIL_EXISTENCE_QUERY = gql`
+  query CheckTeamEmailExistence($email: String!) {
+    checkTeamEmailExistence(email: $email)
   }
 `;
 
@@ -51,11 +57,20 @@ const Step1: React.FC<Step1Props> = ({ onCompleteTeamCreation }) => {
 
   const currentUserEmail = authUtils.getCurrentUser()?.email || '';
 
+  const { data: emailExistenceData } = useQuery(CHECK_TEAM_EMAIL_EXISTENCE_QUERY, {
+    variables: { email: emailTeam },
+    skip: !emailTeam, // Skip query if emailTeam is empty
+  });
+
 
   const handleCreateTeam = async () => {
     try {
       if (!name || !currentUserEmail) {
         throw new Error('Název týmu a e-mail admina jsou povinné.');
+      }
+
+      if (emailExistenceData && emailExistenceData.checkTeamEmailExistence) {
+        throw new Error('Tým s tímto e-mailem již existuje.');
       }
 
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -267,6 +282,4 @@ const Step1: React.FC<Step1Props> = ({ onCompleteTeamCreation }) => {
 
 export default Step1;
 
-function useEffect(arg0: () => void, arg1: (boolean | (() => void))[]) {
-  throw new Error('Function not implemented.');
-}
+
