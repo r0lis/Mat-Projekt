@@ -139,7 +139,7 @@ const MyNavBar: React.FC = () => {
                                     color: 'white',
                                     display: 'block',
                                     fontWeight: 'bold',
-                                    fontSize: '1.2vw',
+                                    fontSize: '1.1vw',
                                     position: 'relative',
                                     lineHeight: '20px',
                                 }}

@@ -44,12 +44,14 @@ const Step2: React.FC<Step2Props> = ({ teamEmail }) => {
       >
         <Box>
           <Typography sx={{ textAlign: "center" }} variant="h4" gutterBottom>
-            Nastavte práva uživatelů a nastavte účty a další infomace.
+            Nastavte práva uživatelů
           </Typography>
-          <Typography>{teamEmail}</Typography>
+          <Box>
           <Typography variant="h6" sx={{ marginTop: 2 }}>
-            Members:
+            Toto jsou člnové co jste již přidali:
           </Typography>
+          </Box>
+          
           {members.map((member: string, index: number) => (
             <Typography key={index}>{member}</Typography>
           ))}
