@@ -46,7 +46,7 @@ const items = [
   { label: 'Soupisky', image: Rousters },
   { label: 'Platby', image: Pay },
   { label: 'Události', image: Events },
-  { label: 'Váš tým', image: TeamIcon },
+  { label: 'Tým', image: TeamIcon },
   { label: 'Členové', image: Members },
   { label: 'Správa', image: Settings },
 ];
@@ -437,12 +437,12 @@ const buttonStyle2 = {
             style={{
               display: 'block',
               alignItems: 'center',
-              backgroundColor: 'white',
+              backgroundColor: '#F0F2F5',
               width: showOnlyIcon ? '4.5em' : '11em',
               maxWidth: '20em',
               height: '100%',
               position: 'absolute',
-              borderRight: `4px solid ${isHovered ? 'rgba(160, 32, 240, 1)' : 'rgba(160, 32, 240, 0.4)'}`,
+              borderRight: `5px solid ${isHovered ? 'rgba(160, 32, 240, 1)' : 'rgba(160, 32, 240, 0.4)'}`,
               padding: '0',
               transition: 'width 0.1s ease-in-out',
             }}>
@@ -455,7 +455,10 @@ const buttonStyle2 = {
                   display: 'flex',
                   alignItems: 'center',
                   verticalAlign: 'center',
-                  backgroundColor: activeLink === item.label ? 'lightgray' : 'transparent', // Zvýraznění aktivního odkazu
+                  backgroundColor: activeLink === item.label ? 'white' : 'transparent',
+                  borderRight: activeLink === item.label ? "5px solid rgba(160, 32, 240, 1)" :"" , // Zvýraznění aktivního odkazu
+                  marginRight: activeLink === item.label ? "-4px" : "0px",
+                   // Zvýraznění aktivního odkazu
                 }}
               >
                 <Box onClick={() => handleLinkClick(item.label)} sx={{ textDecoration: 'none', display: 'flex', padding: '0' }}>

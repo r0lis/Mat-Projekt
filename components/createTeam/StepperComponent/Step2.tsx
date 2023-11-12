@@ -46,14 +46,16 @@ const Step2: React.FC<Step2Props> = ({ teamEmail }) => {
           <Typography sx={{ textAlign: "center" }} variant="h4" gutterBottom>
             Nastavte práva uživatelů
           </Typography>
-          <Box>
-          <Typography variant="h6" sx={{ marginTop: 2 }}>
-            Toto jsou člnové co jste již přidali:
-          </Typography>
+          <Box sx={{marginBottom:'2em'}}>
+            <Typography variant="h6" sx={{ marginTop: 2 }}>
+              Toto jsou členové co jste již přidali:
+            </Typography>
           </Box>
-          
+
           {members.map((member: string, index: number) => (
-            <Typography key={index}>{member}</Typography>
+            <Box sx={{padding:'40px', borderRadius:'10px', marginBottom:'2em',boxShadow: "0 0 10px rgba(0, 0, 0, 0.4)",}}>
+              <Typography key={index}>{member}</Typography>
+            </Box>
           ))}
         </Box>
       </Box>
