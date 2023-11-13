@@ -31,9 +31,9 @@ const CHECK_TEAM_EMAIL_EXISTENCE_QUERY = gql`
   }
 `;
 
-interface Step1Props {
+type Step1Props = {
   onCompleteTeamCreation: (teamEmail: string) => void;
-}
+};
 
 
 const Step1: React.FC<Step1Props> = ({ onCompleteTeamCreation }) => {
