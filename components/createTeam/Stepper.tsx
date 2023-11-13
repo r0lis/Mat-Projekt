@@ -1,22 +1,28 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import Stepper from '@mui/material/Stepper';
-import Step from '@mui/material/Step';
-import StepButton from '@mui/material/StepButton';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import Step1 from './StepperComponent/Step1';
-import Step2 from './StepperComponent/Step2';
-import Step3 from './StepperComponent/Step3';
-import Navbar from './StepperComponent/Navbar';
-import Completed1 from './StepperComponent/Completed1';
+import * as React from "react";
+import Box from "@mui/material/Box";
+import Stepper from "@mui/material/Stepper";
+import Step from "@mui/material/Step";
+import StepButton from "@mui/material/StepButton";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import Step1 from "./StepperComponent/Step1";
+import Step2 from "./StepperComponent/Step2";
+import Step3 from "./StepperComponent/Step3";
+import Navbar from "./StepperComponent/Navbar";
+import Completed1 from "./StepperComponent/Completed1";
 
-const steps: string[] = ['Vyplňte potřebné informace', 'Nastavení práv', 'Kontrola údajů'];
+const steps: string[] = [
+  "Vyplňte potřebné informace",
+  "Nastavení práv",
+  "Kontrola údajů",
+];
 
 const StepperComponent: React.FC = () => {
   const [activeStep, setActiveStep] = React.useState<number>(0);
-  const [completed, setCompleted] = React.useState<{ [k: number]: boolean }>({});
-  const [teamEmailNow, setTeamEmail] = React.useState<string>('');
+  const [completed, setCompleted] = React.useState<{ [k: number]: boolean }>(
+    {}
+  );
+  const [teamEmailNow, setTeamEmail] = React.useState<string>("");
 
   const totalSteps = (): number => {
     return steps.length;
@@ -62,7 +68,11 @@ const StepperComponent: React.FC = () => {
     setCompleted({});
   };
 
-  const handleStepCompletion = (step: number, isStepCompleted: boolean, teamEmail: string) => {
+  const handleStepCompletion = (
+    step: number,
+    isStepCompleted: boolean,
+    teamEmail: string
+  ) => {
     const newCompleted = { ...completed };
     newCompleted[step] = isStepCompleted;
     setCompleted(newCompleted);
@@ -72,7 +82,15 @@ const StepperComponent: React.FC = () => {
   const getStepContent = (step: number): JSX.Element => {
     switch (step) {
       case 0:
-        return completed[0] ? <Completed1 /> : <Step1 onCompleteTeamCreation={(teamEmail) => handleStepCompletion(0, true, teamEmail)} />;
+        return completed[0] ? (
+          <Completed1 />
+        ) : (
+          <Step1
+            onCompleteTeamCreation={(teamEmail) =>
+              handleStepCompletion(0, true, teamEmail)
+            }
+          />
+        );
       case 1:
         return <Step2 teamEmail={teamEmailNow} />;
       case 2:
@@ -83,14 +101,35 @@ const StepperComponent: React.FC = () => {
   };
 
   return (
-    <Box sx={{ width: '100%', margin: 'auto', backgroundColor:'#F0F2F5', paddingBottom:'15%' }}>
-      
-      <Box sx={{ position: 'fixed', top: 0, width: '100%', backgroundColor:'#F0F2F5', zIndex: 100,  textAlign:'center',    }}>
-      <Navbar  />
-      <Box>
-        
-      </Box>
-        <Box sx={{ width: '80%', marginLeft: 'auto', marginRight:'auto', paddingTop:'2em', paddingBottom:'2em'}}>
+    <Box
+      sx={{
+        width: "100%",
+        margin: "auto",
+        backgroundColor: "#F0F2F5",
+        paddingBottom: "15%",
+      }}
+    >
+      <Box
+        sx={{
+          position: "fixed",
+          top: 0,
+          width: "100%",
+          backgroundColor: "#F0F2F5",
+          zIndex: 100,
+          textAlign: "center",
+        }}
+      >
+        <Navbar />
+        <Box></Box>
+        <Box
+          sx={{
+            width: "80%",
+            marginLeft: "auto",
+            marginRight: "auto",
+            paddingTop: "2em",
+            paddingBottom: "2em",
+          }}
+        >
           <Stepper nonLinear activeStep={activeStep}>
             {steps.map((label, index) => (
               <Step key={label} completed={completed[index]}>
@@ -102,11 +141,10 @@ const StepperComponent: React.FC = () => {
           </Stepper>
         </Box>
       </Box>
-     
-      <Box sx={{ marginTop: '2em' }}>
-        <Box sx={{ paddingTop: '5em' }}>
-          <div style={{ marginBottom: '20px' }}>
 
+      <Box sx={{ marginTop: "2em" }}>
+        <Box sx={{ paddingTop: "5em" }}>
+          <div style={{ marginBottom: "20px" }}>
             {getStepContent(activeStep)}
           </div>
 
@@ -116,38 +154,53 @@ const StepperComponent: React.FC = () => {
                 <Typography sx={{ mt: 2, mb: 1 }}>
                   All steps completed - you&apos;re finished
                 </Typography>
-                <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-                  <Box sx={{ flex: '1 1 auto' }} />
+                <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+                  <Box sx={{ flex: "1 1 auto" }} />
                   <Button onClick={handleReset}>Reset</Button>
                 </Box>
               </React.Fragment>
             ) : (
               <React.Fragment>
-                 <Box sx={{ position: 'fixed',  width: '100%', bottom:'0px',  zIndex: 1, backgroundColor:'rgba(240, 242, 245, 0)',  }}>
-                <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-                  <Button
-                    color="inherit"
-                    disabled={activeStep === 0}
-                    onClick={handleBack}
-                    sx={{ marginLeft:'5px' }}
-                  >
-                    Back
-                  </Button>
-                  <Box sx={{ flex: '1 1 auto' }} />
-                  <Button onClick={handleNext} sx={{ mr: 1 }}>
-                    Next
-                  </Button>
-                  {activeStep !== steps.length &&
-                    (completed[activeStep] ? (
-                      <Typography variant="caption" sx={{ display: 'inline-block' }}>
-                        Step {activeStep + 1} already completed
-                      </Typography>
-                    ) : (
-                      <Button onClick={handleComplete}>
-                        {completedSteps() === totalSteps() - 1 ? 'Finish' : 'Complete Step'}
-                      </Button>
-                    ))}
-                </Box>
+                <Box
+                  sx={{
+                    position: "fixed",
+                    width: "100%",
+                    bottom: "0px",
+                    zIndex: 1,
+                    backgroundColor: "rgba(240, 242, 245, 0)",
+                  }}
+                >
+                  <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+                    <Button
+                      color="inherit"
+                      disabled={activeStep === 0}
+                      onClick={handleBack}
+                      sx={{ marginLeft: "5px" }}
+                    >
+                      Back
+                    </Button>
+                    <Box sx={{ flex: "1 1 auto" }} />
+                    <Button onClick={handleNext} sx={{ mr: 1 }}>
+                      Next
+                    </Button>
+                    {activeStep !== steps.length &&
+                      (completed[activeStep] ? (
+                        <Box sx={{marginRight:'1em'}}>
+                          <Typography
+                            variant="caption"
+                            sx={{ display: "inline-block" }}
+                          >
+                            Krok {activeStep + 1} jste již dokončili
+                          </Typography>
+                        </Box>
+                      ) : (
+                        <Button onClick={handleComplete}>
+                          {completedSteps() === totalSteps() - 1
+                            ? "Finish"
+                            : "Complete Step"}
+                        </Button>
+                      ))}
+                  </Box>
                 </Box>
               </React.Fragment>
             )}

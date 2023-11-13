@@ -39,7 +39,7 @@ interface Step1Props {
 const Step1: React.FC<Step1Props> = ({ onCompleteTeamCreation }) => {
 
   const router = useRouter();
-  const [name, setName] = useState('');
+  const [nameTeam, setName] = useState('');
   const [emailTeam, setEmail] = useState('');
   const [img, setImg] = useState('');
   const [nameOwner, setNameOwner] = useState('');
@@ -65,7 +65,7 @@ const Step1: React.FC<Step1Props> = ({ onCompleteTeamCreation }) => {
 
   const handleCreateTeam = async () => {
     try {
-      if (!name || !currentUserEmail) {
+      if (!nameTeam || !currentUserEmail) {
         throw new Error('Název týmu a e-mail admina jsou povinné.');
       }
 
@@ -78,7 +78,7 @@ const Step1: React.FC<Step1Props> = ({ onCompleteTeamCreation }) => {
         throw new Error('Prosím, zadejte platný e-mail pro tým.');
       }
 
-      if (!/^[A-Z].{1,}$/u.test(name)) {
+      if (!/^[A-Z].{1,}$/u.test(nameTeam)) {
         throw new Error('Název týmu musí začínat velkým písmenem a být delší než 1 znak.');
       }
 
@@ -98,7 +98,7 @@ const Step1: React.FC<Step1Props> = ({ onCompleteTeamCreation }) => {
       const allMembers = [currentUserEmail, ...emails];
 
       const response = await createTeam({
-        variables: { Name: name, AdminEmail: currentUserEmail, teamId: "fefe", MembersEmails: allMembers, Email: emailTeam, Logo: img, OwnerName: nameOwner, OwnerSurname: surnameOwner, Place: place },
+        variables: { Name: nameTeam, AdminEmail: currentUserEmail, teamId: "fefe", MembersEmails: allMembers, Email: emailTeam, Logo: img, OwnerName: nameOwner, OwnerSurname: surnameOwner, Place: place },
       });
 
       console.log('Tým byl úspěšně vytvořen', response);
@@ -161,10 +161,10 @@ const Step1: React.FC<Step1Props> = ({ onCompleteTeamCreation }) => {
           <form>
             <div>
               <TextField
-                id="name"
+                id="nameTeam"
                 label="Název týmu"
                 variant="outlined"
-                value={name}
+                value={nameTeam}
                 onChange={(e) => setName(e.target.value)}
                 fullWidth
                 margin="normal" />
