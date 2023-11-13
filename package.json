@@ -52,6 +52,8 @@
   "devDependencies": {
     "@types/react-swipeable-views": "^0.13.4",
     "@types/react-swipeable-views-utils": "^0.13.6",
+    "@typescript-eslint/eslint-plugin": "^6.11.0",
+    "@typescript-eslint/parser": "^6.11.0",
     "eslint": "^8.53.0"
   }
 }
