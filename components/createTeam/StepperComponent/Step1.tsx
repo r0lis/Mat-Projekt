@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import React, { useState } from 'react';
 import TextField from '@mui/material/TextField';
 import { Alert, Box, Button, IconButton, Typography } from '@mui/material';
@@ -48,15 +50,17 @@ const Step1: React.FC<Step1Props> = ({ onCompleteTeamCreation }) => {
   const [emailValue, setEmailValue] = useState('');
   const [editIndex, setEditIndex] = useState<number | null>(null);
   const [error2, setError2] = useState<string | null>(null);
-  const [error3, setError3] = useState<string | null>(null);
+  const [error3, ] = useState<string | null>(null);
   const [isCreated, setIsCreated] = useState(false);
 
   const [createTeam] = useMutation(CREATE_TEAM_MUTATION);
 
+  // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
   const currentUserEmail = authUtils.getCurrentUser()?.email || '';
 
   const { data: emailExistenceData } = useQuery(CHECK_TEAM_EMAIL_EXISTENCE_QUERY, {
     variables: { email: emailTeam },
+    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
     skip: !emailTeam, // Skip query if emailTeam is empty
   });
 
@@ -145,7 +149,7 @@ const Step1: React.FC<Step1Props> = ({ onCompleteTeamCreation }) => {
 
   return (
     <Box sx={{ margin: '0 auto', marginTop: 4, }}>
-      <Box sx={{ backgroundColor: 'white', width: '60%', marginLeft: 'auto', marginRight: 'auto', padding: '5%', marginTop: '6em', borderRadius: '10px', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)' }}>
+      <Box sx={{ backgroundColor: 'white', width: '65%', marginLeft: 'auto', marginRight: 'auto', padding: '5%', marginTop: '6em', borderRadius: '10px', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)' }}>
         <Typography sx={{ textAlign: 'center' }} variant="h4" gutterBottom>
           Vytvoření týmu:
         </Typography>
