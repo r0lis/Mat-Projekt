@@ -1,3 +1,7 @@
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/ban-types */
 import { firestore } from 'firebase-admin';
 import { DecodedIdToken } from 'firebase-admin/lib/auth/token-verifier';
 import { gql } from 'graphql-tag';
@@ -31,10 +35,18 @@ type Team = {
 
 };
 
+type UpdatedMemberInput = {
+  member: String  ;
+  role: number;
+}
+
 type Mutation = {
   createUser(input: CreateUserInput): User
   creteTeam(input: CreateTeamInput): Team
   deleteUserByEmail(email: String): Boolean
+  updateUserRoles(teamEmail: String, updatedMembers: [UpdatedMemberInput]): Team
+
+  
 };
 
 type CreateUserInput = {
@@ -236,6 +248,44 @@ const resolvers = {
       }
     },
 
+    updateUserRoles: async (
+      _: any,
+      { teamEmail, updatedMembers }: { teamEmail: string, updatedMembers: UpdatedMemberInput[] },
+      context: Context
+    ) => {
+      try {
+        if (context.user) {
+          const teamQuery = db.collection('Team').where('Email', '==', teamEmail);
+          const teamSnapshot = await teamQuery.get();
+  
+          if (!teamSnapshot.empty) {
+            const teamDoc = teamSnapshot.docs[0];
+  
+            
+  
+            await teamDoc.ref.update({ Members: updatedMembers });  
+            // Fetch the updated data after the update
+            const updatedTeamQuery = db.collection('Team').where('Email', '==', teamEmail);
+            const updatedTeamSnapshot = await updatedTeamQuery.get();
+  
+            if (!updatedTeamSnapshot.empty) {
+              const updatedTeamData = updatedTeamSnapshot.docs[0].data() as Team;
+  
+              return {
+                Members: updatedMembers,
+              };
+            }
+          }
+        }
+        return null;
+      
+      } catch (error) {
+        console.error('Chyba při aktualizaci rolí uživatelů:', error);
+        throw error;
+      } 
+       
+     
+    },
 
     deleteUserByEmail: async (_: any, { email }: { email: string }, context: Context) => {
       try {
@@ -277,7 +327,7 @@ const typeDefs = gql`
   input CreateTeamInput {
     Name: String!
     AdminEmail: String!
-    MembersEmails: [String]!
+    MembersEmails: [String]
     teamId: String!
     Email: String!
     Logo: String!
@@ -286,10 +336,15 @@ const typeDefs = gql`
     OwnerSurname: String!
   }
 
+  input UpdatedMemberInput {
+    member: String!
+    role: Int!
+  }
+
   type Team {
     Name: String!
     teamId: String!
-    MembersEmails: [String]!
+    MembersEmails: [String]
     AdminEmail: String!
     Email: String!
     Logo: String!
@@ -316,6 +371,7 @@ const typeDefs = gql`
     createUser(input: CreateUserInput): User
     createTeam(input: CreateTeamInput): Team
     deleteUserByEmail(email: String): Boolean
+    updateUserRoles(teamEmail: String!, updatedMembers: [UpdatedMemberInput]!): Team
   }
 
   type TeamDetails {
