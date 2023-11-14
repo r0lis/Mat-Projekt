@@ -1,13 +1,14 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import React, { useState } from 'react'
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Link from 'next/link';
 import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
 import LogoTeam from '@/public/assets/logotym.png';
 import { useRouter } from 'next/router';
 import { gql, useQuery } from '@apollo/client';
-import { Typography, CircularProgress, Avatar, useMediaQuery, Theme, Button, Menu, Toolbar } from '@mui/material'; // Importujte CircularProgress z MUI
+import { Typography, CircularProgress, Avatar, Button, Menu, Toolbar } from '@mui/material'; // Importujte CircularProgress z MUI
 import ChatIcon from '@mui/icons-material/Chat';
 import CircleNotificationsIcon from '@mui/icons-material/CircleNotifications';
 import demoUser from '@/public/assets/demoUser.png';
@@ -37,9 +38,9 @@ const Navbar: React.FC = () => {
   const router = useRouter();    
   const { id } = router.query;
   const user = authUtils.getCurrentUser();
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [, setMenuOpen] = useState(false);
   const [anchorEl2, setAnchorEl2] = useState<null | HTMLElement>(null);
-  const [menuOpen2, setMenuOpen2] = useState(false);
+  const [, setMenuOpen2] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
 

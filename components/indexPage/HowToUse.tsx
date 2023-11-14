@@ -2,8 +2,6 @@ import { Typography } from '@mui/material';
 import React from 'react';
 import LeftDownArr from '../../public/assets/arrowLeftDown.png';
 import RightDownArr from '../../public/assets/arrowRightDown.png';
-import zIndex from '@mui/material/styles/zIndex';
-
 
 
 const HowToUse: React.FC = () => {

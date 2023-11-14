@@ -3,11 +3,9 @@ import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Link from 'next/link';
 import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-import LogoTeam from '@/public/assets/logotym.png';
 import { useRouter } from 'next/router';
 import { gql, useQuery } from '@apollo/client';
-import { Typography, CircularProgress, Avatar, useMediaQuery, Theme, Button, Menu, Toolbar } from '@mui/material'; // Importujte CircularProgress z MUI
+import { Typography, CircularProgress, Avatar, Button, Menu, Toolbar } from '@mui/material'; // Importujte CircularProgress z MUI
 import ChatIcon from '@mui/icons-material/Chat';
 import CircleNotificationsIcon from '@mui/icons-material/CircleNotifications';
 import demoUser from '@/public/assets/demoUser.png';
@@ -26,23 +24,26 @@ const GET_USER_INFO = gql`
 
 const Navbar: React.FC = () => {
     const router = useRouter();
-    const { id } = router.query;
+    
     const user = authUtils.getCurrentUser();
-    const [menuOpen, setMenuOpen] = useState(false);
+    const [, setMenuOpen] = useState(false);
   const [anchorEl2, setAnchorEl2] = useState<null | HTMLElement>(null);
-  const [menuOpen2, setMenuOpen2] = useState(false);
+  const [, setMenuOpen2] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
 
   const { loading: userInfoLoading, error: userInfoError, data: userInfoData } = useQuery(GET_USER_INFO, {
+    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
     variables: { email: user?.email || '' },
     skip: !user,
   });
 
   
+  // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
   const name = userInfoData?.getUserByNameAndSurname.Name || '';
+  // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
   const surname = userInfoData?.getUserByNameAndSurname.Surname || '';
-  const initials = name[0] + surname[0];
+  
 
   const handleOpenMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl2(event.currentTarget);

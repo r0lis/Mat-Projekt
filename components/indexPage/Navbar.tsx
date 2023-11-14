@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import React, { useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -36,12 +38,17 @@ const GET_TEAM_NAMES = gql`
   }
 `;
 
+type Team = {
+    teamId: string;
+    Name: string;
+  };
+
 
 const pages = ['Obsah', 'Ukázky', 'Použití', 'Kontakt'];
 
 const MyNavBar: React.FC = () => {
     const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
-    const [menuOpen, setMenuOpen] = useState(false);
+    const [, setMenuOpen] = useState(false);
     const [anchorEl2, setAnchorEl2] = useState<null | HTMLElement>(null);
     const user = authUtils.getCurrentUser();
 
@@ -256,8 +263,8 @@ const MyNavBar: React.FC = () => {
                                                     : userIdError
                                                         ? 'Chyba'
                                                         : userTeamsData.getUserTeamsByEmail.length > 0
-                                                            ? userTeamsData.getUserTeamsByEmail.map((team: any, index: React.Key | null | undefined) => (
-                                                                <Box sx={{ marginBottom: '1em', padding: '3%', borderRadius: '10px', ...hoverStyle, border: '1px solid gray' }}>
+                                                            ? userTeamsData.getUserTeamsByEmail.map((team: Team, index: number) => (
+                                                            <Box sx={{ marginBottom: '1em', padding: '3%', borderRadius: '10px', ...hoverStyle, border: '1px solid gray' }}>
                                                                     <Link key={index} href={`/Team/${team.teamId}`} style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
                                                                         <img src={TeamLogoImg.src} alt="Team Logo" style={{ width: '50px', height: '50px', marginRight: '1em' }} />
                                                                         <div style={{ color: 'black' }}>{team.Name}</div>

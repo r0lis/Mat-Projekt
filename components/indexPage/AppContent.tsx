@@ -1,5 +1,4 @@
 import { Typography } from '@mui/material'
-import { features } from 'process';
 import React from 'react'
 import comunicationImg from '../../public/assets/message.png';
 import teamImg from '../../public/assets/network.png';

@@ -1,5 +1,3 @@
-// eslint-disable-next-line eslint-comments/disable-enable-pair
-/* eslint-disable unicorn/catch-error-name */
 import { adminAuth } from './firebase-admin-config';
 
 export const verifyToken = async (token: string) => {

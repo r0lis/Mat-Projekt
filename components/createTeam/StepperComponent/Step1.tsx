@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import TextField from '@mui/material/TextField';
-import { Alert, Box, Button, IconButton, List, ListItem, ListItemSecondaryAction, ListItemText, Typography } from '@mui/material';
+import { Alert, Box, Button, IconButton, Typography } from '@mui/material';
 import { gql, useMutation, useQuery } from '@apollo/client';
 import { authUtils } from '@/firebase/auth.utils';
-import { useRouter } from 'next/router';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Table, TableBody, TableCell, TableContainer, TableRow, Paper } from '@mui/material';
@@ -38,7 +37,6 @@ type Step1Props = {
 
 const Step1: React.FC<Step1Props> = ({ onCompleteTeamCreation }) => {
 
-  const router = useRouter();
   const [nameTeam, setName] = useState('');
   const [emailTeam, setEmail] = useState('');
   const [img, setImg] = useState('');

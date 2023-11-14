@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 
 import React, { useEffect, useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
-import GroupImg from '@/public/assets/people.png';
 import Box from '@mui/material/Box';
 import Link from 'next/link';
 import IconButton from '@mui/material/IconButton';
@@ -10,7 +11,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import LogoTeam from '@/public/assets/logotym.png';
 import { useRouter } from 'next/router';
 import { gql, useQuery } from '@apollo/client';
-import { Typography, CircularProgress, Avatar, useMediaQuery, Theme, Button, Menu } from '@mui/material'; // Importujte CircularProgress z MUI
+import { Typography, CircularProgress, Avatar, Button, Menu } from '@mui/material'; // Importujte CircularProgress z MUI
 import ChatIcon from '@mui/icons-material/Chat';
 import CircleNotificationsIcon from '@mui/icons-material/CircleNotifications';
 import demoUser from '@/public/assets/demoUser.png';
@@ -24,7 +25,6 @@ import Pay from '../../public/assets/pay.png';
 import Events from '../../public/assets/Event.png';
 import Members from '../../public/assets/Members.png';
 import Settings from '../../public/assets/Settings.png';
-import type { StaticImageData } from 'next/image';
 import Image from 'next/image';
 import OverviewComponent from '@/components/teamPage/Overview';
 import TrainingsComponent from '@/components/teamPage/Training';
@@ -78,9 +78,9 @@ function Team() {
   const [isHovered, setIsHovered] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [activeLink, setActiveLink] = useState('Přehled');
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [, setMenuOpen] = useState(false);
   const [anchorEl2, setAnchorEl2] = useState<null | HTMLElement>(null);
-  const [menuOpen2, setMenuOpen2] = useState(false);
+  const [, setMenuOpen2] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
 
