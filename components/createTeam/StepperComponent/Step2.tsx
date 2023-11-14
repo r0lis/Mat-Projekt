@@ -24,6 +24,7 @@ import { gql, useMutation, useQuery } from "@apollo/client";
 
 type Step2Props = {
   teamEmail: string;
+  onCompleteStep: () => void; // Add this prop
 };
 
 type SelectedMembers = {
@@ -59,7 +60,7 @@ const TableDivider = () => (
   />
 );
 
-const Step2: React.FC<Step2Props> = ({ teamEmail }) => {
+const Step2: React.FC<Step2Props> = ({ teamEmail, onCompleteStep  }) => {
   const { loading, error, data } = useQuery(GET_TEAM_MEMBERS, {
     variables: { teamEmail },
   });
@@ -156,13 +157,8 @@ const Step2: React.FC<Step2Props> = ({ teamEmail }) => {
           teamEmail,
           updatedMembers: updatedMembersArray,
         },
-        
-      }
-      
-      );
+      });
       setIsCompleted(true);
-
-      
 
       // Handle the response as needed
       console.log(updatedTeamData);
@@ -170,7 +166,6 @@ const Step2: React.FC<Step2Props> = ({ teamEmail }) => {
       // Update state or perform other actions if needed
       // ...
     } catch (error) {
-      
       // Handle errors
     }
   };
@@ -178,81 +173,137 @@ const Step2: React.FC<Step2Props> = ({ teamEmail }) => {
   return (
     <Box sx={{ margin: "0 auto", marginTop: 10, paddingBottom: "4em" }}>
       {isCompleted ? (
-        <Card
+        <Box
           sx={{
-            marginTop: "2em",
-            width: "100%",
-            boxShadow: "0 0 10px rgba(0, 0, 0, 0.3)",
+            backgroundColor: "white",
+            width: "64%",
+            marginLeft: "auto",
+            marginRight: "auto",
+            padding: "5%",
+            marginTop: "6em",
+            borderRadius: "10px",
+            boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
           }}
         >
-          <CardContent>
-            <Box sx={{ textAlign: "center" }}>
-              <Typography
-                sx={{ fontWeight: "bold", fontSize: "2vw" }}
-                variant="h6"
-                gutterBottom
-              >
-                Přehled práv
+          <Card
+            sx={{
+              marginTop: "2em",
+              width: "100%",
+              boxShadow: "0 0 10px rgba(0, 0, 0, 0.3)",
+              paddingBottom: "2em",
+            }}
+          >
+            <CardContent>
+              <Box sx={{ textAlign: "center" }}>
+                <Typography
+                  sx={{ fontWeight: "bold", fontSize: "2vw" }}
+                  variant="h6"
+                  gutterBottom
+                >
+                  Přehled práv
+                </Typography>
+              </Box>
+              <Box sx={{}}>
+                <TableContainer
+                  component={Paper}
+                  sx={{
+                    border: "1px solid rgba(224, 224, 224, 1)",
+                    borderRadius: "10px",
+                    width: "90%",
+                    marginLeft: "auto",
+                    marginRight: "auto",
+                  }}
+                >
+                  <Table>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>
+                          <Typography sx={{ fontWeight: "bold" }}>
+                            Trainers
+                          </Typography>
+                          <TableDivider />
+                        </TableCell>
+                        <TableCell>
+                          <Typography sx={{ fontWeight: "bold" }}>
+                            Manegement
+                          </Typography>
+                          <TableDivider />
+                        </TableCell>
+                        <TableCell>
+                          <Typography sx={{ fontWeight: "bold" }}>
+                            Players
+                          </Typography>
+                        </TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      <TableRow>
+                        <TableCell
+                          sx={{
+                            borderRight: "1px solid rgba(224, 224, 224, 1)",
+                          }}
+                        >
+                          {selectedMembers.Trainers.map((member, index) => (
+                            <Typography key={index}>{member}</Typography>
+                          ))}
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            borderRight: "1px solid rgba(224, 224, 224, 1)",
+                          }}
+                        >
+                          {selectedMembers.Manegement.map((member, index) => (
+                            <Typography key={index}>{member}</Typography>
+                          ))}
+                        </TableCell>
+                        <TableCell>
+                          {selectedMembers.Players.map((member, index) => (
+                            <Typography key={index}>{member}</Typography>
+                          ))}
+                        </TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </Box>
+            </CardContent>
+          </Card>
+          <Box
+            sx={{ marginTop: "2em", display: "flex", justifyContent: "center" }}
+          >
+            <Button
+              sx={{
+                backgroundColor: "rgb(255, 224, 254)",
+                padding: "1em",
+                border: "1px solid rgb(255, 150, 252)",
+                marginRight: "2em",
+                marginLeft: "auto",
+                width: "14em",
+              }}
+              onClick={() => setIsCompleted(false)}
+            >
+              <Typography sx={{ fontWeight: "bold", color: "black" }}>
+                Zpět na úpravy
               </Typography>
-            </Box>
-            <Box sx={{}}>
-              <TableContainer
-                component={Paper}
-                sx={{
-                  border: "1px solid rgba(224, 224, 224, 1)",
-                  borderRadius: "10px",
-                }}
-              >
-                <Table>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>
-                        <Typography sx={{ fontWeight: "bold" }}>
-                          Trainers
-                        </Typography>
-                        <TableDivider />
-                      </TableCell>
-                      <TableCell>
-                        <Typography sx={{ fontWeight: "bold" }}>
-                          Manegement
-                        </Typography>
-                        <TableDivider />
-                      </TableCell>
-                      <TableCell>
-                        <Typography sx={{ fontWeight: "bold" }}>
-                          Players
-                        </Typography>
-                      </TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    <TableRow>
-                      <TableCell
-                        sx={{ borderRight: "1px solid rgba(224, 224, 224, 1)" }}
-                      >
-                        {selectedMembers.Trainers.map((member, index) => (
-                          <Typography key={index}>{member}</Typography>
-                        ))}
-                      </TableCell>
-                      <TableCell
-                        sx={{ borderRight: "1px solid rgba(224, 224, 224, 1)" }}
-                      >
-                        {selectedMembers.Manegement.map((member, index) => (
-                          <Typography key={index}>{member}</Typography>
-                        ))}
-                      </TableCell>
-                      <TableCell>
-                        {selectedMembers.Players.map((member, index) => (
-                          <Typography key={index}>{member}</Typography>
-                        ))}
-                      </TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </Box>
-          </CardContent>
-        </Card>
+            </Button>
+
+            <Button
+              sx={{
+                backgroundColor: "rgb(255, 224, 254)",
+                padding: "1em",
+                border: "1px solid rgb(255, 150, 252)",
+                marginLeft: "2em", // Adjust the margin as needed
+                marginRight: "auto",
+                width: "14em",
+              }}
+              onClick={onCompleteStep}             
+            >
+              <Typography sx={{ fontWeight: "bold", color: "black" }}>
+                Dokončit
+              </Typography>
+            </Button>
+          </Box>
+        </Box>
       ) : (
         <Box
           sx={{

@@ -10,6 +10,7 @@ import Step2 from "./StepperComponent/Step2";
 import Step3 from "./StepperComponent/Step3";
 import Navbar from "./StepperComponent/Navbar";
 import Completed1 from "./StepperComponent/Completed1";
+import Completed2 from "./StepperComponent/Completed2";
 
 const steps: string[] = [
   "Vyplňte potřebné informace",
@@ -92,9 +93,16 @@ const StepperComponent: React.FC = () => {
           />
         );
       case 1:
-        return <Step2 teamEmail={teamEmailNow} />;
+        return completed[1] ? (
+          <Completed2 />
+        ) : (
+          <Step2
+            teamEmail={teamEmailNow}
+            onCompleteStep={() => handleStepCompletion(1, true, teamEmailNow)}
+          />
+        );
       case 2:
-        return <Step3 />;
+        return <Step3 teamEmail={teamEmailNow} />;
       default:
         return <Typography>Unknown step</Typography>;
     }
