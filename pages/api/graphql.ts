@@ -287,6 +287,29 @@ const resolvers = {
      
     },
 
+    deleteTeamByEmail: async (_: any, { email }: { email: string }, context: Context) => {
+      try {
+        if (context.user) {
+          // Najít tým podle e-mailu
+          const teamQuery = db.collection('Team').where('Email', '==', email);
+          const teamSnapshot = await teamQuery.get();
+
+          if (!teamSnapshot.empty) {
+            // Odstranit tým
+            const teamDoc = teamSnapshot.docs[0];
+            await teamDoc.ref.delete();
+
+           
+            return true;
+          }
+        }
+        return false;
+      } catch (error) {
+        console.error('Chyba při mazání týmu:', error);
+        throw error;
+      }
+    },
+
     deleteUserByEmail: async (_: any, { email }: { email: string }, context: Context) => {
       try {
         if (context.user) {
@@ -372,6 +395,8 @@ const typeDefs = gql`
     createTeam(input: CreateTeamInput): Team
     deleteUserByEmail(email: String): Boolean
     updateUserRoles(teamEmail: String!, updatedMembers: [UpdatedMemberInput]!): Team
+    deleteTeamByEmail(email: String): Boolean
+
   }
 
   type TeamDetails {

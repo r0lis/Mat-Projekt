@@ -11,6 +11,9 @@ import Step3 from "./StepperComponent/Step3";
 import Navbar from "./StepperComponent/Navbar";
 import Completed1 from "./StepperComponent/Completed1";
 import Completed2 from "./StepperComponent/Completed2";
+import Completed from "./StepperComponent/Completed";
+import { useMutation, gql } from "@apollo/client";
+
 
 const steps: string[] = [
   "Vyplňte potřebné informace",
@@ -18,12 +21,49 @@ const steps: string[] = [
   "Kontrola údajů",
 ];
 
+const DELETE_TEAM_MUTATION = gql`
+  mutation DeleteTeam($email: String!) {
+    deleteTeamByEmail(email: $email)
+  }
+`;
+
 const StepperComponent: React.FC = () => {
   const [activeStep, setActiveStep] = React.useState<number>(0);
   const [completed, setCompleted] = React.useState<{ [k: number]: boolean }>(
     {}
   );
   const [teamEmailNow, setTeamEmail] = React.useState<string>("");
+  const [confirmUnload, setConfirmUnload] = React.useState<boolean>(false);
+
+
+  const [deleteTeam] = useMutation(DELETE_TEAM_MUTATION, {
+    variables: { email: teamEmailNow },
+  });
+
+  React.useEffect(() => {
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      if (!allStepsCompleted() && !confirmUnload) {
+        const confirmationMessage =
+          'Opravdu chcete opustit stránku? Neuložené údaje budou ztraceny.';
+        event.returnValue = confirmationMessage;
+  
+        // Zde je volání mutace pro smazání týmu
+        
+  
+        // Nastavení confirmUnload na true a neprovádění smazání týmu
+        setConfirmUnload(true);
+  
+        return confirmationMessage;
+      }
+    };
+  
+    window.addEventListener('beforeunload', handleBeforeUnload);
+  
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [completed, confirmUnload, deleteTeam]);
+
 
   const totalSteps = (): number => {
     return steps.length;
@@ -57,17 +97,7 @@ const StepperComponent: React.FC = () => {
     setActiveStep(step);
   };
 
-  const handleComplete = (): void => {
-    const newCompleted = { ...completed };
-    newCompleted[activeStep] = true;
-    setCompleted(newCompleted);
-    handleNext();
-  };
-
-  const handleReset = (): void => {
-    setActiveStep(0);
-    setCompleted({});
-  };
+ 
 
   const handleStepCompletion = (
     step: number,
@@ -101,8 +131,15 @@ const StepperComponent: React.FC = () => {
             onCompleteStep={() => handleStepCompletion(1, true, teamEmailNow)}
           />
         );
-      case 2:
-        return <Step3 teamEmail={teamEmailNow} />;
+        case 2:
+          return completed[2] ? (
+            <Completed />
+          ) : (
+            <Step3
+              teamEmail={teamEmailNow}
+              onCompleteStep={() => handleStepCompletion(2, true, teamEmailNow)}
+            />
+          );
       default:
         return <Typography>Unknown step</Typography>;
     }
@@ -159,12 +196,11 @@ const StepperComponent: React.FC = () => {
           <div>
             {allStepsCompleted() ? (
               <React.Fragment>
-                <Typography sx={{ mt: 2, mb: 1 }}>
-                  All steps completed - you&apos;re finished
+                <Typography sx={{ mt: 2, mb: 1, marginLeft:'30%', }}>
+                  Všechny kroky k vytvoření týmu jste již dokončili
                 </Typography>
                 <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
                   <Box sx={{ flex: "1 1 auto" }} />
-                  <Button onClick={handleReset}>Reset</Button>
                 </Box>
               </React.Fragment>
             ) : (
@@ -202,10 +238,8 @@ const StepperComponent: React.FC = () => {
                           </Typography>
                         </Box>
                       ) : (
-                        <Button onClick={handleComplete}>
-                          {completedSteps() === totalSteps() - 1
-                            ? "Finish"
-                            : "Complete Step"}
+                        <Button >
+                            
                         </Button>
                       ))}
                   </Box>
