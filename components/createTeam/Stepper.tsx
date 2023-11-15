@@ -13,6 +13,7 @@ import Completed1 from "./StepperComponent/Completed1";
 import Completed2 from "./StepperComponent/Completed2";
 import Completed from "./StepperComponent/Completed";
 import { useMutation, gql } from "@apollo/client";
+import { useEffect, useState } from "react";
 
 
 const steps: string[] = [
@@ -29,19 +30,22 @@ const DELETE_TEAM_MUTATION = gql`
 
 
 const StepperComponent: React.FC = () => {
-  const [activeStep, setActiveStep] = React.useState<number>(0);
-  const [completed, setCompleted] = React.useState<{ [k: number]: boolean }>(
+  const [activeStep, setActiveStep] = useState<number>(0);
+  const [completed, setCompleted] = useState<{ [k: number]: boolean }>(
     {}
   );
-  const [teamEmailNow, setTeamEmail] = React.useState<string>("");
+  const [teamEmailNow, setTeamEmail] = useState<string>("");
+  let isAllCompleted = false;
+  
 
   const [deleteTeam] = useMutation(DELETE_TEAM_MUTATION, {
     variables: { email: teamEmailNow },
   });
 
-  React.useEffect(() => {
+  useEffect(() => {
     const handleBeforeUnload = async () => {
       // Call deleteTeam mutation before unloading the page
+      if(!isAllCompleted)
       try {
         await deleteTeam();
       } catch (error) {
@@ -72,6 +76,8 @@ const StepperComponent: React.FC = () => {
 
   const allStepsCompleted = (): boolean => {
     return completedSteps() === totalSteps();
+    isAllCompleted = true;
+   
   };
 
   const handleNext = (): void => {
