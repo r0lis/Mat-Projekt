@@ -27,43 +27,36 @@ const DELETE_TEAM_MUTATION = gql`
   }
 `;
 
+
 const StepperComponent: React.FC = () => {
   const [activeStep, setActiveStep] = React.useState<number>(0);
   const [completed, setCompleted] = React.useState<{ [k: number]: boolean }>(
     {}
   );
   const [teamEmailNow, setTeamEmail] = React.useState<string>("");
-  const [confirmUnload, setConfirmUnload] = React.useState<boolean>(false);
-
 
   const [deleteTeam] = useMutation(DELETE_TEAM_MUTATION, {
     variables: { email: teamEmailNow },
   });
 
   React.useEffect(() => {
-    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-      if (!allStepsCompleted() && !confirmUnload) {
-        const confirmationMessage =
-          'Opravdu chcete opustit stránku? Neuložené údaje budou ztraceny.';
-        event.returnValue = confirmationMessage;
-  
-        // Zde je volání mutace pro smazání týmu
-        
-  
-        // Nastavení confirmUnload na true a neprovádění smazání týmu
-        setConfirmUnload(true);
-  
-        return confirmationMessage;
+    const handleBeforeUnload = async () => {
+      // Call deleteTeam mutation before unloading the page
+      try {
+        await deleteTeam();
+      } catch (error) {
+        console.error("Error deleting team:", error);
       }
     };
-  
-    window.addEventListener('beforeunload', handleBeforeUnload);
-  
-    return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-    };
-  }, [completed, confirmUnload, deleteTeam]);
 
+    // Add event listener for beforeunload event
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    // Clean up the event listener when the component is unmounted
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [deleteTeam]);
 
   const totalSteps = (): number => {
     return steps.length;
