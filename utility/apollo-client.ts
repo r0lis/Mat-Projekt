@@ -1,4 +1,5 @@
-// eslint-disable-next-line eslint-comments/disable-enable-pair
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import {
     ApolloClient,
@@ -52,7 +53,6 @@ import {
     if (typeof window === 'undefined') {
       return new HttpLink({
         uri: endpoint,
-        // eslint-disable-next-line sonarjs/no-duplicate-string
         credentials: 'same-origin',
         headers: {},
       });

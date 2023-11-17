@@ -6,6 +6,7 @@ import React from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { AuthContextProvider } from '@/components/AuthContextProvider';
 import { getApolloClient } from '@/utility/apollo-client';
+import { HeartbeatProvider } from '@/components/HeartBeatProvider';
 import '../styles/indexPage/AppContentStyle.css'
 import '../styles/indexPage/Footer.css'
 import '../styles/indexPage/FooterImg.css'
@@ -33,7 +34,9 @@ export default function App({ Component, pageProps }: AppProps) {
     <AuthContextProvider>
       <ApolloProvider client={client}>
         <ThemeProvider theme={theme}>
+        <HeartbeatProvider>
         <Component {...pageProps} />
+        </HeartbeatProvider>
         </ThemeProvider>
       </ApolloProvider>
     </AuthContextProvider>
