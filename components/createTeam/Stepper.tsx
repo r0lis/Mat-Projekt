@@ -132,7 +132,9 @@ const StepperComponent: React.FC = () => {
         );
         case 2:
           return completed[2] ? (
-            <Completed />
+            <Completed
+            teamEmail={teamEmailNow}
+            />
           ) : (
             <Step3
               teamEmail={teamEmailNow}
@@ -196,7 +198,6 @@ const StepperComponent: React.FC = () => {
             {allStepsCompleted() ? (
               <React.Fragment>
                 <Typography sx={{ mt: 2, mb: 1, marginLeft:'30%', }}>
-                  Všechny kroky k vytvoření týmu jste již dokončili
                 </Typography>
                 <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
                   <Box sx={{ flex: "1 1 auto" }} />
