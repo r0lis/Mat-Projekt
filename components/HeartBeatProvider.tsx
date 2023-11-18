@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { gql, useApolloClient } from '@apollo/client';
 
-interface HeartbeatContextType {
+type HeartbeatContextType = {
   isConnected: boolean;
 }
 
@@ -25,7 +25,6 @@ export const HeartbeatProvider = ({ children }: HeartbeatProviderProps): JSX.Ele
 
   const heartbeat = async () => {
     try {
-      // Zde můžete provést GraphQL dotaz na server
       const response = await apolloClient.query({
         query: gql`
           query {
@@ -47,13 +46,24 @@ export const HeartbeatProvider = ({ children }: HeartbeatProviderProps): JSX.Ele
   useEffect(() => {
     // Spustí heartbeat každých 5 sekund (5000 milisekund)
     const interval = setInterval(heartbeat, 5000);
+    
+
+    const handleBeforeUnload = () => {
+      // Tento kód se spustí, když uživatel opouští stránku
+      console.log('Uživatel opouští aplikaci.');
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
 
     // Zastaví heartbeat při odmontování komponentu
     return () => {
       clearInterval(interval);
+      window.removeEventListener('beforeunload', handleBeforeUnload);
 
       // Tato část kódu se spustí při odmontování komponenty
-      console.log('Uživatel opustil aplikaci. Email uživatele není v aplikaci.');
+      console.log('Uživatel opustil aplikaci.');
+      console.info('Uživatel opustil aplikaci.');
+
     };
   }, [apolloClient]);
 

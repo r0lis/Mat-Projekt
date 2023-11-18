@@ -76,7 +76,6 @@ type NameAndSurname = {
 
 type TeamDetails = {
   Name: String
-  Members: [String]
 }
 
 type Query = {
@@ -108,6 +107,7 @@ const resolvers = {
     user: async (_: any, { id }: { id: string }, context: Context) => {
       // ...
     },
+    heartbeat: () => true, 
 
     checkTeamEmailExistence: async (_: any, { email }: { email: string }, context: Context) => {
       try {
@@ -131,7 +131,6 @@ const resolvers = {
           const teamData = teamSnapshot.docs[0].data() as Team;
           return {
             Name: teamData.Name,
-            Members: teamData.MembersEmails,
           };
         }
       }
@@ -388,6 +387,7 @@ const typeDefs = gql`
     getTeamDetails(teamId: String!): TeamDetails 
     getTeamMembersByEmail(teamEmail: String!): [String] 
     checkTeamEmailExistence(email: String!): Boolean
+    heartbeat: Boolean
   }
 
   type Mutation {
@@ -401,7 +401,6 @@ const typeDefs = gql`
 
   type TeamDetails {
     Name: String!
-    Members: [String]!
   }
 `;
 

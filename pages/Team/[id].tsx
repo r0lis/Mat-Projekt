@@ -55,7 +55,7 @@ const GET_TEAM_DETAILS = gql`
 query GetTeamDetails($teamId: String!) {
   getTeamDetails(teamId: $teamId) {
     Name
-    Members
+    
   }
 }
 `;
