@@ -13,14 +13,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: 'lukyrolenec@gmail.com', // Nahraďte svou e-mailovou adresou
-      pass: 'paqq oaxc fkhe ylba', // Nahraďte heslem své e-mailové adresy
+      user: 'appteammanager@gmail.com', // Nahraďte svou e-mailovou adresou
+      pass: 'igxh nnhl rwvy alzf', // Nahraďte heslem své e-mailové adresy
 
     },
   });
 
   const mailOptions = {
-    from: 'your.email@gmail.com', // Nahraďte svou e-mailovou adresou
+    from: 'appteammanager@gmail.com', // Nahraďte svou e-mailovou adresou
     subject: 'Pozvánka na registraci',
     text: 'Registrace: http://localhost/UserRegistration', // Nahraďte URL své aplikace
   };

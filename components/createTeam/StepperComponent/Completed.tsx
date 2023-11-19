@@ -5,10 +5,11 @@ import {
   Alert,
   Box,
   Button,
+  LinearProgress,
   CircularProgress,
   Typography,
 } from "@mui/material";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 
@@ -24,6 +25,9 @@ const GET_TEAM_MEMBERS = gql`
 `;
 
 const Completed: React.FC<CompletedProps> = ({ teamEmail }) => {
+  const [progress, setProgress] = React.useState(0);
+  const [showLinearProgress, setShowLinearProgress] = useState(false);
+
   const { loading, error, data } = useQuery(GET_TEAM_MEMBERS, {
     variables: { teamEmail },
   });
@@ -32,8 +36,20 @@ const Completed: React.FC<CompletedProps> = ({ teamEmail }) => {
     const members = data?.getTeamMembersByEmail || [];
 
     try {
+      setShowLinearProgress(true); // Show LinearProgress
       await axios.post('/api/sendEmail', { emails: members });
       console.log('E-maily úspěšně odeslány.');
+      // Zvyšování hodnoty progress každou sekundu až na 100
+    let currentProgress = 0;
+    const intervalId = setInterval(() => {
+      currentProgress += 20; // Zvyšte hodnotu podle potřeby
+      setProgress(Math.min(currentProgress, 100));
+
+      if (currentProgress >= 100) {
+        clearInterval(intervalId);
+        setShowLinearProgress(false);
+      }
+    }, 1000);
     } catch (error) {
       console.error('Chyba při odesílání e-mailů:', error);
     }
@@ -82,16 +98,27 @@ const Completed: React.FC<CompletedProps> = ({ teamEmail }) => {
           ) : (
             <Typography variant="body1">No team members found.</Typography>
           )}
+          
+          
 
           <Box sx={{ width: "50%", marginLeft: "auto", marginRight: "auto" }}>
             <Alert severity="success">
-              Tým byl úspěšně vytvořen! Jste přesunuti na hlavni stranku
+              Tým byl úspěšně vytvořen! Jste přesunuti na hlavní stránku.
             </Alert>
           </Box>
 
-          <Box sx={{ textAlign: "center", marginTop: "2em" }}>
-            <CircularProgress />
+          
+
+          {showLinearProgress && (
+        <Box sx={{ textAlign: "center", marginTop: "2em" }}>
+          <Box sx={{ width: "50%", marginLeft: "auto", marginRight: "auto", marginBottom:'1em' }}>
+            <Alert severity="warning">
+              Uživatelům které jste přidali do týmu byl odeslán e-mail pro přidání do týmu.
+            </Alert>
           </Box>
+          <LinearProgress variant="determinate" value={progress} />
+        </Box>
+      )}
 
           <Button
             variant="contained"
