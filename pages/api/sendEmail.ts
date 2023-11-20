@@ -4,7 +4,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import nodemailer from 'nodemailer';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const { emails } = req.body;
+  const { emails, teamId } = req.body;
 
   if (!emails || !Array.isArray(emails) || emails.length === 0) {
     return res.status(400).json({ error: 'Invalid or empty email list.' });
@@ -22,7 +22,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const mailOptions = {
     from: 'appteammanager@gmail.com', // Nahraďte svou e-mailovou adresou
     subject: 'Pozvánka na registraci',
-    text: 'Registrace: http://localhost/UserRegistration', // Nahraďte URL své aplikace
+    text: `Registrace: http://localhost:3001/RegisterToTeam/${teamId}`, // Nahraďte URL své aplikace
   };
 
   try {

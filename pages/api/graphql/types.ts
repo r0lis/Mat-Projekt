@@ -51,6 +51,14 @@ export type CreateUserInput = {
   Email: string;
 };
 
+export type CreateUserToTeamInput = {
+    Name: string;
+    Surname: string;
+    IdUser: string;
+    IdTeam: [String];
+    Email: string;
+  };
+
 export type CreateTeamInput = {
   Name: string;
   teamId: string;
@@ -68,6 +76,10 @@ export type NameAndSurname = {
   Surname: String;
 };
 
+export type TeamDetails2 = {
+    teamId: string;
+  };
+
 export type TeamDetails = {
   Name: String;
 };
@@ -78,4 +90,7 @@ export type Query = {
   getUserTeamsByEmail(email: String): [String];
   getTeamMembersByEmail(teamEmail: String): [String];
   checkTeamEmailExistence(email: String): Boolean;
+  getTeamIdByEmail(teamEmail: String): TeamDetails2
+
+
 };

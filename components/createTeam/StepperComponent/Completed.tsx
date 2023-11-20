@@ -12,7 +12,6 @@ import {
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-
 type CompletedProps = {
   teamEmail: string;
 };
@@ -20,6 +19,14 @@ type CompletedProps = {
 const GET_TEAM_MEMBERS = gql`
   query GetTeamMembers($teamEmail: String!) {
     getTeamMembersByEmail(teamEmail: $teamEmail)
+  }
+`;
+
+const GET_TEAM_ID = gql`
+  query GetTeamIdByEmail($teamEmail: String!) {
+    getTeamIdByEmail(teamEmail: $teamEmail) {
+      teamId
+    }
   }
 `;
 
@@ -31,26 +38,34 @@ const Completed: React.FC<CompletedProps> = ({ teamEmail }) => {
     variables: { teamEmail },
   });
 
+  const { loading: teamIdLoading, error: teamIdError, data: teamIdData } = useQuery(GET_TEAM_ID, {
+    variables: { teamEmail },
+  });
+  
+
   const handleButtonClick = async () => {
     const members = data?.getTeamMembersByEmail || [];
+    const { teamId } = teamIdData?.getTeamIdByEmail || {};
+
 
     try {
+      
       setShowLinearProgress(true); // Show LinearProgress
-      await axios.post('/api/sendEmail', { emails: members });
-      console.log('E-maily úspěšně odeslány.');
+      await axios.post("/api/sendEmail", { emails: members, teamId });
+      console.log("E-maily úspěšně odeslány.");
       // Zvyšování hodnoty progress každou sekundu až na 100
-    let currentProgress = 0;
-    const intervalId = setInterval(() => {
-      currentProgress += 20; // Zvyšte hodnotu podle potřeby
-      setProgress(Math.min(currentProgress, 100));
+      let currentProgress = 0;
+      const intervalId = setInterval(() => {
+        currentProgress += 20; // Zvyšte hodnotu podle potřeby
+        setProgress(Math.min(currentProgress, 100));
 
-      if (currentProgress >= 100) {
-        clearInterval(intervalId);
-        setShowLinearProgress(false);
-      }
-    }, 1000);
+        if (currentProgress >= 100) {
+          clearInterval(intervalId);
+          setShowLinearProgress(false);
+        }
+      }, 1000);
     } catch (error) {
-      console.error('Chyba při odesílání e-mailů:', error);
+      console.error("Chyba při odesílání e-mailů:", error);
     }
   };
   useEffect(() => {
@@ -60,6 +75,8 @@ const Completed: React.FC<CompletedProps> = ({ teamEmail }) => {
   }, []); // Empty dependency array to run the effect only once
 
   const members = data?.getTeamMembersByEmail || [];
+  const { teamId } = teamIdData?.getTeamIdByEmail || {};
+  
 
   if (loading) {
     return <CircularProgress />;
@@ -93,12 +110,13 @@ const Completed: React.FC<CompletedProps> = ({ teamEmail }) => {
                   <li key={index}>{member}</li>
                 ))}
               </ul>
+              
             </div>
+
+            
           ) : (
             <Typography variant="body1">No team members found.</Typography>
           )}
-          
-          
 
           <Box sx={{ width: "50%", marginLeft: "auto", marginRight: "auto" }}>
             <Alert severity="success">
@@ -106,18 +124,24 @@ const Completed: React.FC<CompletedProps> = ({ teamEmail }) => {
             </Alert>
           </Box>
 
-          
-
           {showLinearProgress && (
-        <Box sx={{ textAlign: "center", marginTop: "2em" }}>
-          <Box sx={{ width: "50%", marginLeft: "auto", marginRight: "auto", marginBottom:'1em' }}>
-            <Alert severity="warning">
-              Uživatelům které jste přidali do týmu byl odeslán e-mail pro přidání do týmu.
-            </Alert>
-          </Box>
-          <LinearProgress variant="determinate" value={progress} />
-        </Box>
-      )}
+            <Box sx={{ textAlign: "center", marginTop: "2em" }}>
+              <Box
+                sx={{
+                  width: "50%",
+                  marginLeft: "auto",
+                  marginRight: "auto",
+                  marginBottom: "1em",
+                }}
+              >
+                <Alert severity="warning">
+                  Uživatelům které jste přidali do týmu byl odeslán e-mail pro
+                  přidání do týmu.
+                </Alert>
+              </Box>
+              <LinearProgress variant="determinate" value={progress} />
+            </Box>
+          )}
 
           <Button
             variant="contained"

@@ -16,6 +16,8 @@ import {
   NameAndSurname,
   TeamDetails,
   Query,
+  CreateUserToTeamInput,
+  TeamDetails2,
 } from "./types";
 
 const db = firestore();
@@ -140,6 +142,30 @@ export const resolvers = {
       }
       return null;
     },
+
+    getTeamIdByEmail: async (
+        _: any,
+        { teamEmail }: { teamEmail: string },
+        context: Context
+      ): Promise<TeamDetails2 | null> => {
+        try {
+          if (context.user) {
+            const teamQuery = db.collection("Team").where("Email", "==", teamEmail);
+            const teamSnapshot = await teamQuery.get();
+      
+            if (!teamSnapshot.empty) {
+              const teamData = teamSnapshot.docs[0].data() as Team;
+              return {
+                teamId: teamData.teamId,
+              };
+            }
+          }
+          return null;
+        } catch (error) {
+          console.error("Chyba při získávání ID týmu:", error);
+          throw error;
+        }
+      },
   },
 
   Mutation: {
@@ -171,6 +197,35 @@ export const resolvers = {
         throw error;
       }
     },
+
+    createUserToTeam: async (
+        _: any,
+        { input }: { input: CreateUserToTeamInput },
+        context: Context
+      ) => {
+        try {
+          const newUserDoc = db.collection("User").doc();
+          const userId = newUserDoc.id;
+          const teamId = input.IdTeam;
+          const IsAdmin = 0;
+  
+          const newUser = {
+            Name: input.Name,
+            Surname: input.Surname,
+            IdUser: userId,
+            IdTeam: teamId,
+            Email: input.Email,
+            IsAdmin: IsAdmin,
+          };
+  
+          await newUserDoc.set(newUser);
+  
+          return newUser;
+        } catch (error) {
+          console.error("Chyba při vytváření uživatele:", error);
+          throw error;
+        }
+      },
 
     createTeam: async (
       _: any,

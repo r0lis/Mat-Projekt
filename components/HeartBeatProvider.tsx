@@ -1,12 +1,15 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { gql, useApolloClient } from '@apollo/client';
+import { authUtils } from "@/firebase/auth.utils";
+
 
 type HeartbeatContextType = {
   isConnected: boolean;
 }
 
 const HeartbeatContext = createContext<HeartbeatContextType | undefined>(undefined);
-
+const user = authUtils.getCurrentUser();
+console.log(user);
 export const useHeartbeat = (): HeartbeatContextType => {
   const context = useContext(HeartbeatContext);
   if (!context) {
@@ -44,28 +47,31 @@ export const HeartbeatProvider = ({ children }: HeartbeatProviderProps): JSX.Ele
   };
 
   useEffect(() => {
-    // Spustí heartbeat každých 5 sekund (5000 milisekund)
-    const interval = setInterval(heartbeat, 5000);
-    
-
-    const handleBeforeUnload = () => {
-      // Tento kód se spustí, když uživatel opouští stránku
-      console.log('Uživatel opouští aplikaci.');
-    };
-    window.addEventListener('beforeunload', handleBeforeUnload);
-
-
-    // Zastaví heartbeat při odmontování komponentu
-    return () => {
-      clearInterval(interval);
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-
-      // Tato část kódu se spustí při odmontování komponenty
-      console.log('Uživatel opustil aplikaci.');
-      console.info('Uživatel opustil aplikaci.');
-
-    };
-  }, [apolloClient]);
+    // Check if the user is not null before starting the heartbeat
+    if (user) {
+      // Spustí heartbeat každých 5 sekund (5000 milisekund)
+      const interval = setInterval(heartbeat, 5000);
+  
+      const handleBeforeUnload = () => {
+        // Tento kód se spustí, když uživatel opouští stránku
+        console.log('Uživatel opouští aplikaci.');
+      };
+      window.addEventListener('beforeunload', handleBeforeUnload);
+  
+      // Zastaví heartbeat při odmontování komponentu
+      return () => {
+        clearInterval(interval);
+        window.removeEventListener('beforeunload', handleBeforeUnload);
+  
+        // Tato část kódu se spustí při odmontování komponenty
+        console.log('Uživatel opustil aplikaci.');
+        console.info('Uživatel opustil aplikaci.');
+      };
+    } else {
+      // If user is null, log a message indicating that the heartbeat is not started
+      console.log('Heartbeat is not started because the user is null.');
+    }
+  }, [user, apolloClient]);
 
   return (
     <HeartbeatContext.Provider value={{ isConnected }}>
