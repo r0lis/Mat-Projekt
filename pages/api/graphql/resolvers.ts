@@ -6,83 +6,17 @@ import { firestore } from "firebase-admin";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-expect-error
 import { DecodedIdToken } from "firebase-admin/lib/auth/token-verifier";
-
-type Context = {
-  user?: DecodedIdToken | undefined;
-};
-
-type User = {
-  Name: string;
-  Surname: string;
-  IdUser: string;
-  IdTeam: [String];
-  IsAdmin: boolean;
-  Email: string;
-};
-
-type Team = {
-  Name: string;
-  teamId: string;
-  MembersEmails: [String];
-  AdminEmail: string;
-  Email: string;
-  Logo: string;
-  Place: string;
-  OwnerName: string;
-  OwnerSurname: string;
-};
-
-type UpdatedMemberInput = {
-  member: String;
-  role: number;
-};
-
-type Mutation = {
-  createUser(input: CreateUserInput): User;
-  creteTeam(input: CreateTeamInput): Team;
-  deleteUserByEmail(email: String): Boolean;
-  updateUserRoles(
-    teamEmail: String,
-    updatedMembers: [UpdatedMemberInput]
-  ): Team;
-};
-
-type CreateUserInput = {
-  Name: string;
-  Surname: string;
-  IdUser: string;
-  IdTeam: [String];
-  Email: string;
-};
-
-type CreateTeamInput = {
-  Name: string;
-  teamId: string;
-  MembersEmails: [String];
-  AdminEmail: string;
-  Email: string;
-  Logo: string;
-  Place: string;
-  OwnerName: string;
-  OwnerSurname: string;
-};
-
-type NameAndSurname = {
-  Name: String;
-  Surname: String;
-};
-
-type TeamDetails = {
-  Name: String;
-};
-
-type Query = {
-  user(id: String): User;
-  getUserByNameAndSurname(email: String): NameAndSurname;
-  getUserTeamsByEmail(email: String): [String];
-  getTeamMembersByEmail(teamEmail: String): [String];
-  checkTeamEmailExistence(email: String): Boolean;
-};
+import {
+  Context,
+  User,
+  Team,
+  UpdatedMemberInput,
+  CreateUserInput,
+  CreateTeamInput,
+  NameAndSurname,
+  TeamDetails,
+  Query,
+} from "./types";
 
 const db = firestore();
 
@@ -101,9 +35,8 @@ async function addUserToTeam(adminEmail: any, teamId: String) {
 
 export const resolvers = {
   Query: {
-    user: async (_: any, { id }: { id: string }, context: Context) => {
-      // ...
-    },
+    user: async (_: any, { id }: { id: string }, context: Context) => {},
+
     heartbeat: () => true,
 
     checkTeamEmailExistence: async (
