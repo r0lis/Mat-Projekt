@@ -16,6 +16,9 @@ type Context = {
   user?: DecodedIdToken | undefined;
 };
 
+const db = firestore();
+
+
 const schema = createSchema({
   typeDefs,
   resolvers,
@@ -36,6 +39,7 @@ export default createYoga({
     console.log(auth);
     return {
       user: auth ? await verifyToken(auth) : undefined,
+      db,
     } as Context;
   },
 });

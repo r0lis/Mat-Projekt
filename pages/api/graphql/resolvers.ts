@@ -20,10 +20,9 @@ import {
   TeamDetails2,
 } from "./types";
 
-const db = firestore();
 
-async function addUserToTeam(adminEmail: any, teamId: String) {
-  const userQuery = db.collection("User").where("Email", "==", adminEmail);
+async function addUserToTeam(context: Context,adminEmail: any, teamId: String) {
+  const userQuery = context.db.collection("User").where("Email", "==", adminEmail);
   const userSnapshot = await userQuery.get();
   if (!userSnapshot.empty) {
     const userDoc = userSnapshot.docs[0];
@@ -48,7 +47,7 @@ export const resolvers = {
     ) => {
       try {
         if (context.user) {
-          const teamQuery = db.collection("Team").where("Email", "==", email);
+          const teamQuery = context.db.collection("Team").where("Email", "==", email);
           const teamSnapshot = await teamQuery.get();
           return !teamSnapshot.empty; // Returns true if the email is found in any team
         }
@@ -65,7 +64,7 @@ export const resolvers = {
       context: Context
     ) => {
       if (context.user) {
-        const teamQuery = db.collection("Team").where("teamId", "==", teamId);
+        const teamQuery = context.db.collection("Team").where("teamId", "==", teamId);
         const teamSnapshot = await teamQuery.get();
         if (!teamSnapshot.empty) {
           const teamData = teamSnapshot.docs[0].data() as Team;
@@ -83,7 +82,7 @@ export const resolvers = {
       context: Context
     ) => {
       if (context.user) {
-        const teamQuery = db.collection("Team").where("Email", "==", teamEmail);
+        const teamQuery = context.db.collection("Team").where("Email", "==", teamEmail);
         const teamSnapshot = await teamQuery.get();
         if (!teamSnapshot.empty) {
           const teamData = teamSnapshot.docs[0].data() as Team;
@@ -99,7 +98,7 @@ export const resolvers = {
       context: Context
     ) => {
       if (context.user) {
-        const userQuery = db.collection("User").where("Email", "==", email);
+        const userQuery = context.db.collection("User").where("Email", "==", email);
         const userSnapshot = await userQuery.get();
         if (!userSnapshot.empty) {
           const userData = userSnapshot.docs[0].data() as User;
@@ -118,7 +117,7 @@ export const resolvers = {
       context: Context
     ) => {
       if (context.user) {
-        const userQuery = db.collection("User").where("Email", "==", email);
+        const userQuery = context.db.collection("User").where("Email", "==", email);
         const userSnapshot = await userQuery.get();
         if (!userSnapshot.empty) {
           const userData = userSnapshot.docs[0].data() as User;
@@ -127,7 +126,7 @@ export const resolvers = {
           const teams = [];
 
           for (const teamId of teamIds) {
-            const teamQuery = db
+            const teamQuery = context.db
               .collection("Team")
               .where("teamId", "==", teamId);
             const teamSnapshot = await teamQuery.get();
@@ -150,7 +149,7 @@ export const resolvers = {
       ): Promise<TeamDetails2 | null> => {
         try {
           if (context.user) {
-            const teamQuery = db.collection("Team").where("Email", "==", teamEmail);
+            const teamQuery = context.db.collection("Team").where("Email", "==", teamEmail);
             const teamSnapshot = await teamQuery.get();
       
             if (!teamSnapshot.empty) {
@@ -175,7 +174,7 @@ export const resolvers = {
       context: Context
     ) => {
       try {
-        const newUserDoc = db.collection("User").doc();
+        const newUserDoc = context.db.collection("User").doc();
         const userId = newUserDoc.id;
         const teamId: never[] = [];
         const IsAdmin = 0;
@@ -204,7 +203,7 @@ export const resolvers = {
         context: Context
       ) => {
         try {
-          const newUserDoc = db.collection("User").doc();
+          const newUserDoc = context.db.collection("User").doc();
           const userId = newUserDoc.id;
           const teamId = input.IdTeam;
           const IsAdmin = 0;
@@ -233,9 +232,9 @@ export const resolvers = {
       context: Context
     ) => {
       try {
-        const newTeamDoc = db.collection("Team").doc();
+        const newTeamDoc = context.db.collection("Team").doc();
         const teamId = newTeamDoc.id;
-        await addUserToTeam(input.AdminEmail, teamId);
+        await addUserToTeam(context,input.AdminEmail, teamId);
 
         const newTeam = {
           Name: input.Name,
@@ -268,7 +267,7 @@ export const resolvers = {
     ) => {
       try {
         if (context.user) {
-          const teamQuery = db
+          const teamQuery = context.db
             .collection("Team")
             .where("Email", "==", teamEmail);
           const teamSnapshot = await teamQuery.get();
@@ -278,7 +277,7 @@ export const resolvers = {
 
             await teamDoc.ref.update({ Members: updatedMembers });
             // Fetch the updated data after the update
-            const updatedTeamQuery = db
+            const updatedTeamQuery = context.db
               .collection("Team")
               .where("Email", "==", teamEmail);
             const updatedTeamSnapshot = await updatedTeamQuery.get();
@@ -308,7 +307,7 @@ export const resolvers = {
       try {
         if (context.user) {
           // Najít tým podle e-mailu
-          const teamQuery = db.collection("Team").where("Email", "==", email);
+          const teamQuery = context.db.collection("Team").where("Email", "==", email);
           const teamSnapshot = await teamQuery.get();
 
           if (!teamSnapshot.empty) {
@@ -333,7 +332,7 @@ export const resolvers = {
     ) => {
       try {
         if (context.user) {
-          const userQuery = db.collection("User").where("Email", "==", email);
+          const userQuery = context.db.collection("User").where("Email", "==", email);
           const userSnapshot = await userQuery.get();
           if (!userSnapshot.empty) {
             const userDoc = userSnapshot.docs[0];

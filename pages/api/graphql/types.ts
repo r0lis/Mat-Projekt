@@ -5,6 +5,7 @@ import { DecodedIdToken } from "firebase-admin/lib/auth/token-verifier";
 
 export type Context = {
   user?: DecodedIdToken | undefined;
+  db: FirebaseFirestore.Firestore; // Include the db property
 };
 
 export type User = {

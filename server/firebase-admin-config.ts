@@ -1,6 +1,4 @@
-// eslint-disable-next-line eslint-comments/disable-enable-pair
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-// eslint-disable-next-line import/newline-after-import
 import * as admin from 'firebase-admin';
 const firebaseAdminConfig = {
   "type": "service_account",
@@ -23,5 +21,4 @@ if (admin.apps.length === 0) {
   });
 }
 
-// eslint-disable-next-line prettier/prettier
 export const {firestore, auth: adminAuth} = admin;
