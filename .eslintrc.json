@@ -9,6 +9,7 @@
   "plugins": [
     "@typescript-eslint"
   ],
+
   "rules": {
     "@typescript-eslint/strict-boolean-expressions": [
       2,
@@ -18,5 +19,5 @@
       }
     ]
   },
-  "ignorePatterns": ["src/**/*.test.ts", "src/frontend/generated/*"]
+  "ignorePatterns": ["src/**/*.test.ts", "src/frontend/generated/*","next.config.js"]
 }

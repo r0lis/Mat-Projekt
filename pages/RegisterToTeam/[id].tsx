@@ -9,8 +9,8 @@ import { Box, Button, TextField, Typography, Link } from '@mui/material';
 
 
 const CREATE_USER_TO_TEAM_MUTATION = gql`
-  mutation CreateUser($Name: String!, $Surname: String!, $Email: String!, $IdUser: String!, $IdTeam: [String]!) {
-    createUser(input: { Name: $Name, Surname: $Surname, Email: $Email, IdUser: $IdUser, IdTeam: $IdTeam }) {
+  mutation createUserToTeam($Name: String!, $Surname: String!, $Email: String!, $IdUser: String!, $IdTeam: [String]!) {
+    createUserToTeam(input: { Name: $Name, Surname: $Surname, Email: $Email, IdUser: $IdUser, IdTeam: $IdTeam }) {
       Name
       Surname
       IdUser

@@ -45,7 +45,7 @@ type Team = {
 
 const pages = ["Obsah", "Ukázky", "Použití", "Kontakt"];
 
-const MyNavBar: React.FC = () => {
+const Navbar: React.FC = () => {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [, setMenuOpen] = useState(false);
   const [anchorEl2, setAnchorEl2] = useState<null | HTMLElement>(null);
@@ -522,4 +522,4 @@ const MyNavBar: React.FC = () => {
   );
 };
 
-export default MyNavBar;
+export default Navbar;

@@ -8,8 +8,7 @@ type HeartbeatContextType = {
 }
 
 const HeartbeatContext = createContext<HeartbeatContextType | undefined>(undefined);
-const user = authUtils.getCurrentUser();
-console.log(user);
+
 export const useHeartbeat = (): HeartbeatContextType => {
   const context = useContext(HeartbeatContext);
   if (!context) {
@@ -38,15 +37,17 @@ export const HeartbeatProvider = ({ children }: HeartbeatProviderProps): JSX.Ele
 
       // Můžete aktualizovat isConnected na základě odpovědi
       setIsConnected(response.data.heartbeat);
-      console.info('User is in the application and actively communicating with the server.');
       console.log('User is in the application and actively communicating with the server.');
 
     } catch (error) {
       setIsConnected(false);
     }
   };
+  const user = authUtils.getCurrentUser();
 
   useEffect(() => {
+    const user = authUtils.getCurrentUser();
+
     // Check if the user is not null before starting the heartbeat
     if (user) {
       // Spustí heartbeat každých 5 sekund (5000 milisekund)

@@ -8,8 +8,7 @@ export const verifyToken = async (token: string) => {
       return undefined;
     }
     const decoded = await adminAuth().verifyIdToken(parts[1]);
-    const { email } = decoded;
-    console.info('verified token for user', { email });
+    
     return decoded;
   } catch (e) {
     console.warn('verified token failed', e);

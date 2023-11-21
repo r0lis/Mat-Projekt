@@ -25,7 +25,6 @@ import {
     setContext(async ({ operationName }, { headers }) => {
       const user = authUtils.getCurrentUser() || null;
       const jwtToken = user ? await user.getIdToken() : null;
-      console.log('USER', user);
       return {
         headers: {
           ...headers,
@@ -38,7 +37,6 @@ import {
     onError(({ graphQLErrors, networkError }) => {
       if (networkError) {
         // todo: tiny refactor when working..
-        console.info(JSON.stringify(networkError));
         // {"name":"ServerError","response":{},"statusCode":200,"result":{"timestamp":"2022-08-04T06:50:18.843987244","error":"Unauthorized","status":401,"message":"invalid token","path":"/graphql"}}
         // @ts-ignore we know
         if (networkError?.result?.error === 'Unauthorized') {

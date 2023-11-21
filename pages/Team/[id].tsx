@@ -457,7 +457,7 @@ const buttonStyle2 = {
                   verticalAlign: 'center',
                   backgroundColor: activeLink === item.label ? 'white' : 'transparent',
                   borderRight: activeLink === item.label ? "5px solid rgba(160, 32, 240, 1)" :"" , // Zvýraznění aktivního odkazu
-                  marginRight: activeLink === item.label ? "-4px" : "0px",
+                  marginRight: activeLink === item.label ? "-5px" : "0px",
                    // Zvýraznění aktivního odkazu
                 }}
               >
