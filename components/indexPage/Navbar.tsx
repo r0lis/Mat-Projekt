@@ -318,7 +318,7 @@ const Navbar: React.FC = () => {
                               /> // Zobrazí CircularProgress místo načítání
                             ) : userIdError ? (
                               "Chyba"
-                            ) : userTeamsData.getUserTeamsByEmail.length > 0 ? (
+                            ) : userTeamsData && userTeamsData.getUserTeamsByEmail && userTeamsData.getUserTeamsByEmail.length > 0 ? (
                               userTeamsData.getUserTeamsByEmail.map(
                                 (team: Team, index: number) => (
                                   <Box
