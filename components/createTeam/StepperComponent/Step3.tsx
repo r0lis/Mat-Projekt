@@ -4,6 +4,7 @@ import { Box, Button, Typography } from "@mui/material";
 
 type Step3Props = {
   teamEmail: string;
+  onCompleteStep: () => void;
 };
 
 

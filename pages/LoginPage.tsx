@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import React, { useState } from 'react';
 import { authUtils } from '../firebase/auth.utils';
 import Link from 'next/link';

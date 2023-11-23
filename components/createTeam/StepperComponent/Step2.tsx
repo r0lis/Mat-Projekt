@@ -19,6 +19,7 @@ import {
   TableCell,
   TableHead,
   TableRow,
+  CircularProgress,
 } from "@mui/material";
 import { gql, useMutation, useQuery } from "@apollo/client";
 
@@ -87,7 +88,8 @@ const Step2: React.FC<Step2Props> = ({ teamEmail, onCompleteStep  }) => {
   }, [members]);
 
   if (loading) {
-    return <p>Loading...</p>;
+    return <CircularProgress />
+    ;
   }
 
   if (error) {

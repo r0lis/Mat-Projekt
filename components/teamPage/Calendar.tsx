@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -7,19 +9,15 @@ const emails = ['username@gmail.com', 'user02@gmail.com']
 
 const CalendarComponent: React.FC = () => {
     const [calendarEvents, setCalendarEvents] = useState([
-        // Zde můžete přidat události do kalendáře ve formátu, který očekává FullCalendar
-        // Například:
+        
         {
           title: 'Název události',
           start: '2023-10-15',
           end: '2023-10-16',
         },
-        // Další události...
       ]);
     
-      // Funkce pro zachycení změn v kalendáři (přidání/úprava/odstranění události)
       const handleEventAdd = (eventAddInfo: any) => {
-        // Zde můžete aktualizovat stav událostí v kalendáři podle akce uživatele
         setCalendarEvents([...calendarEvents, eventAddInfo.event.toPlainObject()]);
       };
     

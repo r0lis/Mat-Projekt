@@ -1,3 +1,5 @@
+/* eslint-disable no-useless-catch */
+/* eslint-disable no-empty */
 import {
   createUserWithEmailAndPassword,
   deleteUser,
