@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import { authUtils } from "../firebase/auth.utils";
 import { useMutation, gql } from "@apollo/client";
 import { useRouter } from "next/router";

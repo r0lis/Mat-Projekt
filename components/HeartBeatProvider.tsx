@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { gql, useApolloClient } from '@apollo/client';
 import { authUtils } from "@/firebase/auth.utils";
+import axios from 'axios';
 
 
 type HeartbeatContextType = {
@@ -27,6 +28,7 @@ export const HeartbeatProvider = ({ children }: HeartbeatProviderProps): JSX.Ele
 
   const heartbeat = async () => {
     try {
+      axios.post("/api/teamService");
       const response = await apolloClient.query({
         query: gql`
           query {
@@ -44,9 +46,11 @@ export const HeartbeatProvider = ({ children }: HeartbeatProviderProps): JSX.Ele
     }
   };
   const user = authUtils.getCurrentUser();
-
+  
   useEffect(() => {
     const user = authUtils.getCurrentUser();
+     
+
 
     // Check if the user is not null before starting the heartbeat
     if (user) {

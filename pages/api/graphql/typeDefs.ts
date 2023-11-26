@@ -85,6 +85,8 @@ export const typeDefs = gql`
       updatedMembers: [UpdatedMemberInput]!
     ): Team
     deleteTeamByEmail(email: String): Boolean
+    updateTeamFinished(teamEmail: String!): Boolean
+
   }
 
   type TeamDetails {

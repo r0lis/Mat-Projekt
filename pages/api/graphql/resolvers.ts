@@ -246,6 +246,8 @@ export const resolvers = {
           Place: input.Place,
           OwnerName: input.OwnerName,
           OwnerSurname: input.OwnerSurname,
+          Finished: false,
+          TimeCreated: firestore.Timestamp.now(),
         };
 
         await newTeamDoc.set(newTeam);
@@ -295,6 +297,32 @@ export const resolvers = {
         return null;
       } catch (error) {
         console.error("Chyba při aktualizaci rolí uživatelů:", error);
+        throw error;
+      }
+    },
+
+    updateTeamFinished: async (
+      _: any,
+      { teamEmail }: { teamEmail: string },
+      context: Context
+    ) => {
+      try {
+        if (context.user) {
+          // Najít tým podle e-mailu
+          const teamQuery = context.db.collection("Team").where("Email", "==", teamEmail);
+          const teamSnapshot = await teamQuery.get();
+
+          if (!teamSnapshot.empty) {
+            // Aktualizovat hodnotu Finished na true
+            const teamDoc = teamSnapshot.docs[0];
+            await teamDoc.ref.update({ Finished: true });
+
+            return true;
+          }
+        }
+        return false;
+      } catch (error) {
+        console.error("Chyba při aktualizaci stavu týmu:", error);
         throw error;
       }
     },

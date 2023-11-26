@@ -63,6 +63,26 @@ import {
       },
     });
   };
+  const teamServiceLink = () =>
+  // @ts-ignore
+  new ApolloLink((operation, forward) => {
+    // Do your fetch to the teamService endpoint here
+    // Fetch logic can be similar to what you had in the original teamService.js
+    // Example using fetch API
+    const teamsEndpoint = 'api/teamService';
+    fetch(teamsEndpoint)
+      .then(response => response.json())
+      .then(data => {
+        console.log('Data from teamService:', data);
+      })
+      .catch(error => {
+        console.error('Fetch error from teamService:', error);
+      });
+
+    // Continue with the Apollo Link chain
+    return forward(operation);
+  });
+ 
   
   type ApolloClientProps =
     | {

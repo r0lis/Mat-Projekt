@@ -36,7 +36,7 @@ import EventsComponent from '@/components/teamPage/Events';
 import MembersComponent from '@/components/teamPage/Members';
 import SettingsComponent from '@/components/teamPage/Settings';
 import TeamIcon from '@/public/assets/people.png';
-
+import TeamComponent from '@/components/teamPage/Team';
 
 const items = [
   { label: 'Přehled', image: Overview },
@@ -499,6 +499,7 @@ const buttonStyle2 = {
           {activeLink === 'Zápasy' && <NominationsComponent />}
           {activeLink === 'Platby' && <PayComponent />}
           {activeLink === 'Události' && <EventsComponent />}
+          {activeLink === 'Tým' && <TeamComponent />}
           {activeLink === 'Členové' &&<MembersComponent id={id as string} />}
           {activeLink === 'Správa' && <SettingsComponent />}
         </div>

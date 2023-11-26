@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Stepper from "@mui/material/Stepper";
@@ -11,8 +12,9 @@ import Step3 from "./StepperComponent/Step3";
 import Navbar from "./StepperComponent/Navbar";
 import Completed1 from "./StepperComponent/Completed1";
 import Completed2 from "./StepperComponent/Completed2";
+import Completed3 from "./StepperComponent/Completed3";
+import Step4 from "./StepperComponent/Step4";
 import Completed from "./StepperComponent/Completed";
-import { useMutation, gql } from "@apollo/client";
 import { useEffect, useState } from "react";
 
 
@@ -20,13 +22,9 @@ const steps: string[] = [
   "Vyplňte potřebné informace",
   "Nastavení práv",
   "Kontrola údajů",
+  "Dokončení",
 ];
 
-const DELETE_TEAM_MUTATION = gql`
-  mutation DeleteTeam($email: String!) {
-    deleteTeamByEmail(email: $email)
-  }
-`;
 
 
 const StepperComponent: React.FC = () => {
@@ -36,21 +34,13 @@ const StepperComponent: React.FC = () => {
   );
   const [teamEmailNow, setTeamEmail] = useState<string>("");
   let isAllCompleted = false;
-  
 
-  const [deleteTeam] = useMutation(DELETE_TEAM_MUTATION, {
-    variables: { email: teamEmailNow },
-  });
 
   useEffect(() => {
-    const handleBeforeUnload = async () => {
-      // Call deleteTeam mutation before unloading the page
-      if(!isAllCompleted)
-      try {
-        await deleteTeam();
-      } catch (error) {
-        console.error("Error deleting team:", error);
-      }
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      // Display a confirmation dialog before unloading the page
+      event.returnValue =
+        "Pokud opustíte stránku, neukončená tvorba týmu bude smazána. Opravdu chcete pokračovat?";
     };
 
     // Add event listener for beforeunload event
@@ -60,7 +50,7 @@ const StepperComponent: React.FC = () => {
     return () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
-  }, [deleteTeam]);
+  }, []);
 
   const totalSteps = (): number => {
     return steps.length;
@@ -132,8 +122,7 @@ const StepperComponent: React.FC = () => {
         );
         case 2:
           return completed[2] ? (
-            <Completed
-            teamEmail={teamEmailNow}
+            <Completed3
             />
           ) : (
             <Step3
@@ -141,6 +130,16 @@ const StepperComponent: React.FC = () => {
               onCompleteStep={() => handleStepCompletion(2, true, teamEmailNow)}
             />
           );
+          case 3:
+            return completed[3] ? (
+              <Completed
+              />
+            ) : (
+              <Step4
+                teamEmail={teamEmailNow}
+                onCompleteStep={() => handleStepCompletion(3, true, teamEmailNow)}
+              />
+            );
       default:
         return <Typography>Unknown step</Typography>;
     }

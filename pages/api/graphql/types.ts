@@ -42,6 +42,8 @@ export type Mutation = {
     teamEmail: String,
     updatedMembers: [UpdatedMemberInput]
   ): Team;
+  updateTeamFinished(teamEmail: String): Boolean;
+
 };
 
 export type CreateUserInput = {
