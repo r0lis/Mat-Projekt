@@ -46,6 +46,7 @@ const UPDATE_TEAM_FINISHED = gql`
 const Step4: React.FC<Step4Props> = ({ teamEmail, onCompleteStep }) => {
   const [progress, setProgress] = React.useState(0);
   const [showLinearProgress, setShowLinearProgress] = useState(false);
+  const [buttonVisible, setButtonVisible] = useState(true); 
 
   const { loading, error, data } = useQuery(GET_TEAM_MEMBERS, {
     variables: { teamEmail },
@@ -68,6 +69,7 @@ const Step4: React.FC<Step4Props> = ({ teamEmail, onCompleteStep }) => {
 
     try {
       setShowLinearProgress(true); // Show LinearProgress
+      setButtonVisible(false);
       await axios.post("/api/sendEmail", { emails: members, teamId });
       console.log("E-maily úspěšně odeslány.");
 
@@ -88,6 +90,7 @@ const Step4: React.FC<Step4Props> = ({ teamEmail, onCompleteStep }) => {
       }, 1000);
     } catch (error) {
       console.error("Chyba při odesílání e-mailů:", error);
+      setButtonVisible(true);
     }
   };
   useEffect(() => {
@@ -167,21 +170,23 @@ const Step4: React.FC<Step4Props> = ({ teamEmail, onCompleteStep }) => {
             </Box>
           )}
           <Box sx={{ textAlign: "center" }}>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleButtonClick}
-            sx=
-            {{
-               marginTop: "2em",backgroundColor: "rgb(255, 224, 254)",
-               padding: "1em",
-               border: "1px solid rgb(255, 150, 252)", 
-          }}
-          >
-            <Typography sx={{ fontWeight: "bold", color: "black" }}>
-            Pokračovat k dokončení
-            </Typography>
-          </Button>
+          {buttonVisible && (
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleButtonClick}
+                sx={{
+                  marginTop: "2em",
+                  backgroundColor: "rgb(255, 224, 254)",
+                  padding: "1em",
+                  border: "1px solid rgb(255, 150, 252)",
+                }}
+              >
+                <Typography sx={{ fontWeight: "bold", color: "black" }}>
+                  Dokončit
+                </Typography>
+              </Button>
+            )}
           </Box>
          
         </Box>

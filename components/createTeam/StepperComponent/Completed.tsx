@@ -1,12 +1,39 @@
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState } from 'react';
 
 import { Alert, Box, LinearProgress, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
+import { gql,  useQuery } from "@apollo/client";
 
-function Completed() {
+
+const GET_TEAM_ID = gql`
+  query GetTeamIdByEmail($teamEmail: String!) {
+    getTeamIdByEmail(teamEmail: $teamEmail) {
+      teamId
+    }
+  }
+`;
+
+type Step4Props = {
+  teamEmail: string;
+
+};
+
+const Completed: React.FC<Step4Props> = ({teamEmail}) => {
   
   const [progress, setProgress] = useState(0);
   const router = useRouter();
+
+  const {
+    loading: teamIdLoading,
+    error: teamIdError,
+    data: teamIdData,
+  } = useQuery(GET_TEAM_ID, {
+    variables: { teamEmail },
+  });
+  const { teamId } = teamIdData?.getTeamIdByEmail || {};
+
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -16,8 +43,8 @@ function Completed() {
     // Redirect after 10 seconds
     setTimeout(() => {
       clearInterval(interval);
-       router.push('/');
-    }, 10000);
+      router.push(`/Team/${teamId}`);
+    }, 1000);
 
     // Cleanup interval on component unmount
     return () => {
@@ -41,11 +68,13 @@ function Completed() {
           }}
         >
           <Typography sx={{ textAlign: 'center' }} variant="h4" gutterBottom>
-            Dokončení
+            Tým byl úspěšně vytvořen!
           </Typography>
 
           <Box sx={{ width: '50%', marginLeft: 'auto', marginRight: 'auto' }}>
-            <Alert severity="success">Tým byl úspěšně vytvořen!</Alert>
+            <Box sx={{marginBottom:'1em', marginTop:'1em'}}>
+            <Alert severity="info">Jste přesměrováni na vytvořený tým.</Alert>
+            </Box>
             <LinearProgress variant="determinate" value={progress} />
           </Box>
         </Box>

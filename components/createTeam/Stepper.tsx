@@ -133,6 +133,7 @@ const StepperComponent: React.FC = () => {
           case 3:
             return completed[3] ? (
               <Completed
+              teamEmail={teamEmailNow}
               />
             ) : (
               <Step4
