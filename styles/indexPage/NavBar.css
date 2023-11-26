@@ -32,13 +32,21 @@
 
   .CreateTeamButton {
     position: relative;
-    background-color: white;
+    background-color: #b71dde;
     border-radius: 15px;
     max-width: 100%;
     padding: 6px 16px;
     width: auto;
     height: 3rem;
     border: 1px solid #940372;
+  }
+
+  .CreateTeamButton:hover {
+    background-color: gray;
+  }
+  
+  .CreateTeamButton:hover > span {
+    color: white;
   }
 
   .teamDiv {

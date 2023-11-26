@@ -46,8 +46,6 @@ export const authUtils = {
     }
   },
   getCurrentUser: () => auth.currentUser,
-
-  
   deleteUser: async () => {
     try {
       const user = auth.currentUser;

@@ -38,7 +38,7 @@ const Completed: React.FC<Step4Props> = ({teamEmail}) => {
   useEffect(() => {
     const interval = setInterval(() => {
       setProgress((prevProgress) => (prevProgress >= 100 ? 100 : prevProgress + 10));
-    }, 1000);
+    }, 2000);
 
     // Redirect after 10 seconds
     setTimeout(() => {

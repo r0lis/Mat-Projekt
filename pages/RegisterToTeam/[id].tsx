@@ -5,7 +5,7 @@ import React, { useState } from "react";
 import { authUtils } from "../../firebase/auth.utils";
 import { useMutation, gql } from "@apollo/client";
 import { useRouter } from "next/router";
-import { Box, Button, TextField, Typography, Link } from "@mui/material";
+import { Box, Button, TextField, Typography, Link, Alert } from "@mui/material";
 import photo from "../../public/assets/rosterbot.png";
 import pictureBackground from "../../public/assets/uvodni.jpg";
 
@@ -238,77 +238,100 @@ const RegistrationPage: React.FC = () => {
               </Box>
 
               <Box sx={{ widht: "10%" }}>
-                <TextField
-                  type="text"
-                  label="Name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  fullWidth
-                  margin="normal"
-                />
-                <TextField
-                  type="text"
-                  label="Surname"
-                  value={surname}
-                  onChange={(e) => setSurname(e.target.value)}
-                  fullWidth
-                  margin="normal"
-                />
-
-                <TextField
-                  type="email"
-                  label="E-mail"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  fullWidth
-                  margin="normal"
-                />
-
-                <TextField
-                  type="password"
-                  label="Heslo"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  fullWidth
-                  margin="normal"
-                />
-                <TextField
-                  type="password"
-                  label="Potvrzení hesla"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  fullWidth
-                  margin="normal"
-                />
+              {!registrationSuccess && (
+                  <>
+                    <TextField
+                      type="text"
+                      label="Name"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      fullWidth
+                      margin="normal"
+                    />
+                    <TextField
+                      type="text"
+                      label="Surname"
+                      value={surname}
+                      onChange={(e) => setSurname(e.target.value)}
+                      fullWidth
+                      margin="normal"
+                    />
+                    <TextField
+                      type="email"
+                      label="E-mail"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      fullWidth
+                      margin="normal"
+                    />
+                    <TextField
+                      type="password"
+                      label="Heslo"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      fullWidth
+                      margin="normal"
+                    />
+                    <TextField
+                      type="password"
+                      label="Potvrzení hesla"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      fullWidth
+                      margin="normal"
+                    />
+                  </>
+                )}
                 <Box>
                   {error && (
-                    <Typography
-                      variant="body1"
-                      color="error"
-                      sx={{ marginTop: "1rem" }}
+                    <Alert
+                    severity="error"
+                    sx={{
+                      width: "auto",
+                      marginLeft: "auto",
+                      marginRight: "auto",
+                      marginTop: "1rem",
+                      textAlign: "center",
+                      color: "white",
+                    }} // Set background color to red
                     >
-                      {error}
-                    </Typography>
+                       <Typography
+                        variant="body1"
+                        color="error"
+                        sx={{ marginTop: "1rem" }}
+                      >
+                        {error}
+                      </Typography>
+                    </Alert>
                   )}
                   {registrationSuccess && (
-                    <div>
-                      <Typography
-                        variant="body1"
-                        color="success"
-                        sx={{ marginTop: "1rem" }}
-                      >
-                        Registrace úspěšná. Ověřte svůj e-mail, abyste mohli
-                        pokračovat.
-                      </Typography>
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={handleEmailVerification}
-                        sx={{ marginTop: "1rem" }}
-                      >
-                        Ověřit E-mail
-                      </Button>
-                    </div>
+                     <Alert
+                     severity="success"
+                     sx={{
+                       width: "auto",
+                       marginLeft: "auto",
+                       marginRight: "auto",
+                       marginTop: "1rem",
+                       textAlign: "right",
+                     }} // Set background color to orange
+                   >
+                     <Typography
+                       variant="body1"
+                       color="success"
+                       sx={{ marginTop: "1rem" }}
+                     >
+                       Registrace úspěšná. Ověřte svůj e-mail, abyste mohli
+                       pokračovat.
+                     </Typography>
+                     <Button
+                       variant="contained"
+                       color="primary"
+                       onClick={handleEmailVerification}
+                       sx={{ marginTop: "1rem" }}
+                     >
+                       Ověřit E-mail
+                     </Button>
+                   </Alert>
                   )}
 
                   <Box
@@ -344,26 +367,7 @@ const RegistrationPage: React.FC = () => {
                         Registrovat
                       </Button>
                     )}
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      sx={{
-                        marginTop: "1rem",
-                        marginLeft: "auto",
-                        marginRight: "auto",
-                        display: "block",
-                        backgroundColor: "#FFE0FE",
-                        color: "black",
-                        fontFamily: "Roboto",
-                        fontWeight: "700",
-                        border: "1px solid #ff96fc",
-                        boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.2)",
-                        padding: "0.7em",
-                        borderRadius: "4px",
-                      }}
-                    >
-                      Už mám účet
-                    </Button>
+                   
                   </Box>
                 </Box>
               </Box>
@@ -386,7 +390,7 @@ const RegistrationPage: React.FC = () => {
                 >
                   
                   <Link
-                    href="/UserRegistration"
+                    href={`/RegisterToTeam/${id}`}
                     sx={{
                       marginRight: "1rem",
                       marginTop: "1rem",

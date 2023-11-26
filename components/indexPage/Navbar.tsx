@@ -504,14 +504,16 @@ const Navbar: React.FC = () => {
             <Link href="/CreateTeam">
               <Button className="CreateTeamButton" variant="contained">
                 <Typography
+                  className="CreateTeamButtonText"
                   sx={{
-                    color: "black",
+                    color: "white",
                     fontWeight: "bold",
                     fontSize: { xs: "0.8em", md: "1.3em" },
                     lineHeight: "15px",
+                    fontFamily:'Roboto',
                   }}
                 >
-                  CREATE TEAM
+                  VYTVOŘIT TÝM
                 </Typography>
               </Button>
             </Link>
