@@ -86,7 +86,7 @@ export const typeDefs = gql`
     ): Team
     deleteTeamByEmail(email: String): Boolean
     updateTeamFinished(teamEmail: String!): Boolean
-
+    addUserToTeam(email: String!, teamId: String!): Boolean
   }
 
   type TeamDetails {

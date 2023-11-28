@@ -301,6 +301,32 @@ export const resolvers = {
       }
     },
 
+    addUserToTeam: async (
+      _: any,
+      { email, teamId }: { email: string; teamId: string },
+      context: Context
+    ) => {
+      try {
+        const userQuery = context.db.collection("User").where("Email", "==", email);
+        const userSnapshot = await userQuery.get();
+        if (!userSnapshot.empty) {
+          const userDoc = userSnapshot.docs[0];
+          const userData = userDoc.data() as User;
+
+          // Add teamId to the IdTeam array
+          userData.IdTeam.push(teamId);
+
+          await userDoc.ref.update({ IdTeam: userData.IdTeam });
+
+          return true;
+        }
+        return false;
+      } catch (error) {
+        console.error("Error adding user to team:", error);
+        throw error;
+      }
+    },
+
     updateTeamFinished: async (
       _: any,
       { teamEmail }: { teamEmail: string },

@@ -187,6 +187,10 @@ const Invite: React.FC = () => {
                   </Button>
                 </Link>
                 
+                <Link
+                  href={`/AddToTeam/${id}`}
+                  sx={{ textDecoration: "none" }}
+                >
                 <Button
                   variant="contained"
                   color="primary"
@@ -208,6 +212,7 @@ const Invite: React.FC = () => {
                 >
                   Už mám účet
                 </Button>
+                </Link>
               </Box>
 
               </Box>

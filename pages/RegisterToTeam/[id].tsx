@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { authUtils } from "../../firebase/auth.utils";
 import { useMutation, gql } from "@apollo/client";
 import { useRouter } from "next/router";
-import { Box, Button, TextField, Typography, Link, Alert } from "@mui/material";
+import { Box, Button, TextField, Typography, Link, Alert,  LinearProgress,} from "@mui/material";
 import photo from "../../public/assets/rosterbot.png";
 import pictureBackground from "../../public/assets/uvodni.jpg";
 
@@ -45,9 +45,41 @@ const RegistrationPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [registrationSuccess, setRegistrationSuccess] = useState(false);
   const [verificationSuccess, setverificationSuccess] = useState(false);
-
+  const [verificationSuccess2, setverificationSuccess2] = useState(false);
+  const [progress, setProgress] = useState(0);
   const router = useRouter();
   const { id } = router.query;
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+
+    if (verificationSuccess2) {
+      let value = 0;
+      const increment = 100 / 10; // Increment by 10% every second
+
+      // Increment progress every second until it reaches 100
+      timer = setInterval(() => {
+        value += increment;
+        setProgress(Math.min(value, 100));
+
+        if (value >= 100) {
+          clearInterval(timer);
+          if (id) {
+            router.push(`/`);
+          }
+        }
+      }, 500);
+    }
+
+    return () => {
+      // Clear the interval if the component unmounts or if login is unsuccessful
+      if (timer) {
+        clearInterval(timer);
+      }
+    };
+  }, [verificationSuccess2, id, router]);
+
+
 
   const [createUser] = useMutation(CREATE_USER_TO_TEAM_MUTATION);
 
@@ -99,6 +131,7 @@ const RegistrationPage: React.FC = () => {
             },
           });
           setverificationSuccess(true);
+          setverificationSuccess2(true);
 
           router.push(`/`);
         } else {
@@ -221,7 +254,7 @@ const RegistrationPage: React.FC = () => {
                   marginLeft: "auto",
                   marginRight: "auto",
                   marginTop: "2em",
-                  textAlign: "center",
+                  textAlign: "block",
                 }}
               >
                 <Typography
@@ -304,7 +337,7 @@ const RegistrationPage: React.FC = () => {
                       </Typography>
                     </Alert>
                   )}
-                  {registrationSuccess && (
+                  {registrationSuccess && !verificationSuccess2 &&(
                      <Alert
                      severity="success"
                      sx={{
@@ -369,6 +402,20 @@ const RegistrationPage: React.FC = () => {
                     )}
                    
                   </Box>
+                  {verificationSuccess2 && (
+                    <Box
+                      sx={{
+                        width: "100%",
+                        marginLeft: "auto",
+                        marginRight: "auto",
+                      }}
+                    >
+                      <Box sx={{ marginBottom: "1em", marginTop: "1em", textAlign:'center' }}>
+                        <Alert severity="info"><Typography>Jste na hlavní stránku.</Typography></Alert>
+                      </Box>
+                      <LinearProgress variant="determinate" value={progress} />
+                    </Box>
+                  )}
                 </Box>
               </Box>
               <Box
