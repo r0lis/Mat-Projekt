@@ -36,7 +36,7 @@ const Invite: React.FC = () => {
         <Box sx={{ display: "flex", flexDirection: "row", width: "100%" }}>
           <Box
             sx={{
-              width: "70%",
+              width: "60%",
               maxHeight: "30em",
               position: "relative",
               zIndex: "1", // Ensure content is above the background image
@@ -91,29 +91,36 @@ const Invite: React.FC = () => {
                 >
                   TEAM MANAGER
                 </Typography>
-              </Box>
+              
               <Box
                 sx={{
-                  marginLeft: "10%",
-                  marginRight: "10%",
+                  marginLeft: "5%",
+                  marginRight: "5%",
                   zIndex: "999",
                   marginTop: "2em",
                   position: "relative",
                 }}
               >
+                <Box>
                 <img src={photo.src} alt="logo" width="100%" height="auto" />
+                </Box>
+                </Box>
+                
               </Box>
             </Box>
           </Box>
-          <Box>
+          <Box sx={{marginLeft:'auto', marginRight:'auto'}}>
+            <Box>
+
+            
             <Box
               sx={{
                 width: "100%", // Set the desired width for the box
                 textAlign: "center",
                 position:'relative',
                 display: "flex",
-                
-                
+                marginLeft: "auto",
+                marginRight: "auto",
               }}
             >
               <Box
@@ -128,9 +135,11 @@ const Invite: React.FC = () => {
                 <Typography
                   variant="h4"
                   sx={{
-                    margin: "1rem",
+                    
+                    marginBottom:'1em',
+                    fontSize: "2.7vw",
                     fontFamily: "Roboto",
-                    fontWeight: "500",
+                    fontWeight: "800",
                     marginTop: "40%",
                     
                     textAlign: "center",
@@ -170,7 +179,7 @@ const Invite: React.FC = () => {
                       fontWeight: "700",
                       border: "1px solid #ff96fc",
                       boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.2)",
-                      padding: "0.7em",
+                      padding: "1em",
                       borderRadius: "4px",
                     }}
                   >
@@ -193,7 +202,7 @@ const Invite: React.FC = () => {
                     fontWeight: "700",
                     border: "1px solid #ff96fc",
                     boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.2)",
-                    padding: "0.7em",
+                    padding: "1em",
                     borderRadius: "4px",
                   }}
                 >
@@ -201,6 +210,7 @@ const Invite: React.FC = () => {
                 </Button>
               </Box>
 
+              </Box>
               </Box>
 
               

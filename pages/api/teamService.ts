@@ -30,15 +30,12 @@ async function processTeams() {
 
       const timeDifference = currentTime - teamCreationTime.getTime();
       const timeDifferenceInMinutes = Math.floor(timeDifference / 60000);
-      console.log(`Rozdíl času: ${timeDifferenceInMinutes} minut.`);
-      // Smazat tým, pokud není dokončen a byl vytvořen před více než 20 minutami
       if (timeDifferenceInMinutes > 20) {
         await teamDoc.ref.delete();
         console.log(`Tým ${teamData.Name} byl smazán. Protože vytvořen před více než 5 minutami.`);
       }
     }
 
-    console.log(`Zpracování týmů dokončeno.`);
   } catch (error) {
     console.error("Chyba při zpracování týmů:", error);
   }
