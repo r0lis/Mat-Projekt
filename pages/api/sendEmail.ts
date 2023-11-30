@@ -22,7 +22,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const mailOptions = {
     from: 'appteammanager@gmail.com', // Nahraďte svou e-mailovou adresou
     subject: 'Pozvánka na registraci',
-    text: `Registrace: http://localhost:3001/RegisterToTeam/${teamId}`, // Nahraďte URL své aplikace
+    text: `Registrace: http://localhost:3000/Invite/${teamId}`, // Nahraďte URL své aplikace
   };
 
   try {
