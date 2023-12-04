@@ -53,10 +53,6 @@ const RegistrationPage: React.FC = () => {
   const isEmailValid = email.includes("@");
   const isPasswordValid = password.length >= 6;
 
-
-
-
-
   const handleRegister = async () => {
     try {
       if (!isEmailValid || !isPasswordValid) {
