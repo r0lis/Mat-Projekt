@@ -19,6 +19,9 @@ import {
   CreateUserToTeamInput,
   TeamDetails2,
 } from "./types";
+import 'firebase/storage';
+
+
 
 
 async function addUserToTeam(context: Context,adminEmail: any, teamId: String) {
@@ -201,6 +204,7 @@ export const resolvers = {
         _: any,
         { input }: { input: CreateUserToTeamInput },
         context: Context
+
       ) => {
         try {
           const newUserDoc = context.db.collection("User").doc();
