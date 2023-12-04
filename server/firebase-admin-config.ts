@@ -18,7 +18,7 @@ if (admin.apps.length === 0) {
   admin.initializeApp({
     // @ts-ignore
     credential: admin.credential.cert(firebaseAdminConfig),
+    storageBucket: "mat-project-8e132.appspot.com",
   });
 }
-
-export const {firestore, auth: adminAuth} = admin;
+export const {firestore, auth: adminAuth, } = admin;
