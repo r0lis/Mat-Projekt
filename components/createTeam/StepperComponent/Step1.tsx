@@ -227,7 +227,7 @@ const Step1: React.FC<Step1Props> = ({ onCompleteTeamCreation }) => {
       >
         <Typography
           sx={{ textAlign: "center", fontFamily: "Roboto", fontWeight: "600" }}
-          variant="h3"
+          variant="h4"
           gutterBottom
         >
           Vytvoření týmu:
@@ -277,6 +277,8 @@ const Step1: React.FC<Step1Props> = ({ onCompleteTeamCreation }) => {
               </div>
 
               <Box>
+              <h3>Týmové logo</h3>
+
                 <InputLabel htmlFor="imageInput">
                   <Input
                     id="imageInput"
@@ -287,7 +289,7 @@ const Step1: React.FC<Step1Props> = ({ onCompleteTeamCreation }) => {
                   />
                 </InputLabel>
                 {!selectedImage && (
-                  <Box sx={{ marginTop: "1em", marginBottom: "1em" }}>
+                  <Box sx={{ marginTop: "0.4em", marginBottom: "1em" }}>
                     <label htmlFor="imageInput">
                       <Button variant="contained" component="span">
                         Vybrat obrázek
@@ -300,7 +302,7 @@ const Step1: React.FC<Step1Props> = ({ onCompleteTeamCreation }) => {
                   <Box
                     sx={{
                       padding: "10px",
-                      marginTop: "25px",
+                      marginTop: "0px",
                       borderRadius: "15px",
                       boxShadow: "0 0 10px rgba(0, 0, 0, 0.3)",
                       marginBottom: "20px",

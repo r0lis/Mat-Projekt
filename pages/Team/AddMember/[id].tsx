@@ -1,12 +1,12 @@
 import React from 'react'
 import Navbar from '@/components/teamPage/AddMember/Navbar'
-import Content from '@/components/teamPage/AddMember/Content'
+import AddMember from '@/components/teamPage/AddMember/Content'
 
-function NewMeber() {
+const NewMeber: React.FC = () => {
   return (
     <div>
       <Navbar />
-      <Content/>
+      <AddMember/>
     </div>
   )
 }

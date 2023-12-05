@@ -211,6 +211,7 @@ export const resolvers = {
           const userId = newUserDoc.id;
           const teamId = input.IdTeam;
           const IsAdmin = 0;
+          
   
           const newUser = {
             Name: input.Name,
@@ -263,6 +264,29 @@ export const resolvers = {
       }
     },
 
+    updateMembers: async (_: any, { teamId, newMembers }: any, context: { user: any; db: { collection: (arg0: string) => { (): any; new(): any; where: { (arg0: string, arg1: string, arg2: any): any; new(): any; }; }; }; }) => {
+      try {
+        if (context.user) {
+          // Fetch the team by teamId
+          const teamQuery = context.db.collection("Team").where("teamId", "==", teamId);
+          const teamSnapshot = await teamQuery.get();
+    
+          if (!teamSnapshot.empty) {
+            const teamDoc = teamSnapshot.docs[0];
+            const existingMembers = teamDoc.data().MembersEmails || [];
+    
+            // Assuming MembersEmails is an array of strings
+            const updatedMembers = [...existingMembers, ...newMembers];
+    
+            await teamDoc.ref.update({ MembersEmails: updatedMembers });
+          }
+        }
+        return null;
+      } catch (error) {
+        console.error("Error updating members:", error);
+        throw error;
+      }
+    },
     updateUserRoles: async (
       _: any,
       {

@@ -104,7 +104,8 @@ function Team() {
     <Box>
       {Boolean(team) && (
         <Box>
-          <Nav />
+          <Nav showOnlyIcon={showOnlyIcon} setShowOnlyIcon={setShowOnlyIcon} />
+
           <Box
             className="sidebarContainer"
             onMouseEnter={() => handleHover(true)}

@@ -37,12 +37,15 @@ const GET_TEAM_DETAILS = gql`
     }
   }
 `;
+interface NavProps {
+  showOnlyIcon: boolean;
+  setShowOnlyIcon: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
-const Nav: React.FC = () => {
+const Nav: React.FC<NavProps> =({ showOnlyIcon, setShowOnlyIcon }) => {
   const router = useRouter();
   const { id } = router.query;
   const user = authUtils.getCurrentUser();
-  const [showOnlyIcon, setShowOnlyIcon] = useState(true);
   const [, setMenuOpen] = useState(false);
   const [anchorEl2, setAnchorEl2] = useState<null | HTMLElement>(null);
   const [, setMenuOpen2] = useState(false);

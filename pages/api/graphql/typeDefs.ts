@@ -42,6 +42,11 @@ export const typeDefs = gql`
     role: Int!
   }
 
+  input MemberInput {
+    name: String!
+    UpdatedMemberInput: [String]
+  }
+  
   type Team {
     Name: String!
     teamId: String!
@@ -87,6 +92,8 @@ export const typeDefs = gql`
     deleteTeamByEmail(email: String): Boolean
     updateTeamFinished(teamEmail: String!): Boolean
     addUserToTeam(email: String!, teamId: String!): Boolean
+    updateMembers(teamId: String!, newMembers: [MemberInput!]!): Team
+
   }
 
   type TeamDetails {

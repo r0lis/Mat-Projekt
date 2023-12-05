@@ -23,6 +23,6 @@ if (admin.apps.length === 0) {
   });
 
 }
-const storage = admin.storage() as admin.storage.Storage;
+const storage = admin.storage()
 export const {firestore, auth: adminAuth, } = admin;
 export { storage };
