@@ -19,6 +19,10 @@ if (admin.apps.length === 0) {
     // @ts-ignore
     credential: admin.credential.cert(firebaseAdminConfig),
     storageBucket: "mat-project-8e132.appspot.com",
+
   });
+
 }
+const storage = admin.storage() as admin.storage.Storage;
 export const {firestore, auth: adminAuth, } = admin;
+export { storage };
