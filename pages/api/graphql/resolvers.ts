@@ -273,14 +273,23 @@ export const resolvers = {
     
           if (!teamSnapshot.empty) {
             const teamDoc = teamSnapshot.docs[0];
-            const existingMembers = teamDoc.data().MembersEmails || [];
+            const existingMembers = teamDoc.data().Members || [];
+            const existingEmails = teamDoc.data().MembersEmails || [];
     
-            // Create objects with the email field
+            // Transform newMembers array into the desired format
+            const updatedMembers = [
+              ...existingMembers,
+              ...newMembers.map((email: any) => ({ member: email, role: 0 })),
+            ];
     
-            // Assuming MembersEmails is an array of objects with an email field
-            const updatedMembers = [...existingMembers, ...newMembers];
+            // Combine new emails with existing ones
+            const updatedEmails = [...existingEmails, ...newMembers];
     
-            await teamDoc.ref.update({ MembersEmails: updatedMembers });
+            // Update both Members and MembersEmails
+            await teamDoc.ref.update({
+              Members: updatedMembers,
+              MembersEmails: updatedEmails,
+            });
           }
         }
         return null;
