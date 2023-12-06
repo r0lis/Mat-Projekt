@@ -38,7 +38,7 @@
     padding: 6px 16px;
     width: auto;
     height: 3rem;
-    border: 1px solid #940372;
+    box-shadow: 0 0 10px rgba(51, 0, 45, 0.8); 
   }
 
   .CreateTeamButton:hover {

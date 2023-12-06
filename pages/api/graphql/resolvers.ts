@@ -275,7 +275,9 @@ export const resolvers = {
             const teamDoc = teamSnapshot.docs[0];
             const existingMembers = teamDoc.data().MembersEmails || [];
     
-            // Assuming MembersEmails is an array of strings
+            // Create objects with the email field
+    
+            // Assuming MembersEmails is an array of objects with an email field
             const updatedMembers = [...existingMembers, ...newMembers];
     
             await teamDoc.ref.update({ MembersEmails: updatedMembers });

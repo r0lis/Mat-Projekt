@@ -17,7 +17,7 @@ import {
 } from "@mui/material";
 
 const UPDATE_MEMBERS_MUTATION = gql`
-mutation UpdateMembers($teamId: String!, $newMembers: [MemberInput!]!) {
+mutation UpdateMembers($teamId: String!, $newMembers: [String!]!) {
   updateMembers(teamId: $teamId, newMembers: $newMembers) {
     Name
   }
@@ -44,14 +44,13 @@ const Content: React.FC = () => {
   const handleCreateTeam = async () => {
     try {
 
-      const allMembers = emails.map((email) => ({ name: email, UpdatedMemberInput: [] }));
 
-const response = await updateMembersMutation({
-  variables: {
-    teamId: id, // Replace with the actual team ID from the router
-    newMembers: allMembers,
-  },
-});
+      const response = await updateMembersMutation({
+        variables: {
+          teamId: id,
+          newMembers: emails,
+        },
+      });
 
       console.log("Tým byl úspěšně vytvořen", response);
 
