@@ -15,6 +15,8 @@ import {
   TableRow,
   Paper,
 } from "@mui/material";
+import axios from "axios";
+
 
 const UPDATE_MEMBERS_MUTATION = gql`
 mutation UpdateMembers($teamId: String!, $newMembers: [String!]!) {
@@ -57,6 +59,8 @@ const Content: React.FC = () => {
      
       console.log(emailTeam);
       setIsCreated(true);
+      await axios.post("/api/sendEmail", { emails: emails, id });
+      console.log("E-maily úspěšně odeslány.");
     } catch (error: any) {
       setError(error.message);
     }
