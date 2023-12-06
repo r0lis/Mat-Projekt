@@ -26,6 +26,7 @@ const GET_USER_INFO = gql`
     getUserByNameAndSurname(email: $email) {
       Name
       Surname
+      Id
     }
   }
 `;
@@ -42,7 +43,7 @@ interface NavProps {
   setShowOnlyIcon: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const Nav: React.FC<NavProps> =({ showOnlyIcon, setShowOnlyIcon }) => {
+const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon }) => {
   const router = useRouter();
   const { id } = router.query;
   const user = authUtils.getCurrentUser();
@@ -78,6 +79,7 @@ const Nav: React.FC<NavProps> =({ showOnlyIcon, setShowOnlyIcon }) => {
   const teamName = team ? team.Name : "";
   const name = userInfoData?.getUserByNameAndSurname.Name || "";
   const surname = userInfoData?.getUserByNameAndSurname.Surname || "";
+  const userId = userInfoData?.getUserByNameAndSurname.Id || "";
 
   const toggleContentVisibility = () => {
     setShowOnlyIcon(!showOnlyIcon);
@@ -156,7 +158,6 @@ const Nav: React.FC<NavProps> =({ showOnlyIcon, setShowOnlyIcon }) => {
               display: "flex",
               alignItems: "center",
               marginLeft: { xs: "auto", md: "20%" },
-              
             }}
           >
             <img
@@ -321,19 +322,21 @@ const Nav: React.FC<NavProps> =({ showOnlyIcon, setShowOnlyIcon }) => {
                             justifyContent: "center",
                           }}
                         >
-                          <Button onClick={handleLogout} style={buttonStyle}>
-                            <Typography
-                              sx={{
-                                color: "black",
-                                fontWeight: "bold",
-                                fontSize: "1 vw",
-                                lineHeight: "20px",
-                                padding: "5px",
-                              }}
-                            >
-                              Správa účtu
-                            </Typography>
-                          </Button>
+                          <Link href={`/User/${userId}`}>
+                            <Button className="buttonStyle">
+                              <Typography
+                                sx={{
+                                  color: "black",
+                                  fontWeight: "bold",
+                                  fontSize: "1 vw",
+                                  lineHeight: "20px",
+                                  padding: "5px",
+                                }}
+                              >
+                                Správa účtu
+                              </Typography>
+                            </Button>
+                          </Link>
                           <Button onClick={handleLogout} style={buttonStyle2}>
                             <Typography
                               sx={{
@@ -538,19 +541,21 @@ const Nav: React.FC<NavProps> =({ showOnlyIcon, setShowOnlyIcon }) => {
                             justifyContent: "center",
                           }}
                         >
-                          <Button onClick={handleLogout} style={buttonStyle}>
-                            <Typography
-                              sx={{
-                                color: "black",
-                                fontWeight: "bold",
-                                fontSize: "1 vw",
-                                lineHeight: "20px",
-                                padding: "5px",
-                              }}
-                            >
-                              Správa účtu
-                            </Typography>
-                          </Button>
+                          <Link href={`/User/${userId}`}>
+                            <Button className="buttonStyle">
+                              <Typography
+                                sx={{
+                                  color: "black",
+                                  fontWeight: "bold",
+                                  fontSize: "1 vw",
+                                  lineHeight: "20px",
+                                  padding: "5px",
+                                }}
+                              >
+                                Správa účtu
+                              </Typography>
+                            </Button>
+                          </Link>
                           <Button onClick={handleLogout} style={buttonStyle2}>
                             <Typography
                               sx={{

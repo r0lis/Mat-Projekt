@@ -132,6 +132,7 @@ export const resolvers = {
           return {
             Name: userData.Name,
             Surname: userData.Surname,
+            Id: userData.IdUser,
           };
         }
       }

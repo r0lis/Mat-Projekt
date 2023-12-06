@@ -66,6 +66,7 @@ export const typeDefs = gql`
   type NameAndSurname {
     Name: String
     Surname: String
+    Id: String
   }
 
   type Query {

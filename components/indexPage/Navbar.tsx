@@ -25,6 +25,7 @@ const GET_USER_INFO = gql`
     getUserByNameAndSurname(email: $email) {
       Name
       Surname
+      Id
     }
   }
 `;
@@ -70,6 +71,8 @@ const Navbar: React.FC = () => {
 
   const name = userInfoData?.getUserByNameAndSurname.Name || "";
   const surname = userInfoData?.getUserByNameAndSurname.Surname || "";
+  const id = userInfoData?.getUserByNameAndSurname.Id || "";
+
   const initials = name[0] + surname[0];
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -313,12 +316,14 @@ const Navbar: React.FC = () => {
                                   position: "relative",
                                   top: "2%",
                                   left: "auto",
-                                    right: "auto",
+                                  right: "auto",
                                 }}
                               /> // Zobrazí CircularProgress místo načítání
                             ) : userIdError ? (
                               "Chyba"
-                            ) : userTeamsData && userTeamsData.getUserTeamsByEmail && userTeamsData.getUserTeamsByEmail.length > 0 ? (
+                            ) : userTeamsData &&
+                              userTeamsData.getUserTeamsByEmail &&
+                              userTeamsData.getUserTeamsByEmail.length > 0 ? (
                               userTeamsData.getUserTeamsByEmail.map(
                                 (team: Team, index: number) => (
                                   <Box
@@ -378,22 +383,21 @@ const Navbar: React.FC = () => {
                             justifyContent: "center",
                           }}
                         >
-                          <Button
-                            onClick={handleLogout}
-                            className="buttonStyle"
-                          >
-                            <Typography
-                              sx={{
-                                color: "black",
-                                fontWeight: "bold",
-                                fontSize: "1 vw",
-                                lineHeight: "20px",
-                                padding: "5px",
-                              }}
-                            >
-                              Správa účtu
-                            </Typography>
-                          </Button>
+                          <Link href={`/User/${id}`}>
+                            <Button className="buttonStyle">
+                              <Typography
+                                sx={{
+                                  color: "black",
+                                  fontWeight: "bold",
+                                  fontSize: "1 vw",
+                                  lineHeight: "20px",
+                                  padding: "5px",
+                                }}
+                              >
+                                Správa účtu
+                              </Typography>
+                            </Button>
+                          </Link>
                           <Button
                             onClick={handleLogout}
                             className="buttonStyle2"
@@ -500,9 +504,9 @@ const Navbar: React.FC = () => {
             </Menu>
           </div>
 
-          <Box sx={{ marginRight: "5%", marginLeft: "3%", marginTop: "0.5em", }}>
+          <Box sx={{ marginRight: "5%", marginLeft: "3%", marginTop: "0.5em" }}>
             <Link href="/CreateTeam">
-              <Button  className="CreateTeamButton" variant="contained">
+              <Button className="CreateTeamButton" variant="contained">
                 <Typography
                   className="CreateTeamButtonText"
                   sx={{
@@ -510,7 +514,7 @@ const Navbar: React.FC = () => {
                     fontWeight: "bold",
                     fontSize: { xs: "0.8em", md: "1.3em" },
                     lineHeight: "15px",
-                    fontFamily:'Roboto',
+                    fontFamily: "Roboto",
                   }}
                 >
                   VYTVOŘIT TÝM

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import React, { useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -24,6 +25,7 @@ const GET_USER_INFO = gql`
     getUserByNameAndSurname(email: $email) {
       Name
       Surname
+      Id
     }
   }
 `;
@@ -42,7 +44,6 @@ const Navbar: React.FC = () => {
     error: userInfoError,
     data: userInfoData,
   } = useQuery(GET_USER_INFO, {
-    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
     variables: { email: user?.email || "" },
     skip: !user,
   });
@@ -51,6 +52,7 @@ const Navbar: React.FC = () => {
   const name = userInfoData?.getUserByNameAndSurname.Name || "";
   // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
   const surname = userInfoData?.getUserByNameAndSurname.Surname || "";
+  const id = userInfoData?.getUserByNameAndSurname.Id || "";
 
   const handleOpenMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl2(event.currentTarget);
@@ -282,19 +284,21 @@ const Navbar: React.FC = () => {
                             justifyContent: "center",
                           }}
                         >
-                          <Button onClick={handleLogout} style={buttonStyle}>
-                            <Typography
-                              sx={{
-                                color: "black",
-                                fontWeight: "bold",
-                                fontSize: "1 vw",
-                                lineHeight: "20px",
-                                padding: "5px",
-                              }}
-                            >
-                              Správa účtu
-                            </Typography>
-                          </Button>
+                          <Link href={`/User/${id}`}>
+                            <Button className="buttonStyle">
+                              <Typography
+                                sx={{
+                                  color: "black",
+                                  fontWeight: "bold",
+                                  fontSize: "1 vw",
+                                  lineHeight: "20px",
+                                  padding: "5px",
+                                }}
+                              >
+                                Správa účtu
+                              </Typography>
+                            </Button>
+                          </Link>
                           <Button onClick={handleLogout} style={buttonStyle2}>
                             <Typography
                               sx={{
@@ -495,19 +499,21 @@ const Navbar: React.FC = () => {
                             justifyContent: "center",
                           }}
                         >
-                          <Button onClick={handleLogout} style={buttonStyle}>
-                            <Typography
-                              sx={{
-                                color: "black",
-                                fontWeight: "bold",
-                                fontSize: "1 vw",
-                                lineHeight: "20px",
-                                padding: "5px",
-                              }}
-                            >
-                              Správa účtu
-                            </Typography>
-                          </Button>
+                          <Link href={`/User/${id}`}>
+                            <Button className="buttonStyle">
+                              <Typography
+                                sx={{
+                                  color: "black",
+                                  fontWeight: "bold",
+                                  fontSize: "1 vw",
+                                  lineHeight: "20px",
+                                  padding: "5px",
+                                }}
+                              >
+                                Správa účtu
+                              </Typography>
+                            </Button>
+                          </Link>
                           <Button onClick={handleLogout} style={buttonStyle2}>
                             <Typography
                               sx={{
