@@ -6,6 +6,7 @@ import { Alert, Box, Button, IconButton, Typography } from "@mui/material";
 import { gql, useMutation } from "@apollo/client";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import {
   Table,
@@ -122,7 +123,16 @@ const Content: React.FC = () => {
 
         <Box sx={{ width: "50%", marginLeft: "auto", marginRight: "auto" }}>
           {isCreated ? (
-            <Alert severity="success">Uživatele byli přidáni!</Alert>
+            <Alert severity="success">
+            Uživatele byli přidáni!
+            {/* Add a button linking to the Team page with the specific id */}
+            <Link href={`/Team/${id}`}>
+              <Button variant="contained" sx={{ marginLeft: "10px" }}>
+                Přejít na Team
+              </Button>
+            </Link>
+          </Alert>
+            
           ) : (
             <form>
               
