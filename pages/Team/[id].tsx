@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
@@ -57,6 +58,7 @@ const CHECK_USER_MEMBERSHIP = gql`
   }
 `;
 
+
 function Team() {
   const router = useRouter();
   const { id } = router.query;
@@ -65,6 +67,8 @@ function Team() {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [activeLink, setActiveLink] = useState("Přehled");
   const currentUserEmail = authUtils.getCurrentUser()?.email || ""
+
+
 
   useEffect(() => {
     const handleResize = () => {
@@ -255,6 +259,8 @@ function Team() {
             {activeLink === "Tým" && <TeamComponent />}
             {activeLink === "Členové" && <MembersComponent id={id as string} />}
             {activeLink === "Správa" && <SettingsComponent />}
+           
+
           </Box>
         </Box>
       )}
