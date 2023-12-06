@@ -61,6 +61,28 @@ export const resolvers = {
       }
     },
 
+    checkUserMembership: async (
+      _: any,
+      { teamId, currentUserEmail }: { teamId: string; currentUserEmail: string },
+      context: Context
+    ) => {
+      try {
+        if (context.user) {
+          const teamQuery = context.db.collection("Team").where("teamId", "==", teamId);
+          const teamSnapshot = await teamQuery.get();
+
+          if (!teamSnapshot.empty) {
+            const teamData = teamSnapshot.docs[0].data() as Team;
+            return teamData.MembersEmails?.includes(currentUserEmail) || false;
+          }
+        }
+        return false;
+      } catch (error) {
+        console.error("Error checking user membership:", error);
+        throw error;
+      }
+    },
+
     getTeamDetails: async (
       _: any,
       { teamId }: { teamId: string },

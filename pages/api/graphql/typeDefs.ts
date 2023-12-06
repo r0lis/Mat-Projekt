@@ -76,7 +76,7 @@ export const typeDefs = gql`
     getTeamMembersByEmail(teamEmail: String!): [String]
     checkTeamEmailExistence(email: String!): Boolean
     getTeamIdByEmail(teamEmail: String!): TeamDetails2
-
+    checkUserMembership(teamId: String!, currentUserEmail: String!): Boolean!
     heartbeat: Boolean
   }
 
