@@ -173,7 +173,7 @@ function Team() {
   }
 
   return (
-    <Box>
+    <Box >
       {Boolean(team) && (
         <Box>
           <Nav showOnlyIcon={showOnlyIcon} setShowOnlyIcon={setShowOnlyIcon} />
@@ -188,8 +188,9 @@ function Team() {
               backgroundColor: "#F0F2F5",
               width: showOnlyIcon ? "4.5em" : "11em",
               maxWidth: "20em",
-              height: "100%",
-              position: "absolute",
+              top: "0",
+              height: "100%",  // Set height to 100%
+    position: "fixed", // Set position to fixed
               borderRight: `0.3em solid ${
                 isHovered ? "rgba(160, 32, 240, 1)" : "rgba(160, 32, 240, 0.4)"
               }`,
@@ -197,6 +198,7 @@ function Team() {
               transition: "width 0.1s ease-in-out",
             }}
           >
+            <Box sx={{marginTop:'4.2em'}}>
             {items.map((item, index) => (
               <Box
                 key={index}
@@ -218,7 +220,7 @@ function Team() {
               >
                 <Box
                   onClick={() => handleLinkClick(item.label)}
-                  sx={{ textDecoration: "none", display: "flex", padding: "0" }}
+                  sx={{ textDecoration: "none", display: "flex", padding: "0"}}
                 >
                   <Image
                     src={item.image} // Použijte obrázek z prop item.image
@@ -247,9 +249,10 @@ function Team() {
                 </Box>
               </Box>
             ))}
+            </Box>
           </Box>
-          <Box sx={{ marginLeft: showOnlyIcon ? "5em" : "12em" }}>
-            {activeLink === "Přehled" && <OverviewComponent />}
+          <Box sx={{ marginLeft: showOnlyIcon ? "5em" : "12em", marginTop: "5em",  }}>
+            {activeLink === "Přehled" && <OverviewComponent  />}
             {activeLink === "Tréninky" && <TrainingsComponent />}
             {activeLink === "Kalendář" && <CalendarComponent />}
             {activeLink === "Soupisky" && <RoustersComponent />}

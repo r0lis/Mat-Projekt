@@ -135,12 +135,13 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon }) => {
   return (
     <Box>
       <AppBar
-        position="static"
+        position="fixed"
         sx={{
           backgroundColor: "#A020F0",
           display: "flex",
           justifyContent: "space-between",
           height: "4.2em",
+          
         }}
       >
         <Toolbar>

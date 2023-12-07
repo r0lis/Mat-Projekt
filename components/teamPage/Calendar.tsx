@@ -23,7 +23,7 @@ const CalendarComponent: React.FC = () => {
     
       // Vykreslení kalendáře FullCalendar
       return (
-        <div style={{maxWidth:'900px', height:'400px' , marginTop:'2em', marginLeft:'auto', marginRight:'auto'}}>
+        <div style={{maxWidth:'900px', height: "auto" , marginTop:'2em', marginLeft:'auto', marginRight:'auto'}}>
           <FullCalendar
             plugins={[dayGridPlugin, interactionPlugin]}
             initialView="dayGridMonth"
