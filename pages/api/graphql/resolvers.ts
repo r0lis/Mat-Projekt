@@ -193,6 +193,32 @@ export const resolvers = {
           throw error;
         }
       },
+      checkEmailsInTeam: async (
+        _: any,
+        { teamId, emails }: { teamId: string; emails: string[] },
+        context: Context
+      ) => {
+        try {
+          // Získat team podle teamId
+          const teamQuery = context.db.collection("Team").where("teamId", "==", teamId);
+          const teamSnapshot = await teamQuery.get();
+    
+          if (!teamSnapshot.empty) {
+            const teamData = teamSnapshot.docs[0].data() as Team;
+    
+            // Najít shodné e-maily v poli MembersEmails
+            const duplicateEmails = emails.filter(email => teamData.MembersEmails?.includes(email));
+    
+            // Vrátit e-maily, které již existují v kolekci
+            return duplicateEmails;
+          }
+    
+          return [];
+        } catch (error) {
+          console.error("Chyba při kontrole e-mailů v týmu:", error);
+          throw error;
+        }
+      },
   },
 
   Mutation: {

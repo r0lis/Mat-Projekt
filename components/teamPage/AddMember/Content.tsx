@@ -2,8 +2,8 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import React, { useState } from "react";
 import TextField from "@mui/material/TextField";
-import { Alert, Box, Button, IconButton, Typography } from "@mui/material";
-import { gql, useMutation } from "@apollo/client";
+import { Alert, Box, Button, CircularProgress, IconButton, Typography } from "@mui/material";
+import { gql, useMutation, useQuery } from "@apollo/client";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Link from "next/link";
@@ -26,18 +26,32 @@ mutation UpdateMembers($teamId: String!, $newMembers: [String!]!) {
   }
 }
 `;
+const CHECK_EMAILS_IN_TEAM_QUERY = gql`
+  query CheckEmailsInTeam($teamId: String!, $emails: [String!]!) {
+    checkEmailsInTeam(teamId: $teamId, emails: $emails)
+  }
+`;
+
 
 
 const Content: React.FC = () => {
   const router = useRouter();
   const { id } = router.query;
-  const [emailTeam, ] = useState("");
-  const [error, setError] = useState(null);
   const [emails, setEmails] = useState<string[]>([]);
   const [emailValue, setEmailValue] = useState("");
   const [editIndex, setEditIndex] = useState<number | null>(null);
   const [error2, setError2] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
   const [isCreated, setIsCreated] = useState(false);
+
+  const { data, loading } = useQuery<{ checkEmailsInTeam: string[] }>(CHECK_EMAILS_IN_TEAM_QUERY, {
+    variables: {
+      teamId: id,
+      emails: emails,
+    },
+  });
+
   
 
   // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
@@ -45,8 +59,11 @@ const Content: React.FC = () => {
 
   
   const handleCreateTeam = async () => {
-    try {
-
+     try {
+      if (data && data.checkEmailsInTeam.length > 0) {
+        setError("Následující e-maily již existují v týmu: " + data.checkEmailsInTeam.join(", "));
+        return;
+      }
 
       const response = await updateMembersMutation({
         variables: {
@@ -57,8 +74,6 @@ const Content: React.FC = () => {
 
       console.log("Tým byl úspěšně vytvořen", response);
 
-     
-      console.log(emailTeam);
       setIsCreated(true);
       await axios.post("/api/sendEmail", { emails: emails, teamId:id });
       console.log("E-maily úspěšně odeslány.");
@@ -98,6 +113,17 @@ const Content: React.FC = () => {
     setEmails(updatedEmails);
     setEditIndex(null);
   };
+
+  if (loading) return (
+    <Box>
+    <CircularProgress
+      color="primary"
+      size={50}
+      style={{ position: "absolute", top: "50%", left: "50%" }}
+    />
+    </Box>
+  
+  );
 
   return (
     <Box sx={{ margin: "0 auto", marginTop: 4 }}>
