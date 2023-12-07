@@ -26,13 +26,14 @@ const SettingsComponent: React.FC = () => {
 
   // Function to handle image upload
   const handleImageUpload = async () => {
-    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
     if (selectedImage) {
       try {
         const reader = new FileReader();
         reader.readAsDataURL(selectedImage);
         reader.onloadend = () => {
           const imageBase64 = reader.result as string;
+
+          console.log("Base64 image:", imageBase64);
 
           // Call the GraphQL mutation with the image data
           uploadImage({
@@ -55,7 +56,6 @@ const SettingsComponent: React.FC = () => {
       }
     }
   };
-
 
 
   return (
