@@ -80,6 +80,8 @@ export const typeDefs = gql`
     checkUserMembership(teamId: String!, currentUserEmail: String!): Boolean!
     heartbeat: Boolean
     checkEmailsInTeam(teamId: String!, emails: [String!]!): [String!]!
+    getTeamLogo(teamId: String!): String
+
 
   }
 

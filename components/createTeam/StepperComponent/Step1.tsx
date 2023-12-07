@@ -20,6 +20,7 @@ import InputLabel from "@mui/material/InputLabel";
 import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 
+
 const CREATE_TEAM_MUTATION = gql`
   mutation CreateTeam(
     $Name: String!

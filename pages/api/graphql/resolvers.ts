@@ -219,6 +219,27 @@ export const resolvers = {
           throw error;
         }
       },
+      getTeamLogo: async (
+        _: any,
+        { teamId }: { teamId: string },
+        context: Context
+      ) => {
+        try {
+          if (context.user) {
+            const teamQuery = context.db.collection("Team").where("teamId", "==", teamId);
+            const teamSnapshot = await teamQuery.get();
+  
+            if (!teamSnapshot.empty) {
+              const teamData = teamSnapshot.docs[0].data() as Team;
+              return teamData.Logo;
+            }
+          }
+          return null;
+        } catch (error) {
+          console.error("Error getting team logo:", error);
+          throw error;
+        }
+      },
   },
 
   Mutation: {
