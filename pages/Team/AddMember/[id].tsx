@@ -18,7 +18,6 @@ const NewMeber: React.FC = () => {
   const currentUserEmail = authUtils.getCurrentUser()?.email || ""
   const router = useRouter();
   const { id } = router.query;
-
   const { loading: loadingUser, error: errorUser, data: dataUser } = useQuery(
     CHECK_USER_MEMBERSHIP,
     {
@@ -83,7 +82,7 @@ const NewMeber: React.FC = () => {
   return (
     <div>
       <Navbar />
-      <AddMember/>
+      <AddMember />
     </div>
   )
 }

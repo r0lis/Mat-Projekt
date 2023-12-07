@@ -30,6 +30,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const optionsWithEmail = { ...mailOptions, to: email };
       await transporter.sendMail(optionsWithEmail);
       console.log(`E-mail úspěšně odeslán na ${email}`);
+      console.log(`Registrace: http://localhost:3000/Invite/${teamId}`);
     }
 
     res.status(200).json({ message: 'E-maily úspěšně odeslány.' });

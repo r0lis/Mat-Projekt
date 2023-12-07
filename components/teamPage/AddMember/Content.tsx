@@ -60,7 +60,7 @@ const Content: React.FC = () => {
      
       console.log(emailTeam);
       setIsCreated(true);
-      await axios.post("/api/sendEmail", { emails: emails, id });
+      await axios.post("/api/sendEmail", { emails: emails, teamId:id });
       console.log("E-maily úspěšně odeslány.");
     } catch (error: any) {
       setError(error.message);
