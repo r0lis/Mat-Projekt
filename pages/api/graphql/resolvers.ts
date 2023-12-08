@@ -164,7 +164,8 @@ export const resolvers = {
           for (const teamId of teamIds) {
             const teamQuery = context.db
               .collection("Team")
-              .where("teamId", "==", teamId);
+              .where("teamId", "==", teamId)
+              .where("Finished", "==", true);
             const teamSnapshot = await teamQuery.get();
             if (!teamSnapshot.empty) {
               const teamData = teamSnapshot.docs[0].data() as Team;
