@@ -22,7 +22,15 @@ import {
 import 'firebase/storage';
 import * as admin from 'firebase-admin';
 
-
+const generateRandomString = (length: number) => {
+  let result = '';
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const charactersLength = characters.length;
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+};
 
 
 
@@ -351,7 +359,7 @@ export const resolvers = {
     ) => {
       try {
         const newTeamDoc = context.db.collection("Team").doc();
-        const teamId = newTeamDoc.id;
+        const teamId = generateRandomString(30);
         await addUserToTeam(context,input.AdminEmail, teamId);
 
         const newTeam = {
