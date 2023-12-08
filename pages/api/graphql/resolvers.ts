@@ -22,6 +22,12 @@ import {
 import 'firebase/storage';
 import * as admin from 'firebase-admin';
 
+export type MemberDetails = {
+  Name: string;
+  Surname: string;
+};
+
+
 const generateRandomString = (length: number) => {
   let result = '';
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -248,6 +254,45 @@ export const resolvers = {
           console.error("Error getting team logo:", error);
           throw error;
         }
+      },
+      getTeamMembersDetails: async (
+        _: any,
+        { teamId }: { teamId: string },
+        context: Context
+      ): Promise<MemberDetails[] | null> => {
+        if (context.user) {
+          try {
+            const teamQuery = context.db.collection("Team").where("teamId", "==", teamId);
+            const teamSnapshot = await teamQuery.get();
+  
+            if (!teamSnapshot.empty) {
+              const teamData = teamSnapshot.docs[0].data();
+              const membersEmails = teamData.MembersEmails || [];
+  
+              const membersDetails: MemberDetails[] = [];
+  
+              for (const email of membersEmails) {
+                const userQuery = context.db.collection("User").where("Email", "==", email);
+                const userSnapshot = await userQuery.get();
+  
+                if (!userSnapshot.empty) {
+                  const userData = userSnapshot.docs[0].data() as User;
+                  membersDetails.push({
+                    Name: userData.Name,
+                    Surname: userData.Surname,
+                  });
+                }
+              }
+  
+              return membersDetails;
+            }
+          } catch (error) {
+            console.error("Error getting team members details:", error);
+            throw error;
+          }
+        }
+  
+        return null;
       },
   },
 

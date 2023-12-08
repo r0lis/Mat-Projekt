@@ -63,6 +63,11 @@ export const typeDefs = gql`
     teamId: String!
   }
 
+  type MemberDetails {
+    Name: String!
+    Surname: String!
+  }
+
   type NameAndSurname {
     Name: String
     Surname: String
@@ -81,6 +86,8 @@ export const typeDefs = gql`
     heartbeat: Boolean
     checkEmailsInTeam(teamId: String!, emails: [String!]!): [String!]!
     getTeamLogo(teamId: String!): String
+    getTeamMembersDetails(teamId: String!): [MemberDetails] 
+
 
 
   }

@@ -59,7 +59,7 @@ const CHECK_USER_MEMBERSHIP = gql`
 `;
 
 
-function Team() {
+const Team: React.FC = () => {
   const router = useRouter();
   const { id } = router.query;
   const [showOnlyIcon, setShowOnlyIcon] = useState(true);
@@ -173,7 +173,7 @@ function Team() {
   }
 
   return (
-    <Box >
+    <Box>
       {Boolean(team) && (
         <Box>
           <Nav showOnlyIcon={showOnlyIcon} setShowOnlyIcon={setShowOnlyIcon} />
@@ -189,8 +189,7 @@ function Team() {
               width: showOnlyIcon ? "4.5em" : "11em",
               maxWidth: "20em",
               top: "0",
-              height: "100%",  // Set height to 100%
-    position: "fixed", // Set position to fixed
+              position: "fixed", // Set position to fixed
               borderRight: `0.3em solid ${
                 isHovered ? "rgba(160, 32, 240, 1)" : "rgba(160, 32, 240, 0.4)"
               }`,
@@ -235,7 +234,6 @@ function Team() {
                         fontSize: "1.1em",
                         color: "black",
                         verticalAlign: "center",
-                        marginTop: "5px",
                         marginLeft: "10px",
                         marginRight: "10px",
                         opacity: showOnlyIcon ? 0 : 1,
@@ -251,7 +249,7 @@ function Team() {
             ))}
             </Box>
           </Box>
-          <Box sx={{ marginLeft: showOnlyIcon ? "5em" : "12em", marginTop: "5em",  }}>
+          <Box sx={{ marginLeft: showOnlyIcon ? "5em" : "12em", marginTop: "5em",}}>
             {activeLink === "Přehled" && <OverviewComponent  />}
             {activeLink === "Tréninky" && <TrainingsComponent />}
             {activeLink === "Kalendář" && <CalendarComponent />}
