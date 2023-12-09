@@ -609,6 +609,7 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon }) => {
                         display: "flex",
                         flexDirection: "column",
                         justifyContent: "center",
+                        buttonStyle2
                       }}
                     >
                       <Link href="/LoginPage">
@@ -636,6 +637,7 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon }) => {
                         flexDirection: "column",
                         marginBottom: "1em",
                         justifyContent: "center",
+                        buttonStyle2
                       }}
                     >
                       <Link href="/UserRegistration">

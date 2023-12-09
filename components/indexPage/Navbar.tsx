@@ -446,6 +446,7 @@ const Navbar: React.FC = () => {
                     <Box sx={{ borderBottom: "7px solid #b71dde " }}></Box>
 
                     <Box
+                    className="buttonStyle2"
                       sx={{
                         alignItems: "center",
                         textAlign: "center",
@@ -472,6 +473,7 @@ const Navbar: React.FC = () => {
                       </Link>
                     </Box>
                     <Box
+                    className="buttonStyle2"
                       sx={{
                         alignItems: "center",
                         textAlign: "center",
@@ -506,7 +508,7 @@ const Navbar: React.FC = () => {
 
           <Box sx={{ marginRight: "5%", marginLeft: "3%", marginTop: "0.5em" }}>
             <Link style={{textDecoration: "none"}} href="/CreateTeam">
-              <Button className="CreateTeamButton" sx={{backgroundColor: "#b71dde", borderRadius: "15px"}} variant="contained">
+              <Button className="CreateTeamButton" sx={{backgroundColor: "#b71dde", borderRadius: "15px", boxShadow:"0 0 10px rgba(51, 0, 45, 0.8)"}} variant="contained">
                 <Typography
                   className="CreateTeamButtonText"
                   sx={{
