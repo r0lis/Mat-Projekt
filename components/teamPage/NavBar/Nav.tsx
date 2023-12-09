@@ -158,15 +158,15 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon }) => {
             sx={{
               display: "flex",
               alignItems: "center",
-              marginLeft: { xs: "auto", md: "20%" },
+              marginLeft:"8%"
             }}
           >
             <img
               src={LogoTeam.src}
               alt="Team Logo"
               style={{
-                width: "3.5em",
-                height: "3.5em",
+                width: "3em",
+                height: "3em",
                 marginRight: "30px",
                 marginTop: "2px",
               }}
@@ -176,7 +176,7 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon }) => {
                 sx={{
                   color: "white",
                   fontWeight: "bold",
-                  fontSize: "1.7vw",
+                  fontSize: "1.6em",
                   marginLeft: "%",
                   marginTop: "3px",
                 }}

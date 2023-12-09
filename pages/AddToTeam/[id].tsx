@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import React, { useEffect, useState } from "react";
 import { authUtils } from "../../firebase/auth.utils";
-import { useMutation, gql } from "@apollo/client";
+import { useMutation, gql, useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
 import {
   Box,
@@ -10,9 +10,17 @@ import {
   Typography,
   Alert,
   LinearProgress,
+  Link,
+  CircularProgress,
 } from "@mui/material";
 import photo from "../../public/assets/rosterbot.png";
 import pictureBackground from "../../public/assets/uvodni.jpg";
+
+const CHECK_USER_MEMBERSHIP = gql`
+  query CheckUserMembershipInvite($teamId: String!, $currentUserEmail: String!) {
+    checkUserMembershipInvite(teamId: $teamId, currentUserEmail: $currentUserEmail)
+  }
+`;
 
 const LOGIN_MUTATION = gql`
   mutation LoginMutation($email: String!, $id: String!) {
@@ -27,9 +35,17 @@ const AddToTeam: React.FC = () => {
   const [, setIsLoggedIn] = useState(false);
   const [loginSuccess, setLoginSuccessSuccess] = useState(false);
   const router = useRouter();
-  const { id } = router.query;
+  const { id, email: initialEmail } = router.query;
   const [loginMutation] = useMutation(LOGIN_MUTATION);
   const [progress, setProgress] = useState(0);
+
+
+  useEffect(() => {
+    // Předvyplnění e-mailu, pokud je k dispozici v URL
+    if (initialEmail) {
+      setEmail(initialEmail as string);
+    }
+  }, [initialEmail]);
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
@@ -59,6 +75,45 @@ const AddToTeam: React.FC = () => {
       }
     };
   }, [loginSuccess, id, router]);
+
+
+  const {
+    loading: loadingUser,
+    error: errorUser,
+    data: dataUser,
+  } = useQuery(CHECK_USER_MEMBERSHIP, {
+    variables: { teamId: router.query.id, currentUserEmail: initialEmail },
+  });
+
+  if (loadingUser)
+  return (
+    <CircularProgress
+      color="primary"
+      size={50}
+      style={{ position: "absolute", top: "50%", left: "50%" }}
+    />
+  );
+if (errorUser) {
+  console.error("Error checking user membership:", errorUser);
+  return <p>Error checking user membership</p>;
+}
+
+const isUserMember = dataUser.checkUserMembershipInvite;
+if (isUserMember == false) {
+  return (
+    <Box>
+      <Alert severity="error">
+        Tato akce neni dostupná
+        <br />
+        <Link href="/">
+          <Button sx={{ backgroundColor: "red" }}>
+            <Typography sx={{ color: "#fff" }}>Zpět</Typography>
+          </Button>
+        </Link>
+      </Alert>
+    </Box>
+  );
+}
 
   const handleLogin = async () => {
     try {
@@ -211,6 +266,8 @@ const AddToTeam: React.FC = () => {
                       onChange={(e) => setEmail(e.target.value)}
                       fullWidth
                       margin="normal"
+                      disabled={!!initialEmail}
+
                     />
                     <TextField
                       type="password"

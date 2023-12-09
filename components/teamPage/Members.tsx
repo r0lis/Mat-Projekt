@@ -39,8 +39,10 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
   
   return (
     <Box>
+      <Box sx={{marginLeft:'1em'}}>
+      <Typography sx={{fontFamily:'Roboto', fontWeight:'500'}} variant='h4' >Členové týmu</Typography>
+      </Box>
       
-      <Typography >members</Typography>
 
       <TableContainer component={Paper}>
         <Table>

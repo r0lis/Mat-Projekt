@@ -51,7 +51,7 @@
     font-weight: bold;
     text-align: center;
     font-size: 1.8vw;
-    background: linear-gradient(to bottom, #B71DDE 20%, #EBEBEB 20%);
+    background: linear-gradient(to bottom, #B71DDE 20%, white 20%);
   }
   
   /* howToUseDiv3 */
@@ -66,7 +66,7 @@
     font-weight: bold;
     text-align: center;
     font-size: 1.8vw;
-    background: linear-gradient(to bottom, #B71DDE 20%, #EBEBEB 20%);
+    background: linear-gradient(to bottom, #B71DDE 20%, white 20%);
   }
   
   /* leftBorderDiv */

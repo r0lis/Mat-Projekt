@@ -30,7 +30,6 @@ import Nav from "../../components/teamPage/NavBar/Nav";
 import { authUtils } from "@/firebase/auth.utils";
 import Link from "next/link";
 
-
 const items = [
   { label: "Přehled", image: Overview },
   { label: "Tréninky", image: Trainings },
@@ -58,7 +57,6 @@ const CHECK_USER_MEMBERSHIP = gql`
   }
 `;
 
-
 const Team: React.FC = () => {
   const router = useRouter();
   const { id } = router.query;
@@ -66,9 +64,7 @@ const Team: React.FC = () => {
   const [isHovered, setIsHovered] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [activeLink, setActiveLink] = useState("Přehled");
-  const currentUserEmail = authUtils.getCurrentUser()?.email || ""
-
-
+  const currentUserEmail = authUtils.getCurrentUser()?.email || "";
 
   useEffect(() => {
     const handleResize = () => {
@@ -93,26 +89,26 @@ const Team: React.FC = () => {
     variables: { teamId: id },
   });
 
-  const { loading: loadingUser, error: errorUser, data: dataUser } = useQuery(
-    CHECK_USER_MEMBERSHIP,
-    {
-      variables: { teamId: id, currentUserEmail },
-    }
-  );
+  const {
+    loading: loadingUser,
+    error: errorUser,
+    data: dataUser,
+  } = useQuery(CHECK_USER_MEMBERSHIP, {
+    variables: { teamId: id, currentUserEmail },
+  });
 
-  if (loadingUser) return (
-    <CircularProgress
-      color="primary"
-      size={50}
-      style={{ position: "absolute", top: "50%", left: "50%" }}
-    />
-  );
+  if (loadingUser)
+    return (
+      <CircularProgress
+        color="primary"
+        size={50}
+        style={{ position: "absolute", top: "50%", left: "50%" }}
+      />
+    );
   if (errorUser) {
-    
     console.error("Error checking user membership:", errorUser);
     return <p>Error checking user membership</p>;
   }
-  
 
   if (loading)
     return (
@@ -138,8 +134,6 @@ const Team: React.FC = () => {
 
   const isUserMember = dataUser.checkUserMembership;
 
-  
-
   if (!currentUserEmail) {
     return (
       <Box>
@@ -147,10 +141,9 @@ const Team: React.FC = () => {
           You must be logged in to perform this action.
           <br />
           <Link href="/LoginPage">
-          <Button sx={{backgroundColor:'red'}}>
-            <Typography sx={{ color: '#fff' }}>Login</Typography>
+            <Button sx={{ backgroundColor: "red" }}>
+              <Typography sx={{ color: "#fff" }}>Login</Typography>
             </Button>
-            
           </Link>
         </Alert>
       </Box>
@@ -163,8 +156,8 @@ const Team: React.FC = () => {
           Nejste členem tohoto týmu.
           <br />
           <Link href="/">
-          <Button sx={{backgroundColor:'red'}}>
-            <Typography sx={{ color: '#fff' }}>Zpět</Typography>
+            <Button sx={{ backgroundColor: "red" }}>
+              <Typography sx={{ color: "#fff" }}>Zpět</Typography>
             </Button>
           </Link>
         </Alert>
@@ -173,11 +166,11 @@ const Team: React.FC = () => {
   }
 
   return (
-    <Box>
+    <Box sx={{ display: "block", width:'auto', height:'auto' }}>
       {Boolean(team) && (
         <Box>
           <Nav showOnlyIcon={showOnlyIcon} setShowOnlyIcon={setShowOnlyIcon} />
-
+  
           <Box
             className="sidebarContainer"
             onMouseEnter={() => handleHover(true)}
@@ -187,7 +180,7 @@ const Team: React.FC = () => {
               alignItems: "center",
               backgroundColor: "#F0F2F5",
               width: showOnlyIcon ? "4.5em" : "11em",
-              maxWidth: "20em",
+              height: window.innerHeight < 570 ? "100%" : "100%",
               top: "0",
               position: "fixed", // Set position to fixed
               borderRight: `0.3em solid ${
@@ -197,60 +190,75 @@ const Team: React.FC = () => {
               transition: "width 0.1s ease-in-out",
             }}
           >
-            <Box sx={{marginTop:'4.2em'}}>
-            {items.map((item, index) => (
-              <Box
-                key={index}
-                sx={{
-                  padding: "10px",
-                  left: "0px",
-                  display: "flex",
-                  alignItems: "center",
-                  verticalAlign: "center",
-                  backgroundColor:
-                    activeLink === item.label ? "white" : "transparent",
-                  borderRight:
-                    activeLink === item.label
-                      ? "0.3em solid rgba(160, 32, 240, 1)"
-                      : "", // Zvýraznění aktivního odkazu
-                  marginRight: activeLink === item.label ? "-0.3em" : "0px",
-                  // Zvýraznění aktivního odkazu
-                }}
-              >
+            <Box sx={{ marginTop: "4.2em" }}>
+              {items.map((item, index) => (
                 <Box
-                  onClick={() => handleLinkClick(item.label)}
-                  sx={{ textDecoration: "none", display: "flex", padding: "0"}}
+                  key={index}
+                  sx={{
+                    padding: "10px",
+                    left: "0px",
+                    display: "flex",
+                    alignItems: "center",
+                    verticalAlign: "center",
+                    backgroundColor:
+                      activeLink === item.label ? "white" : "transparent",
+                    borderRight:
+                      activeLink === item.label
+                        ? "0.3em solid rgba(160, 32, 240, 1)"
+                        : "", // Zvýraznění aktivního odkazu
+                    marginRight: activeLink === item.label ? "-0.3em" : "0px",
+                    // Zvýraznění aktivního odkazu
+                  }}
                 >
-                  <Image
-                    src={item.image} // Použijte obrázek z prop item.image
-                    alt={item.label}
-                    width={30}
-                    height={30}
-                    style={{ marginRight: "10px", marginLeft: "10px" }}
-                  />
-                  {showOnlyIcon ? null : (
-                    <span
-                      style={{
-                        fontSize: "1.1em",
-                        color: "black",
-                        verticalAlign: "center",
-                        marginLeft: "10px",
-                        marginRight: "10px",
-                        opacity: showOnlyIcon ? 0 : 1,
-                        transition: "opacity 0.1s ease",
-                        cursor: "pointer",
-                      }}
-                    >
-                      {item.label}
-                    </span>
-                  )}
+                  <Box
+                    onClick={() => handleLinkClick(item.label)}
+                    sx={{
+                      textDecoration: "none",
+                      display: "flex",
+                      padding: "0",
+                      width: "100%",
+
+                    }}
+
+                  >
+                    <Image
+                      src={item.image} // Použijte obrázek z prop item.image
+                      alt={item.label}
+                      width={30}
+                      height={30}
+                      style={{ marginRight: "10px", marginLeft: "10px" }}
+                    />
+                    {showOnlyIcon ? null : (
+                      <span
+                        style={{
+                          fontSize: "1.1em",
+                          color: "black",
+                          verticalAlign: "center",
+                          marginTop: "5px",
+                          marginLeft: "10px",
+                          marginRight: "10px",
+                          opacity: showOnlyIcon ? 0 : 1,
+                          transition: "opacity 0.1s ease",
+                          cursor: "pointer",
+                        }}
+                      >
+                        {item.label}
+                      </span>
+                    )}
+                  </Box>
                 </Box>
-              </Box>
-            ))}
+              ))}
             </Box>
           </Box>
-          <Box sx={{ marginLeft: showOnlyIcon ? "5em" : "12em", marginTop: "5em",}}>
-            {activeLink === "Přehled" && <OverviewComponent  />}
+          <Box
+            sx={{
+              marginLeft: showOnlyIcon ? "5em" : "12em",
+              marginTop: "5em",
+              height: "auto",
+              
+            }}
+          >
+            {activeLink === "Přehled" && <OverviewComponent />}
             {activeLink === "Tréninky" && <TrainingsComponent />}
             {activeLink === "Kalendář" && <CalendarComponent />}
             {activeLink === "Soupisky" && <RoustersComponent />}
@@ -260,13 +268,12 @@ const Team: React.FC = () => {
             {activeLink === "Tým" && <TeamComponent />}
             {activeLink === "Členové" && <MembersComponent id={id as string} />}
             {activeLink === "Správa" && <SettingsComponent />}
-           
-
+            
           </Box>
         </Box>
       )}
     </Box>
   );
-}
+};
 
 export default Team;

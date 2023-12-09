@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
+import { Box, Typography } from '@mui/material';
 
 const emails = ['username@gmail.com', 'user02@gmail.com']
 
@@ -23,7 +24,12 @@ const CalendarComponent: React.FC = () => {
     
       // Vykreslení kalendáře FullCalendar
       return (
-        <div style={{maxWidth:'900px', height: "auto" , marginTop:'2em', marginLeft:'auto', marginRight:'auto'}}>
+        <Box sx={{marginBottom:'5em'}}>
+        <Box sx={{marginLeft:'1em'}}>
+        <Typography variant='h4'>Kalendář</Typography>
+        </Box>
+          
+        <Box sx={{maxWidth:'1000px', height: "700px" , marginTop:'2em', marginLeft:'auto', marginRight:'auto', paddingBottom:'5em', display:'block'}}>
           <FullCalendar
             plugins={[dayGridPlugin, interactionPlugin]}
             initialView="dayGridMonth"
@@ -39,7 +45,11 @@ const CalendarComponent: React.FC = () => {
             select={(info: any) => console.log('Selected:', info)}
             eventAdd={handleEventAdd}
           />
-        </div>
+        </Box>
+        <Box sx={{marginLeft:'1em'}}>
+        
+        </Box>
+        </Box>
       );
     };
 

@@ -13,24 +13,25 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: 'appteammanager@gmail.com', // Nahraďte svou e-mailovou adresou
-      pass: 'igxh nnhl rwvy alzf', // Nahraďte heslem své e-mailové adresy
-
+      user: 'appteammanager@gmail.com',
+      pass: 'igxh nnhl rwvy alzf',
     },
   });
 
-  const mailOptions = {
-    from: 'appteammanager@gmail.com', // Nahraďte svou e-mailovou adresou
-    subject: 'Pozvánka na registraci',
-    text: `Registrace: http://localhost:3000/Invite/${teamId}`, // Nahraďte URL své aplikace
-  };
-
   try {
     for (const email of emails) {
-      const optionsWithEmail = { ...mailOptions, to: email };
-      await transporter.sendMail(optionsWithEmail);
+      const token = generateUniqueToken();
+      const registrationLink = `http://localhost:3000/Invite/${teamId}?email=${encodeURIComponent(email)}&token=${token}`;
+      const mailOptions = {
+        from: 'appteammanager@gmail.com',
+        to: email,
+        subject: 'Pozvánka na registraci',
+        html: `Registrace: <a href="${registrationLink}">${registrationLink}</a>`,
+      };
+
+      await transporter.sendMail(mailOptions);
       console.log(`E-mail úspěšně odeslán na ${email}`);
-      console.log(`Registrace: http://localhost:3000/Invite/${teamId}`);
+      console.log(`Registrace: ${registrationLink}`);
     }
 
     res.status(200).json({ message: 'E-maily úspěšně odeslány.' });
@@ -38,4 +39,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     console.error('Chyba při odesílání e-mailů:', error);
     res.status(500).json({ error: 'Chyba při odesílání e-mailů.' });
   }
+}
+function generateUniqueToken() {
+  const tokenLength = 16;
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let token = '';
+
+  for (let i = 0; i < tokenLength; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    token += characters[randomIndex];
+  }
+
+  return token;
 }
