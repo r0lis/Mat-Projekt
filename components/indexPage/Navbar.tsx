@@ -505,8 +505,8 @@ const Navbar: React.FC = () => {
           </div>
 
           <Box sx={{ marginRight: "5%", marginLeft: "3%", marginTop: "0.5em" }}>
-            <Link href="/CreateTeam">
-              <Button className="CreateTeamButton" variant="contained">
+            <Link style={{textDecoration: "none"}} href="/CreateTeam">
+              <Button className="CreateTeamButton" sx={{backgroundColor: "#b71dde", borderRadius: "15px"}} variant="contained">
                 <Typography
                   className="CreateTeamButtonText"
                   sx={{
