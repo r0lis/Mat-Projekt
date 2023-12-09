@@ -6,7 +6,6 @@
     justify-content: space-between;
   }
   
-  /* buttonStyle */
   .buttonStyle {
     background-color: #FFE0FE;
     width: 11em;
@@ -17,7 +16,6 @@
     background-color: #b71dde;
   }
   
-  /* buttonStyle2 */
   .buttonStyle2 {
     background-color: #FFE0FE;
     margin-bottom: 1em;

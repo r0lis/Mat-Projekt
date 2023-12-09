@@ -15,19 +15,13 @@ import '../styles/indexPage/NavBar.css'
 import '../styles/indexPage/ImageCarousel.css'
 import '../styles/indexPage/PreFace.css'
 
+
 const client = getApolloClient({ forceNew: false });
 
 export default function App({ Component, pageProps }: AppProps) {
 
   const theme = createTheme({
-    typography: {
-      fontFamily: 'Alumni Sans Collegiate One, sans-serif',
-    },
-    palette: {
-      background: {
-        default: "red"
-      }
-    },
+    
   
   });
   return (
