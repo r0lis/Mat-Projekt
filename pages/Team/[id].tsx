@@ -166,11 +166,11 @@ const Team: React.FC = () => {
   }
 
   return (
-    <Box sx={{ display: "block", width:"100%", height:"100%",}}>
+    <Box sx={{ display: "block", width: "100%", height: "100%" }}>
       {Boolean(team) && (
         <Box>
           <Nav showOnlyIcon={showOnlyIcon} setShowOnlyIcon={setShowOnlyIcon} />
-  
+
           <Box
             className="sidebarContainer"
             onMouseEnter={() => handleHover(true)}
@@ -217,9 +217,7 @@ const Team: React.FC = () => {
                       display: "flex",
                       padding: "0",
                       width: "100%",
-
                     }}
-
                   >
                     <Image
                       src={item.image} // Použijte obrázek z prop item.image
@@ -255,7 +253,6 @@ const Team: React.FC = () => {
               marginLeft: showOnlyIcon ? "5em" : "12em",
               marginTop: "5em",
               height: "auto",
-              
             }}
           >
             {activeLink === "Přehled" && <OverviewComponent />}
@@ -268,7 +265,6 @@ const Team: React.FC = () => {
             {activeLink === "Tým" && <TeamComponent />}
             {activeLink === "Členové" && <MembersComponent id={id as string} />}
             {activeLink === "Správa" && <SettingsComponent />}
-            
           </Box>
         </Box>
       )}
