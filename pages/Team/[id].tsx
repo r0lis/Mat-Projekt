@@ -166,7 +166,7 @@ const Team: React.FC = () => {
   }
 
   return (
-    <Box sx={{ display: "block", width:'auto', height:'auto' }}>
+    <Box sx={{ display: "block", width:"100%", height:"100%",}}>
       {Boolean(team) && (
         <Box>
           <Nav showOnlyIcon={showOnlyIcon} setShowOnlyIcon={setShowOnlyIcon} />
