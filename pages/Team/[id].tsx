@@ -32,12 +32,12 @@ import Link from "next/link";
 
 const items = [
   { label: "Přehled", image: Overview },
-  { label: "Tréninky", image: Trainings },
   { label: "Kalendář", image: Calendar },
+  { label: "Události", image: Events },
+  { label: "Tréninky", image: Trainings },
   { label: "Zápasy", image: Nominations },
   { label: "Soupisky", image: Rousters },
   { label: "Platby", image: Pay },
-  { label: "Události", image: Events },
   { label: "Tým", image: TeamIcon },
   { label: "Členové", image: Members },
   { label: "Správa", image: Settings },
@@ -183,7 +183,7 @@ const Team: React.FC = () => {
               height: window.innerHeight < 570 ? "100%" : "100%",
               top: "0",
               position: "fixed", // Set position to fixed
-              borderRight: `0.3em solid ${
+              borderRight: `0.2em solid ${
                 isHovered ? "rgba(160, 32, 240, 1)" : "rgba(160, 32, 240, 0.4)"
               }`,
               padding: "0",
@@ -204,9 +204,9 @@ const Team: React.FC = () => {
                       activeLink === item.label ? "white" : "transparent",
                     borderRight:
                       activeLink === item.label
-                        ? "0.3em solid rgba(160, 32, 240, 1)"
+                        ? "0.2em solid rgba(160, 32, 240, 1)"
                         : "", // Zvýraznění aktivního odkazu
-                    marginRight: activeLink === item.label ? "-0.3em" : "0px",
+                    marginRight: activeLink === item.label ? "-0.2em" : "0px",
                     // Zvýraznění aktivního odkazu
                   }}
                 >

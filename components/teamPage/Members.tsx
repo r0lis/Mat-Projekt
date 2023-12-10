@@ -12,6 +12,7 @@ import {
   CircularProgress,
   Typography,
   Box,
+  Alert,
 } from "@mui/material";
 import React from "react";
 import Link from "next/link";
@@ -31,11 +32,11 @@ const GET_TEAM_MEMBERS_DETAILS = gql`
 interface Member {
   Name: string;
   Surname: string;
-  Role: string; // Assuming Role is of type string, adjust if necessary
+  Role: string;
 }
 
 type MembersProps = {
-  id: string; // Assuming id is of type string
+  id: string;
 };
 
 const MembersComponent: React.FC<MembersProps> = ({ id }) => {
@@ -59,41 +60,115 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
 
   return (
     <Box>
-      <Box sx={{ marginLeft: "1em" }}>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          marginLeft: "5%",
+          marginRight: "5%",
+        }}
+      >
         <Typography
           sx={{ fontFamily: "Roboto", fontWeight: "500" }}
           variant="h4"
         >
           Členové týmu
         </Typography>
+        <Link href={`/Team/AddMember/${id}/`}>
+          <Button variant="contained">Přidat člena</Button>
+        </Link>
       </Box>
 
-      <TableContainer component={Paper}>
+      <TableContainer
+        sx={{
+          width: "90%",
+          marginLeft: "auto",
+          marginRight: "auto",
+          marginTop: "2em",
+          marginBottom: "3em",
+        }}
+        component={Paper}
+      >
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Jméno</TableCell>
-              <TableCell>Přijmení</TableCell>
-              <TableCell>Práva</TableCell>
+              <TableCell>
+                <Typography sx={{ fontFamily: "Roboto", fontWeight: "800" }}>
+                  Jméno
+                </Typography>
+              </TableCell>
+              <TableCell>
+                <Typography sx={{ fontFamily: "Roboto", fontWeight: "800" }}>
+                  Datum narození
+                </Typography>
+              </TableCell>
+              <TableCell>
+                <Typography sx={{ fontFamily: "Roboto", fontWeight: "800" }}>
+                  Práva
+                </Typography>
+              </TableCell>
+              <TableCell>
+                <Typography sx={{ fontFamily: "Roboto", fontWeight: "800" }}>
+                  Zdravotní prohlídka
+                </Typography>
+              </TableCell>
+              <TableCell>
+                <Typography sx={{ fontFamily: "Roboto", fontWeight: "800" }}>
+                  Hlavní tým
+                </Typography>
+              </TableCell>
+              <TableCell>
+                <Typography sx={{ fontFamily: "Roboto", fontWeight: "800" }}>
+                  Štítky
+                </Typography>
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {members.map(
               (member: Member, index: React.Key | null | undefined) => (
                 <TableRow key={index}>
-                  <TableCell>{member.Name}</TableCell>
-                  <TableCell>{member.Surname}</TableCell>
-                  <TableCell>{member.Role}</TableCell>
+                  <TableCell>
+                    {member.Surname} {member.Name}
+                  </TableCell>
+                  <TableCell>
+                    <Typography sx={{ fontFamily: "Roboto" }}>
+                      19.07.2005
+                    </Typography>
+                  </TableCell>
+                  <TableCell>
+                    {member.Role === "1" && "Management"}
+                    {member.Role === "2" && "Trenér"}
+                    {member.Role === "3" && "Hráč"}
+                    {(member.Role === "0" ||
+                      member.Role === "No Role Assigned") && (
+                      <Box sx={{ maxWidth: "15em" }}>
+                        <Alert sx={{ maxHeight: "3em" }} severity="warning">
+                          Není zvoleno
+                        </Alert>
+                      </Box>
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    <Typography sx={{ fontFamily: "Roboto" }}>
+                      do 24.11.2023
+                    </Typography>
+                  </TableCell>
+                  <TableCell>Muži A</TableCell>
+                  <TableCell>
+                    <Box sx={{border:"1px solid black", textAlign:"center", padding:'3px', borderRadius:"8px"}}>
+                      <Typography sx={{ fontFamily: "Roboto",  fontWeight:"500" }}>
+                        útočník
+                      </Typography>
+                    </Box>
+                  </TableCell>
                 </TableRow>
               )
             )}
           </TableBody>
         </Table>
       </TableContainer>
-
-      <Link href={`/Team/AddMember/${id}/`}>
-        <Button variant="contained">Přidat nového hráče</Button>
-      </Link>
     </Box>
   );
 };
