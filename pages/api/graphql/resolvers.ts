@@ -25,6 +25,7 @@ import * as admin from 'firebase-admin';
 export type MemberDetails = {
   Name: string;
   Surname: string;
+  Role: string;
 };
 
 
@@ -287,26 +288,31 @@ export const resolvers = {
           try {
             const teamQuery = context.db.collection("Team").where("teamId", "==", teamId);
             const teamSnapshot = await teamQuery.get();
-  
+      
             if (!teamSnapshot.empty) {
               const teamData = teamSnapshot.docs[0].data();
               const membersEmails = teamData.MembersEmails || [];
-  
+              const membersRoles = teamData.Members || [];
+      
               const membersDetails: MemberDetails[] = [];
-  
-              for (const email of membersEmails) {
+      
+              for (let i = 0; i < membersEmails.length; i++) {
+                const email = membersEmails[i];
+                const role = membersRoles[i]?.role || 'No Role Assigned'; // Default role if not present
+      
                 const userQuery = context.db.collection("User").where("Email", "==", email);
                 const userSnapshot = await userQuery.get();
-  
+      
                 if (!userSnapshot.empty) {
                   const userData = userSnapshot.docs[0].data() as User;
                   membersDetails.push({
                     Name: userData.Name,
                     Surname: userData.Surname,
+                    Role: role, // Add role to the returned details
                   });
                 }
               }
-  
+      
               return membersDetails;
             }
           } catch (error) {
@@ -314,9 +320,10 @@ export const resolvers = {
             throw error;
           }
         }
-  
+      
         return null;
       },
+      
   },
 
   Mutation: {
