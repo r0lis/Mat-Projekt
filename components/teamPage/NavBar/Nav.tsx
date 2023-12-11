@@ -150,7 +150,7 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon }) => {
             aria-label="open sidebar"
             onClick={toggleContentVisibility}
           >
-            <Box sx={{ marginTop: "10px" }}>
+            <Box sx={{ marginTop: "10px"}}>
               <MenuIcon sx={{ color: "white" }} />
             </Box>
           </IconButton>

@@ -179,7 +179,7 @@ const Team: React.FC = () => {
               display: "block",
               alignItems: "center",
               backgroundColor: "#F0F2F5",
-              width: showOnlyIcon ? "4.5em" : "11em",
+              width: showOnlyIcon ? "3.5em" : "11em",
               height: window.innerHeight < 570 ? "100%" : "100%",
               top: "0",
               position: "fixed", // Set position to fixed
@@ -195,7 +195,10 @@ const Team: React.FC = () => {
                 <Box
                   key={index}
                   sx={{
-                    padding: "10px",
+                    
+                    padding: "5px",
+                    paddingBottom:"10px",
+                    paddingTop:"10px",
                     left: "0px",
                     display: "flex",
                     alignItems: "center",
@@ -222,8 +225,8 @@ const Team: React.FC = () => {
                     <Image
                       src={item.image} // Použijte obrázek z prop item.image
                       alt={item.label}
-                      width={30}
-                      height={30}
+                      width={28}
+                      height={28}
                       style={{ marginRight: "10px", marginLeft: "10px" }}
                     />
                     {showOnlyIcon ? null : (
