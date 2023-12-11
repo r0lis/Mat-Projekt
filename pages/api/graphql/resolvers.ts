@@ -26,6 +26,7 @@ export type MemberDetails = {
   Name: string;
   Surname: string;
   Role: string;
+  Email: string;
 };
 
 
@@ -309,6 +310,7 @@ export const resolvers = {
                     Name: userData.Name,
                     Surname: userData.Surname,
                     Role: role, // Add role to the returned details
+                    Email: userData.Email,
                   });
                 }
               }

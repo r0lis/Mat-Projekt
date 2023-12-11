@@ -14,12 +14,15 @@ import {
   Typography,
   Box,
   Alert,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import React, { useState } from "react";
 import Link from "next/link";
 import { useQuery } from "@apollo/client";
 import { gql } from "@apollo/client";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
+import { SelectChangeEvent } from "@mui/material";
 
 const GET_TEAM_MEMBERS_DETAILS = gql`
   query GetTeamMembersDetails($teamId: String!) {
@@ -27,6 +30,7 @@ const GET_TEAM_MEMBERS_DETAILS = gql`
       Name
       Surname
       Role
+      Email
     }
   }
 `;
@@ -35,6 +39,7 @@ interface Member {
   Name: string;
   Surname: string;
   Role: string;
+  Email: string;
 }
 
 type MembersProps = {
@@ -48,14 +53,14 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
     Name: string;
     Surname: string;
     Role: string;
+    Email: string;
   } | null>(null);
+  const [selectedRole, setSelectedRole] = useState("");
+  console.log(selectedRole);
 
-  const handleRowClick = (member: {
-    Name: string;
-    Surname: string;
-    Role: string;
-  }) => {
+  const handleRowClick = (member: Member) => {
     setSelectedMember(member);
+    setSelectedRole(member.Role);
     setModalOpen(true);
   };
 
@@ -71,6 +76,10 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
   const handleSaveClick = () => {
     // Handle save logic here
     setEditMode(false);
+  };
+
+  const handleRoleChange = (event: SelectChangeEvent<string>) => {
+    setSelectedRole(event.target.value);
   };
 
   const { loading, error, data } = useQuery<{
@@ -242,27 +251,62 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
             width: 400,
           }}
         >
+          <Box sx={{padding:"0em 2em 0em 2em"}}>
           <Typography id="modal-title" variant="h6" component="h2">
             {selectedMember?.Name} {selectedMember?.Surname}
           </Typography>
           <Typography id="modal-description" sx={{ mt: 2 }}>
-            {selectedMember?.Role === "1" && "Management"}
-            {selectedMember?.Role === "2" && "Trenér"}
-            {selectedMember?.Role === "3" && "Hráč"}
-            {(selectedMember?.Role === "0" ||
-              selectedMember?.Role === "No Role Assigned") && (
-              <Box sx={{ maxWidth: "15em" }}>
-                <Alert sx={{ maxHeight: "3em" }} severity="warning">
-                  Není zvoleno
-                </Alert>
-              </Box>
-            )}
+            {selectedMember?.Email}
           </Typography>
+          </Box>
           
+          <Box sx={{padding:"0em 2em 0em 2em"}}>
+            {editMode ? (
+              <Box sx={{}}>
+              <React.Fragment >
+                <Typography id="modal-description" sx={{ marginTop:"1em",fontFamily:"Roboto", fontSize:"1.2em"}}>
+                  Práva
+                </Typography>
+                <Select sx={{width:"15em", margin:"0.5em 2em 0.5em 0em"}} value={selectedRole || ""} onChange={handleRoleChange}>
+                  <MenuItem value="No Role Assigned" disabled>
+                    Vyberte!
+                  </MenuItem>
+                  <MenuItem value="1">Management</MenuItem>
+                  <MenuItem value="2">Trenér</MenuItem>
+                  <MenuItem value="3">Hráč</MenuItem>
+                </Select>
+                
+                {selectedRole && (
+                  <Box sx={{ maxWidth: "15em", marginBottom:"1em" }}>
+                    <Alert sx={{ maxHeight: "3em" }} severity="warning">
+                      Není zvoleno
+                    </Alert>
+                  </Box>
+                )}
+              </React.Fragment>
+              </Box>
+            ) : (
+              <Typography id="modal-description" sx={{ mt: 2 }}>
+                {selectedMember?.Role === "1" && "Management"}
+                {selectedMember?.Role === "2" && "Trenér"}
+                {selectedMember?.Role === "3" && "Hráč"}
+                {(selectedMember?.Role === "0" ||
+                  selectedMember?.Role === "No Role Assigned") && (
+                  <Box sx={{ maxWidth: "15em" }}>
+                    <Alert sx={{ maxHeight: "3em" }} severity="warning">
+                      Není zvoleno
+                    </Alert>
+                  </Box>
+                )}
+              </Typography>
+            )}
+          </Box>
+
           {editMode ? (
-            <Button onClick={handleSaveClick}>Uložit</Button>
+            <Box sx={{paddingLeft:"2em", }}><Button sx={{backgroundColor:"lightgray", color:"black", padding:"1em"}} onClick={handleSaveClick}>Uložit</Button></Box>
+            
           ) : (
-            <Button onClick={handleEditClick}>Upravit</Button>
+            <Box sx={{paddingLeft:"2em"}}><Button onClick={handleEditClick}>Upravit</Button></Box>
           )}
         </Box>
       </Modal>

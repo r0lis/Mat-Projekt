@@ -67,6 +67,7 @@ export const typeDefs = gql`
     Name: String!
     Surname: String!
     Role: String!
+    Email: String!
   }
 
   type NameAndSurname {
