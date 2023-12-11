@@ -253,7 +253,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
             borderRadius: "8px",
             width: 400,
             backgroundImage:
-              "linear-gradient(to bottom, #808080 25%, #ffffff 20%)", // Šedý gradient po prvních 20% a poté bílá
+              "linear-gradient(to bottom, #808080 20%, #ffffff 20%)", // Šedý gradient po prvních 20% a poté bílá
           }}
         >
           <Box
@@ -312,7 +312,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                   </Typography>
                   <Select
                     sx={{ width: "15em", margin: "0.5em 2em 0.5em 0em" }}
-                    value={selectedRole || ""}
+                    value={selectedRole}
                     onChange={handleRoleChange}
                   >
                     <MenuItem value="No Role Assigned" disabled>
@@ -323,7 +323,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                     <MenuItem value="3">Hráč</MenuItem>
                   </Select>
 
-                  {selectedRole && (
+                  {selectedRole == "No Role Assigned" && (
                     <Box sx={{ maxWidth: "15em", marginBottom: "1em" }}>
                       <Alert sx={{ maxHeight: "3em" }} severity="warning">
                         Není zvoleno
