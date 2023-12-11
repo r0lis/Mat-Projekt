@@ -16,6 +16,7 @@ import {
   Alert,
   Select,
   MenuItem,
+  Avatar,
 } from "@mui/material";
 import React, { useState } from "react";
 import Link from "next/link";
@@ -23,6 +24,8 @@ import { useQuery } from "@apollo/client";
 import { gql } from "@apollo/client";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import { SelectChangeEvent } from "@mui/material";
+import demoUser from "@/public/assets/demoUser.png";
+
 
 const GET_TEAM_MEMBERS_DETAILS = gql`
   query GetTeamMembersDetails($teamId: String!) {
@@ -249,41 +252,85 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
             p: 4,
             borderRadius: "8px",
             width: 400,
+            backgroundImage:
+              "linear-gradient(to bottom, #808080 25%, #ffffff 20%)", // Šedý gradient po prvních 20% a poté bílá
           }}
         >
-          <Box sx={{padding:"0em 2em 0em 2em"}}>
-          <Typography id="modal-title" variant="h6" component="h2">
-            {selectedMember?.Name} {selectedMember?.Surname}
-          </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              
+            }}
+          >
+            <Box
+              sx={{ fontFamily: "Roboto", fontWeight: "500", opacity: "0.6", marginLeft:"1em", top: "-10px", position: "relative" }}
+            >
+              člen
+            </Box>
+          </Box>
+          <Box
+            sx={{
+              padding: "0em 0em 0em 1em",
+              display: "flex",
+              justifyContent: "space-between",
+            }}
+          >
+            <Box sx={{ marginBottom: "1em", top: "-10px", position: "relative"  }}>
+              <Typography id="modal-title" variant="h6" component="h2">
+                {selectedMember?.Name} {selectedMember?.Surname}
+              </Typography>
+            </Box>
+            <Avatar sx={{
+                width: 50,
+                height: 50,
+                marginLeft: "0.5em", 
+                top: "-24px",
+                right: "1em",
+                
+              }}
+            alt="Remy Sharp" src={demoUser.src} />
+           
+          </Box>
           <Typography id="modal-description" sx={{ mt: 2 }}>
             {selectedMember?.Email}
           </Typography>
-          </Box>
-          
-          <Box sx={{padding:"0em 2em 0em 2em"}}>
+
+          <Box sx={{ padding: "0em 2em 0em 1em" }}>
             {editMode ? (
               <Box sx={{}}>
-              <React.Fragment >
-                <Typography id="modal-description" sx={{ marginTop:"1em",fontFamily:"Roboto", fontSize:"1.2em"}}>
-                  Práva
-                </Typography>
-                <Select sx={{width:"15em", margin:"0.5em 2em 0.5em 0em"}} value={selectedRole || ""} onChange={handleRoleChange}>
-                  <MenuItem value="No Role Assigned" disabled>
-                    Vyberte!
-                  </MenuItem>
-                  <MenuItem value="1">Management</MenuItem>
-                  <MenuItem value="2">Trenér</MenuItem>
-                  <MenuItem value="3">Hráč</MenuItem>
-                </Select>
-                
-                {selectedRole && (
-                  <Box sx={{ maxWidth: "15em", marginBottom:"1em" }}>
-                    <Alert sx={{ maxHeight: "3em" }} severity="warning">
-                      Není zvoleno
-                    </Alert>
-                  </Box>
-                )}
-              </React.Fragment>
+                <React.Fragment>
+                  <Typography
+                    id="modal-description"
+                    sx={{
+                      marginTop: "1em",
+                      fontFamily: "Roboto",
+                      fontSize: "1.2em",
+                    }}
+                  >
+                    Práva
+                  </Typography>
+                  <Select
+                    sx={{ width: "15em", margin: "0.5em 2em 0.5em 0em" }}
+                    value={selectedRole || ""}
+                    onChange={handleRoleChange}
+                  >
+                    <MenuItem value="No Role Assigned" disabled>
+                      Vyberte!
+                    </MenuItem>
+                    <MenuItem value="1">Management</MenuItem>
+                    <MenuItem value="2">Trenér</MenuItem>
+                    <MenuItem value="3">Hráč</MenuItem>
+                  </Select>
+
+                  {selectedRole && (
+                    <Box sx={{ maxWidth: "15em", marginBottom: "1em" }}>
+                      <Alert sx={{ maxHeight: "3em" }} severity="warning">
+                        Není zvoleno
+                      </Alert>
+                    </Box>
+                  )}
+                </React.Fragment>
               </Box>
             ) : (
               <Typography id="modal-description" sx={{ mt: 2 }}>
@@ -303,10 +350,22 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
           </Box>
 
           {editMode ? (
-            <Box sx={{paddingLeft:"2em", }}><Button sx={{backgroundColor:"lightgray", color:"black", padding:"1em"}} onClick={handleSaveClick}>Uložit</Button></Box>
-            
+            <Box sx={{ paddingLeft: "1em" }}>
+              <Button
+                sx={{
+                  backgroundColor: "lightgray",
+                  color: "black",
+                  padding: "1em",
+                }}
+                onClick={handleSaveClick}
+              >
+                Uložit
+              </Button>
+            </Box>
           ) : (
-            <Box sx={{paddingLeft:"2em"}}><Button onClick={handleEditClick}>Upravit</Button></Box>
+            <Box sx={{ paddingLeft: "1em" }}>
+              <Button onClick={handleEditClick}>Upravit</Button>
+            </Box>
           )}
         </Box>
       </Modal>
