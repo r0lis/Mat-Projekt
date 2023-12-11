@@ -4,7 +4,13 @@ import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import { useRouter } from "next/router";
 import { gql, useQuery } from "@apollo/client";
-import { Alert, Button, CircularProgress, Typography } from "@mui/material";
+import {
+  Alert,
+  Button,
+  CircularProgress,
+  Switch,
+  Typography,
+} from "@mui/material";
 import Overview from "../../public/assets/Overview.png";
 import Trainings from "../../public/assets/training.png";
 import Calendar from "../../public/assets/Kalendar.png";
@@ -64,6 +70,7 @@ const Team: React.FC = () => {
   const [isHovered, setIsHovered] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [activeLink, setActiveLink] = useState("Přehled");
+  const [autoOpen, setAutoOpen] = useState(true);
   const currentUserEmail = authUtils.getCurrentUser()?.email || "";
 
   useEffect(() => {
@@ -174,15 +181,16 @@ const Team: React.FC = () => {
           <Box
             className="sidebarContainer"
             onMouseEnter={() => {
-              setShowOnlyIcon(false);
+              {if (autoOpen) {setShowOnlyIcon(false);}}
+              
               handleHover(true);
             }}
             onMouseLeave={() => {
-              setShowOnlyIcon(true);
+              {if (autoOpen) {setShowOnlyIcon(true);}}
 
               handleHover(false);
             }}
-            style={{
+            sx={{
               display: "block",
               alignItems: "center",
               backgroundColor: "#F0F2F5",
@@ -195,7 +203,6 @@ const Team: React.FC = () => {
               }`,
               padding: "0",
               transition: "width 0.1s ease-in-out",
-              
             }}
           >
             <Box sx={{ marginTop: "4.2em" }}>
@@ -203,10 +210,9 @@ const Team: React.FC = () => {
                 <Box
                   key={index}
                   sx={{
-                    
                     padding: "5px",
-                    paddingBottom:"10px",
-                    paddingTop:"10px",
+                    paddingBottom: "10px",
+                    paddingTop: "10px",
                     left: "0px",
                     display: "flex",
                     alignItems: "center",
@@ -257,6 +263,45 @@ const Team: React.FC = () => {
                   </Box>
                 </Box>
               ))}
+
+              {showOnlyIcon ? null : (
+                <span
+                  style={{
+                    fontSize: "1.1em",
+                    color: "black",
+                    verticalAlign: "center",
+                    marginTop: "5px",
+                    marginLeft: "10px",
+                    marginRight: "10px",
+                    opacity: showOnlyIcon ? 0 : 1,
+                    transition: "opacity 0.1s ease",
+                    cursor: "pointer",
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      fontFamily: "Roboto",
+                      fontWeight: "800",
+                      textAlign: "center",
+                    }}
+                  >
+                    Auto open
+                  </Typography>
+                  <Box
+                    sx={{
+                      marginLeft: "auto",
+                      marginRight: "auto",
+                      display: "block",
+                    }}
+                  >
+                    <Switch
+                      sx={{}}
+                      checked={autoOpen}
+                      onChange={() => setAutoOpen(!autoOpen)}
+                    />
+                  </Box>
+                </span>
+              )}
             </Box>
           </Box>
           <Box

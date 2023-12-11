@@ -12,7 +12,7 @@ body {
 
 
 .sidebarContainer:hover {
-  border-right: 4px solid rgba(160, 32, 240, 1);
+  border-right: 0.2em solid rgba(160, 32, 240, 0.7);
 }
 
 
