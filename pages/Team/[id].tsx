@@ -173,8 +173,15 @@ const Team: React.FC = () => {
 
           <Box
             className="sidebarContainer"
-            onMouseEnter={() => handleHover(true)}
-            onMouseLeave={() => handleHover(false)}
+            onMouseEnter={() => {
+              setShowOnlyIcon(false);
+              handleHover(true);
+            }}
+            onMouseLeave={() => {
+              setShowOnlyIcon(true);
+
+              handleHover(false);
+            }}
             style={{
               display: "block",
               alignItems: "center",
@@ -188,6 +195,7 @@ const Team: React.FC = () => {
               }`,
               padding: "0",
               transition: "width 0.1s ease-in-out",
+              
             }}
           >
             <Box sx={{ marginTop: "4.2em" }}>
