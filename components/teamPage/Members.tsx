@@ -252,8 +252,8 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
             p: 4,
             borderRadius: "8px",
             width: 400,
-            backgroundImage:
-              "linear-gradient(to bottom, #808080 20%, #ffffff 20%)", // Šedý gradient po prvních 20% a poté bílá
+            backgroundImage: "linear-gradient(to bottom, #808080 100px, #ffffff 80px)", // Šedý gradient po prvních 80 pixelů a poté bílá
+
           }}
         >
           <Box
@@ -292,15 +292,15 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
             alt="Remy Sharp" src={demoUser.src} />
            
           </Box>
+          <Box sx={{marginLeft:"1em"}}>
           <Typography id="modal-description" sx={{ mt: 2 }}>
             {selectedMember?.Email}
           </Typography>
+          </Box>
+          
 
           <Box sx={{ padding: "0em 2em 0em 1em" }}>
-            {editMode ? (
-              <Box sx={{}}>
-                <React.Fragment>
-                  <Typography
+          <Typography
                     id="modal-description"
                     sx={{
                       marginTop: "1em",
@@ -310,6 +310,10 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                   >
                     Práva
                   </Typography>
+            {editMode ? (
+              <Box sx={{}}>
+                <React.Fragment>
+                  
                   <Select
                     sx={{ width: "15em", margin: "0.5em 2em 0.5em 0em" }}
                     value={selectedRole}
@@ -333,7 +337,8 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                 </React.Fragment>
               </Box>
             ) : (
-              <Typography id="modal-description" sx={{ mt: 2 }}>
+              <Box sx={{marginBottom:"1em"}}>
+                  <Typography id="modal-description" sx={{ }}>
                 {selectedMember?.Role === "1" && "Management"}
                 {selectedMember?.Role === "2" && "Trenér"}
                 {selectedMember?.Role === "3" && "Hráč"}
@@ -346,6 +351,8 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                   </Box>
                 )}
               </Typography>
+              </Box>
+              
             )}
           </Box>
 
@@ -364,7 +371,13 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
             </Box>
           ) : (
             <Box sx={{ paddingLeft: "1em" }}>
-              <Button onClick={handleEditClick}>Upravit</Button>
+              <Button 
+               sx={{
+                backgroundColor: "lightgray",
+                color: "black",
+                padding: "1em",
+              }}
+              onClick={handleEditClick}>Upravit</Button>
             </Box>
           )}
         </Box>
