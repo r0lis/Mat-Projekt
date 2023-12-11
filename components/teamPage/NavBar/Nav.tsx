@@ -191,6 +191,11 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon }) => {
               display: "flex",
               alignItems: "center",
               marginLeft: { xs: "auto", md: "auto" },
+              backgroundColor: "rgba(255, 255, 255, 0.2)",
+              borderRadius: "10px",
+              padding: "0.2em",
+              paddingRight: "1em",
+              paddingLeft: "1em",
             }}
           >
             <Typography
@@ -198,7 +203,6 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon }) => {
                 color: "white",
                 fontWeight: "bold",
                 fontSize: "1.4vw",
-                marginLeft: "%",
                 marginTop: "3px",
               }}
             >
