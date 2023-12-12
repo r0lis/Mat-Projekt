@@ -237,7 +237,7 @@ const Team: React.FC = () => {
                     }}
                   >
                     <Image
-                      src={item.image} // Použijte obrázek z prop item.image
+                      src={item.image} 
                       alt={item.label}
                       width={28}
                       height={28}
@@ -253,7 +253,7 @@ const Team: React.FC = () => {
                           marginLeft: "10px",
                           marginRight: "10px",
                           opacity: showOnlyIcon ? 0 : 1,
-                          transition: "opacity 0.1s ease",
+                          transition: "opacity 0.2s ease 0.2s",
                           cursor: "pointer",
                         }}
                       >
@@ -274,7 +274,7 @@ const Team: React.FC = () => {
                     marginLeft: "10px",
                     marginRight: "10px",
                     opacity: showOnlyIcon ? 0 : 1,
-                    transition: "opacity 0.1s ease",
+                    transition: "opacity 0.2s ease 0.2s",
                     cursor: "pointer",
                   }}
                 >
@@ -282,16 +282,22 @@ const Team: React.FC = () => {
                     sx={{
                       fontFamily: "Roboto",
                       fontWeight: "800",
-                      textAlign: "center",
+                      marginLeft: "1em",
+                      opacity: showOnlyIcon ? 0 : 1,
+                      transition: "opacity 0.2s ease 0.2s",
+                      display:"inline-block",
+                      whiteSpace: 'nowrap',
                     }}
                   >
                     Auto open
                   </Typography>
                   <Box
                     sx={{
-                      marginLeft: "auto",
+                      marginLeft: "1em",
                       marginRight: "auto",
                       display: "block",
+                      opacity: showOnlyIcon ? 0 : 1,
+                      transition: "opacity 0.2s ease 0.2s",
                     }}
                   >
                     <Switch
