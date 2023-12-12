@@ -20,7 +20,7 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import Link from "next/link";
-import { useQuery } from "@apollo/client";
+import { useQuery, useMutation  } from "@apollo/client";
 import { gql } from "@apollo/client";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import { SelectChangeEvent } from "@mui/material";
@@ -36,6 +36,18 @@ const GET_TEAM_MEMBERS_DETAILS = gql`
     }
   }
 `;
+
+const UPDATE_MEMBER_ROLE = gql`
+  mutation UpdateMemberRole($email: String!, $role: String!, $teamId: String!) {
+    updateMemberRole(email: $email, role: $role, teamId: $teamId) {
+      Name
+      Surname
+      Role
+      Email
+    }
+  }
+`;
+
 
 interface Member {
   Name: string;
@@ -58,7 +70,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
     Email: string;
   } | null>(null);
   const [selectedRole, setSelectedRole] = useState("");
-  console.log(selectedRole);
+  const [updateMemberRole] = useMutation(UPDATE_MEMBER_ROLE);
 
   const handleRowClick = (member: Member) => {
     setSelectedMember(member);
@@ -76,16 +88,33 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
     setEditMode(true);
   };
 
-  const handleSaveClick = () => {
-    // Handle save logic here
+  const handleSaveClick = async () => {
     setEditMode(false);
+
+    if (selectedMember) {
+      try {
+        await updateMemberRole({
+          variables: {
+            email: selectedMember.Email,
+            role: selectedRole,
+            teamId: id || "", // Pass the current team ID
+          },
+        });
+       
+        await setModalOpen(false);
+        await refetch();
+      } catch (error: any) {
+        console.error("Error updating member role:", error.message);
+        // Handle error if needed
+      }
+    }
   };
 
   const handleRoleChange = (event: SelectChangeEvent<string>) => {
     setSelectedRole(event.target.value);
   };
 
-  const { loading, error, data } = useQuery<{
+  const { loading, error, data, refetch } = useQuery<{
     getTeamMembersDetails: Member[];
   }>(GET_TEAM_MEMBERS_DETAILS, {
     variables: { teamId: id },

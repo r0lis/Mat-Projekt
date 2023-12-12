@@ -617,6 +617,48 @@ export const resolvers = {
       }
     },
 
+    updateMemberRole: async (
+      _: any,
+      { email, role, teamId }: { email: string; role: string; teamId: string },
+      context: Context
+    ) => {
+      try {
+        // Find the team by teamId
+        const teamQuery = context.db.collection("Team").where("teamId", "==", teamId);
+        const teamSnapshot = await teamQuery.get();
+    
+        if (!teamSnapshot.empty) {
+          const teamDoc = teamSnapshot.docs[0];
+    
+          // Update the role of the specified member in the Members array
+          const existingMembers = teamDoc.data().Members || [];
+          const updatedMembers = existingMembers.map((member: any) => {
+            if (member.member === email) { // Adjust the field name here
+              return { ...member, role };
+            }
+            return member;
+          });
+    
+          // Update the Members field in the database
+          await teamDoc.ref.update({ Members: updatedMembers });
+    
+          // Return the updated member details
+          const updatedMemberDetails = {
+            Name: '', // Get the name from the User collection or other source
+            Surname: '', // Get the surname from the User collection or other source
+            Role: role,
+            Email: email,
+          };
+    
+          return updatedMemberDetails;
+        }
+        return null;
+      } catch (error) {
+        console.error("Error updating member role:", error);
+        throw error;
+      }
+    },
+
     deleteUserByEmail: async (
       _: any,
       { email }: { email: string },

@@ -20,7 +20,7 @@ import Pay from "../../public/assets/pay.png";
 import Events from "../../public/assets/Event.png";
 import Members from "../../public/assets/Members.png";
 import Settings from "../../public/assets/Settings.png";
-import Image from "next/image";
+import Image from "next/image";        
 import OverviewComponent from "@/components/teamPage/Overview";
 import TrainingsComponent from "@/components/teamPage/Training";
 import CalendarComponent from "@/components/teamPage/Calendar";
