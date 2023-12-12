@@ -328,7 +328,7 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon }) => {
                           }}
                         >
                           <Link href={`/User/${userId}`}>
-                            <Button className="buttonStyle">
+                          <Button sx={buttonStyle}>
                               <Typography
                                 sx={{
                                   color: "black",

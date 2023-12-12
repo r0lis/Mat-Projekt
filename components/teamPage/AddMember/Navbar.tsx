@@ -317,7 +317,7 @@ const Navbar: React.FC = () => {
                           }}
                         >
                           <Link href={`/User/${userId}`}>
-                            <Button className="buttonStyle">
+                          <Button sx={buttonStyle}>
                               <Typography
                                 sx={{
                                   color: "black",
@@ -532,7 +532,7 @@ const Navbar: React.FC = () => {
                           }}
                         >
                           <Link href={`/User/${userId}`}>
-                            <Button className="buttonStyle">
+                          <Button sx={buttonStyle}>
                               <Typography
                                 sx={{
                                   color: "black",
