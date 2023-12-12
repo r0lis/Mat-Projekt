@@ -202,7 +202,9 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                       member.Role === "No Role Assigned") && (
                       <Box sx={{ maxWidth: "15em" }}>
                         <Alert sx={{ maxHeight: "3em" }} severity="warning">
+                          <Typography sx={{ fontFamily: "Roboto", fontSize:"1vw" }}>
                           Není zvoleno
+                          </Typography>
                         </Alert>
                       </Box>
                     )}

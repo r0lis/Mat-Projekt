@@ -342,7 +342,7 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon }) => {
                               </Typography>
                             </Button>
                           </Link>
-                          <Button onClick={handleLogout} style={buttonStyle2}>
+                          <Button onClick={handleLogout} sx={buttonStyle2}>
                             <Typography
                               sx={{
                                 color: "black",
@@ -547,7 +547,7 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon }) => {
                           }}
                         >
                           <Link href={`/User/${userId}`}>
-                            <Button className="buttonStyle">
+                            <Button sx={buttonStyle}>
                               <Typography
                                 sx={{
                                   color: "black",
