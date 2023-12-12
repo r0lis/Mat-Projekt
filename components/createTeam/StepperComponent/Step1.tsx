@@ -65,6 +65,12 @@ const CHECK_TEAM_EMAIL_EXISTENCE_QUERY = gql`
   }
 `;
 
+const UPLOAD_IMAGE = gql`
+  mutation UploadImageTeam($imageBase64: String!, $teamEmail: String!) {
+    uploadImageTeam(imageBase64: $imageBase64, teamEmail: $teamEmail)
+  }
+`;
+
 type Step1Props = {
   onCompleteTeamCreation: (teamEmail: string) => void;
 };
@@ -86,6 +92,7 @@ const Step1: React.FC<Step1Props> = ({ onCompleteTeamCreation }) => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   const [createTeam] = useMutation(CREATE_TEAM_MUTATION);
+  const [uploadImage] = useMutation(UPLOAD_IMAGE);
 
   // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
   const currentUserEmail = authUtils.getCurrentUser()?.email || "";
@@ -124,6 +131,10 @@ const Step1: React.FC<Step1Props> = ({ onCompleteTeamCreation }) => {
         throw new Error("Tým musí mít alespoň 2 uživatele.");
       }
 
+      if(!selectedImage) {
+        throw new Error("Vyberte prosím obrázek pro tým.");
+      }
+
       if (!/^[A-Z].{1,}$/u.test(place)) {
         throw new Error(
           "Město týmu musí začínat velkým písmenem a být delší než 1 znak."
@@ -157,7 +168,24 @@ const Step1: React.FC<Step1Props> = ({ onCompleteTeamCreation }) => {
 
       console.log("Tým byl úspěšně vytvořen", response);
 
-      //router.push('/').then(() => window.location.reload());
+      try {
+        const imageBase64 = selectedImage;
+  
+        console.log("Base64 image:", imageBase64);
+  
+        // Call the GraphQL mutation with the image data
+        await uploadImage({
+          variables: {
+            imageBase64,
+            teamEmail: emailTeam,
+          },
+        });
+  
+        console.log("Image uploaded successfully");
+      } catch (error) {
+        console.error("Error uploading image:", error);
+      }
+  
       onCompleteTeamCreation(emailTeam);
       console.log(emailTeam);
       setIsCreated(true);
@@ -262,18 +290,6 @@ const Step1: React.FC<Step1Props> = ({ onCompleteTeamCreation }) => {
                   margin="normal"
                   error={error3 !== null}
                   helperText={error3}
-                />
-              </div>
-
-              <div>
-                <TextField
-                  id="image"
-                  label="Týmové logo"
-                  variant="outlined"
-                  value={img}
-                  onChange={(e) => setImg(e.target.value)}
-                  fullWidth
-                  margin="normal"
                 />
               </div>
 

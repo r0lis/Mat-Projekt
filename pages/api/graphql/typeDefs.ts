@@ -96,10 +96,6 @@ export const typeDefs = gql`
     getTeamMembersDetails(teamId: String!): [MemberDetails] 
     checkUserMembershipInvite(teamId: String!, currentUserEmail: String!): Boolean!
     getUserRoleInTeam(teamId: String!, email: String!): UserRoleInTeam
-
-
-
-
   }
 
   type Mutation {
@@ -116,6 +112,7 @@ export const typeDefs = gql`
     addUserToTeam(email: String!, teamId: String!): Boolean
     updateMembers(teamId: String!, newMembers: [String]!): Team
     uploadImage(imageBase64: String!, teamId: String!): String!
+    uploadImageTeam(imageBase64: String!, teamEmail: String!): String!
     uploadImageUser(imageBase64: String!, userEmail: String!): String!
     updateMemberRole(
       email: String!
