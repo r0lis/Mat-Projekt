@@ -25,6 +25,8 @@ import { gql } from "@apollo/client";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import { SelectChangeEvent } from "@mui/material";
 import demoUser from "@/public/assets/demoUser.png";
+import { authUtils } from "@/firebase/auth.utils";
+
 
 const GET_TEAM_MEMBERS_DETAILS = gql`
   query GetTeamMembersDetails($teamId: String!) {
@@ -63,6 +65,7 @@ type MembersProps = {
 const MembersComponent: React.FC<MembersProps> = ({ id }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [editMode, setEditMode] = useState(false);
+  const currentUserEmail = authUtils.getCurrentUser()?.email || "";
   const [selectedMember, setSelectedMember] = useState<{
     Name: string;
     Surname: string;
@@ -71,6 +74,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
   } | null>(null);
   const [selectedRole, setSelectedRole] = useState("");
   const [updateMemberRole] = useMutation(UPDATE_MEMBER_ROLE);
+
 
   const handleRowClick = (member: Member) => {
     setSelectedMember(member);
@@ -120,6 +124,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
     variables: { teamId: id },
   });
 
+  
   if (loading)
     return (
       <CircularProgress
@@ -131,6 +136,9 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
   if (error) return <p>Error: {error.message}</p>;
 
   const members = data?.getTeamMembersDetails || [];
+
+
+
 
   return (
     <Box>
@@ -205,7 +213,9 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
               (member: Member, index: React.Key | null | undefined) => (
                 <TableRow
                   key={index}
-                  sx={{ "&:hover": { backgroundColor: "rgba(0, 0, 0, 0.04)" } }}
+                  sx={{
+                    backgroundColor: member.Email === currentUserEmail ? "#e6e6e6" : "inherit",
+                  }}
                 >
                   <TableCell>
                     <Box
