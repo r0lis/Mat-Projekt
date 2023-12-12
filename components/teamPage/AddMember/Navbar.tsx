@@ -40,6 +40,15 @@ const GET_USER_INFO = gql`
   }
 `;
 
+const GET_USER_ROLE_IN_TEAM = gql`
+  query GetUserRoleInTeam($teamId: String!, $email: String!) {
+    getUserRoleInTeam(teamId: $teamId, email: $email) {
+      email
+      role
+    }
+  }
+`;
+
 const Navbar: React.FC = () => {
   const router = useRouter();
   const { id } = router.query;
@@ -62,15 +71,28 @@ const Navbar: React.FC = () => {
     skip: !user,
   });
 
-  if (loading)
+  const {
+    loading: roleLoading,
+    error: roleError,
+    data: roleData,
+  } = useQuery(GET_USER_ROLE_IN_TEAM, {
+    variables: { teamId: id, email: user?.email || "" },
+    skip: !user,
+  });
+
+
+
+  if (loading  || roleLoading)
     return (
       <CircularProgress
         color="primary"
         size={50}
         style={{ position: "absolute", top: "50%", left: "50%" }}
       />
-    ); // Zobrazí CircularProgress místo načítání
+    ); 
   if (error) return <p>Chyba: {error.message}</p>;
+  if (roleError) return <p>Chyba: {roleError.message}</p>;
+
 
   const team = data.getTeamDetails;
   const teamName = team ? team.Name : "";
@@ -78,6 +100,7 @@ const Navbar: React.FC = () => {
   const surname = userInfoData?.getUserByNameAndSurname.Surname || "";
   const initials = name[0] + surname[0];
   const userId = userInfoData?.getUserByNameAndSurname.Id || "";
+  const role = roleData?.getUserRoleInTeam.role || "";
 
   const handleOpenMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl2(event.currentTarget);
@@ -155,17 +178,17 @@ const Navbar: React.FC = () => {
             sx={{
               display: "flex",
               alignItems: "center",
-              marginLeft: { xs: "auto", md: "20%" },
+              marginLeft: "8%",
             }}
           >
             <img
               src={LogoTeam.src}
               alt="Team Logo"
               style={{
-                width: "3.5em",
-                height: "3.5em",
+                width: "3em",
+                height: "3em",
                 marginRight: "30px",
-                marginTop: "8px",
+                marginTop: "2px",
               }}
             />
             <Box sx={{ display: "inline-block" }}>
@@ -185,9 +208,16 @@ const Navbar: React.FC = () => {
 
           <Box
             sx={{
+             
               display: "flex",
               alignItems: "center",
               marginLeft: { xs: "auto", md: "auto" },
+              backgroundColor: "rgba(255, 255, 255, 0.2)",
+              borderRadius: "10px",
+              padding: "0.2em",
+              paddingRight: "1em",
+              paddingLeft: "1em",
+             
             }}
           >
             <Typography
@@ -195,11 +225,12 @@ const Navbar: React.FC = () => {
                 color: "white",
                 fontWeight: "bold",
                 fontSize: "1.4vw",
-                marginLeft: "%",
-                marginTop: "8px",
+                marginTop: "3px",
               }}
             >
-              Management
+              {role === "1" && "Management"}
+              {role === "2" && "Trenér"}
+              {role === "3" && "Hráč"}
             </Typography>
           </Box>
 
