@@ -432,6 +432,47 @@ export const resolvers = {
       }
     },
 
+    uploadImageUser: async (
+      _: any,
+      { imageBase64, userEmail }: { imageBase64: string; userEmail: string },
+      context: Context
+    ) => {
+      try {
+        // Decode the base64 image
+        const imageBuffer = Buffer.from(imageBase64.replace(/^data:image\/\w+;base64,/, ""), "base64");
+    
+        // Generate a unique filename for the image
+        const filename = `user_logos/${userEmail}_${Date.now()}.jpg`;
+    
+        // Reference to the Firebase Storage bucket
+        const bucket = admin.storage().bucket();
+    
+        // Upload the image to Firebase Storage
+        await bucket.file(filename).save(imageBuffer, {
+          metadata: {
+            contentType: "image/jpeg", // Adjust the content type based on your image type
+          },
+        });
+    
+        // Get the download URL for the uploaded image
+        const downloadUrl = `https://storage.googleapis.com/${bucket.name}/${filename}`;
+    
+        // Update the team document with the download URL
+        const teamQuery = context.db.collection("User").where("Email", "==", userEmail);
+        const teamSnapshot = await teamQuery.get();
+    
+        if (!teamSnapshot.empty) {
+          const teamDoc = teamSnapshot.docs[0];
+          await teamDoc.ref.update({ Picture: downloadUrl });
+        }
+    
+        return downloadUrl;
+      } catch (error) {
+        console.error("Error uploading image:", error);
+        throw error;
+      }
+    },
+
     createUserToTeam: async (
         _: any,
         { input }: { input: CreateUserToTeamInput },

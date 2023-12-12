@@ -116,6 +116,7 @@ export const typeDefs = gql`
     addUserToTeam(email: String!, teamId: String!): Boolean
     updateMembers(teamId: String!, newMembers: [String]!): Team
     uploadImage(imageBase64: String!, teamId: String!): String!
+    uploadImageUser(imageBase64: String!, userEmail: String!): String!
     updateMemberRole(
       email: String!
       role: String!

@@ -9,6 +9,7 @@ import { Box, Button, TextField, Typography, Link, Alert } from "@mui/material";
 import photo from "../public/assets/rosterbot.png";
 import pictureBackground from "../public/assets/uvodni.jpg";
 
+
 const CREATE_USER_MUTATION = gql`
   mutation CreateUser(
     $Name: String!
