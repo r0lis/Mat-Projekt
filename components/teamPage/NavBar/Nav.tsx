@@ -38,6 +38,15 @@ const GET_TEAM_DETAILS = gql`
     }
   }
 `;
+
+const GET_USER_ROLE_IN_TEAM = gql`
+  query GetUserRoleInTeam($teamId: String!, $email: String!) {
+    getUserRoleInTeam(teamId: $teamId, email: $email) {
+      email
+      role
+    }
+  }
+`;
 interface NavProps {
   showOnlyIcon: boolean;
   setShowOnlyIcon: React.Dispatch<React.SetStateAction<boolean>>;
@@ -52,6 +61,14 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon }) => {
   const [, setMenuOpen2] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
+  const { loading: roleLoading, error: roleError, data: roleData } = useQuery(GET_USER_ROLE_IN_TEAM, {
+    variables: { teamId: id, email: user?.email || "" },
+    skip: !user,
+  });
+
+
+
+
   const { loading, error, data } = useQuery(GET_TEAM_DETAILS, {
     variables: { teamId: id },
   });
@@ -65,7 +82,7 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon }) => {
     skip: !user,
   });
 
-  if (loading)
+  if (loading || roleLoading)
     return (
       <CircularProgress
         color="primary"
@@ -74,12 +91,15 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon }) => {
       />
     );
   if (error) return <p>Chyba: {error.message}</p>;
+  if (roleError) return <p>Chyba: {roleError.message}</p>;
 
   const team = data.getTeamDetails;
   const teamName = team ? team.Name : "";
   const name = userInfoData?.getUserByNameAndSurname.Name || "";
   const surname = userInfoData?.getUserByNameAndSurname.Surname || "";
   const userId = userInfoData?.getUserByNameAndSurname.Id || "";
+  const role = roleData?.getUserRoleInTeam.role || "";
+  console.log(role);
 
   const toggleContentVisibility = () => {
     setShowOnlyIcon(!showOnlyIcon);

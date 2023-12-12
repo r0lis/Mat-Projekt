@@ -233,6 +233,39 @@ export const resolvers = {
           throw error;
         }
       },
+
+      getUserRoleInTeam: async (
+        _: any,
+        { teamId, email }: { teamId: string; email: string },
+        context: Context
+      ) => {
+        try {
+          // Find the team by teamId
+          const teamQuery = context.db.collection("Team").where("teamId", "==", teamId);
+          const teamSnapshot = await teamQuery.get();
+      
+          if (!teamSnapshot.empty) {
+            const teamDoc = teamSnapshot.docs[0];
+      
+            // Find the member in the Members array
+            const members = teamDoc.data().Members || [];
+            const member = members.find((m: any) => m.member === email);
+      
+            if (member) {
+              return {
+                email: member.member, // Ensure you return a non-null value for the 'email' field
+                role: member.role,
+              };
+            }
+          }
+        } catch (error) {
+          console.error("Error fetching user role in team:", error);
+          throw error;
+        }
+      
+        return null; // Ensure you return a non-null value for the 'email' field
+      },
+
       checkEmailsInTeam: async (
         _: any,
         { teamId, emails }: { teamId: string; emails: string[] },

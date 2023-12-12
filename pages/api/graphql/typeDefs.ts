@@ -75,6 +75,11 @@ export const typeDefs = gql`
     Surname: String
     Id: String
   }
+  
+  type UserRoleInTeam {
+    email: String!
+    role: String!
+  }
 
   type Query {
     user(id: String): User
@@ -90,6 +95,9 @@ export const typeDefs = gql`
     getTeamLogo(teamId: String!): String
     getTeamMembersDetails(teamId: String!): [MemberDetails] 
     checkUserMembershipInvite(teamId: String!, currentUserEmail: String!): Boolean!
+    getUserRoleInTeam(teamId: String!, email: String!): UserRoleInTeam
+
+
 
 
   }
