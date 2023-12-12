@@ -61,13 +61,14 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon }) => {
   const [, setMenuOpen2] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
-  const { loading: roleLoading, error: roleError, data: roleData } = useQuery(GET_USER_ROLE_IN_TEAM, {
+  const {
+    loading: roleLoading,
+    error: roleError,
+    data: roleData,
+  } = useQuery(GET_USER_ROLE_IN_TEAM, {
     variables: { teamId: id, email: user?.email || "" },
     skip: !user,
   });
-
-
-
 
   const { loading, error, data } = useQuery(GET_TEAM_DETAILS, {
     variables: { teamId: id },
@@ -99,7 +100,6 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon }) => {
   const surname = userInfoData?.getUserByNameAndSurname.Surname || "";
   const userId = userInfoData?.getUserByNameAndSurname.Id || "";
   const role = roleData?.getUserRoleInTeam.role || "";
-  console.log(role);
 
   const toggleContentVisibility = () => {
     setShowOnlyIcon(!showOnlyIcon);
@@ -161,7 +161,6 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon }) => {
           display: "flex",
           justifyContent: "space-between",
           height: "4.2em",
-          
         }}
       >
         <Toolbar>
@@ -170,7 +169,7 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon }) => {
             aria-label="open sidebar"
             onClick={toggleContentVisibility}
           >
-            <Box sx={{ marginTop: "10px"}}>
+            <Box sx={{ marginTop: "10px" }}>
               <MenuIcon sx={{ color: "white" }} />
             </Box>
           </IconButton>
@@ -178,7 +177,7 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon }) => {
             sx={{
               display: "flex",
               alignItems: "center",
-              marginLeft:"8%"
+              marginLeft: "8%",
             }}
           >
             <img
@@ -226,7 +225,9 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon }) => {
                 marginTop: "3px",
               }}
             >
-              Management
+              {role === "1" && "Management"}
+              {role === "2" && "Trenér"}
+              {role === "3" && "Hráč"}
             </Typography>
           </Box>
 
@@ -348,7 +349,7 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon }) => {
                           }}
                         >
                           <Link href={`/User/${userId}`}>
-                          <Button sx={buttonStyle}>
+                            <Button sx={buttonStyle}>
                               <Typography
                                 sx={{
                                   color: "black",
@@ -633,7 +634,7 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon }) => {
                         display: "flex",
                         flexDirection: "column",
                         justifyContent: "center",
-                        buttonStyle2
+                        buttonStyle2,
                       }}
                     >
                       <Link href="/LoginPage">
@@ -661,7 +662,7 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon }) => {
                         flexDirection: "column",
                         marginBottom: "1em",
                         justifyContent: "center",
-                        buttonStyle2
+                        buttonStyle2,
                       }}
                     >
                       <Link href="/UserRegistration">
