@@ -125,8 +125,8 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon }) => {
 
   const handleLogout = async () => {
     try {
+      router.push("/");
       await authUtils.logout();
-      window.location.reload();
     } catch (error) {
       console.error("Chyba při odhlašování: ", error);
     }
@@ -363,6 +363,7 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon }) => {
                               </Typography>
                             </Button>
                           </Link>
+                          
                           <Button onClick={handleLogout} sx={buttonStyle2}>
                             <Typography
                               sx={{
@@ -376,6 +377,7 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon }) => {
                               Odhlásit se
                             </Typography>
                           </Button>
+                          
                         </Box>
                       </>
                     </Box>

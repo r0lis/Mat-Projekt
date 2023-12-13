@@ -20,7 +20,7 @@ import Pay from "../../public/assets/pay.png";
 import Events from "../../public/assets/Event.png";
 import Members from "../../public/assets/Members.png";
 import Settings from "../../public/assets/Settings.png";
-import Image from "next/image";        
+import Image from "next/image";
 import OverviewComponent from "@/components/teamPage/Overview";
 import TrainingsComponent from "@/components/teamPage/Training";
 import CalendarComponent from "@/components/teamPage/Calendar";
@@ -43,11 +43,13 @@ const items = [
   { label: "Tréninky", image: Trainings },
   { label: "Zápasy", image: Nominations },
   { label: "Soupisky", image: Rousters },
-  { label: "Platby", image: Pay },
   { label: "Tým", image: TeamIcon },
   { label: "Členové", image: Members },
-  { label: "Správa", image: Settings },
+  { label: "Platby", image: Pay },
+  { label: "Správa", image: Settings }
 ];
+
+
 
 const GET_TEAM_DETAILS = gql`
   query GetTeamDetails($teamId: String!) {
@@ -63,6 +65,15 @@ const CHECK_USER_MEMBERSHIP = gql`
   }
 `;
 
+const GET_USER_ROLE_IN_TEAM = gql`
+  query GetUserRoleInTeam($teamId: String!, $email: String!) {
+    getUserRoleInTeam(teamId: $teamId, email: $email) {
+      email
+      role
+    }
+  }
+`;
+
 const Team: React.FC = () => {
   const router = useRouter();
   const { id } = router.query;
@@ -72,6 +83,18 @@ const Team: React.FC = () => {
   const [activeLink, setActiveLink] = useState("Přehled");
   const [autoOpen, setAutoOpen] = useState(true);
   const currentUserEmail = authUtils.getCurrentUser()?.email || "";
+  const user = authUtils.getCurrentUser();
+
+  const {
+    loading: roleLoading,
+    error: roleError,
+    data: roleData,
+  } = useQuery(GET_USER_ROLE_IN_TEAM, {
+    variables: { teamId: id, email: user?.email || "" },
+    skip: !user,
+  });
+
+  if (roleError) return <p>Chyba: {roleError.message}</p>;
 
   useEffect(() => {
     const handleResize = () => {
@@ -104,7 +127,7 @@ const Team: React.FC = () => {
     variables: { teamId: id, currentUserEmail },
   });
 
-  if (loadingUser)
+  if (loadingUser || roleLoading)
     return (
       <CircularProgress
         color="primary"
@@ -128,6 +151,8 @@ const Team: React.FC = () => {
   if (error) return <p>Chyba: {error.message}</p>;
 
   const team = data.getTeamDetails;
+  const role = roleData?.getUserRoleInTeam.role || "";
+ 
 
   const handleLinkClick = (label: string) => {
     setActiveLink(label);
@@ -181,12 +206,20 @@ const Team: React.FC = () => {
           <Box
             className="sidebarContainer"
             onMouseEnter={() => {
-              {if (autoOpen) {setShowOnlyIcon(false);}}
-              
+              {
+                if (autoOpen) {
+                  setShowOnlyIcon(false);
+                }
+              }
+
               handleHover(true);
             }}
             onMouseLeave={() => {
-              {if (autoOpen) {setShowOnlyIcon(true);}}
+              {
+                if (autoOpen) {
+                  setShowOnlyIcon(true);
+                }
+              }
 
               handleHover(false);
             }}
@@ -237,7 +270,7 @@ const Team: React.FC = () => {
                     }}
                   >
                     <Image
-                      src={item.image} 
+                      src={item.image}
                       alt={item.label}
                       width={28}
                       height={28}
@@ -285,8 +318,8 @@ const Team: React.FC = () => {
                       marginLeft: "1em",
                       opacity: showOnlyIcon ? 0 : 1,
                       transition: "opacity 0.2s ease 0.2s",
-                      display:"inline-block",
-                      whiteSpace: 'nowrap',
+                      display: "inline-block",
+                      whiteSpace: "nowrap",
                     }}
                   >
                     Auto open
@@ -317,16 +350,21 @@ const Team: React.FC = () => {
               height: "auto",
             }}
           >
+             
             {activeLink === "Přehled" && <OverviewComponent />}
             {activeLink === "Tréninky" && <TrainingsComponent />}
             {activeLink === "Kalendář" && <CalendarComponent />}
             {activeLink === "Soupisky" && <RoustersComponent />}
             {activeLink === "Zápasy" && <NominationsComponent />}
-            {activeLink === "Platby" && <PayComponent />}
             {activeLink === "Události" && <EventsComponent />}
             {activeLink === "Tým" && <TeamComponent />}
             {activeLink === "Členové" && <MembersComponent id={id as string} />}
-            {activeLink === "Správa" && <SettingsComponent />}
+            {role == 1 && (
+              <>
+                {activeLink === "Platby" && <PayComponent />}
+                {activeLink === "Správa" && <SettingsComponent />}
+              </>
+            )}
           </Box>
         </Box>
       )}

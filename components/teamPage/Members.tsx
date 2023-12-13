@@ -50,6 +50,15 @@ const UPDATE_MEMBER_ROLE = gql`
   }
 `;
 
+const GET_USER_ROLE_IN_TEAM = gql`
+  query GetUserRoleInTeam($teamId: String!, $email: String!) {
+    getUserRoleInTeam(teamId: $teamId, email: $email) {
+      email
+      role
+    }
+  }
+`;
+
 interface Member {
   Name: string;
   Surname: string;
@@ -75,6 +84,18 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
   } | null>(null);
   const [selectedRole, setSelectedRole] = useState("");
   const [updateMemberRole] = useMutation(UPDATE_MEMBER_ROLE);
+  const user = authUtils.getCurrentUser();
+
+  const {
+    loading: roleLoading,
+    error: roleError,
+    data: roleData,
+  } = useQuery(GET_USER_ROLE_IN_TEAM, {
+    variables: { teamId: id, email: user?.email || "" },
+    skip: !user,
+  });
+
+  if (roleError) return <p>Chyba: {roleError.message}</p>;
 
   const handleRowClick = (member: Member) => {
     setSelectedMember(member);
@@ -124,7 +145,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
     variables: { teamId: id },
   });
 
-  if (loading)
+  if (loading || roleLoading)
     return (
       <CircularProgress
         color="primary"
@@ -135,6 +156,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
   if (error) return <p>Error: {error.message}</p>;
 
   const members = data?.getTeamMembersDetails || [];
+  const role = roleData?.getUserRoleInTeam.role || "";
 
   return (
     <Box>
@@ -215,12 +237,15 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                   }}
                 >
                   <TableCell>
-                    <Box
-                      sx={{ height: "20px", width: "20px" }}
-                      onClick={() => handleRowClick(member)}
-                    >
-                      <ModeEditIcon />
-                    </Box>
+                    {(role === "1") && (
+                         <Box
+                         sx={{ height: "20px", width: "20px" }}
+                         onClick={() => handleRowClick(member)}
+                       >
+                         <ModeEditIcon />
+                       </Box>
+                    )}
+                   
                   </TableCell>
                   <TableCell>
                     {member.Surname} {member.Name}
