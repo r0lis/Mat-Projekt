@@ -380,6 +380,7 @@ export const resolvers = {
           IdTeam: teamId,
           Email: input.Email,
           IsAdmin: IsAdmin,
+          DateOfBirth: new Date(input.DateOfBirth).toISOString(),
         };
 
         await newUserDoc.set(newUser);
@@ -534,6 +535,7 @@ export const resolvers = {
             IdTeam: teamId,
             Email: input.Email,
             IsAdmin: IsAdmin,
+            DateOfBirth: new Date(input.DateOfBirth).toISOString(),
           };
   
           await newUserDoc.set(newUser);

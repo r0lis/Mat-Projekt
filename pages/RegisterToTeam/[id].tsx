@@ -5,13 +5,34 @@ import React, { useEffect, useState } from "react";
 import { authUtils } from "../../firebase/auth.utils";
 import { useMutation, gql, useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
-import { Box, Button, TextField, Typography, Link, Alert,  LinearProgress, CircularProgress,} from "@mui/material";
+import {
+  Box,
+  Button,
+  TextField,
+  Typography,
+  Link,
+  Alert,
+  LinearProgress,
+  CircularProgress,
+  FilledTextFieldProps,
+  OutlinedTextFieldProps,
+  StandardTextFieldProps,
+  TextFieldVariants,
+} from "@mui/material";
 import photo from "../../public/assets/rosterbot.png";
 import pictureBackground from "../../public/assets/uvodni.jpg";
+import { DatePicker } from "@mui/lab";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
 
 const CHECK_USER_MEMBERSHIP = gql`
-  query CheckUserMembershipInvite($teamId: String!, $currentUserEmail: String!) {
-    checkUserMembershipInvite(teamId: $teamId, currentUserEmail: $currentUserEmail)
+  query CheckUserMembershipInvite(
+    $teamId: String!
+    $currentUserEmail: String!
+  ) {
+    checkUserMembershipInvite(
+      teamId: $teamId
+      currentUserEmail: $currentUserEmail
+    )
   }
 `;
 
@@ -22,6 +43,7 @@ const CREATE_USER_TO_TEAM_MUTATION = gql`
     $Email: String!
     $IdUser: String!
     $IdTeam: [String]!
+    $DateOfBirth: String!
   ) {
     createUserToTeam(
       input: {
@@ -30,6 +52,7 @@ const CREATE_USER_TO_TEAM_MUTATION = gql`
         Email: $Email
         IdUser: $IdUser
         IdTeam: $IdTeam
+        DateOfBirth: $DateOfBirth
       }
     ) {
       Name
@@ -37,6 +60,7 @@ const CREATE_USER_TO_TEAM_MUTATION = gql`
       IdUser
       IdTeam
       Email
+      DateOfBirth
       # Další údaje, které chcete získat
     }
   }
@@ -55,8 +79,10 @@ const RegistrationPage: React.FC = () => {
   const [progress, setProgress] = useState(0);
   const router = useRouter();
   const { id, email: initialEmail } = router.query;
-  const [createUser] = useMutation(CREATE_USER_TO_TEAM_MUTATION);
+  const [dateOfBirth, setDateOfBirth] = useState<Date | null>(null); // Nový stav pro datum narození
+  const userEmail: string = (initialEmail as string) || "";
 
+  const [createUser] = useMutation(CREATE_USER_TO_TEAM_MUTATION);
 
   useEffect(() => {
     // Předvyplnění e-mailu, pokud je k dispozici v URL
@@ -103,35 +129,34 @@ const RegistrationPage: React.FC = () => {
   });
 
   if (loadingUser)
-  return (
-    <CircularProgress
-      color="primary"
-      size={50}
-      style={{ position: "absolute", top: "50%", left: "50%" }}
-    />
-  );
-if (errorUser) {
-  console.error("Error checking user membership:", errorUser);
-  return <p>Error checking user membership</p>;
-}
+    return (
+      <CircularProgress
+        color="primary"
+        size={50}
+        style={{ position: "absolute", top: "50%", left: "50%" }}
+      />
+    );
+  if (errorUser) {
+    console.error("Error checking user membership:", errorUser);
+    return <p>Error checking user membership</p>;
+  }
 
-const isUserMember = dataUser.checkUserMembershipInvite;
-if (isUserMember == false) {
-  return (
-    <Box>
-      <Alert severity="error">
-        Tato akce neni dostupná
-        <br />
-        <Link href="/">
-          <Button sx={{ backgroundColor: "red" }}>
-            <Typography sx={{ color: "#fff" }}>Zpět</Typography>
-          </Button>
-        </Link>
-      </Alert>
-    </Box>
-  );
-}
-
+  const isUserMember = dataUser.checkUserMembershipInvite;
+  if (isUserMember == false) {
+    return (
+      <Box>
+        <Alert severity="error">
+          Tato akce neni dostupná
+          <br />
+          <Link href="/">
+            <Button sx={{ backgroundColor: "red" }}>
+              <Typography sx={{ color: "#fff" }}>Zpět</Typography>
+            </Button>
+          </Link>
+        </Alert>
+      </Box>
+    );
+  }
 
   const isEmailValid = email.includes("@");
   const isPasswordValid = password.length >= 6;
@@ -178,10 +203,10 @@ if (isUserMember == false) {
               Email: email,
               IdUser: "fefefef",
               IdTeam: [id as string],
+              DateOfBirth: dateOfBirth?.toISOString() || "",
             },
           });
           setverificationSuccess(true);
-          setverificationSuccess2(true);
 
           router.push(`/`);
         } else {
@@ -321,7 +346,7 @@ if (isUserMember == false) {
               </Box>
 
               <Box sx={{ widht: "10%" }}>
-              {!registrationSuccess && (
+                {!registrationSuccess && (
                   <>
                     <TextField
                       type="text"
@@ -338,6 +363,21 @@ if (isUserMember == false) {
                       onChange={(e) => setSurname(e.target.value)}
                       fullWidth
                       margin="normal"
+                    />
+                    <TextField
+                      label="Datum narození"
+                      type="date"
+                      value={
+                        dateOfBirth
+                          ? dateOfBirth.toISOString().split("T")[0]
+                          : ""
+                      }
+                      onChange={(e) => setDateOfBirth(new Date(e.target.value))}
+                      fullWidth
+                      margin="normal"
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
                     />
                     <TextField
                       type="email"
@@ -369,17 +409,17 @@ if (isUserMember == false) {
                 <Box>
                   {error && (
                     <Alert
-                    severity="error"
-                    sx={{
-                      width: "auto",
-                      marginLeft: "auto",
-                      marginRight: "auto",
-                      marginTop: "1rem",
-                      textAlign: "center",
-                      color: "white",
-                    }} // Set background color to red
+                      severity="error"
+                      sx={{
+                        width: "auto",
+                        marginLeft: "auto",
+                        marginRight: "auto",
+                        marginTop: "1rem",
+                        textAlign: "center",
+                        color: "white",
+                      }} // Set background color to red
                     >
-                       <Typography
+                      <Typography
                         variant="body1"
                         color="error"
                         sx={{ marginTop: "1rem" }}
@@ -388,34 +428,34 @@ if (isUserMember == false) {
                       </Typography>
                     </Alert>
                   )}
-                  {registrationSuccess && !verificationSuccess2 &&(
-                     <Alert
-                     severity="success"
-                     sx={{
-                       width: "auto",
-                       marginLeft: "auto",
-                       marginRight: "auto",
-                       marginTop: "1rem",
-                       textAlign: "right",
-                     }} // Set background color to orange
-                   >
-                     <Typography
-                       variant="body1"
-                       color="success"
-                       sx={{ marginTop: "1rem" }}
-                     >
-                       Registrace úspěšná. Ověřte svůj e-mail, abyste mohli
-                       pokračovat.
-                     </Typography>
-                     <Button
-                       variant="contained"
-                       color="primary"
-                       onClick={handleEmailVerification}
-                       sx={{ marginTop: "1rem" }}
-                     >
-                       Ověřit E-mail
-                     </Button>
-                   </Alert>
+                  {registrationSuccess && !verificationSuccess2 && (
+                    <Alert
+                      severity="success"
+                      sx={{
+                        width: "auto",
+                        marginLeft: "auto",
+                        marginRight: "auto",
+                        marginTop: "1rem",
+                        textAlign: "right",
+                      }} // Set background color to orange
+                    >
+                      <Typography
+                        variant="body1"
+                        color="success"
+                        sx={{ marginTop: "1rem" }}
+                      >
+                        Registrace úspěšná. Ověřte svůj e-mail, abyste mohli
+                        pokračovat.
+                      </Typography>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={handleEmailVerification}
+                        sx={{ marginTop: "1rem" }}
+                      >
+                        Ověřit E-mail
+                      </Button>
+                    </Alert>
                   )}
 
                   <Box
@@ -451,7 +491,6 @@ if (isUserMember == false) {
                         Registrovat
                       </Button>
                     )}
-                   
                   </Box>
                   {verificationSuccess2 && (
                     <Box
@@ -461,8 +500,16 @@ if (isUserMember == false) {
                         marginRight: "auto",
                       }}
                     >
-                      <Box sx={{ marginBottom: "1em", marginTop: "1em", textAlign:'center' }}>
-                        <Alert severity="info"><Typography>Jste na hlavní stránku.</Typography></Alert>
+                      <Box
+                        sx={{
+                          marginBottom: "1em",
+                          marginTop: "1em",
+                          textAlign: "center",
+                        }}
+                      >
+                        <Alert severity="info">
+                          <Typography>Jste na hlavní stránku.</Typography>
+                        </Alert>
                       </Box>
                       <LinearProgress variant="determinate" value={progress} />
                     </Box>
@@ -486,7 +533,6 @@ if (isUserMember == false) {
                     color: "#b71dde",
                   }}
                 >
-                  
                   <Link
                     href={`/RegisterToTeam/${id}`}
                     sx={{

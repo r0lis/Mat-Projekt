@@ -15,6 +15,7 @@ export type User = {
   IdTeam: [String];
   IsAdmin: boolean;
   Email: string;
+  DateOfBirth: string;
 };
 
 export type Team = {
@@ -53,6 +54,7 @@ export type CreateUserInput = {
   IdUser: string;
   IdTeam: [String];
   Email: string;
+  DateOfBirth: string;
 };
 
 export type CreateUserToTeamInput = {
@@ -61,6 +63,7 @@ export type CreateUserToTeamInput = {
     IdUser: string;
     IdTeam: [String];
     Email: string;
+    DateOfBirth: string;
   };
 
 export type CreateTeamInput = {

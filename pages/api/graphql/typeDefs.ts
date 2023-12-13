@@ -7,6 +7,7 @@ export const typeDefs = gql`
     IdUser: String!
     IdTeam: [String]!
     Email: String!
+    DateOfBirth: String!
   }
 
   input CreateUserInput {
@@ -15,6 +16,7 @@ export const typeDefs = gql`
     IdUser: String!
     IdTeam: [String]!
     Email: String!
+    DateOfBirth: String!
   }
 
   input CreateUserToTeamInput {
@@ -23,6 +25,7 @@ export const typeDefs = gql`
     IdUser: String!
     IdTeam: [String]!
     Email: String!
+    DateOfBirth: String!
   }
 
   input CreateTeamInput {

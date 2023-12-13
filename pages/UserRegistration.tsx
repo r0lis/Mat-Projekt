@@ -17,6 +17,9 @@ const CREATE_USER_MUTATION = gql`
     $Email: String!
     $IdUser: String!
     $IdTeam: [String]!
+    $DateOfBirth: String!
+
+
   ) {
     createUser(
       input: {
@@ -25,6 +28,8 @@ const CREATE_USER_MUTATION = gql`
         Email: $Email
         IdUser: $IdUser
         IdTeam: $IdTeam
+        DateOfBirth: $DateOfBirth
+
       }
     ) {
       Name
@@ -32,6 +37,7 @@ const CREATE_USER_MUTATION = gql`
       IdUser
       IdTeam
       Email
+      DateOfBirth
       # Další údaje, které chcete získat
     }
   }
@@ -46,6 +52,8 @@ const RegistrationPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [registrationSuccess, setRegistrationSuccess] = useState(false);
   const [verificationSuccess, setverificationSuccess] = useState(false);
+  const [dateOfBirth, setDateOfBirth] = useState<Date | null>(null); // Nový stav pro datum narození
+
 
   const router = useRouter();
 
@@ -100,6 +108,7 @@ const RegistrationPage: React.FC = () => {
               Email: email,
               IdUser: "fefefef",
               IdTeam: ["fefefe"],
+              DateOfBirth: dateOfBirth?.toISOString() || "", // Převést datum na řetězec
             },
           });
           setverificationSuccess(true);
@@ -259,6 +268,21 @@ const RegistrationPage: React.FC = () => {
                       onChange={(e) => setSurname(e.target.value)}
                       fullWidth
                       margin="normal"
+                    />
+                    <TextField
+                      label="Datum narození"
+                      type="date"
+                      value={
+                        dateOfBirth
+                          ? dateOfBirth.toISOString().split("T")[0]
+                          : ""
+                      }
+                      onChange={(e) => setDateOfBirth(new Date(e.target.value))}
+                      fullWidth
+                      margin="normal"
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
                     />
                     <TextField
                       type="email"

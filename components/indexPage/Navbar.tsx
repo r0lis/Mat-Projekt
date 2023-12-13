@@ -446,7 +446,6 @@ const Navbar: React.FC = () => {
                     <Box sx={{ borderBottom: "7px solid #b71dde " }}></Box>
 
                     <Box
-                    className="buttonStyle2"
                       sx={{
                         alignItems: "center",
                         textAlign: "center",
@@ -473,7 +472,7 @@ const Navbar: React.FC = () => {
                       </Link>
                     </Box>
                     <Box
-                    className="buttonStyle2"
+                   
                       sx={{
                         alignItems: "center",
                         textAlign: "center",
