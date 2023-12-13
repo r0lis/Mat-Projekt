@@ -20,13 +20,12 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import Link from "next/link";
-import { useQuery, useMutation  } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
 import { gql } from "@apollo/client";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import { SelectChangeEvent } from "@mui/material";
 import demoUser from "@/public/assets/demoUser.png";
 import { authUtils } from "@/firebase/auth.utils";
-
 
 const GET_TEAM_MEMBERS_DETAILS = gql`
   query GetTeamMembersDetails($teamId: String!) {
@@ -35,6 +34,7 @@ const GET_TEAM_MEMBERS_DETAILS = gql`
       Surname
       Role
       Email
+      DateOfBirth
     }
   }
 `;
@@ -50,12 +50,12 @@ const UPDATE_MEMBER_ROLE = gql`
   }
 `;
 
-
 interface Member {
   Name: string;
   Surname: string;
   Role: string;
   Email: string;
+  DateOfBirth: string;
 }
 
 type MembersProps = {
@@ -71,10 +71,10 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
     Surname: string;
     Role: string;
     Email: string;
+    DateOfBirth: string;
   } | null>(null);
   const [selectedRole, setSelectedRole] = useState("");
   const [updateMemberRole] = useMutation(UPDATE_MEMBER_ROLE);
-
 
   const handleRowClick = (member: Member) => {
     setSelectedMember(member);
@@ -104,7 +104,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
             teamId: id || "", // Pass the current team ID
           },
         });
-       
+
         await setModalOpen(false);
         await refetch();
       } catch (error: any) {
@@ -124,7 +124,6 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
     variables: { teamId: id },
   });
 
-  
   if (loading)
     return (
       <CircularProgress
@@ -136,9 +135,6 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
   if (error) return <p>Error: {error.message}</p>;
 
   const members = data?.getTeamMembersDetails || [];
-
-
-
 
   return (
     <Box>
@@ -155,7 +151,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
           sx={{ fontFamily: "Roboto", fontWeight: "500" }}
           variant="h4"
         >
-          Členové týmu
+          Členové klubu
         </Typography>
         <Link href={`/Team/AddMember/${id}/`}>
           <Button variant="contained">Přidat člena</Button>
@@ -214,7 +210,8 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                 <TableRow
                   key={index}
                   sx={{
-                    backgroundColor: member.Email === currentUserEmail ? "#e6e6e6" : "inherit",
+                    backgroundColor:
+                      member.Email === currentUserEmail ? "#e6e6e6" : "inherit",
                   }}
                 >
                   <TableCell>
@@ -230,7 +227,15 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                   </TableCell>
                   <TableCell>
                     <Typography sx={{ fontFamily: "Roboto" }}>
-                      19.07.2005
+                      {member.DateOfBirth &&
+                        new Date(member.DateOfBirth).toLocaleDateString(
+                          "cs-CZ",
+                          {
+                            day: "2-digit",
+                            month: "2-digit",
+                            year: "numeric",
+                          }
+                        )}
                     </Typography>
                   </TableCell>
                   <TableCell>
@@ -241,8 +246,10 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                       member.Role === "No Role Assigned") && (
                       <Box sx={{ maxWidth: "15em" }}>
                         <Alert sx={{ maxHeight: "3em" }} severity="warning">
-                          <Typography sx={{ fontFamily: "Roboto", fontSize:"1vw" }}>
-                          Není zvoleno
+                          <Typography
+                            sx={{ fontFamily: "Roboto", fontSize: "1vw" }}
+                          >
+                            Není zvoleno
                           </Typography>
                         </Alert>
                       </Box>
@@ -365,9 +372,12 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
               <Typography
                 id="modal-description"
                 sx={{
-                  marginTop: editMode ? "2.5em" : selectedRole === "No Role Assigned" ? "1.5em" : "1em",
+                  marginTop: editMode
+                    ? "2.5em"
+                    : selectedRole === "No Role Assigned"
+                    ? "1.5em"
+                    : "1em",
 
-                  
                   fontFamily: "Roboto",
                   fontSize: "1em",
                 }}
@@ -425,7 +435,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                     {selectedMember?.Role === "3" && "Hráč"}
                     {(selectedMember?.Role === "0" ||
                       selectedMember?.Role === "No Role Assigned") && (
-                      <Box sx={{ maxWidth: "15em", }}>
+                      <Box sx={{ maxWidth: "15em" }}>
                         <Alert sx={{ maxHeight: "2.6em" }} severity="warning">
                           Není zvoleno
                         </Alert>

@@ -27,6 +27,7 @@ export type MemberDetails = {
   Surname: string;
   Role: string;
   Email: string;
+  DateOfBirth: string;
 };
 
 
@@ -344,6 +345,7 @@ export const resolvers = {
                     Surname: userData.Surname,
                     Role: role, // Add role to the returned details
                     Email: userData.Email,
+                    DateOfBirth: userData.DateOfBirth,
                   });
                 }
               }
