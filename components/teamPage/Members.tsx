@@ -59,6 +59,12 @@ const GET_USER_ROLE_IN_TEAM = gql`
   }
 `;
 
+const DELETE_MEMBER = gql`
+  mutation DeleteMember($teamId: String!, $memberEmail: String!) {
+    deleteMember(teamId: $teamId, memberEmail: $memberEmail)
+  }
+`;
+
 interface Member {
   Name: string;
   Surname: string;
@@ -84,6 +90,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
   } | null>(null);
   const [selectedRole, setSelectedRole] = useState("");
   const [updateMemberRole] = useMutation(UPDATE_MEMBER_ROLE);
+  const [deleteMember] = useMutation(DELETE_MEMBER);
   const user = authUtils.getCurrentUser();
 
   const {
@@ -157,10 +164,23 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
   const members = data?.getTeamMembersDetails || [];
   const role = roleData?.getUserRoleInTeam.role || "";
 
-  const handleDeleteClick = () => {
+  const handleDeleteClick = async  () => {
     if (selectedMember && selectedMember.Email !== currentUserEmail) {
       console.log("Deleting member with email:", selectedMember.Email);
-      // Add your delete logic here
+
+      try {
+        await deleteMember({
+          variables: {
+            teamId: id || "",
+            memberEmail: selectedMember.Email,
+          },
+        });
+
+        await setModalOpen(false);
+        await refetch();
+      } catch (error: any) {
+        console.error("Error deleting member:", error.message);
+      }
     }
   };
 
@@ -587,13 +607,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                       </MenuItem>
                     </Select>
 
-                    {selectedRole == "No Role Assigned" && (
-                      <Box sx={{ maxWidth: "15em", marginBottom: "1em" }}>
-                        <Alert sx={{ maxHeight: "3em" }} severity="warning">
-                          Není zvoleno
-                        </Alert>
-                      </Box>
-                    )}
+                   
                   </React.Fragment>
                 </Box>
               ) : (
@@ -616,7 +630,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                     )}
                     {(selectedMember?.Role === "0" ||
                       selectedMember?.Role === "No Role Assigned") && (
-                      <Box sx={{ maxWidth: "15em" }}>
+                      <Box sx={{ maxWidth: "15em", marginBottom:"0.5em" }}>
                         <Alert sx={{ maxHeight: "2.6em" }} severity="warning">
                           Není zvoleno
                         </Alert>

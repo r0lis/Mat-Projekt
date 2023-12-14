@@ -778,6 +778,60 @@ export const resolvers = {
       }
     },
 
+    deleteMember: async (
+      _: any,
+      { teamId, memberEmail }: { teamId: string; memberEmail: string },
+      context: Context
+    ) => {
+      try {
+        if (context.user) {
+          // Find the team by teamId
+          const teamQuery = context.db.collection("Team").where("teamId", "==", teamId);
+          const teamSnapshot = await teamQuery.get();
+    
+          if (!teamSnapshot.empty) {
+            const teamDoc = teamSnapshot.docs[0];
+            const existingMembers = teamDoc.data().Members || [];
+    
+            // Remove the specified memberEmail from Members
+            const updatedMembers = existingMembers.filter(
+              (member: { member: string; role: string }) => member.member !== memberEmail
+            );
+    
+            // Update the Members field in the database
+            await teamDoc.ref.update({ Members: updatedMembers });
+    
+            // Also remove the member from MembersEmails if present
+            const existingMembersEmails = teamDoc.data().MembersEmails || [];
+            const updatedMembersEmails = existingMembersEmails.filter((email: string) => email !== memberEmail);
+    
+            // Update the MembersEmails field in the database
+            await teamDoc.ref.update({ MembersEmails: updatedMembersEmails });
+    
+            // Delete the teamId from IdTeam in the User collection
+            const userQuery = context.db.collection("User");
+            const userSnapshot = await userQuery.get();
+    
+            if (!userSnapshot.empty) {
+              userSnapshot.forEach(async (userDoc) => {
+                const existingIdTeam = userDoc.data().IdTeam || [];
+                const updatedIdTeam = existingIdTeam.filter((id: string) => id !== teamId);
+    
+                // Update the IdTeam field in the User collection
+                await userDoc.ref.update({ IdTeam: updatedIdTeam });
+              });
+            }
+    
+            return true;
+          }
+        }
+        return false;
+      } catch (error) {
+        console.error("Error deleting member:", error);
+        throw error;
+      }
+    },
+    
     deleteUserByEmail: async (
       _: any,
       { email }: { email: string },

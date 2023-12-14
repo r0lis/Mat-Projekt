@@ -123,6 +123,7 @@ export const typeDefs = gql`
       role: String!
       teamId: String!
     ): MemberDetails
+    deleteMember(teamId: String, memberEmail: String): Boolean
 
   }
 
