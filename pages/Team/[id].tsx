@@ -35,6 +35,7 @@ import TeamComponent from "@/components/teamPage/Team";
 import Nav from "../../components/teamPage/NavBar/Nav";
 import { authUtils } from "@/firebase/auth.utils";
 import Link from "next/link";
+import RoleError from "@/components/teamPage/error/RoleError";
 
 const items = [
   { label: "Přehled", image: Overview },
@@ -155,7 +156,7 @@ const Team: React.FC = () => {
       console.log(role);
   if (role == 0) {
     return (
-      <Box><Alert severity="warning">Správce klubu musí nastavit vaše práva.</Alert></Box>
+      <Box><RoleError/></Box>
     );
   }
  
