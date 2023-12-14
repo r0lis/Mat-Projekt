@@ -86,6 +86,8 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
   const [updateMemberRole] = useMutation(UPDATE_MEMBER_ROLE);
   const user = authUtils.getCurrentUser();
 
+  
+
   const {
     loading: roleLoading,
     error: roleError,
@@ -130,7 +132,6 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
         await refetch();
       } catch (error: any) {
         console.error("Error updating member role:", error.message);
-        // Handle error if needed
       }
     }
   };
@@ -157,6 +158,19 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
 
   const members = data?.getTeamMembersDetails || [];
   const role = roleData?.getUserRoleInTeam.role || "";
+
+  const calculateAge = (dateOfBirth: string) => {
+    const dob = new Date(dateOfBirth);
+    const today = new Date();
+    let age = today.getFullYear() - dob.getFullYear();
+    const monthDiff = today.getMonth() - dob.getMonth();
+    
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+      age--;
+    }
+
+    return age;
+  };
 
   return (
     <Box>
@@ -237,15 +251,14 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                   }}
                 >
                   <TableCell>
-                    {(role === "1") && (
-                         <Box
-                         sx={{ height: "20px", width: "20px" }}
-                         onClick={() => handleRowClick(member)}
-                       >
-                         <ModeEditIcon />
-                       </Box>
+                    {role === "1" && (
+                      <Box
+                        sx={{ height: "20px", width: "20px" }}
+                        onClick={() => handleRowClick(member)}
+                      >
+                        <ModeEditIcon />
+                      </Box>
                     )}
-                   
                   </TableCell>
                   <TableCell>
                     {member.Surname} {member.Name}
@@ -381,8 +394,43 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
               justifyContent: "space-between",
             }}
           >
-            {/* Right Column */}
+            
             <Box sx={{ padding: "0em 2em 0em 2em" }}>
+            <Typography
+                id="modal-description"
+                sx={{
+                  marginTop: "1em",
+                  fontFamily: "Roboto",
+                  fontSize: "1em",
+                  marginBottom: "1em",
+                }}
+              >
+                Věk:
+              </Typography>
+              <Typography
+                id="modal-description"
+                sx={{
+                  marginTop: "1em",
+                  fontFamily: "Roboto",
+                  fontSize: "1em",
+                  marginBottom: "1em",
+                  whiteSpace: "nowrap"
+                }}
+              >
+                Datum narození:
+              </Typography>
+              <Typography
+                id="modal-description"
+                sx={{
+                  marginTop: "1em",
+                  fontFamily: "Roboto",
+                  fontSize: "1em",
+                  marginBottom: "1em",
+                  whiteSpace: "nowrap"
+                }}
+              >
+                Hlavní tým:
+              </Typography>
               <Typography
                 id="modal-description"
                 sx={{
@@ -392,7 +440,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                   marginBottom: "1em",
                 }}
               >
-                Email
+                Email:
               </Typography>
               <Typography
                 id="modal-description"
@@ -407,11 +455,11 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                   fontSize: "1em",
                 }}
               >
-                Práva
+                Práva:
               </Typography>
             </Box>
 
-            {/* Left Column */}
+            
             <Box
               sx={{
                 display: "flex",
@@ -424,14 +472,45 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                 id="modal-description"
                 sx={{ marginTop: "1em", marginBottom: "1em" }}
               >
+                {calculateAge(selectedMember?.DateOfBirth || '')} let
+              </Typography>
+
+              <Typography
+                id="modal-description"
+                sx={{  marginBottom: "1em" }}
+              >
+                {selectedMember?.DateOfBirth &&
+                        new Date(selectedMember.DateOfBirth).toLocaleDateString(
+                          "cs-CZ",
+                          {
+                            day: "2-digit",
+                            month: "2-digit",
+                            year: "numeric",
+                          }
+                        )}
+              </Typography>
+
+              <Typography
+                id="modal-description"
+                sx={{  marginBottom: "1em" }}
+              >
+                A-tým
+              </Typography>
+
+              <Typography
+                id="modal-description"
+                sx={{  marginBottom: "1em" }}
+              >
                 {selectedMember?.Email}
               </Typography>
+
+              
 
               {editMode ? (
                 <Box sx={{}}>
                   <React.Fragment>
                     <Select
-                      sx={{ width: "15em", margin: "0.5em 2em 0.5em 0em" }}
+                      sx={{ width: "auto", margin: "0.5em 2em 0.5em 0em" }}
                       value={selectedRole}
                       onChange={handleRoleChange}
                     >
