@@ -105,9 +105,9 @@ function RoleError() {
             <Typography variant="h4" sx={{fontFamily:"Roboto", fontWeight:"700", marginLeft:"1em", marginRight:"1em"}}>Chyba:</Typography>
           
               <Alert severity="error" sx={{marginTop:"1em", marginLeft:"1em", marginRight:"1em"}}>
-                <Typography variant="h6">Nemáte nastavená práva pro zobrazení této stránky, kontaktujte svůj klub.</Typography>
+                <Typography variant="h6">Pro tuto akci je třeba se přihlásit</Typography>
                 </Alert>
-              <Link sx={{textDecoration:"none"}} href="/">
+              <Link sx={{textDecoration:"none"}} href="/LoginPage">
                   <Button
                     variant="contained"
                     color="primary"
@@ -128,7 +128,7 @@ function RoleError() {
                       width: "80%",
                     }}
                   >
-                    <Typography sx={{textDecoration:"none",  whiteSpace: "nowrap", fontSize:"Roboto", fontWeight:"600"}} variant="h5">Zpět do menu</Typography>
+                    <Typography sx={{textDecoration:"none",  whiteSpace: "nowrap", fontSize:"Roboto", fontWeight:"600"}} variant="h5">Přihlásit</Typography>
                     
                   </Button>
                 </Link>

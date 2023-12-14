@@ -5,8 +5,6 @@ import Box from "@mui/material/Box";
 import { useRouter } from "next/router";
 import { gql, useQuery } from "@apollo/client";
 import {
-  Alert,
-  Button,
   CircularProgress,
   Switch,
   Typography,
@@ -34,8 +32,9 @@ import TeamIcon from "@/public/assets/people.png";
 import TeamComponent from "@/components/teamPage/Team";
 import Nav from "../../components/teamPage/NavBar/Nav";
 import { authUtils } from "@/firebase/auth.utils";
-import Link from "next/link";
 import RoleError from "@/components/teamPage/error/RoleError";
+import LoginError from "@/components/teamPage/error/LoginError";
+import MembershipError from "@/components/teamPage/error/MembershipError";
 
 const items = [
   { label: "Přehled", image: Overview },
@@ -87,6 +86,15 @@ const Team: React.FC = () => {
   const user = authUtils.getCurrentUser();
 
   const {
+    loading: loadingUser,
+    error: errorUser,
+    data: dataUser,
+  } = useQuery(CHECK_USER_MEMBERSHIP, {
+    variables: { teamId: id, currentUserEmail },
+  });
+
+
+  const {
     loading: roleLoading,
     error: roleError,
     data: roleData,
@@ -120,13 +128,7 @@ const Team: React.FC = () => {
     variables: { teamId: id },
   });
 
-  const {
-    loading: loadingUser,
-    error: errorUser,
-    data: dataUser,
-  } = useQuery(CHECK_USER_MEMBERSHIP, {
-    variables: { teamId: id, currentUserEmail },
-  });
+  
 
   if (loadingUser || roleLoading)
     return (
@@ -152,9 +154,27 @@ const Team: React.FC = () => {
   if (error) return <p>Chyba: {error.message}</p>;
 
   const team = data.getTeamDetails;
-  const role = roleData?.getUserRoleInTeam.role || "";
+
+  const isUserMember = dataUser.checkUserMembership;
+
+  if (!currentUserEmail) {
+    return (
+      <Box>
+        <LoginError/>
+      </Box>
+    );
+  }
+  if (!isUserMember) {
+    return (
+      <Box>
+        <MembershipError/>
+      </Box>
+    );
+  }
+
+  const role = roleData?.getUserRoleInTeam?.role || "";
       console.log(role);
-  if (role == 0) {
+  if (role == 0 ) {
     return (
       <Box><RoleError/></Box>
     );
@@ -171,38 +191,7 @@ const Team: React.FC = () => {
     }
   };
 
-  const isUserMember = dataUser.checkUserMembership;
-
-  if (!currentUserEmail) {
-    return (
-      <Box>
-        <Alert severity="error">
-          You must be logged in to perform this action.
-          <br />
-          <Link href="/LoginPage">
-            <Button sx={{ backgroundColor: "red" }}>
-              <Typography sx={{ color: "#fff" }}>Login</Typography>
-            </Button>
-          </Link>
-        </Alert>
-      </Box>
-    );
-  }
-  if (!isUserMember) {
-    return (
-      <Box>
-        <Alert severity="error">
-          Nejste členem tohoto týmu.
-          <br />
-          <Link href="/">
-            <Button sx={{ backgroundColor: "red" }}>
-              <Typography sx={{ color: "#fff" }}>Zpět</Typography>
-            </Button>
-          </Link>
-        </Alert>
-      </Box>
-    );
-  }
+  
 
   return (
     <Box sx={{ display: "block", width: "100%", height: "100%" }}>
