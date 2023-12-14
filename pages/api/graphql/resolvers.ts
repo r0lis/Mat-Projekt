@@ -809,7 +809,8 @@ export const resolvers = {
             await teamDoc.ref.update({ MembersEmails: updatedMembersEmails });
     
             // Delete the teamId from IdTeam in the User collection
-            const userQuery = context.db.collection("User");
+            const userQuery = context.db.collection("User").where("Email", "==", memberEmail);
+
             const userSnapshot = await userQuery.get();
     
             if (!userSnapshot.empty) {
@@ -831,7 +832,7 @@ export const resolvers = {
         throw error;
       }
     },
-    
+
     deleteUserByEmail: async (
       _: any,
       { email }: { email: string },

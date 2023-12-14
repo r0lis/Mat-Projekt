@@ -41,4 +41,3 @@ async function processTeams() {
   }
 }
 
-console.log("Služba týmů spuštěna...");
