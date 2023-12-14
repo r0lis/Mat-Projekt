@@ -39,7 +39,6 @@ export const HeartbeatProvider = ({ children }: HeartbeatProviderProps): JSX.Ele
 
       // Můžete aktualizovat isConnected na základě odpovědi
       setIsConnected(response.data.heartbeat);
-      console.log('User is in the application and actively communicating with the server.');
 
     } catch (error) {
       setIsConnected(false);
@@ -59,7 +58,6 @@ export const HeartbeatProvider = ({ children }: HeartbeatProviderProps): JSX.Ele
   
       const handleBeforeUnload = () => {
         // Tento kód se spustí, když uživatel opouští stránku
-        console.log('Uživatel opouští aplikaci.');
       };
       window.addEventListener('beforeunload', handleBeforeUnload);
   
@@ -68,13 +66,10 @@ export const HeartbeatProvider = ({ children }: HeartbeatProviderProps): JSX.Ele
         clearInterval(interval);
         window.removeEventListener('beforeunload', handleBeforeUnload);
   
-        // Tato část kódu se spustí při odmontování komponenty
-        console.log('Uživatel opustil aplikaci.');
-        console.info('Uživatel opustil aplikaci.');
+        
       };
     } else {
       // If user is null, log a message indicating that the heartbeat is not started
-      console.log('Heartbeat is not started because the user is null.');
     }
   }, [user, apolloClient]);
 

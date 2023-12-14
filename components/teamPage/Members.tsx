@@ -95,7 +95,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
     skip: !user,
   });
 
-  if (roleError) return <p>Chyba: {roleError.message}</p>;
+  if (roleError) return <Typography>Chyba: {roleError.message}</Typography>;
 
   const handleRowClick = (member: Member) => {
     setSelectedMember(member);
@@ -152,10 +152,17 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
         style={{ position: "absolute", top: "50%", left: "50%" }}
       />
     );
-  if (error) return <p>Error: {error.message}</p>;
+  if (error) return <Typography>Error: {error.message}</Typography>;
 
   const members = data?.getTeamMembersDetails || [];
   const role = roleData?.getUserRoleInTeam.role || "";
+
+  const handleDeleteClick = () => {
+    if (selectedMember && selectedMember.Email !== currentUserEmail) {
+      console.log("Deleting member with email:", selectedMember.Email);
+      // Add your delete logic here
+    }
+  };
 
   const calculateAge = (dateOfBirth: string) => {
     const dob = new Date(dateOfBirth);
@@ -623,6 +630,61 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
 
           {editMode ? (
             <Box sx={{ paddingLeft: "1em" }}>
+              <Box
+                sx={{
+                  fontFamily: "Roboto",
+                  fontWeight: "500",
+                  opacity: "0.6",
+
+                  top: "-10px",
+                  position: "relative",
+                  marginTop: "1em",
+                }}
+              >
+                štítky
+              </Box>
+
+              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                <Box
+                  sx={{
+                    border: "1px solid black",
+                    textAlign: "center",
+                    padding: "3px",
+                    borderRadius: "8px",
+                    width: "6em",
+                  }}
+                >
+                  <Typography sx={{ fontFamily: "Roboto", fontWeight: "500" }}>
+                    útočník
+                  </Typography>
+                </Box>
+                <Box
+                  sx={{
+                    border: "1px solid black",
+                    textAlign: "center",
+                    padding: "3px",
+                    borderRadius: "8px",
+                    width: "6em",
+                  }}
+                >
+                  <Typography sx={{ fontFamily: "Roboto", fontWeight: "500" }}>
+                    A-Tým
+                  </Typography>
+                </Box>
+                <Box
+                  sx={{
+                    border: "1px solid black",
+                    textAlign: "center",
+                    padding: "3px",
+                    borderRadius: "8px",
+                    width: "6em",
+                  }}
+                >
+                  <Typography sx={{ fontFamily: "Roboto", fontWeight: "500" }}>
+                    Levá strana
+                  </Typography>
+                </Box>
+              </Box>
               <Button
                 sx={{
                   backgroundColor: "lightgray",
@@ -640,7 +702,6 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
             </Box>
           ) : (
             <>
-              <Box sx={{ position: "absolute", borderTop:"1px solid black" }}></Box>
               <Box sx={{ paddingLeft: "1em" }}>
                 <Box
                   sx={{
@@ -648,6 +709,17 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                     alignItems: "center",
                   }}
                 >
+                  <div
+                    style={{
+                      width: "100%",
+                      borderBottom: "4px solid #ddd", // Change the color as needed
+                      position: "absolute",
+                      top: selectedMember && selectedMember.Email === currentUserEmail ? "55%" : "52%",
+                      transform: "translateY(-50%)",
+                      marginLeft: "-3em",
+                      zIndex: -1,
+                    }}
+                  />
                   <Box
                     sx={{
                       fontFamily: "Roboto",
@@ -656,7 +728,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                       marginLeft: "-0.5em",
                       top: "-10px",
                       position: "relative",
-                      marginTop: "2em",
+                      marginTop: "1em",
                     }}
                   >
                     štítky
@@ -716,6 +788,17 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                     alignItems: "center",
                   }}
                 >
+                  <div
+                    style={{
+                      width: "100%",
+                      borderBottom: "4px solid #ddd", // Change the color as needed
+                      position: "absolute",
+                      top: selectedMember && selectedMember.Email === currentUserEmail ? "68%" : "79%",
+                      transform: "translateY(-50%)",
+                      marginLeft: "-3em",
+                      zIndex: -1,
+                    }}
+                  />
                   <Box
                     sx={{
                       fontFamily: "Roboto",
@@ -762,7 +845,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                     backgroundColor: "lightgray",
                     color: "black",
                     padding: "1em",
-                    height: "2.5em",
+                    height: "2em",
                     marginLeft: "-0.5em",
                     marginTop: "0.5em",
                     width: "100%",
@@ -771,6 +854,23 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                 >
                   Upravit
                 </Button>
+                {selectedMember &&
+                  selectedMember.Email !== currentUserEmail && (
+                    <Button
+                      sx={{
+                        backgroundColor: "lightgray",
+                        color: "black",
+                        padding: "1em",
+                        height: "2em",
+                        marginLeft: "-0.5em",
+                        marginTop: "0.5em",
+                        width: "100%",
+                      }}
+                      onClick={handleDeleteClick}
+                    >
+                      Smazat
+                    </Button>
+                  )}
               </Box>
             </>
           )}
