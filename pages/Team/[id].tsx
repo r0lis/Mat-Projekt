@@ -4,11 +4,7 @@ import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import { useRouter } from "next/router";
 import { gql, useQuery } from "@apollo/client";
-import {
-  CircularProgress,
-  Switch,
-  Typography,
-} from "@mui/material";
+import { CircularProgress, Switch, Typography } from "@mui/material";
 import Overview from "../../public/assets/Overview.png";
 import Trainings from "../../public/assets/training.png";
 import Calendar from "../../public/assets/Kalendar.png";
@@ -46,10 +42,8 @@ const items = [
   { label: "Tým", image: TeamIcon },
   { label: "Členové", image: Members },
   { label: "Platby", image: Pay },
-  { label: "Správa", image: Settings }
+  { label: "Správa", image: Settings },
 ];
-
-
 
 const GET_TEAM_DETAILS = gql`
   query GetTeamDetails($teamId: String!) {
@@ -85,26 +79,6 @@ const Team: React.FC = () => {
   const currentUserEmail = authUtils.getCurrentUser()?.email || "";
   const user = authUtils.getCurrentUser();
 
-  const {
-    loading: loadingUser,
-    error: errorUser,
-    data: dataUser,
-  } = useQuery(CHECK_USER_MEMBERSHIP, {
-    variables: { teamId: id, currentUserEmail },
-  });
-
-
-  const {
-    loading: roleLoading,
-    error: roleError,
-    data: roleData,
-  } = useQuery(GET_USER_ROLE_IN_TEAM, {
-    variables: { teamId: id, email: user?.email || "" },
-    skip: !user,
-  });
-
-  if (roleError) return <p>Chyba: {roleError.message}</p>;
-
   useEffect(() => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
@@ -124,13 +98,28 @@ const Team: React.FC = () => {
     };
   }, [windowWidth]);
 
+  const {
+    loading: loadingUser,
+    error: errorUser,
+    data: dataUser,
+  } = useQuery(CHECK_USER_MEMBERSHIP, {
+    variables: { teamId: id, currentUserEmail },
+  });
+
+  const {
+    loading: roleLoading,
+    error: roleError,
+    data: roleData,
+  } = useQuery(GET_USER_ROLE_IN_TEAM, {
+    variables: { teamId: id, email: user?.email || "" },
+    skip: !user,
+  });
+
   const { loading, error, data } = useQuery(GET_TEAM_DETAILS, {
     variables: { teamId: id },
   });
 
-  
-
-  if (loadingUser || roleLoading)
+  if (loadingUser || roleLoading || loading)
     return (
       <CircularProgress
         color="primary"
@@ -138,48 +127,38 @@ const Team: React.FC = () => {
         style={{ position: "absolute", top: "50%", left: "50%" }}
       />
     );
-  if (errorUser) {
+  if (errorUser || roleError || error) {
     console.error("Error checking user membership:", errorUser);
-    return <p>Error checking user membership</p>;
+    return <p>Error</p>;
   }
 
-  if (loading)
-    return (
-      <CircularProgress
-        color="primary"
-        size={50}
-        style={{ position: "absolute", top: "50%", left: "50%" }}
-      />
-    );
-  if (error) return <p>Chyba: {error.message}</p>;
-
   const team = data.getTeamDetails;
-
   const isUserMember = dataUser.checkUserMembership;
 
   if (!currentUserEmail) {
     return (
       <Box>
-        <LoginError/>
+        <LoginError />
       </Box>
     );
   }
   if (!isUserMember) {
     return (
       <Box>
-        <MembershipError/>
+        <MembershipError />
       </Box>
     );
   }
 
   const role = roleData?.getUserRoleInTeam?.role || "";
-      console.log(role);
-  if (role == 0 ) {
+
+  if (role == 0) {
     return (
-      <Box><RoleError/></Box>
+      <Box>
+        <RoleError />
+      </Box>
     );
   }
- 
 
   const handleLinkClick = (label: string) => {
     setActiveLink(label);
@@ -190,8 +169,6 @@ const Team: React.FC = () => {
       setIsHovered(isHovering);
     }
   };
-
-  
 
   return (
     <Box sx={{ display: "block", width: "100%", height: "100%" }}>
@@ -346,7 +323,6 @@ const Team: React.FC = () => {
               height: "auto",
             }}
           >
-             
             {activeLink === "Přehled" && <OverviewComponent />}
             {activeLink === "Tréninky" && <TrainingsComponent />}
             {activeLink === "Kalendář" && <CalendarComponent />}

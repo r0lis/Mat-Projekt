@@ -102,7 +102,6 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
     skip: !user,
   });
 
-  if (roleError) return <Typography>Chyba: {roleError.message}</Typography>;
 
   const handleRowClick = (member: Member) => {
     setSelectedMember(member);
@@ -159,15 +158,13 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
         style={{ position: "absolute", top: "50%", left: "50%" }}
       />
     );
-  if (error) return <Typography>Error: {error.message}</Typography>;
+  if (error || roleError) return <Typography>Chyba</Typography>;
 
   const members = data?.getTeamMembersDetails || [];
   const role = roleData?.getUserRoleInTeam.role || "";
 
-  const handleDeleteClick = async  () => {
+  const handleDeleteClick = async () => {
     if (selectedMember && selectedMember.Email !== currentUserEmail) {
-      console.log("Deleting member with email:", selectedMember.Email);
-
       try {
         await deleteMember({
           variables: {
@@ -193,7 +190,6 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
     if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
       age--;
     }
-
     return age;
   };
 
@@ -298,8 +294,8 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                             month: "2-digit",
                             year: "numeric",
                           }
-                        )}  / { calculateAge( member?.DateOfBirth || "")} let
-                        
+                        )}{" "}
+                      / {calculateAge(member?.DateOfBirth || "")} let
                     </Typography>
                   </TableCell>
                   <TableCell>
@@ -363,7 +359,6 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
             boxShadow: 24,
             p: 4,
             borderRadius: "8px",
-
             width: 400,
             backgroundImage: `
             linear-gradient(to bottom, #808080 0, #909090 100px, #ffffff 100px, #ffffff calc(100% - 110px), #909090 calc(100% - 110px), #909090 100%)
@@ -607,8 +602,6 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                         </Typography>
                       </MenuItem>
                     </Select>
-
-                   
                   </React.Fragment>
                 </Box>
               ) : (
@@ -631,7 +624,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                     )}
                     {(selectedMember?.Role === "0" ||
                       selectedMember?.Role === "No Role Assigned") && (
-                      <Box sx={{ maxWidth: "15em", marginBottom:"0.5em" }}>
+                      <Box sx={{ maxWidth: "15em", marginBottom: "0.5em" }}>
                         <Alert sx={{ maxHeight: "2.6em" }} severity="warning">
                           Není zvoleno
                         </Alert>
@@ -716,7 +709,6 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
               </Button>
             </Box>
           ) : (
-            <>
               <Box sx={{ paddingLeft: "1em" }}>
                 <Box
                   sx={{
@@ -729,7 +721,11 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                       width: "100%",
                       borderBottom: "4px solid #ddd", // Change the color as needed
                       position: "absolute",
-                      top: selectedMember && selectedMember.Email === currentUserEmail ? "55%" : "52%",
+                      top:
+                        selectedMember &&
+                        selectedMember.Email === currentUserEmail
+                          ? "55%"
+                          : "52%",
                       transform: "translateY(-50%)",
                       marginLeft: "-3em",
                       zIndex: -1,
@@ -808,7 +804,11 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                       width: "100%",
                       borderBottom: "4px solid #ddd", // Change the color as needed
                       position: "absolute",
-                      top: selectedMember && selectedMember.Email === currentUserEmail ? "68%" : "79%",
+                      top:
+                        selectedMember &&
+                        selectedMember.Email === currentUserEmail
+                          ? "68%"
+                          : "79%",
                       transform: "translateY(-50%)",
                       marginLeft: "-3em",
                       zIndex: -1,
@@ -887,7 +887,6 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                     </Button>
                   )}
               </Box>
-            </>
           )}
         </Box>
       </Modal>
