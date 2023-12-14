@@ -335,9 +335,11 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
             boxShadow: 24,
             p: 4,
             borderRadius: "8px",
+
             width: 400,
-            backgroundImage:
-              "linear-gradient(to bottom, #808080 100px, #ffffff 80px)", // Šedý gradient po prvních 80 pixelů a poté bílá
+            backgroundImage: `
+            linear-gradient(to bottom, #808080 0, #909090 100px, #ffffff 100px, #ffffff calc(100% - 110px), #909090 calc(100% - 110px), #909090 100%)
+          `,
           }}
         >
           <Box
@@ -489,14 +491,20 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
             >
               <Typography
                 id="modal-description"
-                sx={{ marginTop: "1em", marginBottom: "1em",  color: "black",
-                fontWeight: "500", }}
+                sx={{
+                  marginTop: "1em",
+                  marginBottom: "1em",
+                  color: "black",
+                  fontWeight: "500",
+                }}
               >
                 {calculateAge(selectedMember?.DateOfBirth || "")} let
               </Typography>
 
-              <Typography id="modal-description" sx={{ marginBottom: "1em" ,  color: "black",
-                  fontWeight: "500",}}>
+              <Typography
+                id="modal-description"
+                sx={{ marginBottom: "1em", color: "black", fontWeight: "500" }}
+              >
                 {selectedMember?.DateOfBirth &&
                   new Date(selectedMember.DateOfBirth).toLocaleDateString(
                     "cs-CZ",
@@ -508,19 +516,33 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                   )}
               </Typography>
 
-              <Typography id="modal-description" sx={{ marginBottom: "1em" , color: "black",
-                  fontWeight: "500",}}>
+              <Typography
+                id="modal-description"
+                sx={{ marginBottom: "1em", color: "black", fontWeight: "500" }}
+              >
                 A-tým
               </Typography>
 
-              <Typography id="modal-description" sx={{ marginBottom: "1em" , color: "black",
-                  fontWeight: "500",}}>
+              <Typography
+                id="modal-description"
+                sx={{
+                  marginBottom: "1em",
+                  color: "black",
+                  fontWeight: "500",
+                  whiteSpace: "nowrap",
+                }}
+              >
                 {selectedMember?.Email}
               </Typography>
 
               <Typography
                 id="modal-description"
-                sx={{ marginBottom: "1em", whiteSpace: "nowrap", color: "black", fontWeight: "500", }}
+                sx={{
+                  marginBottom: "1em",
+                  whiteSpace: "nowrap",
+                  color: "black",
+                  fontWeight: "500",
+                }}
               >
                 do 2. 3. 2023
               </Typography>
@@ -529,19 +551,33 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                 <Box sx={{}}>
                   <React.Fragment>
                     <Select
-                      sx={{ width: "auto", margin: "0.5em 2em 0.5em 0em",  }}
+                      sx={{ width: "auto", margin: "0.5em 2em 0.5em 0em" }}
                       value={selectedRole}
                       onChange={handleRoleChange}
                     >
                       <MenuItem value="No Role Assigned" disabled>
-                        <Typography sx={{ color: "black", fontWeight: "500", }}>
-                        Vyberte!
+                        <Typography sx={{ color: "black", fontWeight: "500" }}>
+                          Vyberte!
                         </Typography>
-                        
                       </MenuItem>
-                      <MenuItem value="1"> <Typography sx={{ color: "black", fontWeight: "500", }}>Management</Typography></MenuItem>
-                      <MenuItem value="2"> <Typography sx={{ color: "black", fontWeight: "500", }}>Trenér</Typography></MenuItem>
-                      <MenuItem value="3"> <Typography sx={{ color: "black", fontWeight: "500", }}>Hráč</Typography></MenuItem>
+                      <MenuItem value="1">
+                        {" "}
+                        <Typography sx={{ color: "black", fontWeight: "500" }}>
+                          Management
+                        </Typography>
+                      </MenuItem>
+                      <MenuItem value="2">
+                        {" "}
+                        <Typography sx={{ color: "black", fontWeight: "500" }}>
+                          Trenér
+                        </Typography>
+                      </MenuItem>
+                      <MenuItem value="3">
+                        {" "}
+                        <Typography sx={{ color: "black", fontWeight: "500" }}>
+                          Hráč
+                        </Typography>
+                      </MenuItem>
                     </Select>
 
                     {selectedRole == "No Role Assigned" && (
@@ -554,11 +590,23 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                   </React.Fragment>
                 </Box>
               ) : (
-                <Box sx={{ marginBottom: "1em",  }}>
-                  <Typography id="modal-description" sx={{color:"black"}}>
-                    {selectedMember?.Role === "1" && <Typography sx={{color:"black", fontWeight:"500"}}>Management</Typography>}
-                    {selectedMember?.Role === "2" && <Typography sx={{color:"black", fontWeight:"500"}}>Trenér</Typography>}
-                    {selectedMember?.Role === "3" && <Typography sx={{color:"black", fontWeight:"500"}}>Hráč</Typography>}
+                <Box sx={{ marginBottom: "1em" }}>
+                  <Typography id="modal-description" sx={{ color: "black" }}>
+                    {selectedMember?.Role === "1" && (
+                      <Typography sx={{ color: "black", fontWeight: "500" }}>
+                        Management
+                      </Typography>
+                    )}
+                    {selectedMember?.Role === "2" && (
+                      <Typography sx={{ color: "black", fontWeight: "500" }}>
+                        Trenér
+                      </Typography>
+                    )}
+                    {selectedMember?.Role === "3" && (
+                      <Typography sx={{ color: "black", fontWeight: "500" }}>
+                        Hráč
+                      </Typography>
+                    )}
                     {(selectedMember?.Role === "0" ||
                       selectedMember?.Role === "No Role Assigned") && (
                       <Box sx={{ maxWidth: "15em" }}>
@@ -579,7 +627,11 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                 sx={{
                   backgroundColor: "lightgray",
                   color: "black",
+                  marginTop: "4em",
                   padding: "1em",
+                  height: "2.5em",
+                  marginLeft: "-0.5em",
+                  width: "100%",
                 }}
                 onClick={handleSaveClick}
               >
@@ -587,86 +639,140 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
               </Button>
             </Box>
           ) : (
-            <Box sx={{ paddingLeft: "1em" }}>
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                }}
-              >
+            <>
+              <Box sx={{ position: "absolute", borderTop:"1px solid black" }}></Box>
+              <Box sx={{ paddingLeft: "1em" }}>
                 <Box
                   sx={{
-                    fontFamily: "Roboto",
-                    fontWeight: "500",
-                    opacity: "0.6",
-                    marginLeft: "-0.5em",
-                    top: "-10px",
-                    position: "relative",
-                    marginTop: "2em",
+                    display: "flex",
+                    alignItems: "center",
                   }}
                 >
-                  štítky
+                  <Box
+                    sx={{
+                      fontFamily: "Roboto",
+                      fontWeight: "500",
+                      opacity: "0.6",
+                      marginLeft: "-0.5em",
+                      top: "-10px",
+                      position: "relative",
+                      marginTop: "2em",
+                    }}
+                  >
+                    štítky
+                  </Box>
                 </Box>
-              </Box>
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                }}
-              >
+                <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                  <Box
+                    sx={{
+                      border: "1px solid black",
+                      textAlign: "center",
+                      padding: "3px",
+                      borderRadius: "8px",
+                      width: "6em",
+                    }}
+                  >
+                    <Typography
+                      sx={{ fontFamily: "Roboto", fontWeight: "500" }}
+                    >
+                      útočník
+                    </Typography>
+                  </Box>
+                  <Box
+                    sx={{
+                      border: "1px solid black",
+                      textAlign: "center",
+                      padding: "3px",
+                      borderRadius: "8px",
+                      width: "6em",
+                    }}
+                  >
+                    <Typography
+                      sx={{ fontFamily: "Roboto", fontWeight: "500" }}
+                    >
+                      A-Tým
+                    </Typography>
+                  </Box>
+                  <Box
+                    sx={{
+                      border: "1px solid black",
+                      textAlign: "center",
+                      padding: "3px",
+                      borderRadius: "8px",
+                      width: "6em",
+                    }}
+                  >
+                    <Typography
+                      sx={{ fontFamily: "Roboto", fontWeight: "500" }}
+                    >
+                      Levá strana
+                    </Typography>
+                  </Box>
+                </Box>
+
                 <Box
                   sx={{
-                    fontFamily: "Roboto",
-                    fontWeight: "500",
-                    opacity: "0.6",
-                    marginLeft: "-0.5em",
-                    top: "-10px",
-                    position: "relative",
-                    marginTop: "2em",
+                    display: "flex",
+                    alignItems: "center",
                   }}
                 >
-                  Kontaktní adresa
+                  <Box
+                    sx={{
+                      fontFamily: "Roboto",
+                      fontWeight: "500",
+                      opacity: "0.6",
+                      marginLeft: "-0.5em",
+                      top: "-10px",
+                      position: "relative",
+                      marginTop: "2em",
+                    }}
+                  >
+                    Kontaktní adresa
+                  </Box>
                 </Box>
-              </Box>
-              <Box sx={{marginLeft:"1em"}}>
-                <Typography sx={{ fontFamily: "Roboto", fontWeight: "500" }}>
-                  Skořenice 30 <br />
-                  56501 Choceň
-                </Typography>
-              </Box>
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                }}
-              >
+                <Box sx={{ marginLeft: "1em" }}>
+                  <Typography sx={{ fontFamily: "Roboto", fontWeight: "500" }}>
+                    Skořenice 30 <br />
+                    56501 Choceň
+                  </Typography>
+                </Box>
                 <Box
                   sx={{
-                    fontFamily: "Roboto",
-                    fontWeight: "500",
-                    opacity: "0.6",
-                    marginLeft: "-0.5em",
-                    top: "-10px",
-                    position: "relative",
-                    marginTop: "2em",
+                    display: "flex",
+                    alignItems: "center",
                   }}
                 >
-                  Management
+                  <Box
+                    sx={{
+                      fontFamily: "Roboto",
+                      fontWeight: "500",
+                      opacity: "0.6",
+                      marginLeft: "-0.5em",
+                      top: "-10px",
+                      position: "relative",
+                      marginTop: "2em",
+                    }}
+                  >
+                    Management
+                  </Box>
                 </Box>
-                
+
+                <Button
+                  sx={{
+                    backgroundColor: "lightgray",
+                    color: "black",
+                    padding: "1em",
+                    height: "2.5em",
+                    marginLeft: "-0.5em",
+                    marginTop: "0.5em",
+                    width: "100%",
+                  }}
+                  onClick={handleEditClick}
+                >
+                  Upravit
+                </Button>
               </Box>
-             
-              <Button
-                sx={{
-                  backgroundColor: "lightgray",
-                  color: "black",
-                  padding: "1em",
-                }}
-                onClick={handleEditClick}
-              >
-                Upravit
-              </Button>
-            </Box>
+            </>
           )}
         </Box>
       </Modal>
