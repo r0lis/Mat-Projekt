@@ -152,6 +152,12 @@ const Team: React.FC = () => {
 
   const team = data.getTeamDetails;
   const role = roleData?.getUserRoleInTeam.role || "";
+      console.log(role);
+  if (role == 0) {
+    return (
+      <Box><Alert severity="warning">Správce klubu musí nastavit vaše práva.</Alert></Box>
+    );
+  }
  
 
   const handleLinkClick = (label: string) => {

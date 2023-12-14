@@ -298,7 +298,8 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                             month: "2-digit",
                             year: "numeric",
                           }
-                        )}
+                        )}  / { calculateAge( member?.DateOfBirth || "")} let
+                        
                     </Typography>
                   </TableCell>
                   <TableCell>
