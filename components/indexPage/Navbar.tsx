@@ -108,6 +108,26 @@ const Navbar: React.FC = () => {
     },
   };
 
+  const buttonStyle = {
+    backgroundColor: "#FFE0FE",
+    width: "11em",
+    "&:hover": {
+      backgroundColor: "#b71dde",
+    },
+    border: "1px solid #ff96fc",
+  };
+
+  const buttonStyle2 = {
+    backgroundColor: "#FFE0FE",
+    marginBottom: "1em",
+    marginTop: "1em",
+    width: "11em",
+    "&:hover": {
+      backgroundColor: "#b71dde",
+    },
+    border: "1px solid #ff96fc",
+  };
+
   return (
     <AppBar
       sx={{ backgroundColor: "#DA1AAD", height: "4.5em" }}
@@ -384,7 +404,7 @@ const Navbar: React.FC = () => {
                           }}
                         >
                           <Link href={`/User/${id}`}>
-                            <Button className="buttonStyle">
+                            <Button sx={buttonStyle}>
                               <Typography
                                 sx={{
                                   color: "black",
@@ -400,7 +420,7 @@ const Navbar: React.FC = () => {
                           </Link>
                           <Button
                             onClick={handleLogout}
-                            className="buttonStyle2"
+                            sx={buttonStyle2}
                           >
                             <Typography
                               sx={{
@@ -456,7 +476,7 @@ const Navbar: React.FC = () => {
                       }}
                     >
                       <Link href="/LoginPage">
-                        <Button className="buttonStyle2">
+                        <Button sx={buttonStyle2}>
                           <Typography
                             sx={{
                               color: "black",
@@ -484,7 +504,7 @@ const Navbar: React.FC = () => {
                       }}
                     >
                       <Link href="/UserRegistration">
-                        <Button className="buttonStyle">
+                        <Button sx={buttonStyle}>
                           <Typography
                             sx={{
                               color: "black",
