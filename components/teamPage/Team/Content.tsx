@@ -14,7 +14,7 @@ const Content: React.FC<TeamsProps> = (id , role) => {
     <Box sx={{}}>
        
           <Typography sx={{ fontWeight: "600" }} >
-            Muži A
+            uelej
           </Typography>
        
       </Box>

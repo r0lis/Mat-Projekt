@@ -53,9 +53,11 @@ const LoginPage: React.FC = () => {
         type="password"
         label="Heslo"
         value={password}
+        onSubmit={handleLogin}
         onChange={(e) => setPassword(e.target.value)}
         fullWidth
         margin="normal"
+        
       />
       <Button variant="contained" color="primary" onClick={handleLogin} sx={{ marginTop: '1rem' }}>
         Přihlásit
