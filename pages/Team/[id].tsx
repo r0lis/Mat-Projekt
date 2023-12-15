@@ -162,7 +162,6 @@ const Team: React.FC = () => {
   ? [...items, { label: "Platby", image: Pay }, { label: "Správa", image: Settings }]
   : items;
 
-  console.log(filteredItems);
 
   const handleLinkClick = (label: string) => {
     setActiveLink(label);

@@ -100,6 +100,7 @@ export const typeDefs = gql`
     getTeamMembersDetails(teamId: String!): [MemberDetails] 
     checkUserMembershipInvite(teamId: String!, currentUserEmail: String!): Boolean!
     getUserRoleInTeam(teamId: String!, email: String!): UserRoleInTeam
+    getTeamImg(teamId: String!): String
   }
 
   type Mutation {

@@ -360,6 +360,28 @@ export const resolvers = {
       
         return null;
       },
+
+      getTeamImg: async (
+        _: any,
+        { teamId }: { teamId: string },
+        context: Context
+      ) => {
+        try {
+          if (context.user) {
+            const teamQuery = context.db.collection("Team").where("teamId", "==", teamId);
+            const teamSnapshot = await teamQuery.get();
+      
+            if (!teamSnapshot.empty) {
+              const teamData = teamSnapshot.docs[0].data() as Team;
+              return teamData.Logo;
+            }
+          }
+          return null;
+        } catch (error) {
+          console.error("Error getting team image:", error);
+          throw error;
+        }
+      },
       
   },
 
@@ -457,8 +479,11 @@ export const resolvers = {
           },
         });
     
-        // Get the download URL for the uploaded image
-        const downloadUrl = `https://storage.googleapis.com/${bucket.name}/${filename}`;
+        // Get the signed URL for the uploaded image
+        const [downloadUrl] = await bucket.file(filename).getSignedUrl({
+          action: "read",
+          expires: "03-09-2491", // Adjust the expiration date as needed
+        });
     
         // Update the team document with the download URL
         const teamQuery = context.db.collection("Team").where("Email", "==", teamEmail);
@@ -498,8 +523,11 @@ export const resolvers = {
           },
         });
     
-        // Get the download URL for the uploaded image
-        const downloadUrl = `https://storage.googleapis.com/${bucket.name}/${filename}`;
+        // Get the signed URL for the uploaded image
+        const [downloadUrl] = await bucket.file(filename).getSignedUrl({
+          action: "read",
+          expires: "03-09-2491", // Adjust the expiration date as needed
+        });
     
         // Update the team document with the download URL
         const teamQuery = context.db.collection("User").where("Email", "==", userEmail);
