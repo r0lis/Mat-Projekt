@@ -9,10 +9,19 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import { gql, useMutation, useQuery } from "@apollo/client";
+import Checkbox from "@mui/material/Checkbox";
 
 const CREATE_SUBTEAM = gql`
-  mutation CreateSubteam($teamId: String!, $inputName: String!) {
-    createSubteam(teamId: $teamId, inputName: $inputName) {
+  mutation CreateSubteam(
+    $teamId: String!
+    $inputName: String!
+    $subteamMembers: [String]!
+  ) {
+    createSubteam(
+      teamId: $teamId
+      inputName: $inputName
+      subteamMembers: $subteamMembers
+    ) {
       Name
       subteamId
       teamId
@@ -56,41 +65,52 @@ interface Member {
 const getRoleText = (role: string): string => {
   switch (role) {
     case "0":
-      return 'Není zvolena práva';
+      return "Není zvolena práva";
     case "No Role Assigned":
-      return 'Není zvolena práva';
+      return "Není zvolena práva";
     case "1":
-      return 'Management';
+      return "Management";
     case "2":
-      return 'Trenér';
+      return "Trenér";
     case "3":
-      return 'Hráč';
+      return "Hráč";
     default:
-      return '';
+      return "";
   }
 };
-
 
 const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
   const [addMode, setAddMode] = useState(false);
   const [name, setName] = useState("");
   const [createSubteam] = useMutation(CREATE_SUBTEAM);
   const [error, setError] = useState<string | null>(null);
+  const [addMembers, setAddMembers] = useState<string[]>([]);
 
   const {
     loading,
     error: subteamError,
-    data,
+    data, refetch
   } = useQuery(GET_SUBTEAMS, {
     variables: { teamId: teamId },
   });
 
-  const { loading: loadingMembers, error: errorMembers, data: dataMembers,  } = useQuery<{
+  const {
+    loading: loadingMembers,
+    error: errorMembers,
+    data: dataMembers,
+  } = useQuery<{
     getTeamMembersDetails: Member[];
   }>(GET_TEAM_MEMBERS_DETAILS, {
     variables: { teamId: teamId },
   });
 
+  const handleCheckboxChange = (email: string) => {
+    if (addMembers.includes(email)) {
+      setAddMembers((prevMembers) => prevMembers.filter((m) => m !== email));
+    } else {
+      setAddMembers((prevMembers) => [...prevMembers, email]);
+    }
+  };
 
   if (loading || loadingMembers)
     return (
@@ -115,12 +135,14 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
       // Perform your mutation here using createSubteam mutation
       // Pass teamId and name as variables to the mutation
       await createSubteam({
-        variables: { teamId: teamId, inputName: name }, // Ensure teamId is a string
+        variables: { teamId: teamId, inputName: name,  subteamMembers: addMembers, }, // Ensure teamId is a string
       });
 
       setName("");
+      setAddMembers([]);
       setAddMode(false);
       setError(null); // Clear any previous errors
+      refetch();
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       // Handle the error and set it in the state
@@ -129,17 +151,27 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
   };
 
   return (
-    <Box sx={{}}>
+    <Box sx={{ marginLeft: "10%" }}>
       <Box>
         {!addMode && (
           <>
-            <Button onClick={handleAddTeamClick} variant="contained">
-              <Typography sx={{ fontWeight: "600" }}>Přidat tým</Typography>
-            </Button>
             <Box>
-              <Typography variant="h6">Týmy v klubu:</Typography>
-              {data && data.getSubteamData && (
+              <Box sx={{ display: "flex", alignItems: "center" }}>
                 <Box>
+                  <Typography sx={{ fontWeight: "600" }} variant="h5">
+                    Týmy v klubu:
+                  </Typography>
+                </Box>
+                <Box sx={{ marginLeft: "auto", marginRight: "20%" }}>
+                  <Button onClick={handleAddTeamClick} variant="contained">
+                    <Typography sx={{ fontWeight: "600" }}>
+                      Přidat tým
+                    </Typography>
+                  </Button>
+                </Box>
+              </Box>
+              {data && data.getSubteamData && (
+                <Box ml={2}>
                   {data.getSubteamData.map((subteam: any) => (
                     <Typography variant="h6" key={subteam.subteamId}>
                       {subteam.Name}
@@ -154,32 +186,58 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
 
       <Box>
         {addMode && (
-          <Box>
-            <form onSubmit={handleFormSubmit}>
-              <TextField
-                label="Name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
-            </form>
-            {members   && (
+          <>
+            <Box sx={{ marginTop: "2em" }}>
+              <Typography variant="h6">Vytvořit tým</Typography>
+            </Box>
+            <Box>
+              <form >
+                <TextField
+                  label="Name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+              </form>
+              {members && (
                 <Box>
-                  {members.map((member: Member, ) => (
-                    <Typography variant="h6" key={member.Email}>
-                      {member.Name} {member.Surname} {getRoleText(member.Role)}
-                    </Typography>
+                  {members.map((member: Member) => (
+                    <Box
+                      key={member.Email}
+                      sx={{ display: "flex", alignItems: "center" }}
+                    >
+                      <Typography variant="h6">
+                        {member.Name} {member.Surname}{" "}
+                        {getRoleText(member.Role)}
+                      </Typography>
+                      <Checkbox
+                        onChange={() => handleCheckboxChange(member.Email)}
+                        checked={addMembers.includes(member.Email)}
+                      />
+                    </Box>
                   ))}
                 </Box>
               )}
-            <Box>
-              <Button type="submit" variant="contained">
-                <Typography sx={{ fontWeight: "600" }}>Vytvořit tým</Typography>
-              </Button>
+              <Box>
+                {/* Průběžný výpis pole addMembers */}
+                <Typography variant="h6">Přidaní členové:</Typography>
+                {addMembers.map((email: string) => (
+                  <Typography variant="body1" key={email}>
+                    {email}
+                  </Typography>
+                ))}
+              </Box>
+              <Box>
+                <Button onClick={handleFormSubmit} type="submit" variant="contained">
+                  <Typography sx={{ fontWeight: "600" }}>
+                    Vytvořit tým
+                  </Typography>
+                </Button>
+              </Box>
+              <Box>
+                <Button onClick={() => setAddMode(false)}>Zrušit</Button>
+              </Box>
             </Box>
-            <Box>
-              <Button onClick={() => setAddMode(false)}>Zrušit</Button>
-            </Box>
-          </Box>
+          </>
         )}
 
         {error && <Typography color="error">{error}</Typography>}

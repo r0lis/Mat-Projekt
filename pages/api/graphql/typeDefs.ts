@@ -97,9 +97,10 @@ export const typeDefs = gql`
     Name: String!
     subteamId: String!
     teamId: String!
+    subteamMembers: [String]!
   }
 
-
+ 
 
 
   
@@ -144,7 +145,7 @@ export const typeDefs = gql`
       teamId: String!
     ): MemberDetails
     deleteMember(teamId: String, memberEmail: String): Boolean
-    createSubteam(teamId: String!, inputName: String!): Subteam
+    createSubteam(teamId: String!, inputName: String!,subteamMembers: [String]! ): Subteam
 
   }
 
