@@ -110,3 +110,9 @@ export type MemberDetails = {
   Email: string;
   DateOfBirth: string;
 };
+
+export type Subteam = {
+  Name: string;
+  teamId: string;
+  subteamId: string;
+};

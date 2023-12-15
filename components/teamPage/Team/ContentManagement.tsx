@@ -1,7 +1,14 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-import { Box, Button, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  TextField,
+  Typography,
+} from "@mui/material";
 import React, { useState } from "react";
-import { gql, useMutation } from "@apollo/client";
+import { gql, useMutation, useQuery } from "@apollo/client";
 
 const CREATE_SUBTEAM = gql`
   mutation CreateSubteam($teamId: String!, $inputName: String!) {
@@ -13,16 +20,43 @@ const CREATE_SUBTEAM = gql`
   }
 `;
 
+const GET_SUBTEAMS = gql`
+  query GetSubteamData($teamId: String!) {
+    getSubteamData(teamId: $teamId) {
+      Name
+      subteamId
+      teamId
+    }
+  }
+`;
 
 type TeamsProps = {
   teamId: string;
 };
 
-const ContentManagement: React.FC<TeamsProps> = (teamId) => {
+const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
   const [addMode, setAddMode] = useState(false);
   const [name, setName] = useState("");
   const [createSubteam] = useMutation(CREATE_SUBTEAM);
   const [error, setError] = useState<string | null>(null);
+
+  const {
+    loading,
+    error: subteamError,
+    data,
+  } = useQuery(GET_SUBTEAMS, {
+    variables: { teamId: teamId },
+  });
+
+  if (loading)
+    return (
+      <CircularProgress
+        color="primary"
+        size={50}
+        style={{ position: "absolute", top: "50%", left: "50%" }}
+      />
+    );
+  if (subteamError) return <Typography>Chyba</Typography>;
 
   const handleAddTeamClick = () => {
     setAddMode(true);
@@ -35,7 +69,7 @@ const ContentManagement: React.FC<TeamsProps> = (teamId) => {
       // Perform your mutation here using createSubteam mutation
       // Pass teamId and name as variables to the mutation
       await createSubteam({
-        variables: { teamId: teamId.teamId, inputName: name }, // Ensure teamId is a string
+        variables: { teamId: teamId, inputName: name }, // Ensure teamId is a string
       });
 
       setName("");
@@ -52,25 +86,45 @@ const ContentManagement: React.FC<TeamsProps> = (teamId) => {
     <Box sx={{}}>
       <Box>
         {!addMode && (
-          <Button onClick={handleAddTeamClick} variant="contained">
-            <Typography sx={{ fontWeight: "600" }}>Přidat tým</Typography>
-          </Button>
+          <>
+            <Button onClick={handleAddTeamClick} variant="contained">
+              <Typography sx={{ fontWeight: "600" }}>Přidat tým</Typography>
+            </Button>
+            <Box>
+              <Typography variant="h6">Týmy v klubu:</Typography>
+              {data && data.getSubteamData && (
+                <Box>
+                  {data.getSubteamData.map((subteam: any) => (
+                    <Typography variant="h6" key={subteam.subteamId}>
+                      {subteam.Name}
+                    </Typography>
+                  ))}
+                </Box>
+              )}
+            </Box>
+          </>
         )}
       </Box>
 
       <Box>
         {addMode && (
-          <form onSubmit={handleFormSubmit}>
-            <TextField
-              label="Name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-            <Button type="submit" variant="contained">
-              <Typography sx={{ fontWeight: "600" }}>Vytvořit tým</Typography>
-            </Button>
-            <Button onClick={() => setAddMode(false)}>Zrušit</Button>
-          </form>
+          <Box>
+            <form onSubmit={handleFormSubmit}>
+              <TextField
+                label="Name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </form>
+            <Box>
+              <Button type="submit" variant="contained">
+                <Typography sx={{ fontWeight: "600" }}>Vytvořit tým</Typography>
+              </Button>
+            </Box>
+            <Box>
+              <Button onClick={() => setAddMode(false)}>Zrušit</Button>
+            </Box>
+          </Box>
         )}
 
         {error && <Typography color="error">{error}</Typography>}
