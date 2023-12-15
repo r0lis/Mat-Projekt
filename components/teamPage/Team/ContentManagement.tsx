@@ -1,14 +1,5 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-import {
-  Box,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, Button, TextField, Typography } from "@mui/material";
 import React, { useState } from "react";
 import { gql, useMutation } from "@apollo/client";
 
@@ -22,26 +13,24 @@ const CREATE_SUBTEAM = gql`
   }
 `;
 
+
 type TeamsProps = {
   teamId: string;
-  role: string;
 };
 
 const ContentManagement: React.FC<TeamsProps> = (teamId) => {
-  const [showForm, setShowForm] = useState(false);
+  const [addMode, setAddMode] = useState(false);
   const [name, setName] = useState("");
   const [createSubteam] = useMutation(CREATE_SUBTEAM);
-  const [error, setError] = useState<string | null>(null); 
+  const [error, setError] = useState<string | null>(null);
 
   const handleAddTeamClick = () => {
-    setShowForm(true);
+    setAddMode(true);
   };
 
-  const handleFormClose = () => {
-    setShowForm(false);
-  };
+  const handleFormSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
 
-  const handleFormSubmit = async () => {
     try {
       // Perform your mutation here using createSubteam mutation
       // Pass teamId and name as variables to the mutation
@@ -49,11 +38,11 @@ const ContentManagement: React.FC<TeamsProps> = (teamId) => {
         variables: { teamId: teamId.teamId, inputName: name }, // Ensure teamId is a string
       });
 
-      // Close the form after successful submission
-      setShowForm(false);
+      setName("");
+      setAddMode(false);
       setError(null); // Clear any previous errors
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error : any) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
       // Handle the error and set it in the state
       setError(error.message);
     }
@@ -61,25 +50,31 @@ const ContentManagement: React.FC<TeamsProps> = (teamId) => {
 
   return (
     <Box sx={{}}>
-      <Button variant="contained" onClick={handleAddTeamClick}>
-        <Typography sx={{ fontWeight: "600" }}>Přidat tým</Typography>
-      </Button>
+      <Box>
+        {!addMode && (
+          <Button onClick={handleAddTeamClick} variant="contained">
+            <Typography sx={{ fontWeight: "600" }}>Přidat tým</Typography>
+          </Button>
+        )}
+      </Box>
 
-      <Dialog open={showForm} onClose={handleFormClose}>
-        <DialogTitle>Přidat tým</DialogTitle>
-        <DialogContent>
-          <TextField
-            label="Name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-          {error && <Typography color="error">{error}</Typography>}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleFormClose}>Zavřít</Button>
-          <Button onClick={handleFormSubmit}>Přidat</Button>
-        </DialogActions>
-      </Dialog>
+      <Box>
+        {addMode && (
+          <form onSubmit={handleFormSubmit}>
+            <TextField
+              label="Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+            <Button type="submit" variant="contained">
+              <Typography sx={{ fontWeight: "600" }}>Vytvořit tým</Typography>
+            </Button>
+            <Button onClick={() => setAddMode(false)}>Zrušit</Button>
+          </form>
+        )}
+
+        {error && <Typography color="error">{error}</Typography>}
+      </Box>
     </Box>
   );
 };

@@ -52,7 +52,7 @@ const TeamComponent: React.FC<TeamsProps> = ({ id }) => {
         </Typography>
       </Box>
       <Box sx={{}}>
-      {role == "1" ? <ContentManagement teamId={id as string} role={role}  /> : <Content teamId={id as string} role={role} />}
+      {role == "1" ? <ContentManagement teamId={id as string}   /> : <Content teamId={id as string} role={role} />}
       </Box>
     </>
   );
