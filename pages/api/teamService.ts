@@ -1,9 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import admin from "firebase-admin";
-
+import { firestore } from "firebase-admin";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const { firestore } = admin;
-const db = admin.firestore();
+const db = firestore();
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {

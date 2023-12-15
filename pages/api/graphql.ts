@@ -11,6 +11,7 @@ import { createSchema, createYoga } from "graphql-yoga";
 import { typeDefs } from "./graphql/typeDefs";
 import { resolvers } from "./graphql/resolvers";
 import { verifyToken } from "@/server/verifyToken";
+import * as admin from 'firebase-admin';
 
 type Context = {
   user?: DecodedIdToken | undefined;
