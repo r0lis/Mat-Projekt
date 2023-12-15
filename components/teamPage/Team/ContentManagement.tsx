@@ -19,6 +19,17 @@ const CREATE_SUBTEAM = gql`
     }
   }
 `;
+const GET_TEAM_MEMBERS_DETAILS = gql`
+  query GetTeamMembersDetails($teamId: String!) {
+    getTeamMembersDetails(teamId: $teamId) {
+      Name
+      Surname
+      Role
+      Email
+      DateOfBirth
+    }
+  }
+`;
 
 const GET_SUBTEAMS = gql`
   query GetSubteamData($teamId: String!) {
@@ -34,6 +45,32 @@ type TeamsProps = {
   teamId: string;
 };
 
+interface Member {
+  Name: string;
+  Surname: string;
+  Role: string;
+  Email: string;
+  DateOfBirth: string;
+}
+
+const getRoleText = (role: string): string => {
+  switch (role) {
+    case "0":
+      return 'Není zvolena práva';
+    case "No Role Assigned":
+      return 'Není zvolena práva';
+    case "1":
+      return 'Management';
+    case "2":
+      return 'Trenér';
+    case "3":
+      return 'Hráč';
+    default:
+      return '';
+  }
+};
+
+
 const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
   const [addMode, setAddMode] = useState(false);
   const [name, setName] = useState("");
@@ -48,7 +85,14 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
     variables: { teamId: teamId },
   });
 
-  if (loading)
+  const { loading: loadingMembers, error: errorMembers, data: dataMembers,  } = useQuery<{
+    getTeamMembersDetails: Member[];
+  }>(GET_TEAM_MEMBERS_DETAILS, {
+    variables: { teamId: teamId },
+  });
+
+
+  if (loading || loadingMembers)
     return (
       <CircularProgress
         color="primary"
@@ -56,7 +100,9 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
         style={{ position: "absolute", top: "50%", left: "50%" }}
       />
     );
-  if (subteamError) return <Typography>Chyba</Typography>;
+  if (subteamError || errorMembers) return <Typography>Chyba</Typography>;
+
+  const members = dataMembers?.getTeamMembersDetails || [];
 
   const handleAddTeamClick = () => {
     setAddMode(true);
@@ -116,6 +162,15 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
                 onChange={(e) => setName(e.target.value)}
               />
             </form>
+            {members   && (
+                <Box>
+                  {members.map((member: Member, ) => (
+                    <Typography variant="h6" key={member.Email}>
+                      {member.Name} {member.Surname} {getRoleText(member.Role)}
+                    </Typography>
+                  ))}
+                </Box>
+              )}
             <Box>
               <Button type="submit" variant="contained">
                 <Typography sx={{ fontWeight: "600" }}>Vytvořit tým</Typography>
