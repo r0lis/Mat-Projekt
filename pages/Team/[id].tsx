@@ -332,7 +332,7 @@ const Team: React.FC = () => {
             {activeLink === "Soupisky" && <RoustersComponent />}
             {activeLink === "Zápasy" && <NominationsComponent />}
             {activeLink === "Události" && <EventsComponent />}
-            {activeLink === "Tým" && <TeamComponent />}
+            {activeLink === "Tým" && <TeamComponent id={id as string} />}
             {activeLink === "Členové" && <MembersComponent id={id as string} />}
             {activeLink === "Platby" && <PayComponent />}
             {activeLink === "Správa" && <SettingsComponent />}
