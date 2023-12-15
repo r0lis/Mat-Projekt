@@ -716,16 +716,16 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                     alignItems: "center",
                   }}
                 >
-                  <div
-                    style={{
+                  <Box
+                    sx={{
                       width: "100%",
-                      borderBottom: "4px solid #ddd", // Change the color as needed
+                      borderBottom: "2px solid gray", // Change the color as needed
                       position: "absolute",
                       top:
                         selectedMember &&
                         selectedMember.Email === currentUserEmail
-                          ? "55%"
-                          : "52%",
+                          ? "56%"
+                          : "53%",
                       transform: "translateY(-50%)",
                       marginLeft: "-3em",
                       zIndex: -1,
@@ -799,16 +799,16 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                     alignItems: "center",
                   }}
                 >
-                  <div
-                    style={{
+                  <Box
+                    sx={{
                       width: "100%",
-                      borderBottom: "4px solid #ddd", // Change the color as needed
+                      borderBottom: "2px solid gray", // Change the color as needed
                       position: "absolute",
                       top:
                         selectedMember &&
                         selectedMember.Email === currentUserEmail
                           ? "68%"
-                          : "79%",
+                          : "80%",
                       transform: "translateY(-50%)",
                       marginLeft: "-3em",
                       zIndex: -1,
