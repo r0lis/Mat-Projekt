@@ -41,8 +41,6 @@ const items = [
   { label: "Soupisky", image: Rousters },
   { label: "Tým", image: TeamIcon },
   { label: "Členové", image: Members },
-  { label: "Platby", image: Pay },
-  { label: "Správa", image: Settings },
 ];
 
 const GET_TEAM_DETAILS = gql`
@@ -160,6 +158,12 @@ const Team: React.FC = () => {
     );
   }
 
+  const filteredItems = role == 1
+  ? [...items, { label: "Platby", image: Pay }, { label: "Správa", image: Settings }]
+  : items;
+
+  console.log(filteredItems);
+
   const handleLinkClick = (label: string) => {
     setActiveLink(label);
   };
@@ -212,7 +216,7 @@ const Team: React.FC = () => {
             }}
           >
             <Box sx={{ marginTop: "4.2em" }}>
-              {items.map((item, index) => (
+              {filteredItems.map((item, index) => (
                 <Box
                   key={index}
                   sx={{
