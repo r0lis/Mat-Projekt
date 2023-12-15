@@ -1,9 +1,11 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-import { Box, CircularProgress, Typography } from "@mui/material";
+import { Box,  CircularProgress, Typography } from "@mui/material";
 import React from "react";
 import { authUtils } from "@/firebase/auth.utils";
 import { useQuery } from "@apollo/client";
 import { gql } from "@apollo/client";
+import ContentManagement from "./Team/ContentManagement";
+import Content from "./Team/Content";
 
 type TeamsProps = {
   id: string;
@@ -49,7 +51,9 @@ const TeamComponent: React.FC<TeamsProps> = ({ id }) => {
           {role == "1" ? "Přehled týmů v klubu" : "Váš tým"}
         </Typography>
       </Box>
-      <Box sx={{}}></Box>
+      <Box sx={{}}>
+      {role == "1" ? <ContentManagement teamId={id as string} role={role}  /> : <Content teamId={id as string} role={role} />}
+      </Box>
     </>
   );
 };
