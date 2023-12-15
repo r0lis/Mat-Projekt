@@ -11,17 +11,10 @@ import {
   User,
   Team,
   TeamDetails2,
+  MemberDetails,
 } from "./../../types";
 import "firebase/storage";
 import * as admin from "firebase-admin";
-
-export type MemberDetails = {
-    Name: string;
-    Surname: string;
-    Role: string;
-    Email: string;
-    DateOfBirth: string;
-  };
 
 export const teamQueries = {
   checkTeamEmailExistence: async (

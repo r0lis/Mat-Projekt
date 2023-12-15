@@ -101,3 +101,12 @@ export type Query = {
 
 
 };
+
+
+export type MemberDetails = {
+  Name: string;
+  Surname: string;
+  Role: string;
+  Email: string;
+  DateOfBirth: string;
+};

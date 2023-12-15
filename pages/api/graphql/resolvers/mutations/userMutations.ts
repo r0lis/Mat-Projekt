@@ -18,17 +18,10 @@ import {
   Query,
   CreateUserToTeamInput,
   TeamDetails2,
+  MemberDetails,
 } from "./../../types";
 import "firebase/storage";
 import * as admin from "firebase-admin";
-
-export type MemberDetails = {
-  Name: string;
-  Surname: string;
-  Role: string;
-  Email: string;
-  DateOfBirth: string;
-};
 
 export const userMutations = {
   createUser: async (
