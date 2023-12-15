@@ -331,12 +331,8 @@ const Team: React.FC = () => {
             {activeLink === "Události" && <EventsComponent />}
             {activeLink === "Tým" && <TeamComponent />}
             {activeLink === "Členové" && <MembersComponent id={id as string} />}
-            {role == 1 && (
-              <>
-                {activeLink === "Platby" && <PayComponent />}
-                {activeLink === "Správa" && <SettingsComponent />}
-              </>
-            )}
+            {activeLink === "Platby" && <PayComponent />}
+            {activeLink === "Správa" && <SettingsComponent />}
           </Box>
         </Box>
       )}
