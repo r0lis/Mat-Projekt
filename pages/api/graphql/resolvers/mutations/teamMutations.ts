@@ -417,4 +417,35 @@ export const teamMutations = {
       throw error;
     }
   },
+
+  //subteam mutations
+
+  createSubteam: async (
+    _: any,
+    { teamId, inputName }: { teamId: string; inputName: string },
+    context: Context
+  ) => {
+    try {
+      // Generate a random subteamId
+      const subteamId = generateRandomString(30);
+
+      // Create a new document in the Teams collection
+      const newSubteamDoc = context.db.collection("Teams").doc(subteamId);
+
+      // Define the data for the new subteam
+      const newSubteamData = {
+        Name: inputName,
+        subteamId: subteamId,
+        teamId: teamId,
+      };
+
+      // Set the data for the new subteam
+      await newSubteamDoc.set(newSubteamData);
+
+      return newSubteamData;
+    } catch (error) {
+      console.error("Error creating subteam:", error);
+      throw error;
+    }
+  },
 };

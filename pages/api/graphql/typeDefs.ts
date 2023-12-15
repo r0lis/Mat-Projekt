@@ -85,6 +85,24 @@ export const typeDefs = gql`
     role: String!
   }
 
+  type TeamDetails {
+    Name: String!
+  }
+
+
+
+
+
+  type Subteam {
+    Name: String!
+    subteamId: String!
+    teamId: String!
+  }
+
+
+
+
+  
   type Query {
     user(id: String): User
     getUserByNameAndSurname(email: String): NameAndSurname
@@ -125,10 +143,15 @@ export const typeDefs = gql`
       teamId: String!
     ): MemberDetails
     deleteMember(teamId: String, memberEmail: String): Boolean
+    createSubteam(teamId: String!, inputName: String!): Subteam
 
   }
 
-  type TeamDetails {
-    Name: String!
-  }
+  
+
+
+
 `;
+
+
+
