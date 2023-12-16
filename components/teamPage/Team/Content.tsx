@@ -31,6 +31,7 @@ const Content: React.FC<TeamsProps> = (teamId ) => {
      
     } = useQuery(GET_SUBTEAMS, {
       variables: { teamId: teamId.teamId, email: user?.email || "" },
+      skip: !user,
     });
 
     if (loading )
@@ -48,7 +49,6 @@ const Content: React.FC<TeamsProps> = (teamId ) => {
     <Box sx={{}}>
       {data && data.getYourSubteamData && data.getYourSubteamData.length > 0 ? (
         <>
-          <Typography sx={{ fontWeight: "600" }}>uelej</Typography>
           <Box ml={2}>
             {data.getYourSubteamData.map((subteam: any) => (
               <Typography variant="h6" key={subteam.subteamId}>
