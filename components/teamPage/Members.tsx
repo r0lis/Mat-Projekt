@@ -113,7 +113,6 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
     setSelectedMember(member);
     setSelectedRole(member.Role);
     setModalOpen(true);
-    setExpandedMember(member.Email);
   };
 
   const handleCloseModal = () => {
