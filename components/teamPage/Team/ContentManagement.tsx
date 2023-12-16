@@ -161,6 +161,22 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (name.length < 2 || !name.match(/^[A-Z]/)) {
+      setError("Jméno musí mít alespoň 2 znaky a začínat velkým písmenem.");
+      return;
+    }
+
+    // Validace členů
+    if (
+      addMembers.length < 2 ||
+      addMembers.some((member) => member.position == "0")
+    ) {
+      setError(
+        "Přidejte alespoň 2 členy do týmu a každý člen musí mít vybranou pozici."
+      );
+      return;
+    }
+
     try {
       // Perform your mutation here using createSubteam mutation
       // Pass teamId and name as variables to the mutation
@@ -174,6 +190,7 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
 
       setName("");
       setAddMembers([]);
+      setError(null); // Clear any previous errors
       setAddMode(false);
       setError(null); // Clear any previous errors
       refetch();
@@ -184,7 +201,10 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
     }
   };
 
-  const handlePositionChange = (e: SelectChangeEvent<string>, email: string) => {
+  const handlePositionChange = (
+    e: SelectChangeEvent<string>,
+    email: string
+  ) => {
     const newPosition = e.target.value;
     setAddMembers((prevMembers) =>
       prevMembers.map((member) =>
@@ -362,6 +382,7 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
                     </TableContainer>
                   )}
                 </Box>
+                <Box>{error && <Alert severity="error">{error}</Alert>}</Box>
                 <Box
                   sx={{
                     display: "flex",
@@ -405,7 +426,6 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
           </>
         )}
 
-        {error && <Typography color="error">{error}</Typography>}
       </Box>
     </Box>
   );
