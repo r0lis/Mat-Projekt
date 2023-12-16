@@ -4,8 +4,18 @@ import {
   Box,
   Button,
   CircularProgress,
+  TableHead,
   TextField,
   Typography,
+  Alert,
+} from "@mui/material";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
+  Paper,
 } from "@mui/material";
 import React, { useState } from "react";
 import { gql, useMutation, useQuery } from "@apollo/client";
@@ -89,7 +99,8 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
   const {
     loading,
     error: subteamError,
-    data, refetch
+    data,
+    refetch,
   } = useQuery(GET_SUBTEAMS, {
     variables: { teamId: teamId },
   });
@@ -135,7 +146,11 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
       // Perform your mutation here using createSubteam mutation
       // Pass teamId and name as variables to the mutation
       await createSubteam({
-        variables: { teamId: teamId, inputName: name,  subteamMembers: addMembers, }, // Ensure teamId is a string
+        variables: {
+          teamId: teamId,
+          inputName: name,
+          subteamMembers: addMembers,
+        }, // Ensure teamId is a string
       });
 
       setName("");
@@ -151,11 +166,11 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
   };
 
   return (
-    <Box sx={{ marginLeft: "10%" }}>
+    <Box sx={{}}>
       <Box>
         {!addMode && (
           <>
-            <Box>
+            <Box sx={{ marginLeft: "10%" }}>
               <Box sx={{ display: "flex", alignItems: "center" }}>
                 <Box>
                   <Typography sx={{ fontWeight: "600" }} variant="h5">
@@ -187,54 +202,126 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
       <Box>
         {addMode && (
           <>
-            <Box sx={{ marginTop: "2em" }}>
-              <Typography variant="h6">Vytvořit tým</Typography>
-            </Box>
-            <Box>
-              <form >
-                <TextField
-                  label="Name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                />
-              </form>
-              {members && (
-                <Box>
-                  {members.map((member: Member) => (
-                    <Box
-                      key={member.Email}
-                      sx={{ display: "flex", alignItems: "center" }}
-                    >
-                      <Typography variant="h6">
-                        {member.Name} {member.Surname}{" "}
-                        {getRoleText(member.Role)}
-                      </Typography>
-                      <Checkbox
-                        onChange={() => handleCheckboxChange(member.Email)}
-                        checked={addMembers.includes(member.Email)}
-                      />
-                    </Box>
-                  ))}
+            <Box
+              sx={{
+                backgroundColor: "#F0F2F5",
+                width: "70%",
+                marginLeft: "auto",
+                marginTop: "7%",
+                marginRight: "auto",
+                padding: "2em",
+                position: "relative",
+                display: "block",
+                borderRadius: "15px",
+                boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.3)",
+              }}
+            >
+              <Box sx={{  }}>
+                <Typography variant="h4">Přidání týmu do klubu</Typography>
+              </Box>
+              <Box
+                sx={{
+                  width: "100%",
+                  marginTop: "0.5em",
+                  borderBottom: "3px solid gray", // Change the color as needed
+                  position: "relative",
+                  top: "53%",
+                  transform: "translateY(-50%)",
+                }}
+              />
+              <Box
+                sx={{ marginTop: "1em", marginLeft: "auto", display: "block" }}
+              >
+                <form
+                  style={{
+                    marginLeft: "auto",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                   
+                  }}
+                >
+                  <TextField
+                    sx={{ width: "50%",  backgroundColor: "white", }}
+                    label="Název týmu"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                  />
+                </form>
+                {members && (
+                  <TableContainer component={Paper} sx={{ marginTop: "1em",  boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.1)", }}>
+                    <Table>
+                      <TableHead>
+                        <TableRow>
+                          <TableCell>Člen</TableCell>
+                          <TableCell>Práva</TableCell>
+                          <TableCell>Přidat</TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {members.map((member: Member) => (
+                          <TableRow key={member.Email}>
+                            <TableCell>
+                              <Typography variant="h6">
+                                {member.Name} {member.Surname}
+                              </Typography>
+                            </TableCell>
+                            <TableCell>
+                              <Typography variant="h6">
+                                {getRoleText(member.Role)}
+                              </Typography>
+                            </TableCell>
+                            <TableCell>
+                              <Checkbox
+                                onChange={() =>
+                                  handleCheckboxChange(member.Email)
+                                }
+                                checked={addMembers.includes(member.Email)}
+                              />
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                )}
+                <Box sx={{ marginTop: "2em", marginBottom: "2em" }}>
+                  {addMembers.length === 0 ? (
+                    <Alert severity="warning">Přidejte členy do týmu.</Alert>
+                  ) : (
+                    <TableContainer>
+                      <Table>
+                        <TableHead>
+                          <TableRow>
+                            <TableCell>E-maily členů</TableCell>
+                          </TableRow>
+                        </TableHead>
+                        <TableBody>
+                          {addMembers.map((email: string) => (
+                            <TableRow key={email}>
+                              <TableCell>{email}</TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </TableContainer>
+                  )}
                 </Box>
-              )}
-              <Box>
-                {/* Průběžný výpis pole addMembers */}
-                <Typography variant="h6">Přidaní členové:</Typography>
-                {addMembers.map((email: string) => (
-                  <Typography variant="body1" key={email}>
-                    {email}
-                  </Typography>
-                ))}
-              </Box>
-              <Box>
-                <Button onClick={handleFormSubmit} type="submit" variant="contained">
-                  <Typography sx={{ fontWeight: "600" }}>
-                    Vytvořit tým
-                  </Typography>
-                </Button>
-              </Box>
-              <Box>
-                <Button onClick={() => setAddMode(false)}>Zrušit</Button>
+                <Box sx={{display:"flex", marginLeft:"auto", marginRight:"auto",}}>
+                  <Button
+                    onClick={handleFormSubmit}
+                    type="submit"
+                    sx={{display:"flex", marginLeft:"auto", marginRight:"auto",  width:"20%", backgroundColor:"#3f51b5", color:"white", "&:hover":{backgroundColor:"#A020F0"}}}
+                    variant="contained"
+                  >
+                    <Typography sx={{ fontWeight: "600" }}>
+                      Vytvořit tým
+                    </Typography>
+                  </Button>
+                </Box>
+                <Box >
+                  <Button onClick={() => setAddMode(false)}  sx={{display:"flex", marginLeft:"auto", marginRight:"auto"}}>Zrušit</Button>
+                </Box>
               </Box>
             </Box>
           </>
