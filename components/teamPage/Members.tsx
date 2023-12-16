@@ -210,9 +210,12 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
         >
           Členové klubu
         </Typography>
-        <Link href={`/Team/AddMember/${id}/`}>
-          <Button variant="contained">Přidat člena</Button>
-        </Link>
+        {role === "1" && (
+                       <Link href={`/Team/AddMember/${id}/`}>
+                       <Button variant="contained">Přidat člena</Button>
+                     </Link>
+                    )}
+       
       </Box>
 
       <TableContainer
@@ -264,11 +267,12 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
           <TableBody>
             {members.map(
               (member: Member, index: React.Key | null | undefined) => (
+                (role === "1" || member.Email === currentUserEmail) && (
                 <TableRow
                   key={index}
                   sx={{
                     backgroundColor:
-                      member.Email === currentUserEmail ? "#e6e6e6" : "inherit",
+                      member.Email === currentUserEmail && role === "1" ? "#e6e6e6" : "inherit",
                   }}
                 >
                   <TableCell>
@@ -339,7 +343,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                   </TableCell>
                 </TableRow>
               )
-            )}
+            ))}
           </TableBody>
         </Table>
       </TableContainer>
