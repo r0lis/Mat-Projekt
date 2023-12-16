@@ -23,6 +23,12 @@ import {
 import "firebase/storage";
 import * as admin from "firebase-admin";
 
+type SubteamMemberInput = {
+  email: String
+  role: String
+}
+
+
 const generateRandomString = (length: number) => {
     let result = "";
     const characters =
@@ -39,35 +45,35 @@ export const subteamMutations = {
     //subteam mutations
     
 
-  createSubteam: async (
-    _: any,
-    { teamId, inputName, subteamMembers }: { teamId: string; inputName: string; subteamMembers: string[] },
-    context: Context
-  ) => {
-    try {
-      // Generate a random subteamId
-      const subteamId = generateRandomString(30);
-  
-      console.log(inputName); // Add this line for debugging
-  
-      // Create a new document in the Teams collection
-      const newSubteamDoc = context.db.collection("Teams").doc(subteamId);
-  
-      // Define the data for the new subteam
-      const newSubteamData = {
-        Name: inputName,
-        subteamId: subteamId,
-        teamId: teamId,
-        subteamMembers: subteamMembers,
-      };
-  
-      // Set the data for the new subteam
-      await newSubteamDoc.set(newSubteamData);
-  
-      return newSubteamData;
-    } catch (error) {
-      console.error("Error creating subteam:", error);
-      throw error;
-    }
-  },
+    createSubteam: async (
+      _: any,
+      { teamId, inputName, subteamMembers }: { teamId: string; inputName: string; subteamMembers: SubteamMemberInput[] },
+      context: Context
+    ) => {
+      try {
+        // Generate a random subteamId
+        const subteamId = generateRandomString(30);
+    
+        console.log(inputName); // Add this line for debugging
+    
+        // Create a new document in the Teams collection
+        const newSubteamDoc = context.db.collection("Teams").doc(subteamId);
+    
+        // Define the data for the new subteam
+        const newSubteamData = {
+          Name: inputName,
+          subteamId: subteamId,
+          teamId: teamId,
+          subteamMembers: subteamMembers,
+        };
+    
+        // Set the data for the new subteam
+        await newSubteamDoc.set(newSubteamData);
+    
+        return newSubteamData;
+      } catch (error) {
+        console.error("Error creating subteam:", error);
+        throw error;
+      }
+    },
   };

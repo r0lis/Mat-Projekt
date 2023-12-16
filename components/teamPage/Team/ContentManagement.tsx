@@ -25,7 +25,7 @@ const CREATE_SUBTEAM = gql`
   mutation CreateSubteam(
     $teamId: String!
     $inputName: String!
-    $subteamMembers: [String]!
+    $subteamMembers: [SubteamMemberInput]!
   ) {
     createSubteam(
       teamId: $teamId
@@ -94,7 +94,7 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
   const [name, setName] = useState("");
   const [createSubteam] = useMutation(CREATE_SUBTEAM);
   const [error, setError] = useState<string | null>(null);
-  const [addMembers, setAddMembers] = useState<string[]>([]);
+  const [addMembers, setAddMembers] = useState<{ email: string; role: string }[]>([]);
 
   const {
     loading,
@@ -115,11 +115,16 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
     variables: { teamId: teamId },
   });
 
-  const handleCheckboxChange = (email: string) => {
-    if (addMembers.includes(email)) {
-      setAddMembers((prevMembers) => prevMembers.filter((m) => m !== email));
+  const handleCheckboxChange = (email: string, role: string) => {
+    const memberIndex = addMembers.findIndex((member) => member.email === email);
+  
+    if (memberIndex !== -1) {
+      setAddMembers((prevMembers) => [
+        ...prevMembers.slice(0, memberIndex),
+        ...prevMembers.slice(memberIndex + 1),
+      ]);
     } else {
-      setAddMembers((prevMembers) => [...prevMembers, email]);
+      setAddMembers((prevMembers) => [...prevMembers, { email, role }]);
     }
   };
 
@@ -273,10 +278,8 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
                             </TableCell>
                             <TableCell>
                               <Checkbox
-                                onChange={() =>
-                                  handleCheckboxChange(member.Email)
-                                }
-                                checked={addMembers.includes(member.Email)}
+                                onChange={() => handleCheckboxChange(member.Email, member.Role)}
+                                checked={addMembers.some((m) => m.email === member.Email)}
                               />
                             </TableCell>
                           </TableRow>
@@ -297,9 +300,10 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
                           </TableRow>
                         </TableHead>
                         <TableBody>
-                          {addMembers.map((email: string) => (
-                            <TableRow key={email}>
-                              <TableCell>{email}</TableCell>
+                          {addMembers.map((member) => (
+                            <TableRow key={member.email}>
+                              <TableCell>{member.email}</TableCell>
+                              <TableCell>{member.role}</TableCell>
                             </TableRow>
                           ))}
                         </TableBody>
