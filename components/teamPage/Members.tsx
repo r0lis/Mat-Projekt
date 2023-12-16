@@ -93,12 +93,16 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
     Role: string;
     Email: string;
     DateOfBirth: string;
+    Subteams: { Name: string; subteamId: string }[];
   } | null>(null);
   const [selectedRole, setSelectedRole] = useState("");
   const [updateMemberRole] = useMutation(UPDATE_MEMBER_ROLE);
   const [deleteMember] = useMutation(DELETE_MEMBER);
   const user = authUtils.getCurrentUser();
   const [expandedMember, setExpandedMember] = useState<string | null>(null);
+  const [expandedSelectedMember, setExpandedSelectedMember] = useState<
+    string | null
+  >(null);
 
   const {
     loading: roleLoading,
@@ -331,7 +335,6 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                         do 24.11.2023
                       </Typography>
                     </TableCell>
-                    {/* ... (ostatní buňky) */}
                     <TableCell>
                       {member.Subteams.length === 0 ? (
                         <Alert sx={{ maxWidth: "6em" }} severity="warning">
@@ -368,7 +371,10 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                                   )
                                 }
                                 color="primary"
-                                sx={{ fontFamily: "Roboto", marginLeft: "-1em" }}
+                                sx={{
+                                  fontFamily: "Roboto",
+                                  marginLeft: "-1em",
+                                }}
                               >
                                 {expandedMember === member.Email
                                   ? "Méně"
@@ -599,9 +605,86 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
 
               <Typography
                 id="modal-description"
-                sx={{ marginBottom: "1em", color: "black", fontWeight: "500" }}
+                sx={{
+                  marginBottom: "1em",
+                  color: "black",
+                  fontWeight: "500",
+                }}
               >
-                A-tým
+                {selectedMember?.Subteams &&
+                selectedMember.Subteams.length === 0 ? (
+                  <Typography
+                    sx={{
+                      fontFamily: "Roboto",
+                      color: "black",
+                      fontWeight: "500",
+                    }}
+                  >
+                    Žádný
+                  </Typography>
+                ) : (
+                  selectedMember?.Subteams && (
+                    <>
+                      {selectedMember.Subteams.slice(0, 1).map((subteam) => (
+                        <Box sx={{ display: "flex", alignItems: "center" }}>
+                          <Typography
+                            key={subteam.subteamId}
+                            sx={{
+                              fontFamily: "Roboto",
+                              color: "black",
+                              fontWeight: "500",
+                            }}
+                          >
+                            {subteam.Name}
+                          </Typography>
+                          <Button
+                            onClick={() =>
+                              setExpandedSelectedMember(
+                                expandedSelectedMember === selectedMember.Email
+                                  ? null
+                                  : selectedMember.Email
+                              )
+                            }
+                            color="primary"
+                            sx={{
+                              fontFamily: "Roboto",
+                              marginLeft: "auto",
+                              height: "1.5em",
+                            }}
+                          >
+                            {expandedSelectedMember === selectedMember.Email
+                              ? "Méně"
+                              : "Více"}
+                          </Button>
+                        </Box>
+                      ))}
+                      {selectedMember.Subteams.length > 1 && (
+                        <Collapse
+                          sx={{
+                            position: "absolute",
+                            zIndex: "999",
+                            backgroundColor: "white",
+                            width: "40%",
+                          }}
+                          in={expandedSelectedMember === selectedMember.Email}
+                        >
+                          {selectedMember.Subteams.slice(1).map((subteam) => (
+                            <Typography
+                              key={subteam.subteamId}
+                              sx={{
+                                fontFamily: "Roboto",
+                                color: "black",
+                                fontWeight: "500",
+                              }}
+                            >
+                              {subteam.Name}
+                            </Typography>
+                          ))}
+                        </Collapse>
+                      )}
+                    </>
+                  )
+                )}
               </Typography>
 
               <Typography
