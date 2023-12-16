@@ -17,6 +17,8 @@ import {
   TableRow,
   Paper,
 } from "@mui/material";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
 import React, { useState } from "react";
 import { gql, useMutation, useQuery } from "@apollo/client";
 import Checkbox from "@mui/material/Checkbox";
@@ -95,7 +97,9 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
   const [name, setName] = useState("");
   const [createSubteam] = useMutation(CREATE_SUBTEAM);
   const [error, setError] = useState<string | null>(null);
-  const [addMembers, setAddMembers] = useState<{ email: string; role: string, position: string }[]>([]);
+  const [addMembers, setAddMembers] = useState<
+    { email: string; role: string; position: string }[]
+  >([]);
 
   const {
     loading,
@@ -116,16 +120,25 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
     variables: { teamId: teamId },
   });
 
-  const handleCheckboxChange = (email: string, role: string, position: string) => {
-    const memberIndex = addMembers.findIndex((member) => member.email === email);
-  
+  const handleCheckboxChange = (
+    email: string,
+    role: string,
+    position: string
+  ) => {
+    const memberIndex = addMembers.findIndex(
+      (member) => member.email === email
+    );
+
     if (memberIndex !== -1) {
       setAddMembers((prevMembers) => [
         ...prevMembers.slice(0, memberIndex),
         ...prevMembers.slice(memberIndex + 1),
       ]);
     } else {
-      setAddMembers((prevMembers) => [...prevMembers, { email, role, position }]);
+      setAddMembers((prevMembers) => [
+        ...prevMembers,
+        { email, role, position },
+      ]);
     }
   };
 
@@ -169,6 +182,15 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
       // Handle the error and set it in the state
       setError(error.message);
     }
+  };
+
+  const handlePositionChange = (e: SelectChangeEvent<string>, email: string) => {
+    const newPosition = e.target.value;
+    setAddMembers((prevMembers) =>
+      prevMembers.map((member) =>
+        member.email === email ? { ...member, position: newPosition } : member
+      )
+    );
   };
 
   return (
@@ -222,7 +244,7 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
                 boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.3)",
               }}
             >
-              <Box sx={{  }}>
+              <Box sx={{}}>
                 <Typography variant="h4">Přidání týmu do klubu</Typography>
               </Box>
               <Box
@@ -244,18 +266,23 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
-                   
                   }}
                 >
                   <TextField
-                    sx={{ width: "50%",  backgroundColor: "white", }}
+                    sx={{ width: "50%", backgroundColor: "white" }}
                     label="Název týmu"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                   />
                 </form>
                 {members && (
-                  <TableContainer component={Paper} sx={{ marginTop: "1em",  boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.1)", }}>
+                  <TableContainer
+                    component={Paper}
+                    sx={{
+                      marginTop: "1em",
+                      boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.1)",
+                    }}
+                  >
                     <Table>
                       <TableHead>
                         <TableRow>
@@ -279,8 +306,16 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
                             </TableCell>
                             <TableCell>
                               <Checkbox
-                                onChange={() => handleCheckboxChange(member.Email, member.Role, "0")}
-                                checked={addMembers.some((m) => m.email === member.Email)}
+                                onChange={() =>
+                                  handleCheckboxChange(
+                                    member.Email,
+                                    member.Role,
+                                    "0"
+                                  )
+                                }
+                                checked={addMembers.some(
+                                  (m) => m.email === member.Email
+                                )}
                               />
                             </TableCell>
                           </TableRow>
@@ -305,7 +340,21 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
                             <TableRow key={member.email}>
                               <TableCell>{member.email}</TableCell>
                               <TableCell> {getRoleText(member.role)}</TableCell>
-                              <TableCell> {member.position}</TableCell>
+                              <TableCell>
+                                <Select
+                                  value={member.position || "0"} // Default to "0" if position is not set
+                                  onChange={(e) =>
+                                    handlePositionChange(e, member.email)
+                                  }
+                                >
+                                  <MenuItem value="0">Vyberte</MenuItem>
+                                  <MenuItem value="1">Hlavní trenér</MenuItem>
+                                  <MenuItem value="2">
+                                    Asistent trenéra
+                                  </MenuItem>
+                                  <MenuItem value="3">Hráč</MenuItem>
+                                </Select>
+                              </TableCell>
                             </TableRow>
                           ))}
                         </TableBody>
@@ -313,11 +362,25 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
                     </TableContainer>
                   )}
                 </Box>
-                <Box sx={{display:"flex", marginLeft:"auto", marginRight:"auto",}}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    marginLeft: "auto",
+                    marginRight: "auto",
+                  }}
+                >
                   <Button
                     onClick={handleFormSubmit}
                     type="submit"
-                    sx={{display:"flex", marginLeft:"auto", marginRight:"auto",  width:"20%", backgroundColor:"#3f51b5", color:"white", "&:hover":{backgroundColor:"#A020F0"}}}
+                    sx={{
+                      display: "flex",
+                      marginLeft: "auto",
+                      marginRight: "auto",
+                      width: "20%",
+                      backgroundColor: "#3f51b5",
+                      color: "white",
+                      "&:hover": { backgroundColor: "#A020F0" },
+                    }}
                     variant="contained"
                   >
                     <Typography sx={{ fontWeight: "600" }}>
@@ -325,8 +388,17 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
                     </Typography>
                   </Button>
                 </Box>
-                <Box >
-                  <Button onClick={() => setAddMode(false)}  sx={{display:"flex", marginLeft:"auto", marginRight:"auto"}}>Zrušit</Button>
+                <Box>
+                  <Button
+                    onClick={() => setAddMode(false)}
+                    sx={{
+                      display: "flex",
+                      marginLeft: "auto",
+                      marginRight: "auto",
+                    }}
+                  >
+                    Zrušit
+                  </Button>
                 </Box>
               </Box>
             </Box>
