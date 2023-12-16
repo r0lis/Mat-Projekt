@@ -18,6 +18,7 @@ import {
   MenuItem,
   Avatar,
 } from "@mui/material";
+import Collapse from "@mui/material/Collapse";
 import React, { useState } from "react";
 import Link from "next/link";
 import { useQuery, useMutation } from "@apollo/client";
@@ -75,7 +76,7 @@ interface Member {
   Role: string;
   Email: string;
   DateOfBirth: string;
-  Subteams: { Name: string, subteamId: string }[];
+  Subteams: { Name: string; subteamId: string }[];
 }
 
 type MembersProps = {
@@ -97,6 +98,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
   const [updateMemberRole] = useMutation(UPDATE_MEMBER_ROLE);
   const [deleteMember] = useMutation(DELETE_MEMBER);
   const user = authUtils.getCurrentUser();
+  const [expandedMember, setExpandedMember] = useState<string | null>(null);
 
   const {
     loading: roleLoading,
@@ -111,6 +113,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
     setSelectedMember(member);
     setSelectedRole(member.Role);
     setModalOpen(true);
+    setExpandedMember(member.Email);
   };
 
   const handleCloseModal = () => {
@@ -330,17 +333,60 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                       </Typography>
                     </TableCell>
                     <TableCell>
+                      {role === "1" && (
+                        <Box
+                          sx={{ height: "20px", width: "20px" }}
+                          onClick={() => handleRowClick(member)}
+                        >
+                          <ModeEditIcon />
+                        </Box>
+                      )}
+                    </TableCell>
+                    {/* ... (ostatní buňky) */}
+                    <TableCell>
                       {member.Subteams.length === 0 ? (
-                        <Alert sx={{maxWidth:"6em"}} severity="warning">Žádný</Alert>
+                        <Alert sx={{ maxWidth: "6em" }} severity="warning">
+                          Žádný
+                        </Alert>
                       ) : (
-                        member.Subteams.map((subteam) => (
-                          <Typography
-                            key={subteam.subteamId}
-                            sx={{ fontFamily: "Roboto" }}
-                          >
-                            {subteam.Name}
-                          </Typography>
-                        ))
+                        <>
+                          {member.Subteams.slice(0, 1).map((subteam) => (
+                            <Typography
+                              key={subteam.subteamId}
+                              sx={{ fontFamily: "Roboto" }}
+                            >
+                              {subteam.Name}
+                            </Typography>
+                          ))}
+                          {member.Subteams.length > 1 && (
+                            <>
+                              <Collapse in={expandedMember === member.Email}>
+                                {member.Subteams.slice(1).map((subteam) => (
+                                  <Typography
+                                    key={subteam.subteamId}
+                                    sx={{ fontFamily: "Roboto" }}
+                                  >
+                                    {subteam.Name}
+                                  </Typography>
+                                ))}
+                              </Collapse>
+                              <Button
+                                onClick={() =>
+                                  setExpandedMember(
+                                    expandedMember === member.Email
+                                      ? null
+                                      : member.Email
+                                  )
+                                }
+                                color="primary"
+                              >
+                                {expandedMember === member.Email
+                                  ? "Méně"
+                                  : "Více"}
+                              </Button>
+                            </>
+                          )}
+                        </>
                       )}
                     </TableCell>
                     <TableCell>
