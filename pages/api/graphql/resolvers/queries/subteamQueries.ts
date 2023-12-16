@@ -41,4 +41,32 @@ export const subteamQueries = {
           throw error;
         }
       },
+
+      getYourSubteamData: async (
+        _: any,
+        { teamId, email }: { teamId: string, email: string },
+        context: Context
+      ): Promise<Subteam[] | null> => {
+        try {
+          if (context.user) {
+            const subteamQuery = context.db
+              .collection("Teams")
+              .where("teamId", "==", teamId);
+            
+            const subteamSnapshot = await subteamQuery.get();
+      
+            if (!subteamSnapshot.empty) {
+              const subteamsData = subteamSnapshot.docs.map((doc) => doc.data() as Subteam);
+              const filteredSubteams = subteamsData.filter((subteam) => {
+                return subteam.subteamMembers.some((member: { email: string; }) => member.email === email);
+              });
+              return filteredSubteams;
+            }
+          }
+          return null;
+        } catch (error) {
+          console.error("Error fetching subteam data:", error);
+          throw error;
+        }
+      },
   };

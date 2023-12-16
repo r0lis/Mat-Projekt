@@ -129,6 +129,8 @@ export const typeDefs = gql`
     getUserRoleInTeam(teamId: String!, email: String!): UserRoleInTeam
     getTeamImg(teamId: String!): String
     getSubteamData(teamId: String!): [Subteam]
+    getYourSubteamData(teamId: String!, email: String!): [Subteam]
+
   }
 
   type Mutation {

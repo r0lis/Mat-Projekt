@@ -115,4 +115,11 @@ export type Subteam = {
   Name: string;
   teamId: string;
   subteamId: string;
+  subteamMembers: SubteamMember[];
+};
+
+export type SubteamMember = {
+  email: string;
+  role: string;
+  position: string;
 };
