@@ -46,21 +46,23 @@ const Content: React.FC<TeamsProps> = (teamId ) => {
   
   return (
     <Box sx={{}}>
-       
-          <Typography sx={{ fontWeight: "600" }} >
-            uelej
-          </Typography>
-          {data && data.getYourSubteamData && (
-                <Box ml={2}>
-                  {data.getYourSubteamData.map((subteam: any) => (
-                    <Typography variant="h6" key={subteam.subteamId}>
-                      {subteam.Name}
-                    </Typography>
-                  ))}
-                </Box>
-              )}
-       
-      </Box>
-  )
-}
+      {data && data.getYourSubteamData && data.getYourSubteamData.length > 0 ? (
+        <>
+          <Typography sx={{ fontWeight: "600" }}>uelej</Typography>
+          <Box ml={2}>
+            {data.getYourSubteamData.map((subteam: any) => (
+              <Typography variant="h6" key={subteam.subteamId}>
+                {subteam.Name}
+              </Typography>
+            ))}
+          </Box>
+        </>
+      ) : (
+        <Typography>
+          Manegement klubu vás zatím něpřidal do žádného týmu.
+        </Typography>
+      )}
+    </Box>
+  );
+};
 export default Content

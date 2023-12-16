@@ -233,7 +233,7 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
                   </Button>
                 </Box>
               </Box>
-              {data && data.getSubteamData && (
+              {data && data.getSubteamData && data.getSubteamData.length > 0 ? (
                 <Box ml={2}>
                   {data.getSubteamData.map((subteam: any) => (
                     <Typography variant="h6" key={subteam.subteamId}>
@@ -241,6 +241,10 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
                     </Typography>
                   ))}
                 </Box>
+              ) : (
+                <Typography variant="body1">
+                  V tomto klubu jste zatím nevytvořili žádný tým.
+                </Typography>
               )}
             </Box>
           </>
@@ -425,7 +429,6 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
             </Box>
           </>
         )}
-
       </Box>
     </Box>
   );
