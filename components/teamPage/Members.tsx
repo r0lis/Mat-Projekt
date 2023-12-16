@@ -332,16 +332,6 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                         do 24.11.2023
                       </Typography>
                     </TableCell>
-                    <TableCell>
-                      {role === "1" && (
-                        <Box
-                          sx={{ height: "20px", width: "20px" }}
-                          onClick={() => handleRowClick(member)}
-                        >
-                          <ModeEditIcon />
-                        </Box>
-                      )}
-                    </TableCell>
                     {/* ... (ostatní buňky) */}
                     <TableCell>
                       {member.Subteams.length === 0 ? (
@@ -379,6 +369,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                                   )
                                 }
                                 color="primary"
+                                sx={{ fontFamily: "Roboto", marginLeft: "-1em" }}
                               >
                                 {expandedMember === member.Email
                                   ? "Méně"
