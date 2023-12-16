@@ -69,6 +69,7 @@ interface Member {
   Surname: string;
   Role: string;
   Email: string;
+  Position: string;
   DateOfBirth: string;
 }
 
@@ -94,7 +95,7 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
   const [name, setName] = useState("");
   const [createSubteam] = useMutation(CREATE_SUBTEAM);
   const [error, setError] = useState<string | null>(null);
-  const [addMembers, setAddMembers] = useState<{ email: string; role: string }[]>([]);
+  const [addMembers, setAddMembers] = useState<{ email: string; role: string, position: string }[]>([]);
 
   const {
     loading,
@@ -115,7 +116,7 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
     variables: { teamId: teamId },
   });
 
-  const handleCheckboxChange = (email: string, role: string) => {
+  const handleCheckboxChange = (email: string, role: string, position: string) => {
     const memberIndex = addMembers.findIndex((member) => member.email === email);
   
     if (memberIndex !== -1) {
@@ -124,7 +125,7 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
         ...prevMembers.slice(memberIndex + 1),
       ]);
     } else {
-      setAddMembers((prevMembers) => [...prevMembers, { email, role }]);
+      setAddMembers((prevMembers) => [...prevMembers, { email, role, position }]);
     }
   };
 
@@ -278,7 +279,7 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
                             </TableCell>
                             <TableCell>
                               <Checkbox
-                                onChange={() => handleCheckboxChange(member.Email, member.Role)}
+                                onChange={() => handleCheckboxChange(member.Email, member.Role, "0")}
                                 checked={addMembers.some((m) => m.email === member.Email)}
                               />
                             </TableCell>
@@ -303,7 +304,8 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
                           {addMembers.map((member) => (
                             <TableRow key={member.email}>
                               <TableCell>{member.email}</TableCell>
-                              <TableCell>{member.role}</TableCell>
+                              <TableCell> {getRoleText(member.role)}</TableCell>
+                              <TableCell> {member.position}</TableCell>
                             </TableRow>
                           ))}
                         </TableBody>

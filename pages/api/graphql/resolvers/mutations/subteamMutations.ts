@@ -26,6 +26,7 @@ import * as admin from "firebase-admin";
 type SubteamMemberInput = {
   email: String
   role: String
+  position: String
 }
 
 

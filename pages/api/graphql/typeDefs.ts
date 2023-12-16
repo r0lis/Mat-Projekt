@@ -94,6 +94,7 @@ export const typeDefs = gql`
   input SubteamMemberInput {
     email: String!
     role: String!
+    position: String!
   }
 
   type Subteam {
@@ -106,6 +107,7 @@ export const typeDefs = gql`
   type SubteamMember {
     email: String!
     role: String!
+    position: String!
   }
 
 
