@@ -264,27 +264,5 @@ export const teamQueries = {
     }
   },
 
-  getSubteamData: async (
-    _: any,
-    { teamId }: { teamId: string },
-    context: Context
-  ): Promise<Subteam[] | null> => {
-    try {
-      if (context.user) {
-        const subteamQuery = context.db
-          .collection("Teams")  // Ujistěte se, že používáte správné jméno kolekce
-          .where("teamId", "==", teamId);
-        const subteamSnapshot = await subteamQuery.get();
-
-        if (!subteamSnapshot.empty) {
-          const subteamsData = subteamSnapshot.docs.map((doc) => doc.data() as Subteam);
-          return subteamsData;
-        }
-      }
-      return null;
-    } catch (error) {
-      console.error("Chyba při získávání dat o subtýmu:", error);
-      throw error;
-    }
-  },
+  
 };
