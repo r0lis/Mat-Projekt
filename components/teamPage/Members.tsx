@@ -35,6 +35,10 @@ const GET_TEAM_MEMBERS_DETAILS = gql`
       Role
       Email
       DateOfBirth
+      Subteams {
+        Name
+        subteamId
+      }
     }
   }
 `;
@@ -71,6 +75,7 @@ interface Member {
   Role: string;
   Email: string;
   DateOfBirth: string;
+  Subteams: { Name: string, subteamId: string }[];
 }
 
 type MembersProps = {
@@ -101,7 +106,6 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
     variables: { teamId: id, email: user?.email || "" },
     skip: !user,
   });
-
 
   const handleRowClick = (member: Member) => {
     setSelectedMember(member);
@@ -211,11 +215,10 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
           Členové klubu
         </Typography>
         {role === "1" && (
-                       <Link href={`/Team/AddMember/${id}/`}>
-                       <Button variant="contained">Přidat člena</Button>
-                     </Link>
-                    )}
-       
+          <Link href={`/Team/AddMember/${id}/`}>
+            <Button variant="contained">Přidat člena</Button>
+          </Link>
+        )}
       </Box>
 
       <TableContainer
@@ -254,7 +257,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
               </TableCell>
               <TableCell>
                 <Typography sx={{ fontFamily: "Roboto", fontWeight: "800" }}>
-                  Hlavní tým
+                  Týmy
                 </Typography>
               </TableCell>
               <TableCell>
@@ -266,84 +269,99 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
           </TableHead>
           <TableBody>
             {members.map(
-              (member: Member, index: React.Key | null | undefined) => (
+              (member: Member, index: React.Key | null | undefined) =>
                 (role === "1" || member.Email === currentUserEmail) && (
-                <TableRow
-                  key={index}
-                  sx={{
-                    backgroundColor:
-                      member.Email === currentUserEmail && role === "1" ? "#e6e6e6" : "inherit",
-                  }}
-                >
-                  <TableCell>
-                    {role === "1" && (
-                      <Box
-                        sx={{ height: "20px", width: "20px" }}
-                        onClick={() => handleRowClick(member)}
-                      >
-                        <ModeEditIcon />
-                      </Box>
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    {member.Surname} {member.Name}
-                  </TableCell>
-                  <TableCell>
-                    <Typography sx={{ fontFamily: "Roboto" }}>
-                      {member.DateOfBirth &&
-                        new Date(member.DateOfBirth).toLocaleDateString(
-                          "cs-CZ",
-                          {
-                            day: "2-digit",
-                            month: "2-digit",
-                            year: "numeric",
-                          }
-                        )}{" "}
-                      / {calculateAge(member?.DateOfBirth || "")} let
-                    </Typography>
-                  </TableCell>
-                  <TableCell>
-                    {member.Role === "1" && "Management"}
-                    {member.Role === "2" && "Trenér"}
-                    {member.Role === "3" && "Hráč"}
-                    {(member.Role === "0" ||
-                      member.Role === "No Role Assigned") && (
-                      <Box sx={{ maxWidth: "15em" }}>
-                        <Alert sx={{ maxHeight: "3em" }} severity="warning">
-                          <Typography
-                            sx={{ fontFamily: "Roboto", fontSize: "1vw" }}
-                          >
-                            Není zvoleno
-                          </Typography>
-                        </Alert>
-                      </Box>
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    <Typography sx={{ fontFamily: "Roboto" }}>
-                      do 24.11.2023
-                    </Typography>
-                  </TableCell>
-                  <TableCell>Muži A</TableCell>
-                  <TableCell>
-                    <Box
-                      sx={{
-                        border: "1px solid black",
-                        textAlign: "center",
-                        padding: "3px",
-                        borderRadius: "8px",
-                      }}
-                    >
-                      <Typography
-                        sx={{ fontFamily: "Roboto", fontWeight: "500" }}
-                      >
-                        útočník
+                  <TableRow
+                    key={index}
+                    sx={{
+                      backgroundColor:
+                        member.Email === currentUserEmail && role === "1"
+                          ? "#e6e6e6"
+                          : "inherit",
+                    }}
+                  >
+                    <TableCell>
+                      {role === "1" && (
+                        <Box
+                          sx={{ height: "20px", width: "20px" }}
+                          onClick={() => handleRowClick(member)}
+                        >
+                          <ModeEditIcon />
+                        </Box>
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      {member.Surname} {member.Name}
+                    </TableCell>
+                    <TableCell>
+                      <Typography sx={{ fontFamily: "Roboto" }}>
+                        {member.DateOfBirth &&
+                          new Date(member.DateOfBirth).toLocaleDateString(
+                            "cs-CZ",
+                            {
+                              day: "2-digit",
+                              month: "2-digit",
+                              year: "numeric",
+                            }
+                          )}{" "}
+                        / {calculateAge(member?.DateOfBirth || "")} let
                       </Typography>
-                    </Box>
-                  </TableCell>
-                </TableRow>
-              )
-            ))}
+                    </TableCell>
+                    <TableCell>
+                      {member.Role === "1" && "Management"}
+                      {member.Role === "2" && "Trenér"}
+                      {member.Role === "3" && "Hráč"}
+                      {(member.Role === "0" ||
+                        member.Role === "No Role Assigned") && (
+                        <Box sx={{ maxWidth: "15em" }}>
+                          <Alert sx={{ maxHeight: "3em" }} severity="warning">
+                            <Typography
+                              sx={{ fontFamily: "Roboto", fontSize: "1vw" }}
+                            >
+                              Není zvoleno
+                            </Typography>
+                          </Alert>
+                        </Box>
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      <Typography sx={{ fontFamily: "Roboto" }}>
+                        do 24.11.2023
+                      </Typography>
+                    </TableCell>
+                    <TableCell>
+                      {member.Subteams.length === 0 ? (
+                        <Alert sx={{maxWidth:"6em"}} severity="warning">Žádný</Alert>
+                      ) : (
+                        member.Subteams.map((subteam) => (
+                          <Typography
+                            key={subteam.subteamId}
+                            sx={{ fontFamily: "Roboto" }}
+                          >
+                            {subteam.Name}
+                          </Typography>
+                        ))
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      <Box
+                        sx={{
+                          border: "1px solid black",
+                          textAlign: "center",
+                          padding: "3px",
+                          borderRadius: "8px",
+                        }}
+                      >
+                        <Typography
+                          sx={{ fontFamily: "Roboto", fontWeight: "500" }}
+                        >
+                          útočník
+                        </Typography>
+                      </Box>
+                    </TableCell>
+                  </TableRow>
+                )
+            )}
           </TableBody>
         </Table>
       </TableContainer>
@@ -713,152 +731,161 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
               </Button>
             </Box>
           ) : (
-              <Box sx={{ paddingLeft: "1em" }}>
+            <Box sx={{ paddingLeft: "1em" }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
                 <Box
                   sx={{
-                    display: "flex",
-                    alignItems: "center",
+                    width: "100%",
+                    borderBottom: "2px solid gray", // Change the color as needed
+                    position: "absolute",
+                    top:
+                      selectedMember &&
+                      selectedMember.Email === currentUserEmail
+                        ? "56%"
+                        : "53%",
+                    transform: "translateY(-50%)",
+                    marginLeft: "-3em",
+                    zIndex: -1,
                   }}
-                >
-                  <Box
-                    sx={{
-                      width: "100%",
-                      borderBottom: "2px solid gray", // Change the color as needed
-                      position: "absolute",
-                      top:
-                        selectedMember &&
-                        selectedMember.Email === currentUserEmail
-                          ? "56%"
-                          : "53%",
-                      transform: "translateY(-50%)",
-                      marginLeft: "-3em",
-                      zIndex: -1,
-                    }}
-                  />
-                  <Box
-                    sx={{
-                      fontFamily: "Roboto",
-                      fontWeight: "500",
-                      opacity: "0.6",
-                      marginLeft: "-0.5em",
-                      top: "-10px",
-                      position: "relative",
-                      marginTop: "1em",
-                    }}
-                  >
-                    štítky
-                  </Box>
-                </Box>
-                <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                  <Box
-                    sx={{
-                      border: "1px solid black",
-                      textAlign: "center",
-                      padding: "3px",
-                      borderRadius: "8px",
-                      width: "6em",
-                    }}
-                  >
-                    <Typography
-                      sx={{ fontFamily: "Roboto", fontWeight: "500" }}
-                    >
-                      útočník
-                    </Typography>
-                  </Box>
-                  <Box
-                    sx={{
-                      border: "1px solid black",
-                      textAlign: "center",
-                      padding: "3px",
-                      borderRadius: "8px",
-                      width: "6em",
-                    }}
-                  >
-                    <Typography
-                      sx={{ fontFamily: "Roboto", fontWeight: "500" }}
-                    >
-                      A-Tým
-                    </Typography>
-                  </Box>
-                  <Box
-                    sx={{
-                      border: "1px solid black",
-                      textAlign: "center",
-                      padding: "3px",
-                      borderRadius: "8px",
-                      width: "6em",
-                    }}
-                  >
-                    <Typography
-                      sx={{ fontFamily: "Roboto", fontWeight: "500" }}
-                    >
-                      Levá strana
-                    </Typography>
-                  </Box>
-                </Box>
-
+                />
                 <Box
                   sx={{
-                    display: "flex",
-                    alignItems: "center",
+                    fontFamily: "Roboto",
+                    fontWeight: "500",
+                    opacity: "0.6",
+                    marginLeft: "-0.5em",
+                    top: "-10px",
+                    position: "relative",
+                    marginTop: "1em",
                   }}
                 >
-                  <Box
-                    sx={{
-                      width: "100%",
-                      borderBottom: "2px solid gray", // Change the color as needed
-                      position: "absolute",
-                      top:
-                        selectedMember &&
-                        selectedMember.Email === currentUserEmail
-                          ? "68%"
-                          : "80%",
-                      transform: "translateY(-50%)",
-                      marginLeft: "-3em",
-                      zIndex: -1,
-                    }}
-                  />
-                  <Box
-                    sx={{
-                      fontFamily: "Roboto",
-                      fontWeight: "500",
-                      opacity: "0.6",
-                      marginLeft: "-0.5em",
-                      top: "-10px",
-                      position: "relative",
-                      marginTop: "2em",
-                    }}
-                  >
-                    Kontaktní adresa
-                  </Box>
+                  štítky
                 </Box>
-                <Box sx={{ marginLeft: "1em" }}>
+              </Box>
+              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                <Box
+                  sx={{
+                    border: "1px solid black",
+                    textAlign: "center",
+                    padding: "3px",
+                    borderRadius: "8px",
+                    width: "6em",
+                  }}
+                >
                   <Typography sx={{ fontFamily: "Roboto", fontWeight: "500" }}>
-                    Skořenice 30 <br />
-                    56501 Choceň
+                    útočník
                   </Typography>
                 </Box>
                 <Box
                   sx={{
-                    display: "flex",
-                    alignItems: "center",
+                    border: "1px solid black",
+                    textAlign: "center",
+                    padding: "3px",
+                    borderRadius: "8px",
+                    width: "6em",
                   }}
                 >
-                  <Box
-                    sx={{
-                      fontFamily: "Roboto",
-                      fontWeight: "500",
-                      opacity: "0.6",
-                      marginLeft: "-0.5em",
-                      top: "-10px",
-                      position: "relative",
-                      marginTop: "2em",
-                    }}
-                  >
-                    Management
-                  </Box>
+                  <Typography sx={{ fontFamily: "Roboto", fontWeight: "500" }}>
+                    A-Tým
+                  </Typography>
                 </Box>
+                <Box
+                  sx={{
+                    border: "1px solid black",
+                    textAlign: "center",
+                    padding: "3px",
+                    borderRadius: "8px",
+                    width: "6em",
+                  }}
+                >
+                  <Typography sx={{ fontFamily: "Roboto", fontWeight: "500" }}>
+                    Levá strana
+                  </Typography>
+                </Box>
+              </Box>
 
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <Box
+                  sx={{
+                    width: "100%",
+                    borderBottom: "2px solid gray", // Change the color as needed
+                    position: "absolute",
+                    top:
+                      selectedMember &&
+                      selectedMember.Email === currentUserEmail
+                        ? "68%"
+                        : "80%",
+                    transform: "translateY(-50%)",
+                    marginLeft: "-3em",
+                    zIndex: -1,
+                  }}
+                />
+                <Box
+                  sx={{
+                    fontFamily: "Roboto",
+                    fontWeight: "500",
+                    opacity: "0.6",
+                    marginLeft: "-0.5em",
+                    top: "-10px",
+                    position: "relative",
+                    marginTop: "2em",
+                  }}
+                >
+                  Kontaktní adresa
+                </Box>
+              </Box>
+              <Box sx={{ marginLeft: "1em" }}>
+                <Typography sx={{ fontFamily: "Roboto", fontWeight: "500" }}>
+                  Skořenice 30 <br />
+                  56501 Choceň
+                </Typography>
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <Box
+                  sx={{
+                    fontFamily: "Roboto",
+                    fontWeight: "500",
+                    opacity: "0.6",
+                    marginLeft: "-0.5em",
+                    top: "-10px",
+                    position: "relative",
+                    marginTop: "2em",
+                  }}
+                >
+                  Management
+                </Box>
+              </Box>
+
+              <Button
+                sx={{
+                  backgroundColor: "lightgray",
+                  color: "black",
+                  padding: "1em",
+                  height: "2em",
+                  marginLeft: "-0.5em",
+                  marginTop: "0.5em",
+                  width: "100%",
+                }}
+                onClick={handleEditClick}
+              >
+                Upravit
+              </Button>
+              {selectedMember && selectedMember.Email !== currentUserEmail && (
                 <Button
                   sx={{
                     backgroundColor: "lightgray",
@@ -869,28 +896,12 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                     marginTop: "0.5em",
                     width: "100%",
                   }}
-                  onClick={handleEditClick}
+                  onClick={handleDeleteClick}
                 >
-                  Upravit
+                  Smazat
                 </Button>
-                {selectedMember &&
-                  selectedMember.Email !== currentUserEmail && (
-                    <Button
-                      sx={{
-                        backgroundColor: "lightgray",
-                        color: "black",
-                        padding: "1em",
-                        height: "2em",
-                        marginLeft: "-0.5em",
-                        marginTop: "0.5em",
-                        width: "100%",
-                      }}
-                      onClick={handleDeleteClick}
-                    >
-                      Smazat
-                    </Button>
-                  )}
-              </Box>
+              )}
+            </Box>
           )}
         </Box>
       </Modal>

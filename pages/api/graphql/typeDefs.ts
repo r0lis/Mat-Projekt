@@ -72,6 +72,7 @@ export const typeDefs = gql`
     Role: String!
     Email: String!
     DateOfBirth: String!
+    Subteams: [Subteam]
   }
 
   type NameAndSurname {

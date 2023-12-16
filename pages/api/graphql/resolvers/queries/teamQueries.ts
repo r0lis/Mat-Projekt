@@ -217,14 +217,25 @@ export const teamQueries = {
               .where("Email", "==", email);
             const userSnapshot = await userQuery.get();
 
+            const subteamQuery = context.db
+              .collection("Teams")
+              .where("teamId", "==", teamId);
+            
+            const subteamSnapshot = await subteamQuery.get();
+
             if (!userSnapshot.empty) {
               const userData = userSnapshot.docs[0].data() as User;
+              const subteamsData = subteamSnapshot.docs.map((doc) => doc.data() as Subteam);
+              const filteredSubteams = subteamsData.filter((subteam) => {
+                return subteam.subteamMembers.some((member: { email: string; }) => member.email === email);
+              });
               membersDetails.push({
                 Name: userData.Name,
                 Surname: userData.Surname,
                 Role: role, // Add role to the returned details
                 Email: userData.Email,
                 DateOfBirth: userData.DateOfBirth,
+                Subteams: filteredSubteams,
               });
             }
           }
