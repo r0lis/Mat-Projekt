@@ -1,9 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-import { Box,  CircularProgress,  MenuItem,  Select,  Typography } from '@mui/material';
-import React, { useEffect, useState } from 'react'
-import { authUtils } from '@/firebase/auth.utils';
-import { gql, useQuery } from '@apollo/client';
+import {
+  Box,
+  Button,
+  CircularProgress,
+  MenuItem,
+  Select,
+  Typography,
+} from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { authUtils } from "@/firebase/auth.utils";
+import { gql, useQuery } from "@apollo/client";
 import SubteamContent from "@/components/teamPage/Team/SubTeamContent";
 
 const GET_SUBTEAMS = gql`
@@ -17,43 +24,43 @@ const GET_SUBTEAMS = gql`
 `;
 
 type TeamsProps = {
-    teamId: string;
-    
-  };
+  teamId: string;
+};
 
-  interface Subteam {
-    subteamId: string;
-    Name: string;
-  }
+interface Subteam {
+  subteamId: string;
+  Name: string;
+}
 
-const Content: React.FC<TeamsProps> = (teamId ) => {
+const Content: React.FC<TeamsProps> = (teamId) => {
   const user = authUtils.getCurrentUser();
-    console.log(teamId,  user?.email)
-
-    const {
-      loading,
-      error: subteamError,
-      data,
-     
-    } = useQuery(GET_SUBTEAMS, {
-      variables: { teamId: teamId.teamId, email: user?.email || "" },
-      skip: !user,
-    });
-
-    const [selectedSubteam, setSelectedSubteam] = useState<string | null>(null);
-    const subteams: Subteam[] = data?.getYourSubteamData || [];
+  const {
+    loading,
+    error: subteamError,
+    data,
+  } = useQuery(GET_SUBTEAMS, {
+    variables: { teamId: teamId.teamId, email: user?.email || "" },
+    skip: !user,
+  });
+  const [isSelectVisible, setIsSelectVisible] = useState(false);
+  const [selectedSubteam, setSelectedSubteam] = useState<string | null>(null);
+  const subteams: Subteam[] = data?.getYourSubteamData || [];
   useEffect(() => {
     if (data && data.getYourSubteamData && data.getYourSubteamData.length > 0) {
       setSelectedSubteam(data.getYourSubteamData[0].subteamId);
     }
-  },  [data]);
-    
+  }, [data]);
 
-    const handleSubteamChange = (event: { target: { value: any } }) => {
-      setSelectedSubteam(event.target.value);
-    };
+  const handleSubteamChange = (event: { target: { value: any } }) => {
+    setSelectedSubteam(event.target.value);
+    setIsSelectVisible(false);
+  };
 
-    if (loading )
+  const handleToggleSelect = () => {
+    setIsSelectVisible(!isSelectVisible);
+  };
+
+  if (loading)
     return (
       <CircularProgress
         color="primary"
@@ -63,47 +70,55 @@ const Content: React.FC<TeamsProps> = (teamId ) => {
     );
   if (subteamError) return <Typography>Chyba</Typography>;
 
-  
   return (
     <Box sx={{}}>
+      
       {subteams.length === 1 ? (
         <Box ml={2}>
           {subteams.map((subteam: Subteam) => (
             <div key={subteam.subteamId}>
-              <Typography variant="h6">{subteam.Name}</Typography>
-             
-                <Typography variant="body1">
-                  <SubteamContent subteamId={subteam.subteamId} />
-                </Typography>
-             
+
+              <Typography variant="body1">
+                <SubteamContent subteamId={subteam.subteamId} />
+              </Typography>
             </div>
           ))}
+        
         </Box>
+       ) : subteams.length === 0 ? (
+        <Typography variant="body1">Nepatříte do žádného týmu.</Typography>
       ) : (
-        <Box ml={2}>
-          <Select
-            sx={{ width: "100%", height: "4em", marginTop: "1em" }}
-            value={selectedSubteam}
-            onChange={handleSubteamChange}
+        <><Button
+            sx={{ marginRight: "2em" }}
+            onClick={handleToggleSelect}
+            variant="contained"
           >
-            {subteams.map((subteam: Subteam) => (
-              <MenuItem key={subteam.subteamId} value={subteam.subteamId}>
-                <Typography variant="h6">{subteam.Name}</Typography>
-              </MenuItem>
-            ))}
-          </Select>
-          {subteams.map((subteam: Subteam) => (
-            <div key={subteam.subteamId}>
-              {selectedSubteam === subteam.subteamId && (
-                <Typography variant="body1">
-                  <SubteamContent subteamId={subteam.subteamId} />
-                </Typography>
-              )}
-            </div>
-          ))}
-        </Box>
+            Týmy
+          </Button><Box ml={2}>
+            {isSelectVisible && (
+              <Select
+                sx={{ width: "100%", height: "4em", marginTop: "1em" }}
+                value={selectedSubteam}
+                onChange={handleSubteamChange}
+              >
+                {subteams.map((subteam: Subteam) => (
+                  <MenuItem key={subteam.subteamId} value={subteam.subteamId}>
+                    <Typography variant="h6">{subteam.Name}</Typography>
+                  </MenuItem>
+                ))}
+              </Select>)}
+              {subteams.map((subteam: Subteam) => (
+                <div key={subteam.subteamId}>
+                  {selectedSubteam === subteam.subteamId && (
+                    <Typography variant="body1">
+                      <SubteamContent subteamId={subteam.subteamId} />
+                    </Typography>
+                  )}
+                </div>
+              ))}
+            </Box></>
       )}
     </Box>
   );
 };
-export default Content
+export default Content;

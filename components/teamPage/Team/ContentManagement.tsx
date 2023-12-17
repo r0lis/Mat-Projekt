@@ -103,6 +103,7 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
   const [name, setName] = useState("");
   const [createSubteam] = useMutation(CREATE_SUBTEAM);
   const [error, setError] = useState<string | null>(null);
+  const [isSelectVisible, setIsSelectVisible] = useState(false);
   const [addMembers, setAddMembers] = useState<
     { email: string; role: string; position: string }[]
   >([]);
@@ -122,8 +123,7 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
     if (data && data.getSubteamData && data.getSubteamData.length > 0) {
       setSelectedSubteam(data.getSubteamData[0].subteamId);
     }
-  },  [data]);
-
+  }, [data]);
 
   const {
     loading: loadingMembers,
@@ -218,6 +218,7 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
 
   const handleSubteamChange = (event: { target: { value: any } }) => {
     setSelectedSubteam(event.target.value);
+    setIsSelectVisible(false);
   };
 
   const handlePositionChange = (
@@ -232,12 +233,16 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
     );
   };
 
+  const handleToggleSelect = () => {
+    setIsSelectVisible(!isSelectVisible);
+  };
+
   return (
     <Box sx={{}}>
       <Box>
         {!addMode && (
           <>
-            <Box sx={{ marginLeft: "5%", marginRight:"5%" }}>
+            <Box sx={{ marginLeft: "5%", marginRight: "5%" }}>
               <Box sx={{ display: "flex", alignItems: "center" }}>
                 <Box>
                   <Typography sx={{ fontWeight: "600" }} variant="h4">
@@ -245,35 +250,39 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
                   </Typography>
                 </Box>
                 <Box sx={{ marginLeft: "auto", marginRight: "" }}>
+                <Button sx={{marginRight:"2em"}} onClick={handleToggleSelect} variant="contained">
+                      Týmy
+                    </Button>
+
                   <Button onClick={handleAddTeamClick} variant="contained">
                     <Typography sx={{ fontWeight: "600" }}>
                       Přidat tým
                     </Typography>
                   </Button>
+                
                 </Box>
               </Box>
               <>
                 {data &&
                 data.getSubteamData &&
                 data.getSubteamData.length > 0 ? (
-                  <Box ml={2} >
+                  <Box ml={2}>
+                    
+                    {isSelectVisible && (
                     <Select
                       sx={{ width: "100%", height: "4em", marginTop: "1em" }}
                       value={selectedSubteam}
                       onChange={handleSubteamChange}
-                      
                     >
                       {data.getSubteamData.map((subteam: Subteam) => (
                         <MenuItem
                           key={subteam.subteamId}
                           value={subteam.subteamId}
                         >
-                          <Typography variant="h6">
-                          {subteam.Name}
-                          </Typography>
+                          <Typography variant="h6">{subteam.Name}</Typography>
                         </MenuItem>
                       ))}
-                    </Select>
+                    </Select>)}
                     {data.getSubteamData.map((subteam: Subteam) => (
                       <div key={subteam.subteamId}>
                         {selectedSubteam === subteam.subteamId && (
