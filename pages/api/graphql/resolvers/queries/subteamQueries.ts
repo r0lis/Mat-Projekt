@@ -69,4 +69,26 @@ export const subteamQueries = {
           throw error;
         }
       },
+
+      getSubteamDetails: async (
+        _: any,
+        { subteamId }: { subteamId: string },
+        context: Context
+      ): Promise<Subteam | null> => {
+        try {
+          if (context.user) {
+            const subteamDoc = await context.db.collection("Teams").doc(subteamId).get();
+    
+            if (subteamDoc.exists) {
+              const subteamData = subteamDoc.data() as Subteam;
+              return subteamData;
+            }
+          }
+    
+          return null;
+        } catch (error) {
+          console.error("Error fetching subteam details:", error);
+          throw error;
+        }
+      },
   };
