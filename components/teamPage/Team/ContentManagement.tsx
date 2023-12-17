@@ -23,9 +23,8 @@ import React, { useEffect, useState } from "react";
 import { gql, useMutation, useQuery } from "@apollo/client";
 import Checkbox from "@mui/material/Checkbox";
 import Content from "@/components/teamPage/Team/SubTeamContent";
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 
 const CREATE_SUBTEAM = gql`
   mutation CreateSubteam(
@@ -107,6 +106,10 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
   const [createSubteam] = useMutation(CREATE_SUBTEAM);
   const [error, setError] = useState<string | null>(null);
   const [isSelectVisible, setIsSelectVisible] = useState(false);
+  const [hasRole1, setHasRole1] = useState(false);
+  const [hasRole2Or3, setHasRole2Or3] = useState(false);
+  const [updateMembersEffectTrigger, setUpdateMembersEffectTrigger] =
+    useState(0);
   const [addMembers, setAddMembers] = useState<
     { email: string; role: string; position: string }[]
   >([]);
@@ -138,6 +141,38 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
     variables: { teamId: teamId },
   });
 
+  const members = dataMembers?.getTeamMembersDetails || [];
+
+  useEffect(() => {
+    // Vaše existující useEffect kód
+    if (members) {
+      // Filtrujte členy s Role === "1"
+      const membersWithRoleOne = members.filter(
+        (member) => member.Role === "1"
+      );
+
+      // Nastavte membersWithRoleOne do addMembers pole
+      setAddMembers(
+        membersWithRoleOne.map(({ Email, Role }) => ({
+          email: Email,
+          role: Role,
+          position: "0",
+        }))
+      );
+
+      // Zkontrolujte, zda existuje alespoň jeden člen s rolí 1
+      setHasRole1(membersWithRoleOne.length > 0);
+
+      // Zkontrolujte, zda existuje alespoň jeden člen s rolí 2 nebo 3
+      const hasRole2Or3 = members.some(
+        (member) => member.Role === "2" || member.Role === "3"
+      );
+      setHasRole2Or3(hasRole2Or3);
+    }
+  }, [members, updateMembersEffectTrigger]);
+
+  // ...
+
   const handleCheckboxChange = (
     email: string,
     role: string,
@@ -147,16 +182,21 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
       (member) => member.email === email
     );
 
-    if (memberIndex !== -1) {
-      setAddMembers((prevMembers) => [
-        ...prevMembers.slice(0, memberIndex),
-        ...prevMembers.slice(memberIndex + 1),
-      ]);
+    if (role === "1") {
+      // If Role is "1", do nothing, already handled in useEffect
     } else {
-      setAddMembers((prevMembers) => [
-        ...prevMembers,
-        { email, role, position },
-      ]);
+      // If Role is not "1", toggle the member in addMembers array
+      if (memberIndex !== -1) {
+        setAddMembers((prevMembers) => [
+          ...prevMembers.slice(0, memberIndex),
+          ...prevMembers.slice(memberIndex + 1),
+        ]);
+      } else {
+        setAddMembers((prevMembers) => [
+          ...prevMembers,
+          { email, role, position },
+        ]);
+      }
     }
   };
 
@@ -170,10 +210,12 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
     );
   if (subteamError || errorMembers) return <Typography>Chyba</Typography>;
 
-  const members = dataMembers?.getTeamMembersDetails || [];
+  
 
   const handleAddTeamClick = () => {
     setAddMode(true);
+
+    setUpdateMembersEffectTrigger((prev) => prev + 1);
   };
 
   const handleFormSubmit = async (e: React.FormEvent) => {
@@ -191,6 +233,18 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
     ) {
       setError(
         "Přidejte alespoň 2 členy do týmu a každý člen musí mít vybranou pozici."
+      );
+      return;
+    }
+
+    const hasRole1 = addMembers.some((member) => member.role === "1");
+    const hasRole2Or3 = addMembers.some(
+      (member) => member.role === "2" || member.role === "3"
+    );
+
+    if (!hasRole1 || !hasRole2Or3) {
+      setError(
+        "Musíte mít alespoň jednoho člena s roli 1 a jednoho s rolí 2 nebo 3."
       );
       return;
     }
@@ -253,13 +307,15 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
                   </Typography>
                 </Box>
                 <Box sx={{ marginLeft: "auto", marginRight: "" }}>
+                  {data && data.getSubteamData && data.getSubteamData.length > 1 && (
                   <Button
                     sx={{ marginRight: "2em" }}
                     onClick={handleToggleSelect}
                     variant="contained"
                   >
-                    Týmy ({data?.getSubteamData?.length || 0}) {isSelectVisible ? <ExpandLessIcon/> : <ExpandMoreIcon />}
-                  </Button>
+                    Týmy ({data?.getSubteamData?.length || 0}){" "}
+                    {isSelectVisible ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                  </Button>)}
 
                   <Button onClick={handleAddTeamClick} variant="contained">
                     <Typography sx={{ fontWeight: "600" }}>
@@ -398,9 +454,12 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
                                     "0"
                                   )
                                 }
-                                checked={addMembers.some(
-                                  (m) => m.email === member.Email
-                                )}
+                                checked={
+                                  member.Role === "1" ||
+                                  addMembers.some(
+                                    (m) => m.email === member.Email
+                                  )
+                                }
                               />
                             </TableCell>
                           </TableRow>
@@ -412,6 +471,11 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
                 <Box sx={{ marginTop: "2em", marginBottom: "2em" }}>
                   {addMembers.length === 0 ? (
                     <Alert severity="warning">Přidejte členy do týmu.</Alert>
+                  ) : !hasRole1 || !hasRole2Or3 ? (
+                    <Alert severity="error">
+                      Musíte mít alespoň jednoho člena s roli 1 a jednoho s rolí
+                      2 nebo 3.
+                    </Alert>
                   ) : (
                     <TableContainer>
                       <Table>
