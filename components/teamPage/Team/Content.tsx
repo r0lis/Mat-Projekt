@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-import { Box,  CircularProgress,  Typography } from '@mui/material';
-import React from 'react'
+import { Box,  CircularProgress,  MenuItem,  Select,  Typography } from '@mui/material';
+import React, { useState } from 'react'
 import { authUtils } from '@/firebase/auth.utils';
 import { gql, useQuery } from '@apollo/client';
+import SubteamContent from "@/components/teamPage/Team/SubTeamContent";
 
 const GET_SUBTEAMS = gql`
   query GetYourSubteamData($teamId: String!, $email: String!) {
@@ -20,6 +21,11 @@ type TeamsProps = {
     
   };
 
+  interface Subteam {
+    subteamId: string;
+    Name: string;
+  }
+
 const Content: React.FC<TeamsProps> = (teamId ) => {
   const user = authUtils.getCurrentUser();
     console.log(teamId,  user?.email)
@@ -33,6 +39,17 @@ const Content: React.FC<TeamsProps> = (teamId ) => {
       variables: { teamId: teamId.teamId, email: user?.email || "" },
       skip: !user,
     });
+
+    const [selectedSubteam, setSelectedSubteam] = useState(
+      data?.getYourSubteamData?.length > 0
+        ? data.getYourSubteamData[0].subteamId
+        : null
+    );
+    
+
+    const handleSubteamChange = (event: { target: { value: any } }) => {
+      setSelectedSubteam(event.target.value);
+    };
 
     if (loading )
     return (
@@ -49,13 +66,36 @@ const Content: React.FC<TeamsProps> = (teamId ) => {
     <Box sx={{}}>
       {data && data.getYourSubteamData && data.getYourSubteamData.length > 0 ? (
         <>
-          <Box ml={2}>
-            {data.getYourSubteamData.map((subteam: any) => (
-              <Typography variant="h6" key={subteam.subteamId}>
-                {subteam.Name}
-              </Typography>
-            ))}
-          </Box>
+          <Box ml={2} >
+                    <Select
+                      sx={{ width: "100%", height: "4em", marginTop: "1em" }}
+                      value={selectedSubteam}
+                      onChange={handleSubteamChange}
+                      
+                    >
+                      {data.getYourSubteamData.map((subteam: Subteam) => (
+                        <MenuItem
+                          key={subteam.subteamId}
+                          value={subteam.subteamId}
+                        >
+                          <Typography variant="h6">
+                          {subteam.Name}
+                          </Typography>
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    {data.getYourSubteamData.map((subteam: Subteam) => (
+                      <div key={subteam.subteamId}>
+                        {selectedSubteam === subteam.subteamId && (
+                          // Content to show when this subteam is selected
+                          <Typography variant="body1">
+                            {/* Assuming Content component accepts subteamId */}
+                            <SubteamContent subteamId={subteam.subteamId} />
+                          </Typography>
+                        )}
+                      </div>
+                    ))}
+                  </Box>
         </>
       ) : (
         <Typography>

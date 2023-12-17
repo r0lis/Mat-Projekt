@@ -22,6 +22,7 @@ import MenuItem from "@mui/material/MenuItem";
 import React, { useState } from "react";
 import { gql, useMutation, useQuery } from "@apollo/client";
 import Checkbox from "@mui/material/Checkbox";
+import Content from "@/components/teamPage/Team/SubTeamContent";
 
 const CREATE_SUBTEAM = gql`
   mutation CreateSubteam(
@@ -75,6 +76,11 @@ interface Member {
   DateOfBirth: string;
 }
 
+interface Subteam {
+  subteamId: string;
+  Name: string;
+}
+
 const getRoleText = (role: string): string => {
   switch (role) {
     case "0":
@@ -109,6 +115,10 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
   } = useQuery(GET_SUBTEAMS, {
     variables: { teamId: teamId },
   });
+
+  const [selectedSubteam, setSelectedSubteam] = useState(
+    data.getSubteamData.length > 0 ? data.getSubteamData[0].subteamId : null
+  );
 
   const {
     loading: loadingMembers,
@@ -201,6 +211,10 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
     }
   };
 
+  const handleSubteamChange = (event: { target: { value: any } }) => {
+    setSelectedSubteam(event.target.value);
+  };
+
   const handlePositionChange = (
     e: SelectChangeEvent<string>,
     email: string
@@ -218,14 +232,14 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
       <Box>
         {!addMode && (
           <>
-            <Box sx={{ marginLeft: "10%" }}>
+            <Box sx={{ marginLeft: "5%", marginRight:"5%" }}>
               <Box sx={{ display: "flex", alignItems: "center" }}>
                 <Box>
-                  <Typography sx={{ fontWeight: "600" }} variant="h5">
-                    Týmy v klubu:
+                  <Typography sx={{ fontWeight: "600" }} variant="h4">
+                    Týmy:
                   </Typography>
                 </Box>
-                <Box sx={{ marginLeft: "auto", marginRight: "20%" }}>
+                <Box sx={{ marginLeft: "auto", marginRight: "" }}>
                   <Button onClick={handleAddTeamClick} variant="contained">
                     <Typography sx={{ fontWeight: "600" }}>
                       Přidat tým
@@ -233,19 +247,46 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
                   </Button>
                 </Box>
               </Box>
-              {data && data.getSubteamData && data.getSubteamData.length > 0 ? (
-                <Box ml={2}>
-                  {data.getSubteamData.map((subteam: any) => (
-                    <Typography variant="h6" key={subteam.subteamId}>
-                      {subteam.Name}
-                    </Typography>
-                  ))}
-                </Box>
-              ) : (
-                <Typography variant="body1">
-                  V tomto klubu jste zatím nevytvořili žádný tým.
-                </Typography>
-              )}
+              <>
+                {data &&
+                data.getSubteamData &&
+                data.getSubteamData.length > 0 ? (
+                  <Box ml={2} >
+                    <Select
+                      sx={{ width: "100%", height: "4em", marginTop: "1em" }}
+                      value={selectedSubteam}
+                      onChange={handleSubteamChange}
+                      
+                    >
+                      {data.getSubteamData.map((subteam: Subteam) => (
+                        <MenuItem
+                          key={subteam.subteamId}
+                          value={subteam.subteamId}
+                        >
+                          <Typography variant="h6">
+                          {subteam.Name}
+                          </Typography>
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    {data.getSubteamData.map((subteam: Subteam) => (
+                      <div key={subteam.subteamId}>
+                        {selectedSubteam === subteam.subteamId && (
+                          // Content to show when this subteam is selected
+                          <Typography variant="body1">
+                            {/* Assuming Content component accepts subteamId */}
+                            <Content subteamId={subteam.subteamId} />
+                          </Typography>
+                        )}
+                      </div>
+                    ))}
+                  </Box>
+                ) : (
+                  <Typography variant="body1">
+                    V tomto klubu jste zatím nevytvořili žádný tým.
+                  </Typography>
+                )}
+              </>
             </Box>
           </>
         )}
