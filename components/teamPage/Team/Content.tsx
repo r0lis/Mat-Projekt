@@ -71,30 +71,38 @@ const Content: React.FC<TeamsProps> = (teamId) => {
   if (subteamError) return <Typography>Chyba</Typography>;
 
   return (
-    <Box sx={{}}>
-      
+    <Box sx={{ marginLeft: "5%", marginRight: "5%"}}>
       {subteams.length === 1 ? (
         <Box ml={2}>
           {subteams.map((subteam: Subteam) => (
-            <div key={subteam.subteamId}>
+            <Box key={subteam.subteamId}>
+              <Typography variant="h6">Váš tým</Typography>
 
               <Typography variant="body1">
                 <SubteamContent subteamId={subteam.subteamId} />
               </Typography>
-            </div>
+            </Box>
           ))}
-        
         </Box>
-       ) : subteams.length === 0 ? (
+      ) : subteams.length === 0 ? (
         <Typography variant="body1">Nepatříte do žádného týmu.</Typography>
       ) : (
-        <><Button
-            sx={{ marginRight: "2em" }}
-            onClick={handleToggleSelect}
-            variant="contained"
-          >
-            Týmy
-          </Button><Box ml={2}>
+        <>
+          <Box sx={{ display: "flex" }}>
+            <Box>
+              <Typography variant="h6">Váš tým</Typography>
+            </Box>
+            <Box sx={{marginLeft:"auto", }}>
+              <Button
+                sx={{ marginRight: "2em" }}
+                onClick={handleToggleSelect}
+                variant="contained"
+              >
+                Týmy ({subteams.length})
+              </Button>
+            </Box>
+          </Box>
+          <Box ml={2}>
             {isSelectVisible && (
               <Select
                 sx={{ width: "100%", height: "4em", marginTop: "1em" }}
@@ -106,17 +114,19 @@ const Content: React.FC<TeamsProps> = (teamId) => {
                     <Typography variant="h6">{subteam.Name}</Typography>
                   </MenuItem>
                 ))}
-              </Select>)}
-              {subteams.map((subteam: Subteam) => (
-                <div key={subteam.subteamId}>
-                  {selectedSubteam === subteam.subteamId && (
-                    <Typography variant="body1">
-                      <SubteamContent subteamId={subteam.subteamId} />
-                    </Typography>
-                  )}
-                </div>
-              ))}
-            </Box></>
+              </Select>
+            )}
+            {subteams.map((subteam: Subteam) => (
+              <div key={subteam.subteamId}>
+                {selectedSubteam === subteam.subteamId && (
+                  <Typography variant="body1">
+                    <SubteamContent subteamId={subteam.subteamId} />
+                  </Typography>
+                )}
+              </div>
+            ))}
+          </Box>
+        </>
       )}
     </Box>
   );

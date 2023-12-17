@@ -250,16 +250,19 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
                   </Typography>
                 </Box>
                 <Box sx={{ marginLeft: "auto", marginRight: "" }}>
-                <Button sx={{marginRight:"2em"}} onClick={handleToggleSelect} variant="contained">
-                      Týmy
-                    </Button>
+                  <Button
+                    sx={{ marginRight: "2em" }}
+                    onClick={handleToggleSelect}
+                    variant="contained"
+                  >
+                    Týmy ({data.getSubteamData.length})
+                  </Button>
 
                   <Button onClick={handleAddTeamClick} variant="contained">
                     <Typography sx={{ fontWeight: "600" }}>
                       Přidat tým
                     </Typography>
                   </Button>
-                
                 </Box>
               </Box>
               <>
@@ -267,22 +270,22 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
                 data.getSubteamData &&
                 data.getSubteamData.length > 0 ? (
                   <Box ml={2}>
-                    
                     {isSelectVisible && (
-                    <Select
-                      sx={{ width: "100%", height: "4em", marginTop: "1em" }}
-                      value={selectedSubteam}
-                      onChange={handleSubteamChange}
-                    >
-                      {data.getSubteamData.map((subteam: Subteam) => (
-                        <MenuItem
-                          key={subteam.subteamId}
-                          value={subteam.subteamId}
-                        >
-                          <Typography variant="h6">{subteam.Name}</Typography>
-                        </MenuItem>
-                      ))}
-                    </Select>)}
+                      <Select
+                        sx={{ width: "100%", height: "4em", marginTop: "1em" }}
+                        value={selectedSubteam}
+                        onChange={handleSubteamChange}
+                      >
+                        {data.getSubteamData.map((subteam: Subteam) => (
+                          <MenuItem
+                            key={subteam.subteamId}
+                            value={subteam.subteamId}
+                          >
+                            <Typography variant="h6">{subteam.Name}</Typography>
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    )}
                     {data.getSubteamData.map((subteam: Subteam) => (
                       <div key={subteam.subteamId}>
                         {selectedSubteam === subteam.subteamId && (

@@ -46,11 +46,6 @@ const TeamComponent: React.FC<TeamsProps> = ({ id }) => {
 
   return (
     <>
-      <Box sx={{height:"auto"}}>
-        <Typography sx={{ fontWeight: "600" }} variant="h5">
-          {role == "1" ? "" : "Váš tým"}
-        </Typography>
-      </Box>
       <Box sx={{}}>
       {role == "1" ? <ContentManagement teamId={id as string}   /> : <Content teamId={id as string} />}
       </Box>
