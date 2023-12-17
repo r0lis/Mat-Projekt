@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { Box,  CircularProgress,  MenuItem,  Select,  Typography } from '@mui/material';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { authUtils } from '@/firebase/auth.utils';
 import { gql, useQuery } from '@apollo/client';
 import SubteamContent from "@/components/teamPage/Team/SubTeamContent";
@@ -40,11 +40,13 @@ const Content: React.FC<TeamsProps> = (teamId ) => {
       skip: !user,
     });
 
-    const subteams = data?.getYourSubteamData || [];
-  const [selectedSubteam, setSelectedSubteam] = useState(
-    subteams.length > 0 ? subteams[0].subteamId : null
-  );
-  console.log(subteams)
+    const [selectedSubteam, setSelectedSubteam] = useState<string | null>(null);
+    const subteams: Subteam[] = data?.getYourSubteamData || [];
+  useEffect(() => {
+    if (data && data.getYourSubteamData && data.getYourSubteamData.length > 0) {
+      setSelectedSubteam(data.getYourSubteamData[0].subteamId);
+    }
+  },  [data]);
     
 
     const handleSubteamChange = (event: { target: { value: any } }) => {
