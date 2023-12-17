@@ -23,6 +23,9 @@ import React, { useEffect, useState } from "react";
 import { gql, useMutation, useQuery } from "@apollo/client";
 import Checkbox from "@mui/material/Checkbox";
 import Content from "@/components/teamPage/Team/SubTeamContent";
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+
 
 const CREATE_SUBTEAM = gql`
   mutation CreateSubteam(
@@ -255,7 +258,7 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
                     onClick={handleToggleSelect}
                     variant="contained"
                   >
-                    Týmy ({data.getSubteamData.length})
+                    Týmy ({data.getSubteamData.length}) {isSelectVisible ? <ExpandLessIcon/> : <ExpandMoreIcon />}
                   </Button>
 
                   <Button onClick={handleAddTeamClick} variant="contained">

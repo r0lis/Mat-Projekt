@@ -12,6 +12,8 @@ import React, { useEffect, useState } from "react";
 import { authUtils } from "@/firebase/auth.utils";
 import { gql, useQuery } from "@apollo/client";
 import SubteamContent from "@/components/teamPage/Team/SubTeamContent";
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 
 const GET_SUBTEAMS = gql`
   query GetYourSubteamData($teamId: String!, $email: String!) {
@@ -98,7 +100,7 @@ const Content: React.FC<TeamsProps> = (teamId) => {
                 onClick={handleToggleSelect}
                 variant="contained"
               >
-                Týmy ({subteams.length})
+                Týmy ({subteams.length}) {isSelectVisible ? <ExpandLessIcon/> : <ExpandMoreIcon />}
               </Button>
             </Box>
           </Box>
