@@ -19,7 +19,7 @@ import {
 } from "@mui/material";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { gql, useMutation, useQuery } from "@apollo/client";
 import Checkbox from "@mui/material/Checkbox";
 import Content from "@/components/teamPage/Team/SubTeamContent";
@@ -116,9 +116,14 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
     variables: { teamId: teamId },
   });
 
-  const [selectedSubteam, setSelectedSubteam] = useState(
-    data.getSubteamData.length > 0 ? data.getSubteamData[0].subteamId : null
-  );
+  const [selectedSubteam, setSelectedSubteam] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (data && data.getSubteamData && data.getSubteamData.length > 0) {
+      setSelectedSubteam(data.getSubteamData[0].subteamId);
+    }
+  },  [data]);
+
 
   const {
     loading: loadingMembers,
@@ -236,7 +241,7 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
               <Box sx={{ display: "flex", alignItems: "center" }}>
                 <Box>
                   <Typography sx={{ fontWeight: "600" }} variant="h4">
-                    Týmy:
+                    Týmy v klubu:
                   </Typography>
                 </Box>
                 <Box sx={{ marginLeft: "auto", marginRight: "" }}>

@@ -40,11 +40,11 @@ const Content: React.FC<TeamsProps> = (teamId ) => {
       skip: !user,
     });
 
-    const [selectedSubteam, setSelectedSubteam] = useState(
-      data?.getYourSubteamData?.length > 0
-        ? data.getYourSubteamData[0].subteamId
-        : null
-    );
+    const subteams = data?.getYourSubteamData || [];
+  const [selectedSubteam, setSelectedSubteam] = useState(
+    subteams.length > 0 ? subteams[0].subteamId : null
+  );
+  console.log(subteams)
     
 
     const handleSubteamChange = (event: { target: { value: any } }) => {
@@ -64,43 +64,42 @@ const Content: React.FC<TeamsProps> = (teamId ) => {
   
   return (
     <Box sx={{}}>
-      {data && data.getYourSubteamData && data.getYourSubteamData.length > 0 ? (
-        <>
-          <Box ml={2} >
-                    <Select
-                      sx={{ width: "100%", height: "4em", marginTop: "1em" }}
-                      value={selectedSubteam}
-                      onChange={handleSubteamChange}
-                      
-                    >
-                      {data.getYourSubteamData.map((subteam: Subteam) => (
-                        <MenuItem
-                          key={subteam.subteamId}
-                          value={subteam.subteamId}
-                        >
-                          <Typography variant="h6">
-                          {subteam.Name}
-                          </Typography>
-                        </MenuItem>
-                      ))}
-                    </Select>
-                    {data.getYourSubteamData.map((subteam: Subteam) => (
-                      <div key={subteam.subteamId}>
-                        {selectedSubteam === subteam.subteamId && (
-                          // Content to show when this subteam is selected
-                          <Typography variant="body1">
-                            {/* Assuming Content component accepts subteamId */}
-                            <SubteamContent subteamId={subteam.subteamId} />
-                          </Typography>
-                        )}
-                      </div>
-                    ))}
-                  </Box>
-        </>
+      {subteams.length === 1 ? (
+        <Box ml={2}>
+          {subteams.map((subteam: Subteam) => (
+            <div key={subteam.subteamId}>
+              <Typography variant="h6">{subteam.Name}</Typography>
+             
+                <Typography variant="body1">
+                  <SubteamContent subteamId={subteam.subteamId} />
+                </Typography>
+             
+            </div>
+          ))}
+        </Box>
       ) : (
-        <Typography>
-          Manegement klubu vás zatím něpřidal do žádného týmu.
-        </Typography>
+        <Box ml={2}>
+          <Select
+            sx={{ width: "100%", height: "4em", marginTop: "1em" }}
+            value={selectedSubteam}
+            onChange={handleSubteamChange}
+          >
+            {subteams.map((subteam: Subteam) => (
+              <MenuItem key={subteam.subteamId} value={subteam.subteamId}>
+                <Typography variant="h6">{subteam.Name}</Typography>
+              </MenuItem>
+            ))}
+          </Select>
+          {subteams.map((subteam: Subteam) => (
+            <div key={subteam.subteamId}>
+              {selectedSubteam === subteam.subteamId && (
+                <Typography variant="body1">
+                  <SubteamContent subteamId={subteam.subteamId} />
+                </Typography>
+              )}
+            </div>
+          ))}
+        </Box>
       )}
     </Box>
   );
