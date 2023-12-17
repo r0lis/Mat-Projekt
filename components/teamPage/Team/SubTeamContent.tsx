@@ -1,11 +1,11 @@
 import { Box, Button, CircularProgress, Typography } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import { gql, useQuery } from "@apollo/client";
 import { authUtils } from "@/firebase/auth.utils";
-
-interface ContentProps {
-  subteamId: string;
-}
+import Attendance from "./Component/Attendance";
+import Members from "./Component/Members";
+import Overview from "./Component/Overview";
+import Wall from "./Component/Wall";
 
 const GET_SUBTEAM_DETAILS = gql`
   query GetSubteamDetails($subteamId: String!) {
@@ -22,6 +22,10 @@ const GET_SUBTEAM_DETAILS = gql`
   }
 `;
 
+interface ContentProps {
+  subteamId: string;
+}
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface SubteamMember {
   email: string;
@@ -31,6 +35,8 @@ interface SubteamMember {
 
 const Content: React.FC<ContentProps> = ({ subteamId }) => {
   const user = authUtils.getCurrentUser();
+  const [selectedButton, setSelectedButton] = useState("overview");
+
 
   const { loading, error, data } = useQuery(GET_SUBTEAM_DETAILS, {
     variables: { subteamId },
@@ -49,29 +55,100 @@ const Content: React.FC<ContentProps> = ({ subteamId }) => {
 
   const subteam = data.getSubteamDetails;
 
+  const renderContent = () => {
+    switch (selectedButton) {
+      case "overview":
+        return <Overview subteamId={subteamId} />;
+      case "wall":
+        return <Wall subteamId={subteamId} />;
+      case "attendance":
+        return <Attendance subteamId={subteamId} />;
+      case "members":
+        return <Members subteamId={subteamId} />;
+      default:
+        return null;
+    }
+  };
+
+
   return (
-    <Box sx={{marginTop:"1em", fontSize:"Roboto",}}>
-      <Box sx={{boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.3)", width:"100%", padding:"15px 0px 15px 0px", borderRadius:"15px"}}>
-        <Typography sx={{marginLeft:"5%", fontSize:"1.8em"}} >{subteam.Name}</Typography>
-        <Typography sx={{fontSize:"1em", marginLeft:"5%"}} >hlavní tým</Typography>
+    <Box sx={{ marginTop: "1em", fontSize: "Roboto" }}>
+      <Box
+        sx={{
+          boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.3)",
+          width: "100%",
+          padding: "15px 0px 15px 0px",
+          borderRadius: "15px",
+        }}
+      >
+        <Typography sx={{ marginLeft: "5%", fontSize: "1.8em" }}>
+          {subteam.Name}
+        </Typography>
       </Box>
-      <Box sx={{marginTop:"1em", }}>
-        <Button sx={{ backgroundColor:"#F0F2F5", boxShadow: "0px 0px 8px rgba(0, 0, 0, 0.2)", marginRight:"2em"}}>
-            <Typography sx={{color:"black", fontFamily:"Roboto"}}>Přehled</Typography>
+      <Box sx={{ marginTop: "1em" }}>
+        <Button
+          style={{
+            backgroundColor:
+              selectedButton === "overview" ? "gray" : "#F0F2F5",
+            boxShadow: "0px 0px 8px rgba(0, 0, 0, 0.2)",
+            marginRight: "2em",
+            color: "black",
+            fontFamily: "Roboto",
+          }}
+          onClick={() => setSelectedButton("overview")}
+        >
+          Přehled
         </Button>
-        <Button sx={{ backgroundColor:"#F0F2F5", boxShadow: "0px 0px 8px rgba(0, 0, 0, 0.2)", marginRight:"2em"}}>
-            <Typography sx={{color:"black", fontFamily:"Roboto"}}>Nástěnka</Typography>
+        <Button
+          style={{
+            backgroundColor: selectedButton === "wall" ? "gray" : "#F0F2F5",
+            boxShadow: "0px 0px 8px rgba(0, 0, 0, 0.2)",
+            marginRight: "2em",
+            color: "black",
+            fontFamily: "Roboto",
+          }}
+          onClick={() => setSelectedButton("wall")}
+        >
+          Nástěnka
         </Button>
-        <Button sx={{ backgroundColor:"#F0F2F5", boxShadow: "0px 0px 8px rgba(0, 0, 0, 0.2)", marginRight:"2em"}}>
-            <Typography sx={{color:"black", fontFamily:"Roboto"}}>Doházka</Typography>
+        <Button
+          style={{
+            backgroundColor:
+              selectedButton === "attendance" ? "gray" : "#F0F2F5",
+            boxShadow: "0px 0px 8px rgba(0, 0, 0, 0.2)",
+            marginRight: "2em",
+            color: "black",
+            fontFamily: "Roboto",
+          }}
+          onClick={() => setSelectedButton("attendance")}
+        >
+          Doházka
         </Button>
-        <Button sx={{ backgroundColor:"#F0F2F5", boxShadow: "0px 0px 8px rgba(0, 0, 0, 0.2)",}}>
-            <Typography sx={{color:"black", fontFamily:"Roboto"}}>Členové</Typography>
+        <Button
+          style={{
+            backgroundColor:
+              selectedButton === "members" ? "gray" : "#F0F2F5",
+            boxShadow: "0px 0px 8px rgba(0, 0, 0, 0.2)",
+            color: "black",
+            fontFamily: "Roboto",
+          }}
+          onClick={() => setSelectedButton("members")}
+        >
+          Členové
         </Button>
       </Box>
-      <Box sx={{boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.3)", width:"100%", padding:"26px 0px 26px 0px", borderRadius:"15px", marginTop:"1em", minHeight:"100vh"}}>
-        <Typography sx={{marginLeft:"10%"}} variant="h4">Constefes</Typography>
-        </Box>
+      <Box
+        sx={{
+          boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.3)",
+          width: "100%",
+          padding: "26px 0px 26px 0px",
+          borderRadius: "15px",
+          marginTop: "1em",
+          minHeight: "100vh",
+        }}
+      >
+        {renderContent()}
+      </Box>
     </Box>
   );
 };
