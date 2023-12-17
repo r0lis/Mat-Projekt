@@ -302,7 +302,7 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
             <Box sx={{ marginLeft: "5%", marginRight: "5%" }}>
               <Box sx={{ display: "flex", alignItems: "center" }}>
                 <Box>
-                  <Typography sx={{ fontWeight: "600" }} variant="h4">
+                  <Typography sx={{ fontWeight: "600" }} variant="h5">
                     Týmy v klubu:
                   </Typography>
                 </Box>
@@ -328,7 +328,7 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
                 {data &&
                 data.getSubteamData &&
                 data.getSubteamData.length > 0 ? (
-                  <Box ml={2}>
+                  <Box>
                     {isSelectVisible && (
                       <Select
                         sx={{ width: "100%", height: "4em", marginTop: "1em" }}

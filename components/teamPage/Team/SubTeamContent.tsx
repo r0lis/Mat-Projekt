@@ -1,4 +1,4 @@
-import { Box, CircularProgress, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, Typography } from "@mui/material";
 import React from "react";
 import { gql, useQuery } from "@apollo/client";
 import { authUtils } from "@/firebase/auth.utils";
@@ -22,6 +22,7 @@ const GET_SUBTEAM_DETAILS = gql`
   }
 `;
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface SubteamMember {
   email: string;
   role: string;
@@ -49,16 +50,28 @@ const Content: React.FC<ContentProps> = ({ subteamId }) => {
   const subteam = data.getSubteamDetails;
 
   return (
-    <Box>
-      <Typography variant="h5">{subteam.Name}</Typography>
-      <Typography variant="h6">Subteam Members:</Typography>
-      <ul>
-        {subteam.subteamMembers.map((member: SubteamMember) => (
-          <li key={member.email}>
-            <Typography>{`${member.email} - Role: ${member.role}, Position: ${member.position}`}</Typography>
-          </li>
-        ))}
-      </ul>
+    <Box sx={{marginTop:"1em", fontSize:"Roboto",}}>
+      <Box sx={{boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.3)", width:"100%", padding:"15px 0px 15px 0px", borderRadius:"15px"}}>
+        <Typography sx={{marginLeft:"5%", fontSize:"1.8em"}} >{subteam.Name}</Typography>
+        <Typography sx={{fontSize:"1em", marginLeft:"5%"}} >hlavní tým</Typography>
+      </Box>
+      <Box sx={{marginTop:"1em", }}>
+        <Button sx={{ backgroundColor:"#F0F2F5", boxShadow: "0px 0px 8px rgba(0, 0, 0, 0.2)", marginRight:"2em"}}>
+            <Typography sx={{color:"black", fontFamily:"Roboto"}}>Přehled</Typography>
+        </Button>
+        <Button sx={{ backgroundColor:"#F0F2F5", boxShadow: "0px 0px 8px rgba(0, 0, 0, 0.2)", marginRight:"2em"}}>
+            <Typography sx={{color:"black", fontFamily:"Roboto"}}>Nástěnka</Typography>
+        </Button>
+        <Button sx={{ backgroundColor:"#F0F2F5", boxShadow: "0px 0px 8px rgba(0, 0, 0, 0.2)", marginRight:"2em"}}>
+            <Typography sx={{color:"black", fontFamily:"Roboto"}}>Doházka</Typography>
+        </Button>
+        <Button sx={{ backgroundColor:"#F0F2F5", boxShadow: "0px 0px 8px rgba(0, 0, 0, 0.2)",}}>
+            <Typography sx={{color:"black", fontFamily:"Roboto"}}>Členové</Typography>
+        </Button>
+      </Box>
+      <Box sx={{boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.3)", width:"100%", padding:"26px 0px 26px 0px", borderRadius:"15px", marginTop:"1em", minHeight:"100vh"}}>
+        <Typography sx={{marginLeft:"10%"}} variant="h4">Constefes</Typography>
+        </Box>
     </Box>
   );
 };
