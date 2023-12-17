@@ -637,6 +637,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                           >
                             {subteam.Name}
                           </Typography>
+                          {selectedMember.Subteams.length > 1 && (
                           <Button
                             onClick={() =>
                               setExpandedSelectedMember(
@@ -655,7 +656,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                             {expandedSelectedMember === selectedMember.Email
                               ? "Méně"
                               : "Více"}
-                          </Button>
+                          </Button>)}
                         </Box>
                       ))}
                       {selectedMember.Subteams.length > 1 && (
