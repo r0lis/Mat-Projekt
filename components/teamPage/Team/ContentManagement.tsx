@@ -258,7 +258,7 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
                     onClick={handleToggleSelect}
                     variant="contained"
                   >
-                    Týmy ({data.getSubteamData.length}) {isSelectVisible ? <ExpandLessIcon/> : <ExpandMoreIcon />}
+                    Týmy ({data?.getSubteamData?.length || 0}) {isSelectVisible ? <ExpandLessIcon/> : <ExpandMoreIcon />}
                   </Button>
 
                   <Button onClick={handleAddTeamClick} variant="contained">

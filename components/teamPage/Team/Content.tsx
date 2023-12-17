@@ -12,8 +12,8 @@ import React, { useEffect, useState } from "react";
 import { authUtils } from "@/firebase/auth.utils";
 import { gql, useQuery } from "@apollo/client";
 import SubteamContent from "@/components/teamPage/Team/SubTeamContent";
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 
 const GET_SUBTEAMS = gql`
   query GetYourSubteamData($teamId: String!, $email: String!) {
@@ -73,7 +73,7 @@ const Content: React.FC<TeamsProps> = (teamId) => {
   if (subteamError) return <Typography>Chyba</Typography>;
 
   return (
-    <Box sx={{ marginLeft: "5%", marginRight: "5%"}}>
+    <Box sx={{ marginLeft: "5%", marginRight: "5%" }}>
       {subteams.length === 1 ? (
         <Box ml={2}>
           {subteams.map((subteam: Subteam) => (
@@ -94,13 +94,14 @@ const Content: React.FC<TeamsProps> = (teamId) => {
             <Box>
               <Typography variant="h6">Váš tým</Typography>
             </Box>
-            <Box sx={{marginLeft:"auto", }}>
+            <Box sx={{ marginLeft: "auto" }}>
               <Button
                 sx={{ marginRight: "2em" }}
                 onClick={handleToggleSelect}
                 variant="contained"
               >
-                Týmy ({subteams.length}) {isSelectVisible ? <ExpandLessIcon/> : <ExpandMoreIcon />}
+                Týmy ({subteams.length || ""}){" "}
+                {isSelectVisible ? <ExpandLessIcon /> : <ExpandMoreIcon />}
               </Button>
             </Box>
           </Box>
