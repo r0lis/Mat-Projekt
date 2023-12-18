@@ -37,7 +37,6 @@ const Content: React.FC<ContentProps> = ({ subteamId }) => {
   const user = authUtils.getCurrentUser();
   const [selectedButton, setSelectedButton] = useState("overview");
 
-
   const { loading, error, data } = useQuery(GET_SUBTEAM_DETAILS, {
     variables: { subteamId },
     skip: !user,
@@ -70,7 +69,6 @@ const Content: React.FC<ContentProps> = ({ subteamId }) => {
     }
   };
 
-
   return (
     <Box sx={{ marginTop: "1em", fontSize: "Roboto" }}>
       <Box
@@ -85,12 +83,23 @@ const Content: React.FC<ContentProps> = ({ subteamId }) => {
           {subteam.Name}
         </Typography>
       </Box>
-      <Box sx={{ marginTop: "1em" }}>
+      <Box
+        sx={{
+          marginTop: "1em",
+          backgroundColor: "#c2c3c4",
+          borderRadius: "10px",
+          padding: "0.4em",
+        }}
+      >
         <Button
           style={{
             backgroundColor:
-              selectedButton === "overview" ? "gray" : "#F0F2F5",
-            boxShadow: "0px 0px 8px rgba(0, 0, 0, 0.2)",
+              selectedButton === "overview" ? "white" : "#F0F2F5",
+            border: selectedButton === "overview" ? "2px solid black" : "",
+            boxShadow:
+              selectedButton === "overview"
+                ? "0px 0px 8px rgba(0, 0, 0, 0.6)"
+                : "0px 0px 0px rgba(0, 0, 0, 0.2)",
             marginRight: "2em",
             color: "black",
             fontFamily: "Roboto",
@@ -101,8 +110,12 @@ const Content: React.FC<ContentProps> = ({ subteamId }) => {
         </Button>
         <Button
           style={{
-            backgroundColor: selectedButton === "wall" ? "gray" : "#F0F2F5",
-            boxShadow: "0px 0px 8px rgba(0, 0, 0, 0.2)",
+            backgroundColor: selectedButton === "wall" ?  "white" : "#F0F2F5",
+            border: selectedButton === "wall" ? "2px solid black" : "",
+            boxShadow:
+            selectedButton === "wall"
+              ? "0px 0px 8px rgba(0, 0, 0, 0.6)"
+              : "0px 0px 0px rgba(0, 0, 0, 0.2)",
             marginRight: "2em",
             color: "black",
             fontFamily: "Roboto",
@@ -113,9 +126,12 @@ const Content: React.FC<ContentProps> = ({ subteamId }) => {
         </Button>
         <Button
           style={{
-            backgroundColor:
-              selectedButton === "attendance" ? "gray" : "#F0F2F5",
-            boxShadow: "0px 0px 8px rgba(0, 0, 0, 0.2)",
+            backgroundColor: selectedButton === "attendance" ?  "white" : "#F0F2F5",
+            border: selectedButton === "attendance" ? "2px solid black" : "",
+            boxShadow:
+            selectedButton === "attendance"
+              ? "0px 0px 8px rgba(0, 0, 0, 0.6)"
+              : "0px 0px 0px rgba(0, 0, 0, 0.2)",
             marginRight: "2em",
             color: "black",
             fontFamily: "Roboto",
@@ -126,9 +142,12 @@ const Content: React.FC<ContentProps> = ({ subteamId }) => {
         </Button>
         <Button
           style={{
-            backgroundColor:
-              selectedButton === "members" ? "gray" : "#F0F2F5",
-            boxShadow: "0px 0px 8px rgba(0, 0, 0, 0.2)",
+            backgroundColor: selectedButton === "members" ?  "white" : "#F0F2F5",
+            border: selectedButton === "members" ? "2px solid black" : "",
+            boxShadow:
+            selectedButton === "members"
+              ? "0px 0px 8px rgba(0, 0, 0, 0.6)"
+              : "0px 0px 0px rgba(0, 0, 0, 0.2)",
             color: "black",
             fontFamily: "Roboto",
           }}
