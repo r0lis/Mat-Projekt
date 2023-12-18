@@ -1,4 +1,6 @@
 import { Box, Button, CircularProgress, Typography } from "@mui/material";
+import MenuIcon from '@mui/icons-material/Menu';
+import AddBoxIcon from '@mui/icons-material/AddBox';
 import React, { useState } from "react";
 import { gql, useQuery } from "@apollo/client";
 import { authUtils } from "@/firebase/auth.utils";
@@ -77,19 +79,24 @@ const Content: React.FC<ContentProps> = ({ subteamId }) => {
             boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.3)",
             width: "100%",
             padding: "15px 0px 15px 0px",
-            borderRadius: "15px",
+            borderRadius: "15px 15px 0px 0px",
+            display: "flex",
           }}
         >
-          <Typography sx={{ marginLeft: "5%", fontSize: "1.8em" }}>
+          <Typography sx={{ marginLeft: "5%", fontSize: "1.8em", fontWeight:"600" }}>
             {subteam.Name}
           </Typography>
+          <AddBoxIcon sx={{marginLeft:"auto",  width:"1.5em", height:"1.5em", color: "#404040"}}/>
+          <MenuIcon sx={{marginLeft:"1em",  width:"1.5em", height:"1.5em", marginRight:"5%", color: "#404040"}}/>
         </Box>
         <Box
           sx={{
-            marginTop: "1em",
+            
             backgroundColor: "#c2c3c4",
-            borderRadius: "10px",
-            padding: "0.4em",
+            borderRadius: "0px 0px 15px 15px",
+            padding: "0.3em",
+            height: "2.5em",
+            boxShadow: "0px 3px 15px rgba(0, 0, 0, 0.3)", 
           }}
         >
           <Button
@@ -105,6 +112,7 @@ const Content: React.FC<ContentProps> = ({ subteamId }) => {
               color: "black",
               fontFamily: "Roboto",
               marginLeft: "5%",
+              
             }}
             onClick={() => setSelectedButton("overview")}
           >

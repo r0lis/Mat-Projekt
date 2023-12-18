@@ -309,7 +309,7 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
                 <Box sx={{ marginLeft: "auto", marginRight: "" }}>
                   {data && data.getSubteamData && data.getSubteamData.length > 1 && (
                   <Button
-                    sx={{ marginRight: "2em" }}
+                    sx={{ marginRight: "2em", backgroundColor: "#027ef2" }}
                     onClick={handleToggleSelect}
                     variant="contained"
                   >
@@ -318,7 +318,7 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
                   </Button>)}
 
                   <Button onClick={handleAddTeamClick} variant="contained">
-                    <Typography sx={{ fontWeight: "600" }}>
+                    <Typography sx={{ fontWeight: "600", backgroundColor: "#027ef2" }}>
                       Přidat tým
                     </Typography>
                   </Button>

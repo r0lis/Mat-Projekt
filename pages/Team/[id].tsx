@@ -184,19 +184,22 @@ const Team: React.FC = () => {
             onMouseEnter={() => {
               {
                 if (autoOpen) {
-                  setShowOnlyIcon(false);
+                  setTimeout(() => {
+                    setShowOnlyIcon(false);
+                  }, 10);
                 }
               }
 
               handleHover(true);
             }}
             onMouseLeave={() => {
-              {
-                if (autoOpen) {
+              if (autoOpen) {
+                // Set a delay of 500 milliseconds (adjust as needed)
+                setTimeout(() => {
                   setShowOnlyIcon(true);
-                }
+                }, 10);
               }
-
+          
               handleHover(false);
             }}
             sx={{

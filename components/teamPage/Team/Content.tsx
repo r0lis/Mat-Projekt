@@ -96,7 +96,7 @@ const Content: React.FC<TeamsProps> = (teamId) => {
             </Box>
             <Box sx={{ marginLeft: "auto" }}>
               <Button
-                sx={{ marginRight: "2em" }}
+                sx={{ marginRight: "2em",backgroundColor: "#027ef2" }}
                 onClick={handleToggleSelect}
                 variant="contained"
               >
