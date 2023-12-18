@@ -70,7 +70,7 @@ const Content: React.FC<ContentProps> = ({ subteamId }) => {
   };
 
   return (
-    <Box sx={{display:"flex"}}>
+    <Box sx={{display:"flex", marginBottom:"2em"}}>
       <Box sx={{ marginTop: "1em", fontSize: "Roboto", width: "80%"}}>
         <Box
           sx={{
@@ -172,7 +172,7 @@ const Content: React.FC<ContentProps> = ({ subteamId }) => {
           {renderContent()}
         </Box>
       </Box>
-      <Box>tento bude napravo vele</Box>
+      <Box sx={{marginTop:"1em",  boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.3)",  borderRadius: "15px", width:"20%", marginLeft:"2em"}}><Typography>Management týmu</Typography></Box>
     </Box>
   );
 };
