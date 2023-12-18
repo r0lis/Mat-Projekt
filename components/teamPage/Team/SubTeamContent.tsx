@@ -104,6 +104,7 @@ const Content: React.FC<ContentProps> = ({ subteamId }) => {
               marginRight: "2em",
               color: "black",
               fontFamily: "Roboto",
+              marginLeft: "5%",
             }}
             onClick={() => setSelectedButton("overview")}
           >
@@ -174,7 +175,7 @@ const Content: React.FC<ContentProps> = ({ subteamId }) => {
       </Box>
       <Box
         sx={{
-          width: "20%",
+          width: "23%",
           marginLeft: "2em",
           marginTop: "1em",
           minHeight: "100vh",

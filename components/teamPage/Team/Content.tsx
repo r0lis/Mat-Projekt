@@ -73,7 +73,7 @@ const Content: React.FC<TeamsProps> = (teamId) => {
   if (subteamError) return <Typography>Chyba</Typography>;
 
   return (
-    <Box sx={{ marginLeft: "5%", marginRight: "5%" }}>
+    <Box sx={{ marginLeft: "2%", marginRight: "2%" }}>
       {subteams.length === 1 ? (
         <Box ml={2}>
           {subteams.map((subteam: Subteam) => (
@@ -105,7 +105,7 @@ const Content: React.FC<TeamsProps> = (teamId) => {
               </Button>
             </Box>
           </Box>
-          <Box ml={2}>
+          <Box >
             {isSelectVisible && (
               <Select
                 sx={{ width: "100%", height: "4em", marginTop: "1em" }}
