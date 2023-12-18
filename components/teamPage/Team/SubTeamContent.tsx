@@ -70,8 +70,8 @@ const Content: React.FC<ContentProps> = ({ subteamId }) => {
   };
 
   return (
-    <Box sx={{display:"flex", marginBottom:"2em"}}>
-      <Box sx={{ marginTop: "1em", fontSize: "Roboto", width: "80%"}}>
+    <Box sx={{ display: "flex", marginBottom: "2em" }}>
+      <Box sx={{ marginTop: "1em", fontSize: "Roboto", width: "80%" }}>
         <Box
           sx={{
             boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.3)",
@@ -172,7 +172,61 @@ const Content: React.FC<ContentProps> = ({ subteamId }) => {
           {renderContent()}
         </Box>
       </Box>
-      <Box sx={{marginTop:"1em",  boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.3)",  borderRadius: "15px", width:"20%", marginLeft:"2em"}}><Typography>Management týmu</Typography></Box>
+      <Box
+        sx={{
+          width: "20%",
+          marginLeft: "2em",
+          marginTop: "1em",
+          minHeight: "100vh",
+        }}
+      >
+        <Box
+          sx={{
+            borderRadius: "15px",
+            backgroundImage: `
+             linear-gradient(to bottom, #c2c3c4 60px, #ffffff 60px)
+             `,
+            boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.3)",
+            height: "49%",
+           
+          }}
+        >
+          <Box sx={{}}>
+            <Typography
+              sx={{
+                fontSize: "1.5em",
+                marginLeft: "1em",
+                fontWeight: "600",
+                paddingTop: "0.5em",
+              }}
+            >
+              Aktuality
+            </Typography>
+          </Box>
+        </Box>
+        <Box
+          sx={{
+            borderRadius: "15px",
+            backgroundImage: `
+             linear-gradient(to bottom, #c2c3c4 60px, #ffffff 60px)
+             `,
+            boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.3)",
+            height: "48%",
+            marginTop: "10%",
+          }}
+        >
+          <Typography
+            sx={{
+              paddingTop: "0.5em",
+              fontSize: "1.5em",
+              marginLeft: "1em",
+              fontWeight: "600",
+            }}
+          >
+            Realizační tým
+          </Typography>
+        </Box>
+      </Box>
     </Box>
   );
 };
