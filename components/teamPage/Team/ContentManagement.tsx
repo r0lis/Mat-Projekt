@@ -324,8 +324,8 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
                     {isSelectVisible ? <ExpandLessIcon /> : <ExpandMoreIcon />}
                   </Button>)}
 
-                  <Button onClick={handleAddTeamClick} variant="contained">
-                    <Typography sx={{ fontWeight: "600", backgroundColor: "#027ef2" }}>
+                  <Button sx={{backgroundColor: "#027ef2"}} onClick={handleAddTeamClick} variant="contained">
+                    <Typography sx={{ fontWeight: "600",  }}>
                       Přidat tým
                     </Typography>
                   </Button>

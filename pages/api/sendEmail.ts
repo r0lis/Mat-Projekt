@@ -21,7 +21,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   try {
     for (const email of emails) {
       const token = generateUniqueToken();
-      const registrationLink = `http://localhost:3000/Invite/${teamId}?email=${encodeURIComponent(email)}&token=${token}`;
+      const registrationLink = `https://team-app-sand.vercel.app/Invite/${teamId}?email=${encodeURIComponent(email)}&token=${token}`;
       const mailOptions = {
         from: 'appteammanager@gmail.com',
         to: email,
