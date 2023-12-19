@@ -320,7 +320,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                       {(member.Role === "0" ||
                         member.Role === "No Role Assigned") && (
                         <Box sx={{ maxWidth: "15em" }}>
-                          <Alert sx={{ maxHeight: "3em" }} severity="warning">
+                          <Alert sx={{ maxHeight: "3em" }} severity="error">
                             <Typography
                               sx={{ fontFamily: "Roboto", fontSize: "1vw" }}
                             >
@@ -638,25 +638,27 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                             {subteam.Name}
                           </Typography>
                           {selectedMember.Subteams.length > 1 && (
-                          <Button
-                            onClick={() =>
-                              setExpandedSelectedMember(
-                                expandedSelectedMember === selectedMember.Email
-                                  ? null
-                                  : selectedMember.Email
-                              )
-                            }
-                            color="primary"
-                            sx={{
-                              fontFamily: "Roboto",
-                              marginLeft: "auto",
-                              height: "1.5em",
-                            }}
-                          >
-                            {expandedSelectedMember === selectedMember.Email
-                              ? "Méně"
-                              : "Více"}
-                          </Button>)}
+                            <Button
+                              onClick={() =>
+                                setExpandedSelectedMember(
+                                  expandedSelectedMember ===
+                                    selectedMember.Email
+                                    ? null
+                                    : selectedMember.Email
+                                )
+                              }
+                              color="primary"
+                              sx={{
+                                fontFamily: "Roboto",
+                                marginLeft: "auto",
+                                height: "1.5em",
+                              }}
+                            >
+                              {expandedSelectedMember === selectedMember.Email
+                                ? "Méně"
+                                : "Více"}
+                            </Button>
+                          )}
                         </Box>
                       ))}
                       {selectedMember.Subteams.length > 1 && (
@@ -767,8 +769,8 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                     {(selectedMember?.Role === "0" ||
                       selectedMember?.Role === "No Role Assigned") && (
                       <Box sx={{ maxWidth: "15em", marginBottom: "0.5em" }}>
-                        <Alert sx={{ maxHeight: "2.6em" }} severity="warning">
-                          Není zvoleno
+                        <Alert sx={{ maxHeight: "2.6em" }} severity="error">
+                          <Typography sx={{fontSize:"1em", fontWeight:"600"}}>Zvolte !</Typography>
                         </Alert>
                       </Box>
                     )}

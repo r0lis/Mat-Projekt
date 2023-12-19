@@ -111,6 +111,22 @@ export const typeDefs = gql`
     position: String!
   }
 
+  type CompleteSubteam {
+    Name: String
+    teamId: String
+    subteamId: String
+    subteamMembers: [CompleteSubteamMember]
+  }
+  
+  type CompleteSubteamMember {
+    name: String
+    surname: String
+    email: String
+    role: String
+    position: String
+  }
+  
+
 
   
   type Query {
@@ -132,6 +148,8 @@ export const typeDefs = gql`
     getSubteamData(teamId: String!): [Subteam]
     getYourSubteamData(teamId: String!, email: String!): [Subteam]
     getSubteamDetails(subteamId: String!): Subteam
+    getCompleteSubteamDetail(subteamId: String!): CompleteSubteam
+
   }
 
   type Mutation {

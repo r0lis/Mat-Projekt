@@ -59,13 +59,13 @@ const Content: React.FC<ContentProps> = ({ subteamId }) => {
   const renderContent = () => {
     switch (selectedButton) {
       case "overview":
-        return <Overview subteamId={subteamId} />;
+        return <Overview subteamId={subteamId as string} />;
       case "wall":
         return <Wall subteamId={subteamId} />;
       case "attendance":
         return <Attendance subteamId={subteamId} />;
       case "members":
-        return <Members subteamId={subteamId} />;
+        return <Members subteamId={subteamId  as string} />;
       default:
         return null;
     }

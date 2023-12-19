@@ -124,3 +124,20 @@ export type SubteamMember = {
   role: string;
   position: string;
 };
+
+
+export type CompleteSubteam = {
+  Name: string;
+  teamId: string;
+  subteamId: string;
+  subteamMembers: CompleteSubteamMember[];
+};
+
+export type CompleteSubteamMember = {
+  name: string;
+  surname: string;
+  email: string;
+  role: string;
+  position: string;
+};
+

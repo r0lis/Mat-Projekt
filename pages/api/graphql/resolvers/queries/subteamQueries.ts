@@ -13,6 +13,8 @@ import {
   TeamDetails2,
   MemberDetails,
   Subteam,
+  CompleteSubteam,
+  CompleteSubteamMember
 } from "./../../types";
 import "firebase/storage";
 import * as admin from "firebase-admin";
@@ -88,6 +90,63 @@ export const subteamQueries = {
           return null;
         } catch (error) {
           console.error("Error fetching subteam details:", error);
+          throw error;
+        }
+      },
+
+      getCompleteSubteamDetail: async (
+        _: any,
+        { subteamId }: { subteamId: string },
+        context: Context
+      ): Promise<CompleteSubteam | null> => {
+        try {
+          if (context.user) {
+            // Retrieve subteam details
+            const subteamDoc = await context.db.collection("Teams").doc(subteamId).get();
+    
+            if (subteamDoc.exists) {
+              const subteamData = subteamDoc.data() as Subteam;
+    
+              // Retrieve member details for each subteam member
+              const subteamMembersPromises = subteamData.subteamMembers.map(
+                async (member: { email: string; position: string; role: string }) => {
+                  const userDoc = await context.db.collection("User").where("Email", "==", member.email).get();
+    
+                  if (!userDoc.empty) {
+                    const userData = userDoc.docs[0].data() as User;
+                    const completeMember: CompleteSubteamMember = {
+                      name: userData.Name,
+                      surname: userData.Surname,
+                      email: userData.Email,
+                      role: member.role,
+                      position: member.position,
+                    };
+    
+                    return completeMember;
+                  }
+    
+                  return null;
+                }
+              );
+    
+              // Resolve all promises to get the complete subteam members' details
+              const subteamMembers = await Promise.all(subteamMembersPromises);
+    
+              // Create the CompleteSubteam object
+              const completeSubteam: CompleteSubteam = {
+                Name: subteamData.Name,
+                teamId: subteamData.teamId,
+                subteamId: subteamData.subteamId,
+                subteamMembers: subteamMembers.filter(Boolean) as CompleteSubteamMember[], // Filter out null values
+              };
+    
+              return completeSubteam;
+            }
+          }
+    
+          return null;
+        } catch (error) {
+          console.error("Error fetching complete subteam details:", error);
           throw error;
         }
       },

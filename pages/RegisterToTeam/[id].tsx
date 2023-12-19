@@ -177,6 +177,7 @@ const RegistrationPage: React.FC = () => {
 
       if (user) {
         setRegistrationSuccess(true);
+        setError(null);
       } else {
         throw new Error("Chyba při vytváření uživatele.");
       }

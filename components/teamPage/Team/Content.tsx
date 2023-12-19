@@ -14,6 +14,7 @@ import { gql, useQuery } from "@apollo/client";
 import SubteamContent from "@/components/teamPage/Team/SubTeamContent";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import NoTeam from "@/components/teamPage/Team/Component/Noteam";
 
 const GET_SUBTEAMS = gql`
   query GetYourSubteamData($teamId: String!, $email: String!) {
@@ -87,7 +88,7 @@ const Content: React.FC<TeamsProps> = (teamId) => {
           ))}
         </Box>
       ) : subteams.length === 0 ? (
-        <Typography variant="body1">Nepatříte do žádného týmu.</Typography>
+        <NoTeam />
       ) : (
         <>
           <Box sx={{ display: "flex" }}>
