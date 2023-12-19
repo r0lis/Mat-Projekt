@@ -48,7 +48,10 @@ const GET_MISSING_SUBTEAM_MEMBERS = gql`
 `;
 
 const UPDATE_SUBTEAM_MEMBERS = gql`
-  mutation UpdateSubteamMembers($subteamId: String!, $updatedMembers: [UpdatedSubteamMemberInput!]!) {
+  mutation UpdateSubteamMembers(
+    $subteamId: String!
+    $updatedMembers: [UpdatedSubteamMemberInput!]!
+  ) {
     updateSubteamMembers(subteamId: $subteamId, updatedMembers: $updatedMembers)
   }
 `;
@@ -104,7 +107,7 @@ const Members: React.FC<MembersProps> = (subteamId) => {
     const memberIndex = addMembers.findIndex(
       (member) => member.email === email
     );
-  
+
     if (role === "1") {
       // If Role is "1", do nothing, already handled in useEffect
     } else {
@@ -123,7 +126,7 @@ const Members: React.FC<MembersProps> = (subteamId) => {
       }
     }
   };
-  
+
   const { loading, error, data } = useQuery(GET_COMPLETESUBTEAM_DETAILS, {
     variables: { subteamId: id },
     skip: !user,
@@ -184,11 +187,10 @@ const Members: React.FC<MembersProps> = (subteamId) => {
     <Box>
       {addMember ? (
         <Box>
-          <Box>
-            <Typography variant="h4">Přidání člena do týmu</Typography>
+          <Box sx={{ marginLeft: "10%" }}>
+            <Typography variant="h5">Přidání člena do týmu</Typography>
           </Box>
           <Box sx={{ marginTop: "1em", marginLeft: "auto", display: "block" }}>
-            <Typography variant="h5">Chybějící členové</Typography>
             {missingMembers && missingMembers.length > 0 ? (
               <Box>
                 <TableContainer
@@ -297,10 +299,20 @@ const Members: React.FC<MembersProps> = (subteamId) => {
               <Typography>Všichni členové jsou přidáni.</Typography>
             )}
           </Box>
-          <Box>
-          <Button onClick={handleConfirm}>Potvrdit</Button>
-
-            <Button onClick={() => setAddMember(false)}>Zrušit</Button>
+          <Box sx={{ marginLeft: "10%" }}>
+            <Button sx={{ backgroundColor: "#027ef2", marginRight:"2em" }} onClick={handleConfirm}>
+            <Typography sx={{ fontWeight: "600", color:"white"  }}>
+              Potvrdit
+              </Typography>
+            </Button>
+            <Button
+              sx={{ backgroundColor: "#027ef2", color:"white"  }}
+              onClick={() => setAddMember(false)}
+            >
+              <Typography sx={{ fontWeight: "600",  }}>
+              Zrušit
+              </Typography>
+            </Button>
           </Box>
         </Box>
       ) : (
