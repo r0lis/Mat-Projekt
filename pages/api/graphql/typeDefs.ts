@@ -131,6 +131,12 @@ export const typeDefs = gql`
     role: Int
   }
 
+  input UpdatedSubteamMemberInput {
+    email: String!
+    role: String!
+    position: String!
+  }
+
   
   type Query {
     user(id: String): User
@@ -183,6 +189,11 @@ export const typeDefs = gql`
       inputName: String!
       subteamMembers: [SubteamMemberInput]!
     ): Subteam
+
+    updateSubteamMembers(
+      subteamId: String!
+      updatedMembers: [UpdatedSubteamMemberInput]!
+    ): Boolean
   }
 
   

@@ -28,7 +28,11 @@ type SubteamMemberInput = {
   role: String
   position: String
 }
-
+type UpdatedSubteamMemberInput = {
+  email: string;
+  role: string;
+  position: string;
+};
 
 const generateRandomString = (length: number) => {
     let result = "";
@@ -74,6 +78,40 @@ export const subteamMutations = {
         return newSubteamData;
       } catch (error) {
         console.error("Error creating subteam:", error);
+        throw error;
+      }
+    },
+
+    updateSubteamMembers: async (
+      _: any,
+      {
+        subteamId,
+        updatedMembers,
+      }: { subteamId: string; updatedMembers: UpdatedSubteamMemberInput[] },
+      context: Context
+    ) => {
+      try {
+        // Fetch existing subteam members
+        const subteamDoc = context.db.collection("Teams").doc(subteamId);
+        const subteamSnapshot = await subteamDoc.get();
+    
+        if (!subteamSnapshot.exists) {
+          throw new Error(`Subteam with ID ${subteamId} not found`);
+        }
+    
+        const existingMembers = subteamSnapshot.data()?.subteamMembers || [];
+    
+        // Combine existing members with updated members
+        const combinedMembers = [...existingMembers, ...updatedMembers];
+    
+        // Update subteam members in the Teams collection
+        await subteamDoc.update({
+          subteamMembers: combinedMembers,
+        });
+    
+        return true;
+      } catch (error) {
+        console.error("Error updating subteam members:", error);
         throw error;
       }
     },
