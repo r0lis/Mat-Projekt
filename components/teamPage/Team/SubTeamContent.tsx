@@ -91,11 +91,11 @@ const Content: React.FC<ContentProps> = ({ subteamId }) => {
         </Box>
         <Box
           sx={{
-            
+            borderTop:"2px solid black",
             backgroundColor: "#c2c3c4",
             borderRadius: "0px 0px 15px 15px",
             padding: "0.3em",
-            height: "2.5em",
+            
             boxShadow: "0px 3px 15px rgba(0, 0, 0, 0.3)", 
           }}
         >
@@ -112,6 +112,8 @@ const Content: React.FC<ContentProps> = ({ subteamId }) => {
               color: "black",
               fontFamily: "Roboto",
               marginLeft: "5%",
+              marginTop: "0.5em",
+              marginBottom: "0.5em",
               
             }}
             onClick={() => setSelectedButton("overview")}
@@ -129,6 +131,8 @@ const Content: React.FC<ContentProps> = ({ subteamId }) => {
               marginRight: "2em",
               color: "black",
               fontFamily: "Roboto",
+              marginTop: "0.5em",
+              marginBottom: "0.5em",
             }}
             onClick={() => setSelectedButton("wall")}
           >
@@ -146,6 +150,8 @@ const Content: React.FC<ContentProps> = ({ subteamId }) => {
               marginRight: "2em",
               color: "black",
               fontFamily: "Roboto",
+              marginTop: "0.5em",
+              marginBottom: "0.5em",
             }}
             onClick={() => setSelectedButton("attendance")}
           >
@@ -162,6 +168,8 @@ const Content: React.FC<ContentProps> = ({ subteamId }) => {
                   : "0px 0px 0px rgba(0, 0, 0, 0.2)",
               color: "black",
               fontFamily: "Roboto",
+              marginTop: "0.5em",
+              marginBottom: "0.5em",
             }}
             onClick={() => setSelectedButton("members")}
           >
