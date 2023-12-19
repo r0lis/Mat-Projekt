@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import React from "react";
 import { Box, CircularProgress, Typography } from "@mui/material";
 import { useQuery, gql } from "@apollo/client";
@@ -17,6 +18,12 @@ const GET_COMPLETESUBTEAM_DETAILS = gql`
         position
       }
     }
+  }
+`;
+
+const GET_MISSING_SUBTEAM_MEMBERS = gql`
+  query GetMissingSubteamMembers($subteamId: String!) {
+    getMissingSubteamMembers(subteamId: $subteamId)
   }
 `;
 
@@ -42,7 +49,16 @@ const Members: React.FC<MembersProps> = (subteamId) => {
     skip: !user,
   });
 
-  if (loading)
+  const {
+    loading: missingMembersLoading,
+    error: missingMembersError,
+    data: missingMembersData,
+  } = useQuery(GET_MISSING_SUBTEAM_MEMBERS, {
+    variables: { subteamId: id },
+    skip: !user,
+  });
+
+  if (loading || missingMembersLoading)
     return (
       <CircularProgress
         color="primary"
@@ -50,9 +66,10 @@ const Members: React.FC<MembersProps> = (subteamId) => {
         style={{ position: "absolute", top: "50%", left: "50%" }}
       />
     );
-  if (error) return <Typography>Chyba</Typography>;
+  if (error || missingMembersError) return <Typography>Chyba</Typography>;
 
   const subteam = data.getCompleteSubteamDetail;
+  const missingMembers = missingMembersData.getMissingSubteamMembers;
   
   return (
      <Box>
@@ -62,6 +79,14 @@ const Members: React.FC<MembersProps> = (subteamId) => {
           {member.name} {member.surname} {member.email} - {member.role}
         </Typography>
       ))}
+      <Typography variant="h5">Missing members</Typography>
+      {missingMembers && missingMembers.map((email: string) => (
+        <Typography key={email}>
+          {email}
+        </Typography>
+      ))}
+       
+     
     </Box>
   );
 };

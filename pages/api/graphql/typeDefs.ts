@@ -149,6 +149,7 @@ export const typeDefs = gql`
     getYourSubteamData(teamId: String!, email: String!): [Subteam]
     getSubteamDetails(subteamId: String!): Subteam
     getCompleteSubteamDetail(subteamId: String!): CompleteSubteam
+    getMissingSubteamMembers(subteamId: String!): [String]
 
   }
 
