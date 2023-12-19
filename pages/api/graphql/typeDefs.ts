@@ -126,7 +126,10 @@ export const typeDefs = gql`
     position: String
   }
   
-
+  type SubteamMember2 {
+    email: String
+    role: Int
+  }
 
   
   type Query {
@@ -149,7 +152,7 @@ export const typeDefs = gql`
     getYourSubteamData(teamId: String!, email: String!): [Subteam]
     getSubteamDetails(subteamId: String!): Subteam
     getCompleteSubteamDetail(subteamId: String!): CompleteSubteam
-    getMissingSubteamMembers(subteamId: String!): [String]
+    getMissingSubteamMembers(subteamId: String!): [SubteamMember2]
 
   }
 

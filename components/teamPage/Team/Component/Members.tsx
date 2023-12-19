@@ -22,10 +22,14 @@ const GET_COMPLETESUBTEAM_DETAILS = gql`
 `;
 
 const GET_MISSING_SUBTEAM_MEMBERS = gql`
-  query GetMissingSubteamMembers($subteamId: String!) {
-    getMissingSubteamMembers(subteamId: $subteamId)
+query GetMissingSubteamMembers($subteamId: String!) {
+  getMissingSubteamMembers(subteamId: $subteamId) {
+    email
+    role
   }
+}
 `;
+
 
 type MembersProps = {
   subteamId: string;
@@ -37,6 +41,11 @@ type Member = {
   email: string;
   role: string;
   position: string;
+};
+
+type SubteamMember = {
+  email: string;
+  role: string;
 };
 
 const Members: React.FC<MembersProps> = (subteamId) => {
@@ -66,8 +75,8 @@ const Members: React.FC<MembersProps> = (subteamId) => {
         style={{ position: "absolute", top: "50%", left: "50%" }}
       />
     );
-  if (error || missingMembersError) return <Typography>Chyba</Typography>;
-
+  if (error || missingMembersError) return <Typography>kurva</Typography>;
+console.log(missingMembersError)
   const subteam = data.getCompleteSubteamDetail;
   const missingMembers = missingMembersData.getMissingSubteamMembers;
 
@@ -77,12 +86,13 @@ const Members: React.FC<MembersProps> = (subteamId) => {
         <Box>
           <Typography>Přidání člena</Typography>
 
-          <Typography variant="h5">Missing members</Typography>
-          {missingMembers &&
-            missingMembers.map((email: string) => (
-              <Typography key={email}>{email}</Typography>
+           <Typography variant="h5">Missing members</Typography>
+           {missingMembers &&
+            missingMembers.map((member: SubteamMember) => (
+              <Typography key={member.email}>
+                {member.email} - Role: {member.role}
+              </Typography>
             ))}
-            
           <Button onClick={() => setAddMember(false)}>Zrušit</Button>
         </Box>
       ) : (

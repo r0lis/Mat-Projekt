@@ -192,33 +192,46 @@ export const subteamQueries = {
     _: any,
     { subteamId }: { subteamId: string },
     context: Context
-  ): Promise<string[] | null> => {
+  ): Promise<{ email: string; role: number }[] | null> => {
     try {
       if (context.user) {
         // Fetch subteam details using the helper function
         const subteamDetails = await getSubteamDetails(subteamId, context);
-
+  
         if (subteamDetails && subteamDetails.subteamMembers) {
-          // Extracting emails from subteamMembers array
-          const subteamEmails = subteamDetails.subteamMembers.map((member: any) => member.email);
-
+          // Extracting emails and roles from subteamMembers array
+          const subteamMembers = subteamDetails.subteamMembers.map((member: any) => ({
+            email: member.email,
+            role: member.role,
+          }));
+  
           // Fetch team details using the provided teamId
           const teamQuery = context.db.collection("Team").where("teamId", "==", subteamDetails.teamId);
           const teamSnapshot = await teamQuery.get();
-
+  
           if (!teamSnapshot.empty) {
-            // Extracting emails from Members array of the Team collection
+            // Extracting emails and roles from Members array of the Team collection
             const teamData = teamSnapshot.docs[0].data() as Team;
-            const teamEmails = teamData.MembersEmails.map((email: any) => email);
+            const teamMembers = teamData.Members.map((member: any) => ({
+              email: member.member,
+              role: member.role,
+            }));
+  
+            const allMembers: { email: string; role: number }[] = [...subteamMembers, ...teamMembers];
 
-            const allEmails: string[] = [...subteamEmails, ...teamEmails];
-
-            // Filter emails that appear exactly once
-            const uniqueEmails = allEmails.filter((email, index, self) => self.indexOf(email) === self.lastIndexOf(email));
-            return uniqueEmails;
+            // Create a map to track email occurrences
+            const emailOccurrences: Record<string, number> = {};
+            allMembers.forEach((member) => {
+              emailOccurrences[member.email] = (emailOccurrences[member.email] || 0) + 1;
+            });
+  
+            // Filter members where email occurrences are 1 (unique)
+            const uniqueMembers = allMembers.filter((member) => emailOccurrences[member.email] === 1);
+  
+            return uniqueMembers;
           }
         }
-
+  
         return null;
       } else {
         return null;

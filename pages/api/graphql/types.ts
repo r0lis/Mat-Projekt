@@ -23,6 +23,7 @@ export type Team = {
   teamId: string;
   MembersEmails: [String];
   AdminEmail: string;
+  Members: { member: string; role: string }[];
   Email: string;
   Logo: string;
   Place: string;
@@ -70,6 +71,7 @@ export type CreateTeamInput = {
   Name: string;
   teamId: string;
   MembersEmails: [String];
+  
   AdminEmail: string;
   Email: string;
   Logo: string;
