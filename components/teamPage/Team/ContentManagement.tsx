@@ -111,9 +111,9 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
   const [updateMembersEffectTrigger, setUpdateMembersEffectTrigger] =
     useState(0);
   const [addMembers, setAddMembers] = useState<
-    { email: string; role: string; position: string }[]
+    {name:string, surname:string, email: string; role: string; position: string }[]
   >([]);
-
+  
   const {
     loading,
     error: subteamError,
@@ -153,7 +153,9 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
 
       // Nastavte membersWithRoleOne do addMembers pole
       setAddMembers(
-        membersWithRoleOne.map(({ Email, Role }) => ({
+        membersWithRoleOne.map(({Name,Surname, Email, Role }) => ({
+          name: Name,
+          surname: Surname,
           email: Email,
           role: Role,
           position: "0",
@@ -174,6 +176,8 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
   // ...
 
   const handleCheckboxChange = (
+    name: string,
+    surname: string,
     email: string,
     role: string,
     position: string
@@ -194,7 +198,7 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
       } else {
         setAddMembers((prevMembers) => [
           ...prevMembers,
-          { email, role, position },
+          {name, surname, email, role, position },
         ]);
       }
     }
@@ -252,11 +256,14 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
     try {
       // Perform your mutation here using createSubteam mutation
       // Pass teamId and name as variables to the mutation
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const membersWithoutNameAndSurname = addMembers.map(({ name, surname, ...rest }) => rest);
+
       await createSubteam({
         variables: {
           teamId: teamId,
           inputName: name,
-          subteamMembers: addMembers,
+          subteamMembers: membersWithoutNameAndSurname,
         }, // Ensure teamId is a string
       });
 
@@ -449,6 +456,8 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
                               <Checkbox
                                 onChange={() =>
                                   handleCheckboxChange(
+                                    member.Name,
+                                    member.Surname,
                                     member.Email,
                                     member.Role,
                                     "0"
@@ -473,20 +482,24 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
                     <Alert severity="warning">Přidejte členy do týmu.</Alert>
                   ) : !hasRole1 || !hasRole2Or3 ? (
                     <Alert severity="error">
-                      Musíte mít alespoň jednoho člena s roli 1 a jednoho s rolí
-                      2 nebo 3.
+                      Musíte mít alespoň jednoho člena s rolí Management a jednoho s rolí
+                      Trenér nebo Hráč.
                     </Alert>
                   ) : (
                     <TableContainer>
                       <Table>
                         <TableHead>
                           <TableRow>
-                            <TableCell>E-maily členů</TableCell>
+                            <TableCell>Člen</TableCell>
+                            <TableCell>E-mail</TableCell>
+                            <TableCell>Práva</TableCell>
+                            <TableCell>Pozice</TableCell>
                           </TableRow>
                         </TableHead>
                         <TableBody>
                           {addMembers.map((member) => (
                             <TableRow key={member.email}>
+                              <TableCell>{member.name} {member.surname}</TableCell>
                               <TableCell>{member.email}</TableCell>
                               <TableCell> {getRoleText(member.role)}</TableCell>
                               <TableCell>
@@ -497,11 +510,12 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
                                   }
                                 >
                                   <MenuItem value="0">Vyberte</MenuItem>
-                                  <MenuItem value="1">Hlavní trenér</MenuItem>
-                                  <MenuItem value="2">
+                                  <MenuItem value="1">Správce</MenuItem>
+                                  <MenuItem value="2">Hlavní trenér</MenuItem>
+                                  <MenuItem value="3">
                                     Asistent trenéra
                                   </MenuItem>
-                                  <MenuItem value="3">Hráč</MenuItem>
+                                  <MenuItem value="4">Hráč</MenuItem>
                                 </Select>
                               </TableCell>
                             </TableRow>
