@@ -20,8 +20,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     for (const email of emails) {
-      const token = generateUniqueToken();
-      const registrationLink = `https://team-app-sand.vercel.app/Invite/${teamId}?email=${encodeURIComponent(email)}&token=${token}`;
+      const registrationLink = `https://team-app-sand.vercel.app/Invite/${teamId}?email=${encodeURIComponent(email)}`;
       const mailOptions = {
         from: 'appteammanager@gmail.com',
         to: email,
@@ -39,16 +38,4 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     console.error('Chyba při odesílání e-mailů:', error);
     res.status(500).json({ error: 'Chyba při odesílání e-mailů.' });
   }
-}
-function generateUniqueToken() {
-  const tokenLength = 16;
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  let token = '';
-
-  for (let i = 0; i < tokenLength; i++) {
-    const randomIndex = Math.floor(Math.random() * characters.length);
-    token += characters[randomIndex];
-  }
-
-  return token;
 }
