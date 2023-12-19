@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-import React from "react";
-import { Box, CircularProgress, Typography } from "@mui/material";
+import React, { useState } from "react";
+import { Box, Button, CircularProgress, Typography } from "@mui/material";
 import { useQuery, gql } from "@apollo/client";
-import {authUtils} from "@/firebase/auth.utils";
+import { authUtils } from "@/firebase/auth.utils";
 
 const GET_COMPLETESUBTEAM_DETAILS = gql`
   query GetCompleteSubteamDetail($subteamId: String!) {
@@ -42,7 +42,7 @@ type Member = {
 const Members: React.FC<MembersProps> = (subteamId) => {
   const user = authUtils.getCurrentUser();
   const id = subteamId.subteamId;
-  console.log(id);
+  const [addMember, setAddMember] = useState(false);
 
   const { loading, error, data } = useQuery(GET_COMPLETESUBTEAM_DETAILS, {
     variables: { subteamId: id },
@@ -70,26 +70,36 @@ const Members: React.FC<MembersProps> = (subteamId) => {
 
   const subteam = data.getCompleteSubteamDetail;
   const missingMembers = missingMembersData.getMissingSubteamMembers;
-  
+
   return (
-     <Box>
-      <Typography variant="h5">Members</Typography>
-      {subteam?.subteamMembers.map((member: Member) => (
-        <Typography key={member.email}>
-          {member.name} {member.surname} {member.email} - {member.role}
-        </Typography>
-      ))}
-      <Typography variant="h5">Missing members</Typography>
-      {missingMembers && missingMembers.map((email: string) => (
-        <Typography key={email}>
-          {email}
-        </Typography>
-      ))}
-       
-     
+    <Box>
+      {addMember ? (
+        <Box>
+          <Typography>Přidání člena</Typography>
+
+          <Typography variant="h5">Missing members</Typography>
+          {missingMembers &&
+            missingMembers.map((email: string) => (
+              <Typography key={email}>{email}</Typography>
+            ))}
+            
+          <Button onClick={() => setAddMember(false)}>Zrušit</Button>
+        </Box>
+      ) : (
+        <Box>
+          <Button onClick={() => setAddMember(true)}>Přidat člena</Button>
+          <Typography variant="h5">Members</Typography>
+          {subteam?.subteamMembers.map((member: Member) => (
+            <Typography key={member.email}>
+              {member.name} {member.surname} {member.email} - {member.role}
+            </Typography>
+          ))}
+
+         
+        </Box>
+      )}
     </Box>
   );
 };
 
 export default Members;
-
