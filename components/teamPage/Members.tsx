@@ -869,7 +869,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                       selectedMember &&
                       selectedMember.Email === currentUserEmail
                         ? "56%"
-                        : "53%",
+                        : "52%",
                     transform: "translateY(-50%)",
                     marginLeft: "-3em",
                     zIndex: -1,
