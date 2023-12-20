@@ -1,6 +1,6 @@
 import { Box, Button, CircularProgress, Typography } from "@mui/material";
-import MenuIcon from '@mui/icons-material/Menu';
-import AddBoxIcon from '@mui/icons-material/AddBox';
+import MenuIcon from "@mui/icons-material/Menu";
+import AddBoxIcon from "@mui/icons-material/AddBox";
 import React, { useState } from "react";
 import { gql, useQuery } from "@apollo/client";
 import { authUtils } from "@/firebase/auth.utils";
@@ -65,7 +65,7 @@ const Content: React.FC<ContentProps> = ({ subteamId }) => {
       case "attendance":
         return <Attendance subteamId={subteamId} />;
       case "members":
-        return <Members subteamId={subteamId  as string} />;
+        return <Members subteamId={subteamId as string} />;
       default:
         return null;
     }
@@ -83,20 +83,37 @@ const Content: React.FC<ContentProps> = ({ subteamId }) => {
             display: "flex",
           }}
         >
-          <Typography sx={{ marginLeft: "5%", fontSize: "1.8em", fontWeight:"600" }}>
+          <Typography
+            sx={{ marginLeft: "5%", fontSize: "1.8em", fontWeight: "600" }}
+          >
             {subteam.Name}
           </Typography>
-          <AddBoxIcon sx={{marginLeft:"auto",  width:"1.5em", height:"1.5em", color: "#404040"}}/>
-          <MenuIcon sx={{marginLeft:"1em",  width:"1.5em", height:"1.5em", marginRight:"5%", color: "#404040"}}/>
+          <AddBoxIcon
+            sx={{
+              marginLeft: "auto",
+              width: "1.5em",
+              height: "1.5em",
+              color: "#404040",
+            }}
+          />
+          <MenuIcon
+            sx={{
+              marginLeft: "1em",
+              width: "1.5em",
+              height: "1.5em",
+              marginRight: "5%",
+              color: "#404040",
+            }}
+          />
         </Box>
         <Box
           sx={{
-            borderTop:"2px solid black",
+            borderTop: "2px solid black",
             backgroundColor: "#c2c3c4",
             borderRadius: "0px 0px 15px 15px",
             padding: "0.3em",
-            
-            boxShadow: "0px 3px 15px rgba(0, 0, 0, 0.3)", 
+
+            boxShadow: "0px 3px 15px rgba(0, 0, 0, 0.3)",
           }}
         >
           <Button
@@ -114,7 +131,6 @@ const Content: React.FC<ContentProps> = ({ subteamId }) => {
               marginLeft: "5%",
               marginTop: "0.5em",
               marginBottom: "0.5em",
-              
             }}
             onClick={() => setSelectedButton("overview")}
           >
@@ -205,16 +221,15 @@ const Content: React.FC<ContentProps> = ({ subteamId }) => {
              `,
             boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.3)",
             height: "49%",
-           
           }}
         >
           <Box sx={{}}>
             <Typography
               sx={{
-                fontSize: "1.5rem",
-                marginLeft: "1em",
+                fontSize: ["0.8rem", "1.1rem", "1.5rem"],
+                marginLeft: ["0.6rem", "1rem", "1rem"],
                 fontWeight: "600",
-                paddingTop: "0.5em",
+                paddingTop: ["1.4rem", "1rem","0.5em"],
               }}
             >
               Aktuality
@@ -234,10 +249,11 @@ const Content: React.FC<ContentProps> = ({ subteamId }) => {
         >
           <Typography
             sx={{
-              paddingTop: "0.5em",
-              fontSize: "1.5em",
-              marginLeft: "1em",
+              paddingTop: ["0.8rem", "1rem","0.5em"],
+              fontSize: ["0.8rem", "1.1rem", "1.5rem"],
+              marginLeft: ["0.3rem", "0.6rem", "1rem"],
               fontWeight: "600",
+              whiteSpace: "nowrap",
             }}
           >
             Realizační tým
