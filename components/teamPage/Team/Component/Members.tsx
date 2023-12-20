@@ -104,7 +104,7 @@ const getPositionText = (position: string): string => {
     default:
       return "";
   }
-}
+};
 
 const Members: React.FC<MembersProps> = (subteamId) => {
   const user = authUtils.getCurrentUser();
@@ -143,7 +143,7 @@ const Members: React.FC<MembersProps> = (subteamId) => {
     }
   };
 
-  const { loading, error, data } = useQuery(GET_COMPLETESUBTEAM_DETAILS, {
+  const { loading, error, data, refetch } = useQuery(GET_COMPLETESUBTEAM_DETAILS, {
     variables: { subteamId: id },
     skip: !user,
   });
@@ -152,6 +152,8 @@ const Members: React.FC<MembersProps> = (subteamId) => {
     loading: missingMembersLoading,
     error: missingMembersError,
     data: missingMembersData,
+    refetch: missingMembersRefetch,
+    
   } = useQuery(GET_MISSING_SUBTEAM_MEMBERS, {
     variables: { subteamId: id },
     skip: !user,
@@ -162,7 +164,7 @@ const Members: React.FC<MembersProps> = (subteamId) => {
       <CircularProgress
         color="primary"
         size={50}
-        style={{ position: "absolute", top: "50%", left: "50%" }}
+        style={{ position: "absolute", top: "50%", left: "40%" }}
       />
     );
   if (error || missingMembersError) return <Typography>kurva</Typography>;
@@ -194,6 +196,8 @@ const Members: React.FC<MembersProps> = (subteamId) => {
       // Optionally, you can reset the state or perform other actions after successful update
       setAddMembers([]);
       setAddMember(false);
+      refetch();
+      await missingMembersRefetch();
     } catch (error) {
       console.error("Error updating subteam members:", error);
     }
@@ -217,11 +221,13 @@ const Members: React.FC<MembersProps> = (subteamId) => {
                     width: "80%",
                     marginLeft: "auto",
                     marginRight: "auto",
+                    borderRadius:"10px",
+                    border:"2px solid gray"
                   }}
                 >
                   <Table>
                     <TableHead>
-                      <TableRow>
+                      <TableRow sx={{borderBottom:"2px solid black "}}>
                         <TableCell>E-mail</TableCell>
                         <TableCell>Role</TableCell>
                         <TableCell>Přidat</TableCell>
@@ -229,7 +235,7 @@ const Members: React.FC<MembersProps> = (subteamId) => {
                     </TableHead>
                     <TableBody>
                       {missingMembers.map((member: SubteamMember) => (
-                        <TableRow key={member.email}>
+                         <TableRow sx={{borderTop:"2px solid gray"}} key={member.email}>
                           <TableCell>{member.email}</TableCell>
                           <TableCell>
                             {getRoleText(member.role.toString())}
@@ -265,10 +271,12 @@ const Members: React.FC<MembersProps> = (subteamId) => {
                     marginRight: "auto",
                   }}
                 >
+                  
                   {addMembers.length === 0 ? (
                     <Alert severity="warning">Přidejte členy do týmu.</Alert>
                   ) : (
-                    <TableContainer>
+                    <TableContainer sx={{borderRadius:"10px",
+                    border:"2px solid gray"}}>
                       <Table>
                         <TableHead>
                           <TableRow>
@@ -280,7 +288,7 @@ const Members: React.FC<MembersProps> = (subteamId) => {
                         </TableHead>
                         <TableBody>
                           {addMembers.map((member) => (
-                            <TableRow key={member.email}>
+                            <TableRow sx={{borderTop:"2px solid gray"}} key={member.email}>
                               <TableCell>{member.email}</TableCell>
                               <TableCell>{member.email}</TableCell>
                               <TableCell>
@@ -316,49 +324,101 @@ const Members: React.FC<MembersProps> = (subteamId) => {
             )}
           </Box>
           <Box sx={{ marginLeft: "10%" }}>
-            <Button sx={{ backgroundColor: "#027ef2", marginRight:"2em" }} onClick={handleConfirm}>
-            <Typography sx={{ fontWeight: "600", color:"white"  }}>
-              Potvrdit
+            <Button
+              sx={{
+                backgroundColor: "#027ef2",
+                marginRight: "2em",
+                ":hover": {
+                  backgroundColor: "gray",
+                },
+              }}
+              onClick={handleConfirm}
+            >
+              <Typography sx={{ fontWeight: "600", color: "white" }}>
+                Potvrdit
               </Typography>
             </Button>
             <Button
-              sx={{ backgroundColor: "#027ef2", color:"white"  }}
+              sx={{
+                backgroundColor: "#027ef2",
+                marginRight: "2em",
+                ":hover": {
+                  backgroundColor: "gray",
+                },
+                color: "white",
+              }}
               onClick={() => setAddMember(false)}
             >
-              <Typography sx={{ fontWeight: "600",  }}>
-              Zrušit
-              </Typography>
+              <Typography sx={{ fontWeight: "600" }}>Zrušit</Typography>
             </Button>
           </Box>
         </Box>
       ) : (
         <Box>
-        <Button onClick={() => setAddMember(true)}>Přidat člena</Button>
-        <TableContainer sx={{width:"80%", marginLeft:"auto", marginRight:"auto"}} component={Paper}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Člen</TableCell>
-                <TableCell>E-mail</TableCell>
-                <TableCell>Práva</TableCell>
-                <TableCell>Pozice</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {subteam?.subteamMembers.map((member: Member) => (
-                <TableRow key={member.email}>
-                  <TableCell>{member.name} {member.surname}</TableCell>
-                  <TableCell>{member.email}</TableCell>
-                  <TableCell>{getRoleText(member.role.toString())}</TableCell>
-                  <TableCell>{getPositionText(member.position)}</TableCell>
+          <Box
+            sx={{
+              marginLeft: "10%",
+              display: "flex",
+              marginRight: "10%",
+              marginBottom: "1em",
+            }}
+          >
+            <Typography sx={{ fontWeight: "600" }} variant="h5">
+              Členové týmu
+            </Typography>
+
+            <Button
+              sx={{
+                backgroundColor: "#027ef2",
+                ":hover": {
+                  backgroundColor: "gray",
+                },
+                color: "white",
+                marginLeft: "auto",
+              }}
+              onClick={() => setAddMember(true)}
+            >
+              Přidat člena
+            </Button>
+          </Box>
+          <TableContainer
+            sx={{
+              width: "80%",
+              marginLeft: "auto",
+              marginRight: "auto",
+              boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.4)",
+            }}
+            component={Paper}
+          >
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Člen</TableCell>
+                  <TableCell>E-mail</TableCell>
+                  <TableCell>Práva</TableCell>
+                  <TableCell>Pozice</TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Box>
-    )}
-  </Box>
+              </TableHead>
+              <TableBody>
+                {subteam?.subteamMembers.map((member: Member) => (
+                  <TableRow
+                    sx={{ borderTop: "2px solid gray" }}
+                    key={member.email}
+                  >
+                    <TableCell>
+                      {member.name} {member.surname}
+                    </TableCell>
+                    <TableCell>{member.email}</TableCell>
+                    <TableCell>{getRoleText(member.role.toString())}</TableCell>
+                    <TableCell>{getPositionText(member.position)}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Box>
+      )}
+    </Box>
   );
 };
 

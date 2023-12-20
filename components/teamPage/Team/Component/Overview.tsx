@@ -5,11 +5,12 @@ type OverviewProps = {
   subteamId: string;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const Overview: React.FC<OverviewProps> = (subteamId) => {
   return (
-    <Box>
-      <Typography>Overview</Typography>
-      <Typography>Subteam ID: {subteamId.subteamId}</Typography>
+    <Box sx={{marginLeft:"2%", marginRight:"2%"}}>
+      <Typography>todo prehled</Typography>
+      
     </Box>
   );
 };

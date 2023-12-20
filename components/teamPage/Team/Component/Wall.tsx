@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from "react";
 import { Box, Typography } from "@mui/material";
 
@@ -7,9 +8,9 @@ type WallProps = {
 
 const Wall: React.FC<WallProps> = (subteamId) => {
   return (
-    <Box>
-      <Typography>Wall</Typography>
-      <Typography>Subteam ID: {subteamId.subteamId}</Typography>
+    <Box sx={{marginLeft:"2%", marginRight:"2%"}}>
+      <Typography>todo nastenka</Typography>
+      
     </Box>
   );
 };
