@@ -89,6 +89,22 @@ const getRoleText = (role: string): string => {
       return "";
   }
 };
+const getPositionText = (position: string): string => {
+  switch (position) {
+    case "0":
+      return "Není zvolena pozice";
+    case "1":
+      return "Správce";
+    case "2":
+      return "Hlavní trenér";
+    case "3":
+      return "Asistent trenéra";
+    case "4":
+      return "Hráč";
+    default:
+      return "";
+  }
+}
 
 const Members: React.FC<MembersProps> = (subteamId) => {
   const user = authUtils.getCurrentUser();
@@ -317,16 +333,32 @@ const Members: React.FC<MembersProps> = (subteamId) => {
         </Box>
       ) : (
         <Box>
-          <Button onClick={() => setAddMember(true)}>Přidat člena</Button>
-          <Typography variant="h5">Members</Typography>
-          {subteam?.subteamMembers.map((member: Member) => (
-            <Typography key={member.email}>
-              {member.name} {member.surname} {member.email} - {member.role}
-            </Typography>
-          ))}
-        </Box>
-      )}
-    </Box>
+        <Button onClick={() => setAddMember(true)}>Přidat člena</Button>
+        <TableContainer sx={{width:"80%", marginLeft:"auto", marginRight:"auto"}} component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Člen</TableCell>
+                <TableCell>E-mail</TableCell>
+                <TableCell>Práva</TableCell>
+                <TableCell>Pozice</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {subteam?.subteamMembers.map((member: Member) => (
+                <TableRow key={member.email}>
+                  <TableCell>{member.name} {member.surname}</TableCell>
+                  <TableCell>{member.email}</TableCell>
+                  <TableCell>{getRoleText(member.role.toString())}</TableCell>
+                  <TableCell>{getPositionText(member.position)}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Box>
+    )}
+  </Box>
   );
 };
 

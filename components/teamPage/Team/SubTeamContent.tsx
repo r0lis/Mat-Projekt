@@ -211,7 +211,7 @@ const Content: React.FC<ContentProps> = ({ subteamId }) => {
           <Box sx={{}}>
             <Typography
               sx={{
-                fontSize: "1.5em",
+                fontSize: "1.5rem",
                 marginLeft: "1em",
                 fontWeight: "600",
                 paddingTop: "0.5em",
