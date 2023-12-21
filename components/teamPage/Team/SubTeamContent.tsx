@@ -72,9 +72,11 @@ const Content: React.FC<ContentProps> = ({ subteamId, idTeam }) => {
     }
   };
 
+  const isSmallView = window.innerWidth >= 900;
+
   return (
-    <Box sx={{ display: "flex", marginBottom: "2em" }}>
-      <Box sx={{ marginTop: "1em", fontSize: "Roboto", width: "80%" }}>
+    <Box sx={{display: isSmallView ? "flex" : "block", marginBottom: "2em" }}>
+      <Box sx={{ marginTop: "1em", fontSize: "Roboto", width: isSmallView ? "80%":"100%" }}>
         <Box
           sx={{
             boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.3)",
@@ -82,6 +84,7 @@ const Content: React.FC<ContentProps> = ({ subteamId, idTeam }) => {
             padding: "15px 0px 15px 0px",
             borderRadius: "15px 15px 0px 0px",
             display: "flex",
+          
           }}
         >
           <Typography
@@ -201,6 +204,7 @@ const Content: React.FC<ContentProps> = ({ subteamId, idTeam }) => {
             borderRadius: "15px",
             marginTop: "1em",
             minHeight: "100vh",
+            
           }}
         >
           {renderContent()}
@@ -208,10 +212,11 @@ const Content: React.FC<ContentProps> = ({ subteamId, idTeam }) => {
       </Box>
       <Box
         sx={{
-          width: "23%",
+          width: isSmallView ? "23%":"auto",
           marginLeft: "2em",
           marginTop: "1em",
           minHeight: "100vh",
+          display: isSmallView ? "block" : "flex",
         }}
       >
         <Box

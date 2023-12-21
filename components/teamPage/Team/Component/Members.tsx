@@ -231,7 +231,9 @@ const Members: React.FC<MembersProps> = (subteamId ) => {
           <Box sx={{ marginLeft: "10%" }}>
             <Typography variant="h5">Přidání člena do týmu</Typography>
           </Box>
-          <Box sx={{ marginTop: "1em", marginLeft: "auto", display: "block" }}>
+          <Box sx={{ marginTop: "1em", marginLeft: "auto", display: "block",  "@media (max-width: 900px)": {
+                flexDirection: "column", // Přidáno pro změnu směru na sloupcový layout
+              }, }}>
             {missingMembers && missingMembers.length > 0 ? (
               <Box>
                 <TableContainer
