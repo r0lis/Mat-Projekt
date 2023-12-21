@@ -26,6 +26,7 @@ const GET_SUBTEAM_DETAILS = gql`
 
 interface ContentProps {
   subteamId: string;
+  idTeam: string;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -35,7 +36,7 @@ interface SubteamMember {
   position: string;
 }
 
-const Content: React.FC<ContentProps> = ({ subteamId }) => {
+const Content: React.FC<ContentProps> = ({ subteamId, idTeam }) => {
   const user = authUtils.getCurrentUser();
   const [selectedButton, setSelectedButton] = useState("overview");
 
@@ -65,7 +66,7 @@ const Content: React.FC<ContentProps> = ({ subteamId }) => {
       case "attendance":
         return <Attendance subteamId={subteamId} />;
       case "members":
-        return <Members subteamId={subteamId as string} />;
+        return <Members subteamId={subteamId as string} idTeam={idTeam}/>;
       default:
         return null;
     }

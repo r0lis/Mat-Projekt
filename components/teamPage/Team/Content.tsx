@@ -82,7 +82,7 @@ const Content: React.FC<TeamsProps> = (teamId) => {
               <Typography variant="h6">Váš tým</Typography>
 
               <Typography variant="body1">
-                <SubteamContent subteamId={subteam.subteamId} />
+                <SubteamContent subteamId={subteam.subteamId} idTeam={teamId.teamId} />
               </Typography>
             </Box>
           ))}
@@ -124,7 +124,7 @@ const Content: React.FC<TeamsProps> = (teamId) => {
               <div key={subteam.subteamId}>
                 {selectedSubteam === subteam.subteamId && (
                   <Typography variant="body1">
-                    <SubteamContent subteamId={subteam.subteamId} />
+                    <SubteamContent subteamId={subteam.subteamId} idTeam={teamId.teamId} />
                   </Typography>
                 )}
               </div>

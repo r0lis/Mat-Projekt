@@ -56,8 +56,18 @@ const UPDATE_SUBTEAM_MEMBERS = gql`
   }
 `;
 
+const GET_USER_ROLE_IN_TEAM = gql`
+  query GetUserRoleInTeam($teamId: String!, $email: String!) {
+    getUserRoleInTeam(teamId: $teamId, email: $email) {
+      email
+      role
+    }
+  }
+`;
+
 type MembersProps = {
   subteamId: string;
+  idTeam: string;
 };
 
 type Member = {
@@ -106,7 +116,7 @@ const getPositionText = (position: string): string => {
   }
 };
 
-const Members: React.FC<MembersProps> = (subteamId) => {
+const Members: React.FC<MembersProps> = (subteamId ) => {
   const user = authUtils.getCurrentUser();
   const id = subteamId.subteamId;
   const [updateSubteamMembers] = useMutation(UPDATE_SUBTEAM_MEMBERS);
@@ -114,6 +124,8 @@ const Members: React.FC<MembersProps> = (subteamId) => {
   const [addMembers, setAddMembers] = useState<
     { email: string; role: string; position: string }[]
   >([]);
+  const userEmail = user?.email;
+
 
   const handleCheckboxChange = (
     email: string,
@@ -159,7 +171,15 @@ const Members: React.FC<MembersProps> = (subteamId) => {
     skip: !user,
   });
 
-  if (loading || missingMembersLoading)
+  const { loading: roleLoading, error: roleError, data: roleData } = useQuery(
+    GET_USER_ROLE_IN_TEAM,
+    {
+      variables: { teamId: subteamId.idTeam, email: userEmail },
+      skip: !user,
+    }
+  );
+
+  if (loading || missingMembersLoading || roleLoading)
     return (
       <CircularProgress
         color="primary"
@@ -167,8 +187,7 @@ const Members: React.FC<MembersProps> = (subteamId) => {
         style={{ position: "absolute", top: "50%", left: "40%" }}
       />
     );
-  if (error || missingMembersError) return <Typography>kurva</Typography>;
-  console.log(missingMembersError);
+  if (error || missingMembersError || roleError) return <Typography>kurva</Typography>;
   const subteam = data.getCompleteSubteamDetail;
   const missingMembers = missingMembersData.getMissingSubteamMembers;
 
@@ -202,6 +221,8 @@ const Members: React.FC<MembersProps> = (subteamId) => {
       console.error("Error updating subteam members:", error);
     }
   };
+  const role = roleData.getUserRoleInTeam.role;
+  
 
   return (
     <Box>
@@ -367,6 +388,7 @@ const Members: React.FC<MembersProps> = (subteamId) => {
               Členové týmu
             </Typography>
 
+            {role === "1" && (
             <Button
               sx={{
                 backgroundColor: "#027ef2",
@@ -379,7 +401,7 @@ const Members: React.FC<MembersProps> = (subteamId) => {
               onClick={() => setAddMember(true)}
             >
               Přidat člena
-            </Button>
+            </Button>)}
           </Box>
           <TableContainer
             sx={{

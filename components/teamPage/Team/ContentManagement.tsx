@@ -301,6 +301,8 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
     setIsSelectVisible(!isSelectVisible);
   };
 
+ 
+
   return (
     <Box sx={{}}>
       <Box>
@@ -358,7 +360,7 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
                           // Content to show when this subteam is selected
                           <Typography variant="body1">
                             {/* Assuming Content component accepts subteamId */}
-                            <Content subteamId={subteam.subteamId} />
+                            <Content  subteamId={subteam.subteamId} idTeam={teamId}  />
                           </Typography>
                         )}
                       </div>

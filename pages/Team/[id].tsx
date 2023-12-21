@@ -122,7 +122,7 @@ const Team: React.FC = () => {
       <CircularProgress
         color="primary"
         size={50}
-        style={{ position: "absolute", top: "50%", left: "50%" }}
+        style={{ position: "absolute", top: "45%", left: "50%" }}
       />
     );
   if (errorUser || roleError || error) {

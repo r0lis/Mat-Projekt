@@ -13,8 +13,8 @@ const CalendarComponent: React.FC = () => {
         
         {
           title: 'Název události',
-          start: '2023-10-15',
-          end: '2023-10-16',
+          start: '2023-12-22',
+          end: '2023-12-24',
         },
       ]);
     
