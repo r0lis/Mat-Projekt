@@ -516,7 +516,7 @@ const Members: React.FC<MembersProps> = (subteamId) => {
                 <TableRow>
                   <TableCell>Člen</TableCell>
                   <TableCell>E-mail</TableCell>
-                  <TableCell>Práva</TableCell>
+                  {(role == 1 &&<TableCell>Práva</TableCell>)}
                   <TableCell>Pozice</TableCell>
                   {editMember && <TableCell>Úprava</TableCell>}
                 </TableRow>
@@ -531,7 +531,7 @@ const Members: React.FC<MembersProps> = (subteamId) => {
                       {member.name} {member.surname}
                     </TableCell>
                     <TableCell>{member.email}</TableCell>
-                    <TableCell>{getRoleText(member.role.toString())}</TableCell>
+                    {(role == 1 &&<TableCell>{getRoleText(member.role.toString())}</TableCell>)}
                     <TableCell>{getPositionText(member.position)}</TableCell>
                     <TableCell>
                       {editMember && (
