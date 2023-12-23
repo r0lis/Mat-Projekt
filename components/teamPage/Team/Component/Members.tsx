@@ -73,6 +73,12 @@ const GET_USER_ROLE_IN_TEAM = gql`
   }
 `;
 
+const UPDATE_SUBTEAM_MEMBER = gql`
+  mutation UpdateSubteamMember($subteamId: String!, $email: String!, $position: String!) {
+    updateSubteamMember(subteamId: $subteamId, email: $email, position: $position)
+  }
+`;
+
 type MembersProps = {
   subteamId: string;
   idTeam: string;
@@ -138,6 +144,8 @@ const Members: React.FC<MembersProps> = (subteamId) => {
   const [selectedMember, setSelectedMember] = useState<Member | null>(null);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
   const userEmail = user?.email;
+  const [updateSubteamMember] = useMutation(UPDATE_SUBTEAM_MEMBER);
+
 
   const handleCheckboxChange = (
     email: string,
@@ -245,8 +253,29 @@ const Members: React.FC<MembersProps> = (subteamId) => {
 
   const role = roleData.getUserRoleInTeam.role;
 
-  function handleUpdateMember(): void {
-    throw new Error("Function not implemented.");
+  async function handleUpdateMember(): Promise<void> {
+    try {
+      // Ensure selectedMember exists and has a valid email and position
+      if (selectedMember && selectedMember.email && selectedMember.position) {
+        // Call the updateSubteamMember mutation
+        await updateSubteamMember({
+          variables: {
+            subteamId: id,
+            email: selectedMember.email,
+            position: selectedMember.position,
+          },
+        });
+
+        // Optionally, you can reset the state or perform other actions after a successful update
+        setEditModalOpen(false);
+        refetch();
+        // ... any other actions you need
+      } else {
+        console.error("Invalid selected member data");
+      }
+    } catch (error) {
+      console.error("Error updating subteam member:", error);
+    }
   }
 
   return (

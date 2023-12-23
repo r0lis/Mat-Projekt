@@ -196,6 +196,11 @@ export const typeDefs = gql`
       subteamId: String!
       updatedMembers: [UpdatedSubteamMemberInput]!
     ): Boolean
+    updateSubteamMember(
+      subteamId: String!
+      email: String!
+      position: String!
+    ): Boolean
   }
 
   

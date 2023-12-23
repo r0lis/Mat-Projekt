@@ -115,4 +115,42 @@ export const subteamMutations = {
         throw error;
       }
     },
+
+    updateSubteamMember: async (
+      _: any,
+      { subteamId, email, position }: { subteamId: string; email: string; position: string },
+      context: Context
+    ) => {
+      try {
+        // Fetch existing subteam members
+        const subteamDoc = context.db.collection("Teams").doc(subteamId);
+        const subteamSnapshot = await subteamDoc.get();
+  
+        if (!subteamSnapshot.exists) {
+          throw new Error(`Subteam with ID ${subteamId} not found`);
+        }
+  
+        const existingMembers = subteamSnapshot.data()?.subteamMembers || [];
+  
+        // Find the index of the member to be updated
+        const memberIndex = existingMembers.findIndex((member: { email: string; }) => member.email === email);
+  
+        if (memberIndex === -1) {
+          throw new Error(`Member with email ${email} not found in subteam ${subteamId}`);
+        }
+  
+        // Update the member's position
+        existingMembers[memberIndex].position = position;
+  
+        // Update subteam members in the Teams collection
+        await subteamDoc.update({
+          subteamMembers: existingMembers,
+        });
+  
+        return true;
+      } catch (error) {
+        console.error("Error updating subteam member:", error);
+        throw error;
+      }
+    },
   };
