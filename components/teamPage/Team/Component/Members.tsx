@@ -22,6 +22,7 @@ import {
   DialogContent,
   DialogActions,
   Grid,
+  FormControl,
 } from "@mui/material";
 import { useQuery, gql, useMutation } from "@apollo/client";
 import { authUtils } from "@/firebase/auth.utils";
@@ -524,40 +525,63 @@ const Members: React.FC<MembersProps> = (subteamId) => {
           </TableContainer>
         </Box>
       )}
-      <Dialog open={isEditModalOpen} onClose={() => setEditModalOpen(false)}>
-        <Box sx={{padding:"0 2em 0em 2em", fontFamily:"Roboto"}}>
-        <DialogTitle>Člen
-        {selectedMember && (
-          <Typography sx={{color:"black", fontWeight:"600"}} variant="h5">
-            {selectedMember.name} {selectedMember.surname}
-          </Typography>
-        )}
-        </DialogTitle>
-        <DialogContent>
-          {selectedMember && (
-            <form>
-              <Grid container spacing={2} alignItems="center">
-                <Grid item xs={4}>
-                  <Typography variant="subtitle1">Email:</Typography>
-                  <Typography variant="subtitle1">Pozice:</Typography>
+      <Dialog sx={{height:"auto"}} open={isEditModalOpen} onClose={() => setEditModalOpen(false)}>
+        <Box sx={{ padding: "0 2em 0em 2em", fontFamily: "Roboto" }}>
+          <DialogTitle>
+            Člen
+            {selectedMember && (
+              <Typography
+                sx={{ color: "black", fontWeight: "600" }}
+                variant="h5"
+              >
+                {selectedMember.name} {selectedMember.surname}
+              </Typography>
+            )}
+          </DialogTitle>
+          <DialogContent>
+            {selectedMember && (
+              <form>
+                <Grid container spacing={2} alignItems="center">
+                  <Grid item xs={4}>
+                    <Typography sx={{marginTop:"-1em"}} variant="subtitle1">Email:</Typography>
+                    <Typography variant="subtitle1">Práva:</Typography>
+                    <Typography sx={{marginTop:"3em"}} variant="subtitle1">Pozice:</Typography>
+                  </Grid>
+                  <Grid item xs={8}>
+                    <Typography
+                      sx={{ whiteSpace: "nowrap" }}
+                      variant="subtitle1"
+                    >
+                      {selectedMember.email}
+                    </Typography>
+                    <Typography sx={{paddingBottom:"2em"}} variant="subtitle1">
+                      {getRoleText(selectedMember.role)}
+                    </Typography>
+                    <FormControl  fullWidth>
+                      <Select
+                        value={selectedMember.position}
+                        onChange={(e) => {
+                          setSelectedMember((prevMember) => ({
+                            ...(prevMember as Member), // Assert that prevMember is of type Member
+                            position: e.target.value as string,
+                          }));
+                        }}
+                      >
+                        <MenuItem value="1">Správce</MenuItem>
+                        <MenuItem value="2">Hlavní trenér</MenuItem>
+                        <MenuItem value="3">Asistent trenéra</MenuItem>
+                        <MenuItem value="4">Hráč</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Grid>
                 </Grid>
-                <Grid item xs={8}>
-                  <Typography sx={{whiteSpace:"nowrap"}} variant="subtitle1">
-                    {selectedMember.email}
-                  </Typography>
-                  <Typography variant="subtitle1">
-                    { getPositionText(selectedMember.position)}
-                  </Typography>
-                </Grid>
-              </Grid>
-            </form>
-          )}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setEditModalOpen(false)}>Zrušit</Button>
-          {/* Add a function to handle the update when the "Potvrdit" button is clicked */}
-          <Button onClick={handleUpdateMember}>Potvrdit</Button>
-        </DialogActions>
+              </form>
+            )}
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setEditModalOpen(false)}>Zrušit</Button>
+            <Button onClick={handleUpdateMember}>Potvrdit</Button>
+          </DialogActions>
         </Box>
       </Dialog>
     </Box>
