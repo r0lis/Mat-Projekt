@@ -116,16 +116,16 @@ const getPositionText = (position: string): string => {
   }
 };
 
-const Members: React.FC<MembersProps> = (subteamId ) => {
+const Members: React.FC<MembersProps> = (subteamId) => {
   const user = authUtils.getCurrentUser();
   const id = subteamId.subteamId;
   const [updateSubteamMembers] = useMutation(UPDATE_SUBTEAM_MEMBERS);
   const [addMember, setAddMember] = useState(false);
+  const [editMember, setEditMember] = useState(false);
   const [addMembers, setAddMembers] = useState<
     { email: string; role: string; position: string }[]
   >([]);
   const userEmail = user?.email;
-
 
   const handleCheckboxChange = (
     email: string,
@@ -155,29 +155,32 @@ const Members: React.FC<MembersProps> = (subteamId ) => {
     }
   };
 
-  const { loading, error, data, refetch } = useQuery(GET_COMPLETESUBTEAM_DETAILS, {
-    variables: { subteamId: id },
-    skip: !user,
-  });
+  const { loading, error, data, refetch } = useQuery(
+    GET_COMPLETESUBTEAM_DETAILS,
+    {
+      variables: { subteamId: id },
+      skip: !user,
+    }
+  );
 
   const {
     loading: missingMembersLoading,
     error: missingMembersError,
     data: missingMembersData,
     refetch: missingMembersRefetch,
-    
   } = useQuery(GET_MISSING_SUBTEAM_MEMBERS, {
     variables: { subteamId: id },
     skip: !user,
   });
 
-  const { loading: roleLoading, error: roleError, data: roleData } = useQuery(
-    GET_USER_ROLE_IN_TEAM,
-    {
-      variables: { teamId: subteamId.idTeam, email: userEmail },
-      skip: !user,
-    }
-  );
+  const {
+    loading: roleLoading,
+    error: roleError,
+    data: roleData,
+  } = useQuery(GET_USER_ROLE_IN_TEAM, {
+    variables: { teamId: subteamId.idTeam, email: userEmail },
+    skip: !user,
+  });
 
   if (loading || missingMembersLoading || roleLoading)
     return (
@@ -187,7 +190,8 @@ const Members: React.FC<MembersProps> = (subteamId ) => {
         style={{ position: "absolute", top: "50%", left: "40%" }}
       />
     );
-  if (error || missingMembersError || roleError) return <Typography>kurva</Typography>;
+  if (error || missingMembersError || roleError)
+    return <Typography>kurva</Typography>;
   const subteam = data.getCompleteSubteamDetail;
   const missingMembers = missingMembersData.getMissingSubteamMembers;
 
@@ -222,7 +226,6 @@ const Members: React.FC<MembersProps> = (subteamId ) => {
     }
   };
   const role = roleData.getUserRoleInTeam.role;
-  
 
   return (
     <Box>
@@ -231,9 +234,7 @@ const Members: React.FC<MembersProps> = (subteamId ) => {
           <Box sx={{ marginLeft: "10%" }}>
             <Typography variant="h5">Přidání člena do týmu</Typography>
           </Box>
-          <Box sx={{ marginTop: "1em", marginLeft: "auto", display: "block",  "@media (max-width: 900px)": {
-                flexDirection: "column", // Přidáno pro změnu směru na sloupcový layout
-              }, }}>
+          <Box sx={{ marginTop: "1em", marginLeft: "auto", display: "block" }}>
             {missingMembers && missingMembers.length > 0 ? (
               <Box>
                 <TableContainer
@@ -244,13 +245,13 @@ const Members: React.FC<MembersProps> = (subteamId ) => {
                     width: "80%",
                     marginLeft: "auto",
                     marginRight: "auto",
-                    borderRadius:"10px",
-                    border:"2px solid gray"
+                    borderRadius: "10px",
+                    border: "2px solid gray",
                   }}
                 >
                   <Table>
                     <TableHead>
-                      <TableRow sx={{borderBottom:"2px solid black "}}>
+                      <TableRow sx={{ borderBottom: "2px solid black " }}>
                         <TableCell>E-mail</TableCell>
                         <TableCell>Role</TableCell>
                         <TableCell>Přidat</TableCell>
@@ -258,7 +259,10 @@ const Members: React.FC<MembersProps> = (subteamId ) => {
                     </TableHead>
                     <TableBody>
                       {missingMembers.map((member: SubteamMember) => (
-                         <TableRow sx={{borderTop:"2px solid gray"}} key={member.email}>
+                        <TableRow
+                          sx={{ borderTop: "2px solid gray" }}
+                          key={member.email}
+                        >
                           <TableCell>{member.email}</TableCell>
                           <TableCell>
                             {getRoleText(member.role.toString())}
@@ -294,12 +298,12 @@ const Members: React.FC<MembersProps> = (subteamId ) => {
                     marginRight: "auto",
                   }}
                 >
-                  
                   {addMembers.length === 0 ? (
                     <Alert severity="warning">Přidejte členy do týmu.</Alert>
                   ) : (
-                    <TableContainer sx={{borderRadius:"10px",
-                    border:"2px solid gray"}}>
+                    <TableContainer
+                      sx={{ borderRadius: "10px", border: "2px solid gray" }}
+                    >
                       <Table>
                         <TableHead>
                           <TableRow>
@@ -311,7 +315,10 @@ const Members: React.FC<MembersProps> = (subteamId ) => {
                         </TableHead>
                         <TableBody>
                           {addMembers.map((member) => (
-                            <TableRow sx={{borderTop:"2px solid gray"}} key={member.email}>
+                            <TableRow
+                              sx={{ borderTop: "2px solid gray" }}
+                              key={member.email}
+                            >
                               <TableCell>{member.email}</TableCell>
                               <TableCell>{member.email}</TableCell>
                               <TableCell>
@@ -391,19 +398,52 @@ const Members: React.FC<MembersProps> = (subteamId ) => {
             </Typography>
 
             {role === "1" && (
-            <Button
-              sx={{
-                backgroundColor: "#027ef2",
-                ":hover": {
-                  backgroundColor: "gray",
-                },
-                color: "white",
-                marginLeft: "auto",
-              }}
-              onClick={() => setAddMember(true)}
-            >
-              Přidat člena
-            </Button>)}
+              <>
+                <Button
+                  sx={{
+                    backgroundColor: "#027ef2",
+                    ":hover": {
+                      backgroundColor: "gray",
+                    },
+                    color: "white",
+                    marginLeft: "auto",
+                  }}
+                  onClick={() => setAddMember(true)}
+                >
+                  Přidat člena
+                </Button>
+                {editMember == false && (
+                  <Button
+                    sx={{
+                      backgroundColor: "#027ef2",
+                      ":hover": {
+                        backgroundColor: "gray",
+                      },
+                      color: "white",
+                      marginLeft: "1em",
+                    }}
+                    onClick={() => setEditMember(true)}
+                  >
+                    Upravit člena
+                  </Button>
+                )}
+                {editMember == true && (
+                  <Button
+                    sx={{
+                      backgroundColor: "#027ef2",
+                      ":hover": {
+                        backgroundColor: "gray",
+                      },
+                      color: "white",
+                      marginLeft: "1em",
+                    }}
+                    onClick={() => setEditMember(false)}
+                  >
+                    Zrušit
+                  </Button>
+                )}
+              </>
+            )}
           </Box>
           <TableContainer
             sx={{
@@ -421,6 +461,7 @@ const Members: React.FC<MembersProps> = (subteamId ) => {
                   <TableCell>E-mail</TableCell>
                   <TableCell>Práva</TableCell>
                   <TableCell>Pozice</TableCell>
+                  {editMember && <TableCell>Úprava</TableCell>}
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -435,6 +476,21 @@ const Members: React.FC<MembersProps> = (subteamId ) => {
                     <TableCell>{member.email}</TableCell>
                     <TableCell>{getRoleText(member.role.toString())}</TableCell>
                     <TableCell>{getPositionText(member.position)}</TableCell>
+                    <TableCell>
+                      {editMember && (
+                        <Button
+                          sx={{
+                            backgroundColor: "#027ef2",
+                            ":hover": {
+                              backgroundColor: "gray",
+                            },
+                            color: "white",
+                          }}
+                        >
+                          Upravit
+                        </Button>
+                      )}
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
