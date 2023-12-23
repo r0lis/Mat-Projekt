@@ -192,23 +192,23 @@ export const subteamQueries = {
     _: any,
     { subteamId }: { subteamId: string },
     context: Context
-  ): Promise<{ email: string; role: number }[] | null> => {
+  ): Promise<{ email: string; role: number; name: string; surname: string }[] | null> => {
     try {
       if (context.user) {
         // Fetch subteam details using the helper function
         const subteamDetails = await getSubteamDetails(subteamId, context);
-  
+
         if (subteamDetails && subteamDetails.subteamMembers) {
           // Extracting emails and roles from subteamMembers array
           const subteamMembers = subteamDetails.subteamMembers.map((member: any) => ({
             email: member.email,
             role: member.role,
           }));
-  
+
           // Fetch team details using the provided teamId
           const teamQuery = context.db.collection("Team").where("teamId", "==", subteamDetails.teamId);
           const teamSnapshot = await teamQuery.get();
-  
+
           if (!teamSnapshot.empty) {
             // Extracting emails and roles from Members array of the Team collection
             const teamData = teamSnapshot.docs[0].data() as Team;
@@ -216,7 +216,7 @@ export const subteamQueries = {
               email: member.member,
               role: member.role,
             }));
-  
+
             const allMembers: { email: string; role: number }[] = [...subteamMembers, ...teamMembers];
 
             // Create a map to track email occurrences
@@ -224,14 +224,38 @@ export const subteamQueries = {
             allMembers.forEach((member) => {
               emailOccurrences[member.email] = (emailOccurrences[member.email] || 0) + 1;
             });
-  
+
             // Filter members where email occurrences are 1 (unique)
             const uniqueMembers = allMembers.filter((member) => emailOccurrences[member.email] === 1);
-  
-            return uniqueMembers;
+
+            // Fetch name and surname for unique members
+            const completeMembers = await Promise.all(
+              uniqueMembers.map(async (member) => {
+                const userDoc = await context.db.collection("User").where("Email", "==", member.email).get();
+
+                if (!userDoc.empty) {
+                  const userData = userDoc.docs[0].data() as User;
+                  return {
+                    email: member.email,
+                    role: member.role,
+                    name: userData.Name,
+                    surname: userData.Surname,
+                  };
+                }
+
+                return null;
+              })
+            );
+
+            return completeMembers.filter(Boolean) as {
+              email: string;
+              role: number;
+              name: string;
+              surname: string;
+            }[];
           }
         }
-  
+
         return null;
       } else {
         return null;

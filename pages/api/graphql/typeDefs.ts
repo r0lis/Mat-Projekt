@@ -129,6 +129,8 @@ export const typeDefs = gql`
   type SubteamMember2 {
     email: String
     role: Int
+    name: String
+    surname: String
   }
 
   input UpdatedSubteamMemberInput {

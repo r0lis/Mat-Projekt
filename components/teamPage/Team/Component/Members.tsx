@@ -43,6 +43,8 @@ const GET_MISSING_SUBTEAM_MEMBERS = gql`
     getMissingSubteamMembers(subteamId: $subteamId) {
       email
       role
+      name
+      surname
     }
   }
 `;
@@ -81,6 +83,8 @@ type Member = {
 type SubteamMember = {
   email: string;
   role: string;
+  name: string;
+  surname: string;
 };
 
 const getRoleText = (role: string): string => {
@@ -252,6 +256,8 @@ const Members: React.FC<MembersProps> = (subteamId) => {
                   <Table>
                     <TableHead>
                       <TableRow sx={{ borderBottom: "2px solid black " }}>
+                        <TableCell>Jméno</TableCell>
+                        <TableCell>Příjmení</TableCell>
                         <TableCell>E-mail</TableCell>
                         <TableCell>Role</TableCell>
                         <TableCell>Přidat</TableCell>
@@ -263,6 +269,8 @@ const Members: React.FC<MembersProps> = (subteamId) => {
                           sx={{ borderTop: "2px solid gray" }}
                           key={member.email}
                         >
+                          <TableCell>{member.name}</TableCell>
+                          <TableCell>{member.surname}</TableCell>
                           <TableCell>{member.email}</TableCell>
                           <TableCell>
                             {getRoleText(member.role.toString())}
