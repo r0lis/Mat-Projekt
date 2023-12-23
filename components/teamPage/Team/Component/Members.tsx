@@ -506,6 +506,8 @@ const Members: React.FC<MembersProps> = (subteamId) => {
               marginLeft: "auto",
               marginRight: "auto",
               boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.4)",
+              maxHeight: "100vh",
+              overflowY: "auto",
             }}
             component={Paper}
           >
