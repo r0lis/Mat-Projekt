@@ -66,17 +66,23 @@ const Content: React.FC<ContentProps> = ({ subteamId, idTeam }) => {
       case "attendance":
         return <Attendance subteamId={subteamId} />;
       case "members":
-        return <Members subteamId={subteamId as string} idTeam={idTeam}/>;
+        return <Members subteamId={subteamId as string} idTeam={idTeam} />;
       default:
         return null;
     }
   };
 
-  const isSmallView = window.innerWidth >= 900;
+  const isSmallView = window.innerWidth >= 1200;
 
   return (
-    <Box sx={{display: isSmallView ? "flex" : "block", marginBottom: "2em" }}>
-      <Box sx={{ marginTop: "1em", fontSize: "Roboto", width: isSmallView ? "80%":"100%" }}>
+    <Box sx={{ display: isSmallView ? "flex" : "block", marginBottom: "2em" }}>
+      <Box
+        sx={{
+          marginTop: "1em",
+          fontSize: "Roboto",
+          width: isSmallView ? "80%" : "100%",
+        }}
+      >
         <Box
           sx={{
             boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.3)",
@@ -84,7 +90,6 @@ const Content: React.FC<ContentProps> = ({ subteamId, idTeam }) => {
             padding: "15px 0px 15px 0px",
             borderRadius: "15px 15px 0px 0px",
             display: "flex",
-          
           }}
         >
           <Typography
@@ -204,68 +209,132 @@ const Content: React.FC<ContentProps> = ({ subteamId, idTeam }) => {
             borderRadius: "15px",
             marginTop: "1em",
             minHeight: "100vh",
-            
           }}
         >
           {renderContent()}
         </Box>
       </Box>
-      <Box
-        sx={{
-          width: isSmallView ? "23%":"auto",
-          marginLeft: "2em",
-          marginTop: "1em",
-          minHeight: "100vh",
-          display: isSmallView ? "block" : "flex",
-        }}
-      >
+      {isSmallView ? (
         <Box
           sx={{
-            borderRadius: "15px",
-            backgroundImage: `
-             linear-gradient(to bottom, #c2c3c4 60px, #ffffff 60px)
-             `,
-            boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.3)",
-            height: "49%",
+            width: isSmallView ? "23%" : "100%",
+            marginLeft: "2em",
+            marginTop: "1em",
+            display: isSmallView ? "block" : "flex",
           }}
         >
-          <Box sx={{}}>
+          <Box
+            sx={{
+              borderRadius: "15px",
+              backgroundImage: `
+             linear-gradient(to bottom, #c2c3c4 60px, #ffffff 60px)
+             `,
+              boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.3)",
+              height: "49%",
+              display: isSmallView ? "" : "block",
+            }}
+          >
+            <Box sx={{}}>
+              <Typography
+                sx={{
+                  fontSize: ["0.8rem", "1.1rem", "1.5rem"],
+                  marginLeft: ["0.6rem", "1rem", "1rem"],
+                  fontWeight: "600",
+                  paddingTop: ["1.4rem", "1rem", "0.5em"],
+                }}
+              >
+                Aktuality
+              </Typography>
+            </Box>
+          </Box>
+          <Box
+            sx={{
+              borderRadius: "15px",
+              backgroundImage: `
+             linear-gradient(to bottom, #c2c3c4 60px, #ffffff 60px)
+             `,
+              boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.3)",
+              height: "48%",
+              marginTop: isSmallView ? "10%" : "0%",
+            }}
+          >
             <Typography
               sx={{
+                paddingTop: ["0.8rem", "1rem", "0.5em"],
                 fontSize: ["0.8rem", "1.1rem", "1.5rem"],
-                marginLeft: ["0.6rem", "1rem", "1rem"],
+                marginLeft: ["0.3rem", "0.6rem", "1rem"],
                 fontWeight: "600",
-                paddingTop: ["1.4rem", "1rem","0.5em"],
+                whiteSpace: "nowrap",
               }}
             >
-              Aktuality
+              Realizační tým
             </Typography>
           </Box>
         </Box>
+      ) : (
         <Box
           sx={{
-            borderRadius: "15px",
-            backgroundImage: `
-             linear-gradient(to bottom, #c2c3c4 60px, #ffffff 60px)
-             `,
-            boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.3)",
-            height: "48%",
-            marginTop: "10%",
+            display: "flex", // Set display to flex
+            justifyContent: "space-between", // Add space between the two boxes
+            width: "100%",
+            marginTop: "1em",
+            minHeight: "100vh",
           }}
         >
-          <Typography
+          <Box
             sx={{
-              paddingTop: ["0.8rem", "1rem","0.5em"],
-              fontSize: ["0.8rem", "1.1rem", "1.5rem"],
-              marginLeft: ["0.3rem", "0.6rem", "1rem"],
-              fontWeight: "600",
-              whiteSpace: "nowrap",
+              flex: 1, // Make the first box take up available space
+              borderRadius: "15px",
+              backgroundImage: `
+        linear-gradient(to bottom, #c2c3c4 60px, #ffffff 60px)
+      `,
+              boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.3)",
+              height: "auto",
+              display: isSmallView ? "" : "block",
             }}
           >
-            Realizační tým
-          </Typography>
+            <Box sx={{}}>
+              <Typography
+                sx={{
+                  fontSize: ["0.8rem", "1.1rem", "1.5rem"],
+                  marginLeft: "1rem",
+                  fontWeight: "600",
+                  paddingTop: ["1.4rem", "1rem", "0.5em"],
+                }}
+              >
+                Aktuality
+              </Typography>
+            </Box>
+          </Box>
+
+          <Box
+            sx={{
+              flex: 1, // Make the first box take up available space
+              borderRadius: "15px",
+              backgroundImage: `
+        linear-gradient(to bottom, #c2c3c4 60px, #ffffff 60px)
+      `,
+              boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.3)",
+              height: "auto",
+              display: isSmallView ? "" : "block",
+              marginLeft: "2em",
+            }}
+          >
+            <Box sx={{}}>
+              <Typography
+                sx={{
+                  fontSize: ["0.8rem", "1.1rem", "1.5rem"],
+                  marginLeft: "1rem",
+                  fontWeight: "600",
+                  paddingTop: ["1.4rem", "1rem", "0.5em"],
+                }}
+              >
+                Realizační tým
+              </Typography>
+            </Box>
+          </Box>
         </Box>
-      </Box>
+      )}
     </Box>
   );
 };
