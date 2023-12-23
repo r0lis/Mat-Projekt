@@ -17,6 +17,11 @@ import {
   TableHead,
   TableRow,
   Typography,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Grid,
 } from "@mui/material";
 import { useQuery, gql, useMutation } from "@apollo/client";
 import { authUtils } from "@/firebase/auth.utils";
@@ -129,6 +134,8 @@ const Members: React.FC<MembersProps> = (subteamId) => {
   const [addMembers, setAddMembers] = useState<
     { email: string; role: string; position: string }[]
   >([]);
+  const [selectedMember, setSelectedMember] = useState<Member | null>(null);
+  const [isEditModalOpen, setEditModalOpen] = useState(false);
   const userEmail = user?.email;
 
   const handleCheckboxChange = (
@@ -229,7 +236,17 @@ const Members: React.FC<MembersProps> = (subteamId) => {
       console.error("Error updating subteam members:", error);
     }
   };
+
+  const handleEditClick = (member: Member) => {
+    setSelectedMember(member);
+    setEditModalOpen(true);
+  };
+
   const role = roleData.getUserRoleInTeam.role;
+
+  function handleUpdateMember(): void {
+    throw new Error("Function not implemented.");
+  }
 
   return (
     <Box>
@@ -494,6 +511,7 @@ const Members: React.FC<MembersProps> = (subteamId) => {
                             },
                             color: "white",
                           }}
+                          onClick={() => handleEditClick(member)}
                         >
                           Upravit
                         </Button>
@@ -506,6 +524,42 @@ const Members: React.FC<MembersProps> = (subteamId) => {
           </TableContainer>
         </Box>
       )}
+      <Dialog open={isEditModalOpen} onClose={() => setEditModalOpen(false)}>
+        <Box sx={{padding:"0 2em 0em 2em", fontFamily:"Roboto"}}>
+        <DialogTitle>Člen
+        {selectedMember && (
+          <Typography sx={{color:"black", fontWeight:"600"}} variant="h5">
+            {selectedMember.name} {selectedMember.surname}
+          </Typography>
+        )}
+        </DialogTitle>
+        <DialogContent>
+          {selectedMember && (
+            <form>
+              <Grid container spacing={2} alignItems="center">
+                <Grid item xs={4}>
+                  <Typography variant="subtitle1">Email:</Typography>
+                  <Typography variant="subtitle1">Pozice:</Typography>
+                </Grid>
+                <Grid item xs={8}>
+                  <Typography sx={{whiteSpace:"nowrap"}} variant="subtitle1">
+                    {selectedMember.email}
+                  </Typography>
+                  <Typography variant="subtitle1">
+                    { getPositionText(selectedMember.position)}
+                  </Typography>
+                </Grid>
+              </Grid>
+            </form>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setEditModalOpen(false)}>Zrušit</Button>
+          {/* Add a function to handle the update when the "Potvrdit" button is clicked */}
+          <Button onClick={handleUpdateMember}>Potvrdit</Button>
+        </DialogActions>
+        </Box>
+      </Dialog>
     </Box>
   );
 };
