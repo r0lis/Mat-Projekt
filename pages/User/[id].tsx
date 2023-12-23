@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import { authUtils } from "@/firebase/auth.utils";
 import { gql, useMutation } from '@apollo/client';
 import { Box, Typography } from '@mui/material';
+import NavBar from '@/components/User/NavBar';
 
 const UPLOAD_IMAGE_USER = gql`
   mutation UploadImageUser($imageBase64: String!, $userEmail: String!) {
@@ -58,6 +59,7 @@ const UserManagement: React.FC = () => {
 
   return (
     <Box>
+      <NavBar />
       <Typography>
       user management
       </Typography>
