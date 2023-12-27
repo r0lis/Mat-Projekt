@@ -76,6 +76,7 @@ const Navbar: React.FC = () => {
   const id = userInfoData?.getUserByNameAndSurname.Id || "";
   const userPicture = userInfoData?.getUserByNameAndSurname.Picture || "";
   const initials = name[0] + surname[0];
+  const test = true;
   console.log(initials);
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -299,16 +300,16 @@ const Navbar: React.FC = () => {
                               }}
                             >
                               {userInfoLoading ? (
-                                <CircularProgress
-                                  color="primary"
-                                  size={30}
-                                  style={{
-                                    position: "relative",
-                                    top: "20%",
-                                    left: "auto",
-                                    right: "auto",
-                                  }}
-                                />
+                                 <Box
+                                 sx={{
+                                   display: "flex",
+                                   alignItems: "center",
+                                   justifyContent: "center",
+                                   
+                                 }}
+                               >
+                                 <CircularProgress color="primary" size={30} />
+                               </Box>
                               ) : userInfoError ? (
                                 "Chyba"
                               ) : (
@@ -337,16 +338,16 @@ const Navbar: React.FC = () => {
                             }}
                           >
                             {userIdLoading ? (
-                              <CircularProgress
-                                color="primary"
-                                size={30}
-                                style={{
-                                  position: "relative",
-                                  top: "2%",
-                                  left: "auto",
-                                  right: "auto",
-                                }}
-                              /> // Zobrazí CircularProgress místo načítání
+                              <Box
+                              sx={{
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                
+                              }}
+                            >
+                              <CircularProgress color="primary" size={30} />
+                            </Box>
                             ) : userIdError ? (
                               "Chyba"
                             ) : userTeamsData &&

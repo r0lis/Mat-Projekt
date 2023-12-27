@@ -23,11 +23,17 @@ const SettingsComponent: React.FC = () => {
 
   if (loading)
     return (
-      <CircularProgress
-        color="primary"
-        size={50}
-        style={{ position: "absolute", top: "50%", left: "50%" }}
-      />
+      <Box
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        height: "80vh",
+        
+      }}
+    >
+      <CircularProgress color="primary" size={50} />
+    </Box>
     );
   if (error) return <Typography>Chyba</Typography>;
       console.log(error);

@@ -88,7 +88,18 @@ const Step2: React.FC<Step2Props> = ({ teamEmail, onCompleteStep  }) => {
   }, [members]);
 
   if (loading) {
-    return <CircularProgress />
+    return (
+      <Box
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        height: "80vh",
+        
+      }}
+    >
+      <CircularProgress color="primary" size={50} />
+    </Box>)
     ;
   }
 

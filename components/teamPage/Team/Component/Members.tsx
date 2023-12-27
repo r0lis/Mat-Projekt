@@ -204,11 +204,17 @@ const Members: React.FC<MembersProps> = (subteamId) => {
 
   if (loading || missingMembersLoading || roleLoading)
     return (
-      <CircularProgress
-        color="primary"
-        size={50}
-        style={{ position: "absolute", top: "50%", left: "40%" }}
-      />
+      <Box
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        height: "80vh",
+        
+      }}
+    >
+      <CircularProgress color="primary" size={50} />
+    </Box>
     );
   if (error || missingMembersError || roleError)
     return <Typography>kurva</Typography>;

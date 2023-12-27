@@ -103,7 +103,17 @@ const Step4: React.FC<Step4Props> = ({ teamEmail, onCompleteStep }) => {
   const { teamId } = teamIdData?.getTeamIdByEmail || {};
 
   if (loading) {
-    return <CircularProgress />;
+    return(  <Box
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        height: "80vh",
+        
+      }}
+    >
+      <CircularProgress color="primary" size={50} />
+    </Box>);
   }
 
   if (error) {

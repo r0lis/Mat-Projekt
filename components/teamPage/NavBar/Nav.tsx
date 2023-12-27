@@ -86,11 +86,17 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon }) => {
 
   if (loading || roleLoading)
     return (
-      <CircularProgress
-        color="primary"
-        size={50}
-        style={{ position: "absolute", top: "45%", left: "50%" }}
-      />
+      <Box
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        height: "100vh",
+        
+      }}
+    >
+      <CircularProgress color="primary" size={30} />
+    </Box>
     );
   if (error) return <p>Chyba: {error.message}</p>;
   if (roleError) return <p>Chyba: {roleError.message}</p>;

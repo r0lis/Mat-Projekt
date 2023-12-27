@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-import { Box,  CircularProgress, Typography } from "@mui/material";
+import { Box, CircularProgress, Typography } from "@mui/material";
 import React from "react";
 import { authUtils } from "@/firebase/auth.utils";
 import { useQuery } from "@apollo/client";
@@ -33,12 +33,17 @@ const TeamComponent: React.FC<TeamsProps> = ({ id }) => {
   });
 
   if (roleLoading)
-    return (
-      <CircularProgress
-        color="primary"
-        size={50}
-        style={{ position: "absolute", top: "50%", left: "50%" }}
-      />
+    return ( 
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "80vh",
+        }}
+      >
+        <CircularProgress color="primary" size={50} />
+      </Box>
     );
   if (roleError) return <Typography>Chyba</Typography>;
 
@@ -47,7 +52,11 @@ const TeamComponent: React.FC<TeamsProps> = ({ id }) => {
   return (
     <>
       <Box sx={{}}>
-      {role == "1" ? <ContentManagement teamId={id as string}   /> : <Content teamId={id as string} />}
+        {role == "1" ? (
+          <ContentManagement teamId={id as string} />
+        ) : (
+          <Content teamId={id as string} />
+        )}
       </Box>
     </>
   );

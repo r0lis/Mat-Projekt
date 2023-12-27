@@ -87,11 +87,16 @@ const AddToTeam: React.FC = () => {
 
   if (loadingUser)
   return (
-    <CircularProgress
-      color="primary"
-      size={50}
-      style={{ position: "absolute", top: "50%", left: "50%" }}
-    />
+    <Box
+    sx={{
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      height: "100vh",
+    }}
+  >
+    <CircularProgress color="primary" size={50} />
+  </Box>
   );
 if (errorUser) {
   console.error("Error checking user membership:", errorUser);

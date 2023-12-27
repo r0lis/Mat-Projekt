@@ -8,7 +8,7 @@ import React, {
 } from 'react';
 
 import firebase_app from '../firebase/config';
-import { CircularProgress } from '@mui/material';
+import { Box, CircularProgress } from '@mui/material';
 
 const auth = getAuth(firebase_app);
 type AuthContextType = { user?: User | null; loading?: boolean };
@@ -32,11 +32,16 @@ export const AuthContextProvider: FC<PropsWithChildren> = ({ children }) => {
   return (
     <AuthContext.Provider value={{ user, loading }}>
       {loading ?
-    <CircularProgress
-      color="primary"
-      size={50}
-      style={{ position: "absolute", top: "50%", left: "50%" }}
-    />
+     <Box
+     sx={{
+       display: "flex",
+       alignItems: "center",
+       justifyContent: "center",
+       height: "100vh",
+     }}
+   >
+     <CircularProgress color="primary" size={50} />
+   </Box>
    : children}
     </AuthContext.Provider>
   );

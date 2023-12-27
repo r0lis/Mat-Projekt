@@ -162,11 +162,17 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
 
   if (loading || roleLoading)
     return (
-      <CircularProgress
-        color="primary"
-        size={50}
-        style={{ position: "absolute", top: "50%", left: "50%" }}
-      />
+      <Box
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        height: "80vh",
+        
+      }}
+    >
+      <CircularProgress color="primary" size={50} />
+    </Box>
     );
   if (error || roleError) return <Typography>Chyba</Typography>;
 

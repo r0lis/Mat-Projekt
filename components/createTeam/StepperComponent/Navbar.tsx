@@ -227,15 +227,16 @@ const Navbar: React.FC = () => {
                               }}
                             >
                               {userInfoLoading ? (
-                                <CircularProgress
-                                  color="primary"
-                                  size={30}
-                                  style={{
-                                    position: "absolute",
-                                    top: "2%",
-                                    left: "40%",
-                                  }}
-                                />
+                              <Box
+                              sx={{
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                
+                              }}
+                            >
+                              <CircularProgress color="primary" size={30} />
+                            </Box>
                               ) : userInfoError ? (
                                 "Chyba"
                               ) : (
