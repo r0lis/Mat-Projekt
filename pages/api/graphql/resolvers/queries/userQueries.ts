@@ -80,6 +80,7 @@ export const userQueries = {
           Name: userData.Name,
           Surname: userData.Surname,
           Id: userData.IdUser,
+          DateOfBirth: userData.DateOfBirth,
         };
       }
     }

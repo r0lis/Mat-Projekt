@@ -2,7 +2,14 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { authUtils } from "@/firebase/auth.utils";
 import { gql, useQuery } from "@apollo/client";
-import { Avatar, Box, Button, CircularProgress, Link, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Button,
+  CircularProgress,
+  Link,
+  Typography,
+} from "@mui/material";
 import React from "react";
 import TeamLogoImg from "../../public/assets/logotym.png";
 import { useRouter } from "next/router";
@@ -14,6 +21,7 @@ const GET_USER_INFO = gql`
       Name
       Surname
       Id
+      DateOfBirth
     }
   }
 `;
@@ -26,6 +34,18 @@ const GET_TEAM_NAMES = gql`
     }
   }
 `;
+
+const calculateAge = (dateOfBirth: string) => {
+  const dob = new Date(dateOfBirth);
+  const today = new Date();
+  let age = today.getFullYear() - dob.getFullYear();
+  const monthDiff = today.getMonth() - dob.getMonth();
+
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+    age--;
+  }
+  return age;
+};
 
 type Team = {
   teamId: string;
@@ -78,7 +98,10 @@ const Content = () => {
     },
   };
 
-  if (!user || (idUser && idUser !== userInfoData?.getUserByNameAndSurname.Id)) {
+  if (
+    !user ||
+    (idUser && idUser !== userInfoData?.getUserByNameAndSurname.Id)
+  ) {
     return <BasicError />;
   }
 
@@ -94,17 +117,55 @@ const Content = () => {
         borderRadius: "10px",
       }}
     >
-      <Box sx={{display:"flex", marginBottom:"2em" }}>
-        <Typography sx={{fontSize:"3em", fontWeight:"500"}}>
+      <Box sx={{ display: "flex", marginBottom: "2em" }}>
+        <Typography sx={{ fontSize: "3em", fontWeight: "500" }}>
           {name} {surname}
         </Typography>
-        <Avatar sx={{height:"3em", width:"3em", marginLeft:"auto", marginRight:"3em"}} alt="R" src="" />
+        <Avatar
+          sx={{
+            height: "3em",
+            width: "3em",
+            marginLeft: "auto",
+            marginRight: "3em",
+          }}
+          alt="R"
+          src=""
+        />
       </Box>
+      <Box sx={{ marginBottom: "2em" }}>
+        <Typography sx={{ fontSize: "2em", fontWeight: "500" }}>
+          Email:
+        </Typography>
+        <Typography sx={{ fontSize: "1.5em" }}>{user?.email}</Typography>
+      </Box>
+      <Box sx={{ marginBottom: "2em" }}>
+        <Typography sx={{ fontSize: "2em", fontWeight: "500" }}>
+          Datum narození:
+        </Typography>
+        <Typography sx={{ fontSize: "1.5em" }}>
+          {userInfoData?.getUserByNameAndSurname.DateOfBirth &&
+            new Date(
+              userInfoData?.getUserByNameAndSurname.DateOfBirth
+            ).toLocaleDateString("cs-CZ", {
+              day: "2-digit",
+              month: "2-digit",
+              year: "numeric",
+            })}{" "}
+          /{" "}
+          {calculateAge(
+            userInfoData?.getUserByNameAndSurname?.DateOfBirth || ""
+          )}{" "}
+          let
+        </Typography>
+      </Box>
+
       <Box>
-        <Typography sx={{fontSize:"2em", fontWeight:"500"}}>Týmy:</Typography>
+        <Typography sx={{ fontSize: "2em", fontWeight: "500" }}>
+          Týmy:
+        </Typography>
         {userTeamsData &&
-          userTeamsData.getUserTeamsByEmail &&
-          userTeamsData.getUserTeamsByEmail.length > 0 ? (
+        userTeamsData.getUserTeamsByEmail &&
+        userTeamsData.getUserTeamsByEmail.length > 0 ? (
           userTeamsData.getUserTeamsByEmail.map((team: Team, index: number) => (
             <Box
               sx={{
@@ -139,20 +200,21 @@ const Content = () => {
           ))
         ) : (
           <Box
-              sx={{
-                marginBottom: "1em",
-                padding: "3%",
-                borderRadius: "10px",
-                border: "1px solid gray",
-                backgroundColor: "lightgray",
-              }}
-            >
-          Nepatříte do žádného klubu</Box>
+            sx={{
+              marginBottom: "1em",
+              padding: "3%",
+              borderRadius: "10px",
+              border: "1px solid gray",
+              backgroundColor: "lightgray",
+            }}
+          >
+            Nepatříte do žádného klubu
+          </Box>
         )}
       </Box>
-      <Box sx={{marginTop:"2em"}}>
+      <Box sx={{ marginTop: "2em" }}>
         <Button>Upravit</Button>
-        </Box>
+      </Box>
     </Box>
   );
 };

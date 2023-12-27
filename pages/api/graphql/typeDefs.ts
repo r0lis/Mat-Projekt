@@ -79,6 +79,7 @@ export const typeDefs = gql`
     Name: String
     Surname: String
     Id: String
+    DateOfBirth: String
   }
   
   type UserRoleInTeam {
