@@ -18,7 +18,7 @@ import { authUtils } from "../../firebase/auth.utils";
 import { useQuery } from "@apollo/client";
 import { gql } from "graphql-tag";
 import TeamLogoImg from "../../public/assets/logotym.png";
-import { CircularProgress } from "@mui/material";
+import { Avatar, CircularProgress } from "@mui/material";
 
 const GET_USER_INFO = gql`
   query GetUserInfo($email: String!) {
@@ -26,6 +26,8 @@ const GET_USER_INFO = gql`
       Name
       Surname
       Id
+      DateOfBirth
+      Picture
     }
   }
 `;
@@ -72,8 +74,9 @@ const Navbar: React.FC = () => {
   const name = userInfoData?.getUserByNameAndSurname.Name || "";
   const surname = userInfoData?.getUserByNameAndSurname.Surname || "";
   const id = userInfoData?.getUserByNameAndSurname.Id || "";
-
+  const userPicture = userInfoData?.getUserByNameAndSurname.Picture || "";
   const initials = name[0] + surname[0];
+  console.log(initials);
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -243,14 +246,19 @@ const Navbar: React.FC = () => {
                 height: "6%",
                 width: "6%",
                 position: "relative",
-                marginTop: "0.5em",
+                marginTop: "0.4em",
               }}
               onClick={handleOpenMenu}
             >
-              <img
-                style={{ height: "50px", width: "50px", color: "white" }}
-                src={user ? LoginIcon2.src : LoginIcon.src}
-                alt="login"
+              <Avatar
+                sx={{
+                  height: "2.7em",
+                  width: "2.7em",
+                  marginLeft: "auto",
+                  marginRight: "3em",
+                }}
+                alt={initials}
+                src={user ? userPicture : LoginIcon.src} // Set src to user's picture URL if it exists
               />
             </Box>
             <Menu
@@ -418,10 +426,7 @@ const Navbar: React.FC = () => {
                               </Typography>
                             </Button>
                           </Link>
-                          <Button
-                            onClick={handleLogout}
-                            sx={buttonStyle2}
-                          >
+                          <Button onClick={handleLogout} sx={buttonStyle2}>
                             <Typography
                               sx={{
                                 color: "black",
@@ -492,7 +497,6 @@ const Navbar: React.FC = () => {
                       </Link>
                     </Box>
                     <Box
-                   
                       sx={{
                         alignItems: "center",
                         textAlign: "center",
@@ -526,8 +530,16 @@ const Navbar: React.FC = () => {
           </div>
 
           <Box sx={{ marginRight: "5%", marginLeft: "3%", marginTop: "0.5em" }}>
-            <Link style={{textDecoration: "none"}} href="/CreateTeam">
-              <Button className="CreateTeamButton" sx={{backgroundColor: "#b71dde", borderRadius: "15px", boxShadow:"0 0 10px rgba(51, 0, 45, 0.8)"}} variant="contained">
+            <Link style={{ textDecoration: "none" }} href="/CreateTeam">
+              <Button
+                className="CreateTeamButton"
+                sx={{
+                  backgroundColor: "#b71dde",
+                  borderRadius: "15px",
+                  boxShadow: "0 0 10px rgba(51, 0, 45, 0.8)",
+                }}
+                variant="contained"
+              >
                 <Typography
                   className="CreateTeamButtonText"
                   sx={{

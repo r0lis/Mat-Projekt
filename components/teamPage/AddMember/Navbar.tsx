@@ -101,6 +101,7 @@ const Navbar: React.FC = () => {
   const initials = name[0] + surname[0];
   const userId = userInfoData?.getUserByNameAndSurname.Id || "";
   const role = roleData?.getUserRoleInTeam.role || "";
+  const userPicture = userInfoData?.getUserByNameAndSurname.Picture || "";
 
   const handleOpenMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl2(event.currentTarget);
@@ -475,7 +476,16 @@ const Navbar: React.FC = () => {
                 marginTop: "8px",
               }}
             >
-              <Avatar alt="Remy Sharp" src={demoUser.src} />
+               <Avatar
+                sx={{
+                  height: "2.5em",
+                  width: "2.5em",
+                  marginLeft: "auto",
+                  marginRight: "3em",
+                }}
+                alt={initials}
+                src={userPicture} 
+              />
             </Box>
             <Menu
               id="menu-appbar2"

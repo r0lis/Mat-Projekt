@@ -18,7 +18,6 @@ import IconButton from "@mui/material/IconButton";
 import { gql, useQuery } from "@apollo/client";
 import { authUtils } from "../../../firebase/auth.utils";
 import LogoTeam from "@/public/assets/logotym.png";
-import demoUser from "@/public/assets/demoUser.png";
 import { useRouter } from "next/router";
 
 const GET_USER_INFO = gql`
@@ -100,6 +99,8 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon }) => {
   const surname = userInfoData?.getUserByNameAndSurname.Surname || "";
   const userId = userInfoData?.getUserByNameAndSurname.Id || "";
   const role = roleData?.getUserRoleInTeam.role || "";
+  const userPicture = userInfoData?.getUserByNameAndSurname.Picture || "";
+  const initials = name[0] + surname[0];
 
   const toggleContentVisibility = () => {
     setShowOnlyIcon(!showOnlyIcon);
@@ -363,7 +364,7 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon }) => {
                               </Typography>
                             </Button>
                           </Link>
-                          
+
                           <Button onClick={handleLogout} sx={buttonStyle2}>
                             <Typography
                               sx={{
@@ -377,7 +378,6 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon }) => {
                               Odhlásit se
                             </Typography>
                           </Button>
-                          
                         </Box>
                       </>
                     </Box>
@@ -478,7 +478,16 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon }) => {
                 marginTop: "3px",
               }}
             >
-              <Avatar alt="Remy Sharp" src={demoUser.src} />
+              <Avatar
+                sx={{
+                  height: "2.5em",
+                  width: "2.5em",
+                  marginLeft: "auto",
+                  marginRight: "3em",
+                }}
+                alt={initials}
+                src={userPicture} // Set src to user's picture URL if it exists
+              />
             </Box>
             <Menu
               id="menu-appbar2"
