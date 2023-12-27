@@ -6,11 +6,12 @@ import ImageCarousel from '@/components/indexPage/ImageCarousel';
 import HowToUse from '@/components/indexPage/HowToUse';
 import FooterImg from '@/components/indexPage/FooterImg';
 import Footer from '@/components/indexPage/Footer';
+import { Box } from '@mui/material';
 
 export default function Home() {
 
   return (
-    <div >
+    <Box >
       <NavBar />
       <PreFace />
       <main>
@@ -23,7 +24,7 @@ export default function Home() {
         <Footer />
       </footer>
 
-    </div>
+    </Box>
   );
 
 }
