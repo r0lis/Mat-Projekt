@@ -14,6 +14,7 @@ import React, { useState } from "react";
 import TeamLogoImg from "../../public/assets/logotym.png";
 import { useRouter } from "next/router";
 import BasicError from "../teamPage/error/BasicError";
+import Edit from "./Edit";
 
 const GET_USER_INFO = gql`
   query GetUserInfo($email: String!) {
@@ -222,6 +223,7 @@ const Content: React.FC = () => {
             <Button onClick={handleEditClick}>Upravit</Button>
           </Box></>) : (
         <Box sx={{ marginTop: "2em",marginLeft:"3em", marginRight:"3em" }}>
+          <Edit />
         <Button onClick={handleBackClick}>Zpět</Button>
         </Box>
       )}

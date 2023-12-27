@@ -26,6 +26,8 @@ const GET_USER_INFO = gql`
       Name
       Surname
       Id
+      DateOfBirth
+      Picture
     }
   }
 `;

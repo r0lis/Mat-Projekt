@@ -1,9 +1,13 @@
-import { Box } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import React from 'react'
+import PhotoProvider from './PhotoProvider'
 
 const Edit: React.FC =() => {
   return (
-    <Box>Edit</Box>
+    <Box>
+        <Typography variant="h4">Úprava profilu:</Typography>
+        <PhotoProvider />
+    </Box>
   )
 }
 

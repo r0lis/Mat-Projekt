@@ -1,9 +1,12 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { Box } from "@mui/material";
+import { Box, Avatar, Button, CircularProgress } from "@mui/material";
 import React, { useState } from "react";
 import { gql, useMutation } from "@apollo/client";
 import { authUtils } from "@/firebase/auth.utils";
+
+interface UploadImageResponse {
+  uploadImageUser: string;
+}
 
 const UPLOAD_IMAGE_USER = gql`
   mutation UploadImageUser($imageBase64: String!, $userEmail: String!) {
@@ -14,13 +17,23 @@ const UPLOAD_IMAGE_USER = gql`
 const PhotoProvider: React.FC = () => {
   const currentUserEmail = authUtils.getCurrentUser()?.email || "";
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
 
-  const [uploadImage] = useMutation(UPLOAD_IMAGE_USER);
+  const [uploadImage, { loading }] = useMutation<UploadImageResponse>(
+    UPLOAD_IMAGE_USER
+  );
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
       setSelectedImage(file);
+
+      // Display image preview
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
     }
   };
 
@@ -32,8 +45,6 @@ const PhotoProvider: React.FC = () => {
         reader.onloadend = () => {
           const imageBase64 = reader.result as string;
 
-          console.log("Base64 image:", imageBase64);
-
           // Call the GraphQL mutation with the image data
           uploadImage({
             variables: {
@@ -41,11 +52,11 @@ const PhotoProvider: React.FC = () => {
               userEmail: currentUserEmail,
             },
           })
-            .then((response: any) => {
+            .then((response) => {
               // Handle success, e.g., show a success message or update UI
-              console.log("Image uploaded successfully:", response);
+              console.log("Image uploaded successfully:", response.data);
             })
-            .catch((error: any) => {
+            .catch((error) => {
               // Handle error, e.g., show an error message or log the error
               console.error("Error uploading image:", error);
             });
@@ -58,8 +69,24 @@ const PhotoProvider: React.FC = () => {
 
   return (
     <Box>
+      {loading && <CircularProgress size={20} />}
       <input type="file" accept="image/*" onChange={handleFileChange} />
-      <button onClick={handleImageUpload}>Upload Image</button>
+      {imagePreview && (
+        <Avatar
+          alt="Selected Image"
+          src={imagePreview}
+          sx={{ width: 100, height: 100, marginTop: 1 }}
+        />
+      )}
+      <Button
+        onClick={handleImageUpload}
+        disabled={!selectedImage || loading}
+        variant="contained"
+        color="primary"
+        sx={{ marginTop: 1 }}
+      >
+        Upload Image
+      </Button>
     </Box>
   );
 };
