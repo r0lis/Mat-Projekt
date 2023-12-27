@@ -81,6 +81,7 @@ export const userQueries = {
           Surname: userData.Surname,
           Id: userData.IdUser,
           DateOfBirth: userData.DateOfBirth,
+          Picture: userData.Picture || false,
         };
       }
     }

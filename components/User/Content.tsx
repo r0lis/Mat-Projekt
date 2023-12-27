@@ -22,6 +22,7 @@ const GET_USER_INFO = gql`
       Surname
       Id
       DateOfBirth
+      Picture
     }
   }
 `;
@@ -77,6 +78,7 @@ const Content = () => {
   const name = userInfoData?.getUserByNameAndSurname.Name || "";
   const surname = userInfoData?.getUserByNameAndSurname.Surname || "";
   const id = userInfoData?.getUserByNameAndSurname.Id || "";
+  const userPicture = userInfoData?.getUserByNameAndSurname.Picture || "";
 
   const initials = name[0] + surname[0];
 
@@ -128,8 +130,8 @@ const Content = () => {
             marginLeft: "auto",
             marginRight: "3em",
           }}
-          alt="R"
-          src=""
+          alt={initials}
+          src={userPicture} // Set src to user's picture URL if it exists
         />
       </Box>
       <Box sx={{ marginBottom: "2em" }}>

@@ -16,6 +16,7 @@ export type User = {
   IsAdmin: boolean;
   Email: string;
   DateOfBirth: string;
+  Picture: string;
 };
 
 export type Team = {

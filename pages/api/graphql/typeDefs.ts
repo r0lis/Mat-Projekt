@@ -75,11 +75,12 @@ export const typeDefs = gql`
     Subteams: [Subteam]
   }
 
-  type NameAndSurname {
+  type UserDetail {
     Name: String
     Surname: String
     Id: String
     DateOfBirth: String
+    Picture: String
   }
   
   type UserRoleInTeam {
@@ -143,7 +144,7 @@ export const typeDefs = gql`
   
   type Query {
     user(id: String): User
-    getUserByNameAndSurname(email: String): NameAndSurname
+    getUserByNameAndSurname(email: String): UserDetail
     getUserTeamsByEmail(email: String!): [Team]
     getTeamDetails(teamId: String!): TeamDetails
     getTeamMembersByEmail(teamEmail: String!): [String]
