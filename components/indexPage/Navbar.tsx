@@ -515,7 +515,7 @@ const Navbar: React.FC = () => {
                               color: "black",
                               whiteSpace: "nowrap",
                               fontWeight: "bold",
-                              fontSize: ["1rem", "0.8rem","0.7rem"],
+                              fontSize: "1 vw",
                               lineHeight: "20px",
                               padding: "5px",
                             }}
@@ -547,7 +547,7 @@ const Navbar: React.FC = () => {
                   sx={{
                     color: "white",
                     fontWeight: "bold",
-                    fontSize: { xs: "0.8em", md: "1.3em" },
+                    fontSize:[ "0.8rem","0.8rem", "1.2rem" ],
                     lineHeight: "15px",
                     fontFamily: "Roboto",
                   }}

@@ -119,11 +119,16 @@ const Team: React.FC = () => {
 
   if (loadingUser || roleLoading || loading)
     return (
-      <CircularProgress
-        color="primary"
-        size={50}
-        style={{ position: "absolute", top: "45%", left: "50%" }}
-      />
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "100vh", 
+        }}
+      >
+        <CircularProgress color="primary" size={50} />
+      </Box>
     );
   if (errorUser || roleError || error) {
     console.error("Error checking user membership:", errorUser);
@@ -158,10 +163,14 @@ const Team: React.FC = () => {
     );
   }
 
-  const filteredItems = role == 1
-  ? [...items, { label: "Platby", image: Pay }, { label: "Správa", image: Settings }]
-  : items;
-
+  const filteredItems =
+    role == 1
+      ? [
+          ...items,
+          { label: "Platby", image: Pay },
+          { label: "Správa", image: Settings },
+        ]
+      : items;
 
   const handleLinkClick = (label: string) => {
     setActiveLink(label);
@@ -199,7 +208,7 @@ const Team: React.FC = () => {
                   setShowOnlyIcon(true);
                 }, 10);
               }
-          
+
               handleHover(false);
             }}
             sx={{
