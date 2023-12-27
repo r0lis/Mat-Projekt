@@ -483,7 +483,7 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon }) => {
                   height: "2.5em",
                   width: "2.5em",
                   marginLeft: "auto",
-                  marginRight: "3em",
+                  marginRight: "1em",
                 }}
                 alt={initials}
                 src={userPicture} // Set src to user's picture URL if it exists

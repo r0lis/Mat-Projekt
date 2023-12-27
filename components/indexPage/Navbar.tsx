@@ -118,6 +118,7 @@ const Navbar: React.FC = () => {
       backgroundColor: "#b71dde",
     },
     border: "1px solid #ff96fc",
+    whiteSpace: "nowrap",
   };
 
   const buttonStyle2 = {
@@ -161,7 +162,7 @@ const Navbar: React.FC = () => {
             sx={{
               position: "relative",
               left: "25%",
-              marginRight: "20%",
+              marginRight: "25%",
               flexGrow: 1,
               display: { xs: "none", md: "flex" },
             }}
@@ -201,8 +202,7 @@ const Navbar: React.FC = () => {
           <Box
             sx={{
               position: "relative",
-              marginLeft: "40%",
-              marginRight: "0",
+              marginLeft: ["25%","40%","20%"],
               flexGrow: 1,
               display: { xs: "flex", md: "none" },
             }}
@@ -255,7 +255,7 @@ const Navbar: React.FC = () => {
                   height: "2.7em",
                   width: "2.7em",
                   marginLeft: "auto",
-                  marginRight: "3em",
+                  marginRight: ["0.5rem", "1.5rem", "1rem"]
                 }}
                 alt={initials}
                 src={user ? userPicture : LoginIcon.src} // Set src to user's picture URL if it exists
@@ -505,6 +505,7 @@ const Navbar: React.FC = () => {
                         flexDirection: "column",
                         marginBottom: "1em",
                         justifyContent: "center",
+                        whiteSpace: "nowrap",
                       }}
                     >
                       <Link href="/UserRegistration">
@@ -512,8 +513,9 @@ const Navbar: React.FC = () => {
                           <Typography
                             sx={{
                               color: "black",
+                              whiteSpace: "nowrap",
                               fontWeight: "bold",
-                              fontSize: "1 vw",
+                              fontSize: ["1rem", "0.8rem","0.7rem"],
                               lineHeight: "20px",
                               padding: "5px",
                             }}
