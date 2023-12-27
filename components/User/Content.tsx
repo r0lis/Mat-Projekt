@@ -10,7 +10,7 @@ import {
   Link,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useState } from "react"; 
 import TeamLogoImg from "../../public/assets/logotym.png";
 import { useRouter } from "next/router";
 import BasicError from "../teamPage/error/BasicError";
@@ -53,10 +53,11 @@ type Team = {
   Name: string;
 };
 
-const Content = () => {
+const Content: React.FC = () => {
   const user = authUtils.getCurrentUser();
   const router = useRouter();
   const { idUser } = router.query;
+  const [editMode, setEditMode] = useState(false);
 
   const {
     loading: userInfoLoading,
@@ -77,9 +78,7 @@ const Content = () => {
 
   const name = userInfoData?.getUserByNameAndSurname.Name || "";
   const surname = userInfoData?.getUserByNameAndSurname.Surname || "";
-  const id = userInfoData?.getUserByNameAndSurname.Id || "";
   const userPicture = userInfoData?.getUserByNameAndSurname.Picture || "";
-
   const initials = name[0] + surname[0];
 
   if (userInfoLoading || userIdLoading)
@@ -107,6 +106,14 @@ const Content = () => {
     return <BasicError />;
   }
 
+  const handleEditClick = () => {
+    setEditMode(true); // Set editMode to true
+  };
+
+  const handleBackClick = () => {
+    setEditMode(false); // Set editMode to false
+  }
+
   return (
     <Box
       sx={{
@@ -119,104 +126,105 @@ const Content = () => {
         borderRadius: "10px",
       }}
     >
-      <Box sx={{ display: "flex", marginBottom: "2em" }}>
+      <Box sx={{ display: "flex", marginBottom: "2em", marginLeft:"3em", marginRight:"3em" }}>
         <Typography sx={{ fontSize: "3em", fontWeight: "500" }}>
           {name} {surname}
         </Typography>
         <Avatar
           sx={{
-            height: "3em",
-            width: "3em",
+            height: "5em",
+            width: "5em",
             marginLeft: "auto",
-            marginRight: "3em",
+           
           }}
           alt={initials}
           src={userPicture} // Set src to user's picture URL if it exists
         />
       </Box>
-      <Box sx={{ marginBottom: "2em" }}>
-        <Typography sx={{ fontSize: "2em", fontWeight: "500" }}>
-          Email:
-        </Typography>
-        <Typography sx={{ fontSize: "1.5em" }}>{user?.email}</Typography>
-      </Box>
-      <Box sx={{ marginBottom: "2em" }}>
-        <Typography sx={{ fontSize: "2em", fontWeight: "500" }}>
-          Datum narození:
-        </Typography>
-        <Typography sx={{ fontSize: "1.5em" }}>
-          {userInfoData?.getUserByNameAndSurname.DateOfBirth &&
-            new Date(
-              userInfoData?.getUserByNameAndSurname.DateOfBirth
-            ).toLocaleDateString("cs-CZ", {
-              day: "2-digit",
-              month: "2-digit",
-              year: "numeric",
-            })}{" "}
-          /{" "}
-          {calculateAge(
-            userInfoData?.getUserByNameAndSurname?.DateOfBirth || ""
-          )}{" "}
-          let
-        </Typography>
-      </Box>
-
-      <Box>
-        <Typography sx={{ fontSize: "2em", fontWeight: "500" }}>
-          Týmy:
-        </Typography>
-        {userTeamsData &&
-        userTeamsData.getUserTeamsByEmail &&
-        userTeamsData.getUserTeamsByEmail.length > 0 ? (
-          userTeamsData.getUserTeamsByEmail.map((team: Team, index: number) => (
-            <Box
-              sx={{
-                marginBottom: "1em",
-                padding: "2%",
-                borderRadius: "10px",
-                ...hoverStyle,
-                border: "1px solid gray",
-              }}
-            >
-              <Link
-                key={index}
-                href={`/Team/${team.teamId}`}
-                style={{
-                  textDecoration: "none",
-                  display: "flex",
-                  alignItems: "center",
+      {editMode === false ? (
+      <><Box sx={{ marginBottom: "2em", marginLeft: "3em", marginRight: "3em" }}>
+          <Typography sx={{ fontSize: "1.7em", fontWeight: "500" }}>
+            Email:
+          </Typography>
+          <Typography sx={{ fontSize: "1.3em" }}>{user?.email}</Typography>
+        </Box><Box sx={{ marginBottom: "2em", marginLeft: "3em", marginRight: "3em" }}>
+            <Typography sx={{ fontSize: "1.7em", fontWeight: "500" }}>
+              Datum narození:
+            </Typography>
+            <Typography sx={{ fontSize: "1.3em", }}>
+              {userInfoData?.getUserByNameAndSurname.DateOfBirth &&
+                new Date(
+                  userInfoData?.getUserByNameAndSurname.DateOfBirth
+                ).toLocaleDateString("cs-CZ", {
+                  day: "2-digit",
+                  month: "2-digit",
+                  year: "numeric",
+                })}{" "}
+              /{" "}
+              {calculateAge(
+                userInfoData?.getUserByNameAndSurname?.DateOfBirth || ""
+              )}{" "}
+              let
+            </Typography>
+          </Box><Box sx={{ marginLeft: "3em", marginRight: "3em" }}>
+            <Typography sx={{ fontSize: "1.7em", fontWeight: "500" }}>
+              Týmy:
+            </Typography>
+            {userTeamsData &&
+              userTeamsData.getUserTeamsByEmail &&
+              userTeamsData.getUserTeamsByEmail.length > 0 ? (
+              userTeamsData.getUserTeamsByEmail.map((team: Team, index: number) => (
+                <Box
+                  sx={{
+                    marginBottom: "1em",
+                    padding: "2%",
+                    borderRadius: "10px",
+                    ...hoverStyle,
+                    border: "1px solid gray",
+                  }}
+                >
+                  <Link
+                    key={index}
+                    href={`/Team/${team.teamId}`}
+                    style={{
+                      textDecoration: "none",
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                  >
+                    <img
+                      src={TeamLogoImg.src}
+                      alt="Team Logo"
+                      style={{
+                        width: "50px",
+                        height: "50px",
+                        marginRight: "1em",
+                      }} />
+                    <div style={{ color: "black", fontSize: "1.3em", fontWeight: "600" }}>{team.Name}</div>
+                  </Link>
+                </Box>
+              ))
+            ) : (
+              <Box
+                sx={{
+                  marginBottom: "1em",
+                  padding: "3%",
+                  borderRadius: "10px",
+                  border: "1px solid gray",
+                  backgroundColor: "lightgray",
+                  marginLeft: "3em", marginRight: "3em"
                 }}
               >
-                <img
-                  src={TeamLogoImg.src}
-                  alt="Team Logo"
-                  style={{
-                    width: "50px",
-                    height: "50px",
-                    marginRight: "1em",
-                  }}
-                />
-                <div style={{ color: "black" }}>{team.Name}</div>
-              </Link>
-            </Box>
-          ))
-        ) : (
-          <Box
-            sx={{
-              marginBottom: "1em",
-              padding: "3%",
-              borderRadius: "10px",
-              border: "1px solid gray",
-              backgroundColor: "lightgray",
-            }}
-          >
-            Nepatříte do žádného klubu
-          </Box>
-        )}
-      </Box>
-      <Box sx={{ marginTop: "2em" }}>
-        <Button>Upravit</Button>
-      </Box>
+                Nepatříte do žádného klubu
+              </Box>
+            )}
+          </Box><Box sx={{ marginTop: "2em", marginLeft: "3em", marginRight: "3em" }}>
+            <Button onClick={handleEditClick}>Upravit</Button>
+          </Box></>) : (
+        <Box sx={{ marginTop: "2em",marginLeft:"3em", marginRight:"3em" }}>
+        <Button onClick={handleBackClick}>Zpět</Button>
+        </Box>
+      )}
     </Box>
   );
 };
