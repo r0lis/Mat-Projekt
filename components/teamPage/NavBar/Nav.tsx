@@ -51,9 +51,11 @@ const GET_USER_ROLE_IN_TEAM = gql`
 interface NavProps {
   showOnlyIcon: boolean;
   setShowOnlyIcon: React.Dispatch<React.SetStateAction<boolean>>;
+  menuOpen: boolean;
+  setMenu: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon }) => {
+const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon, menuOpen, setMenu }) => {
   const router = useRouter();
   const { id } = router.query;
   const user = authUtils.getCurrentUser();
@@ -113,6 +115,10 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon }) => {
   const toggleContentVisibility = () => {
     setShowOnlyIcon(!showOnlyIcon);
   };
+  const toggleContentVisibilityMobile = () => {
+    setMenu(!menuOpen);
+    };
+
 
   const handleOpenMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl2(event.currentTarget);
@@ -163,6 +169,7 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon }) => {
 
   const isSmallView = window.innerWidth >= 850;
   const isSmallView2 = window.innerWidth >= 550;
+  const isMobile = window.innerWidth < 600; 
 
 
   return (
@@ -178,15 +185,26 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon }) => {
         }}
       >
         <Toolbar>
-          <IconButton
+          {isMobile ?
+          ( <IconButton
             color="inherit"
             aria-label="open sidebar"
-            onClick={toggleContentVisibility}
+            onClick={toggleContentVisibilityMobile}
           >
             <Box sx={{ marginTop: "11px" }}>
               <MenuIcon sx={{ color: "white" }} />
             </Box>
-          </IconButton>
+          </IconButton>):(
+              <IconButton
+              color="inherit"
+              aria-label="open sidebar"
+              onClick={toggleContentVisibility}
+            >
+              <Box sx={{ marginTop: "11px" }}>
+                <MenuIcon sx={{ color: "white" }} />
+              </Box>
+            </IconButton>)}
+                  
           <Box
             sx={{
               display: "flex",

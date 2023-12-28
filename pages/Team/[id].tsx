@@ -70,6 +70,7 @@ const Team: React.FC = () => {
   const router = useRouter();
   const { id } = router.query;
   const [showOnlyIcon, setShowOnlyIcon] = useState(true);
+  const [menuOpen, setMenu] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [activeLink, setActiveLink] = useState("Přehled");
@@ -182,11 +183,14 @@ const Team: React.FC = () => {
     }
   };
 
+  const isMobile = windowWidth < 600; 
+  console.log(menuOpen);
+
   return (
     <Box sx={{ display: "block", width: "100%", height: "100%" }}>
       {Boolean(team) && (
         <Box>
-          <Nav showOnlyIcon={showOnlyIcon} setShowOnlyIcon={setShowOnlyIcon} />
+          <Nav showOnlyIcon={showOnlyIcon} setShowOnlyIcon={setShowOnlyIcon} menuOpen={menuOpen} setMenu={setMenu}  />
 
           <Box
             className="sidebarContainer"
@@ -212,7 +216,7 @@ const Team: React.FC = () => {
               handleHover(false);
             }}
             sx={{
-              display: "block",
+              display: menuOpen ? "block": isMobile ? "none": "block",
               alignItems: "center",
               backgroundColor: "#F0F2F5",
               width: showOnlyIcon ? "3.5em" : "11em",
@@ -333,7 +337,7 @@ const Team: React.FC = () => {
           </Box>
           <Box
             sx={{
-              marginLeft: showOnlyIcon ? "5em" : "12em",
+              marginLeft: menuOpen ? showOnlyIcon ? "5em" : "12em" : isMobile ? "1em" : showOnlyIcon ? "5em" : "12em",
               marginTop: "5em",
               height: "auto",
             }}

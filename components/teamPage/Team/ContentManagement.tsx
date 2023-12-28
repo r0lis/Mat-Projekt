@@ -314,7 +314,7 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
       <Box>
         {!addMode && (
           <>
-            <Box sx={{ marginLeft: "2%", marginRight: "2%" }}>
+            <Box sx={{ marginLeft: "", marginRight: "2%" }}>
               <Box sx={{ display: "flex", alignItems: "center" }}>
                 <Box>
                   <Typography sx={{ fontWeight: "600" }} variant="h5">
