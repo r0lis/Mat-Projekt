@@ -307,7 +307,8 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
     setIsSelectVisible(!isSelectVisible);
   };
 
- 
+  const isMobile = window.innerWidth <= 600;
+
 
   return (
     <Box sx={{}}>
@@ -315,13 +316,13 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
         {!addMode && (
           <>
             <Box sx={{ marginLeft: "", marginRight: "2%" }}>
-              <Box sx={{ display: "flex", alignItems: "center" }}>
+              <Box sx={{display: isMobile ? "block":"flex", alignItems: "center" }}>
                 <Box>
                   <Typography sx={{ fontWeight: "600" }} variant="h5">
                     Týmy v klubu:
                   </Typography>
                 </Box>
-                <Box sx={{ marginLeft: "auto", marginRight: "" }}>
+                <Box sx={{ marginLeft: "auto", marginRight: "", }}>
                   {data && data.getSubteamData && data.getSubteamData.length > 1 && (
                   <Button
                     sx={{ marginRight: "2em", backgroundColor: "#027ef2" }}

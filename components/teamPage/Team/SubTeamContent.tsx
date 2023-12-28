@@ -48,16 +48,15 @@ const Content: React.FC<ContentProps> = ({ subteamId, idTeam }) => {
   if (loading)
     return (
       <Box
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        height: "80vh",
-        
-      }}
-    >
-      <CircularProgress color="primary" size={50} />
-    </Box>
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "80vh",
+        }}
+      >
+        <CircularProgress color="primary" size={50} />
+      </Box>
     );
   if (error) return <Typography>Chyba</Typography>;
 
@@ -132,81 +131,175 @@ const Content: React.FC<ContentProps> = ({ subteamId, idTeam }) => {
             boxShadow: "0px 3px 15px rgba(0, 0, 0, 0.3)",
           }}
         >
-          <Button
-            style={{
-              backgroundColor:
-                selectedButton === "overview" ? "white" : "#F0F2F5",
-              border: selectedButton === "overview" ? "2px solid black" : "",
-              boxShadow:
-                selectedButton === "overview"
-                  ? "0px 0px 8px rgba(0, 0, 0, 0.6)"
-                  : "0px 0px 0px rgba(0, 0, 0, 0.2)",
-              marginRight: "2em",
-              color: "black",
-              fontFamily: "Roboto",
-              marginLeft: "5%",
-              marginTop: "0.5em",
-              marginBottom: "0.5em",
-            }}
-            onClick={() => setSelectedButton("overview")}
-          >
-            Přehled
-          </Button>
-          <Button
-            style={{
-              backgroundColor: selectedButton === "wall" ? "white" : "#F0F2F5",
-              border: selectedButton === "wall" ? "2px solid black" : "",
-              boxShadow:
-                selectedButton === "wall"
-                  ? "0px 0px 8px rgba(0, 0, 0, 0.6)"
-                  : "0px 0px 0px rgba(0, 0, 0, 0.2)",
-              marginRight: "2em",
-              color: "black",
-              fontFamily: "Roboto",
-              marginTop: "0.5em",
-              marginBottom: "0.5em",
-            }}
-            onClick={() => setSelectedButton("wall")}
-          >
-            Nástěnka
-          </Button>
-          <Button
-            style={{
-              backgroundColor:
-                selectedButton === "attendance" ? "white" : "#F0F2F5",
-              border: selectedButton === "attendance" ? "2px solid black" : "",
-              boxShadow:
-                selectedButton === "attendance"
-                  ? "0px 0px 8px rgba(0, 0, 0, 0.6)"
-                  : "0px 0px 0px rgba(0, 0, 0, 0.2)",
-              marginRight: "2em",
-              color: "black",
-              fontFamily: "Roboto",
-              marginTop: "0.5em",
-              marginBottom: "0.5em",
-            }}
-            onClick={() => setSelectedButton("attendance")}
-          >
-            Doházka
-          </Button>
-          <Button
-            style={{
-              backgroundColor:
-                selectedButton === "members" ? "white" : "#F0F2F5",
-              border: selectedButton === "members" ? "2px solid black" : "",
-              boxShadow:
-                selectedButton === "members"
-                  ? "0px 0px 8px rgba(0, 0, 0, 0.6)"
-                  : "0px 0px 0px rgba(0, 0, 0, 0.2)",
-              color: "black",
-              fontFamily: "Roboto",
-              marginTop: "0.5em",
-              marginBottom: "0.5em",
-            }}
-            onClick={() => setSelectedButton("members")}
-          >
-            Členové
-          </Button>
+          {isMobile ? (
+            <Box sx={{marginLeft:"auto", marginRight:"auto"}}>
+              <Box>
+                <Button
+                  style={{
+                    backgroundColor:
+                      selectedButton === "overview" ? "white" : "#F0F2F5",
+                    border:
+                      selectedButton === "overview" ? "2px solid black" : "",
+                    boxShadow:
+                      selectedButton === "overview"
+                        ? "0px 0px 8px rgba(0, 0, 0, 0.6)"
+                        : "0px 0px 0px rgba(0, 0, 0, 0.2)",
+                    marginRight: "2em",
+                    color: "black",
+                    fontFamily: "Roboto",
+                    marginLeft: "5%",
+                    marginTop: "0.5em",
+                    marginBottom: "0.5em",
+                  }}
+                  onClick={() => setSelectedButton("overview")}
+                >
+                  Přehled
+                </Button>
+                <Button
+                  style={{
+                    backgroundColor:
+                      selectedButton === "wall" ? "white" : "#F0F2F5",
+                    border: selectedButton === "wall" ? "2px solid black" : "",
+                    boxShadow:
+                      selectedButton === "wall"
+                        ? "0px 0px 8px rgba(0, 0, 0, 0.6)"
+                        : "0px 0px 0px rgba(0, 0, 0, 0.2)",
+                    marginRight: "2em",
+                    color: "black",
+                    fontFamily: "Roboto",
+                    marginTop: "0.5em",
+                    marginBottom: "0.5em",
+                  }}
+                  onClick={() => setSelectedButton("wall")}
+                >
+                  Nástěnka
+                </Button>
+              </Box>
+
+              <Box sx={{ marginLeft: "5%" }}>
+                <Button
+                  style={{
+                    backgroundColor:
+                      selectedButton === "attendance" ? "white" : "#F0F2F5",
+                    border:
+                      selectedButton === "attendance" ? "2px solid black" : "",
+                    boxShadow:
+                      selectedButton === "attendance"
+                        ? "0px 0px 8px rgba(0, 0, 0, 0.6)"
+                        : "0px 0px 0px rgba(0, 0, 0, 0.2)",
+                    marginRight: "2em",
+                    color: "black",
+                    fontFamily: "Roboto",
+                    marginTop: "0.5em",
+                    marginBottom: "0.5em",
+                  }}
+                  onClick={() => setSelectedButton("attendance")}
+                >
+                  Doházka
+                </Button>
+                <Button
+                  style={{
+                    backgroundColor:
+                      selectedButton === "members" ? "white" : "#F0F2F5",
+                    border:
+                      selectedButton === "members" ? "2px solid black" : "",
+                    boxShadow:
+                      selectedButton === "members"
+                        ? "0px 0px 8px rgba(0, 0, 0, 0.6)"
+                        : "0px 0px 0px rgba(0, 0, 0, 0.2)",
+                    color: "black",
+                    fontFamily: "Roboto",
+                    marginTop: "0.5em",
+                    marginBottom: "0.5em",
+                  }}
+                  onClick={() => setSelectedButton("members")}
+                >
+                  Členové
+                </Button>
+              </Box>
+            </Box>
+          ) : (
+            <Box>
+              <Button
+                style={{
+                  backgroundColor:
+                    selectedButton === "overview" ? "white" : "#F0F2F5",
+                  border:
+                    selectedButton === "overview" ? "2px solid black" : "",
+                  boxShadow:
+                    selectedButton === "overview"
+                      ? "0px 0px 8px rgba(0, 0, 0, 0.6)"
+                      : "0px 0px 0px rgba(0, 0, 0, 0.2)",
+                  marginRight: "2em",
+                  color: "black",
+                  fontFamily: "Roboto",
+                  marginLeft: "5%",
+                  marginTop: "0.5em",
+                  marginBottom: "0.5em",
+                }}
+                onClick={() => setSelectedButton("overview")}
+              >
+                Přehled
+              </Button>
+              <Button
+                style={{
+                  backgroundColor:
+                    selectedButton === "wall" ? "white" : "#F0F2F5",
+                  border: selectedButton === "wall" ? "2px solid black" : "",
+                  boxShadow:
+                    selectedButton === "wall"
+                      ? "0px 0px 8px rgba(0, 0, 0, 0.6)"
+                      : "0px 0px 0px rgba(0, 0, 0, 0.2)",
+                  marginRight: "2em",
+                  color: "black",
+                  fontFamily: "Roboto",
+                  marginTop: "0.5em",
+                  marginBottom: "0.5em",
+                }}
+                onClick={() => setSelectedButton("wall")}
+              >
+                Nástěnka
+              </Button>
+              <Button
+                style={{
+                  backgroundColor:
+                    selectedButton === "attendance" ? "white" : "#F0F2F5",
+                  border:
+                    selectedButton === "attendance" ? "2px solid black" : "",
+                  boxShadow:
+                    selectedButton === "attendance"
+                      ? "0px 0px 8px rgba(0, 0, 0, 0.6)"
+                      : "0px 0px 0px rgba(0, 0, 0, 0.2)",
+                  marginRight: "2em",
+                  color: "black",
+                  fontFamily: "Roboto",
+                  marginTop: "0.5em",
+                  marginBottom: "0.5em",
+                }}
+                onClick={() => setSelectedButton("attendance")}
+              >
+                Doházka
+              </Button>
+              <Button
+                style={{
+                  backgroundColor:
+                    selectedButton === "members" ? "white" : "#F0F2F5",
+                  border: selectedButton === "members" ? "2px solid black" : "",
+                  boxShadow:
+                    selectedButton === "members"
+                      ? "0px 0px 8px rgba(0, 0, 0, 0.6)"
+                      : "0px 0px 0px rgba(0, 0, 0, 0.2)",
+                  color: "black",
+                  fontFamily: "Roboto",
+                  marginTop: "0.5em",
+                  marginBottom: "0.5em",
+                }}
+                onClick={() => setSelectedButton("members")}
+              >
+                Členové
+              </Button>
+            </Box>
+          )}
         </Box>
         <Box
           sx={{
@@ -324,7 +417,7 @@ const Content: React.FC<ContentProps> = ({ subteamId, idTeam }) => {
               boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.3)",
               height: "auto",
               display: isSmallView ? "" : "block",
-              marginLeft:  isMobile ? "0.5em" : "2em",
+              marginLeft: isMobile ? "0.5em" : "2em",
             }}
           >
             <Box sx={{}}>
