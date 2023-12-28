@@ -191,7 +191,7 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon, menuOpen, setM
             aria-label="open sidebar"
             onClick={toggleContentVisibilityMobile}
           >
-            <Box sx={{ marginTop: "11px" }}>
+            <Box sx={{ marginTop: isMobile ? "14px": "11px" }}>
               <MenuIcon sx={{ color: "white" }} />
             </Box>
           </IconButton>):(
@@ -219,7 +219,7 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon, menuOpen, setM
                 width: "3em",
                 height: "3em",
                 marginRight: "30px",
-                marginTop: "3px",
+                marginTop: isMobile ? "8px": "3px",
               }}
             />
             <Box sx={{  display: isSmallView2 ? "flex": "none",}}>
@@ -229,7 +229,7 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon, menuOpen, setM
                   fontWeight: "bold",
                   fontSize: "1.6em",
                   marginLeft: "%",
-                  marginTop: "4px",
+                  marginTop: isMobile ? "9px": "4px",
                   whiteSpace: "nowrap",
                 }}
               >
@@ -246,7 +246,7 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon, menuOpen, setM
               marginRight: "1%",
               backgroundColor: "rgba(255, 255, 255, 0.2)",
               borderRadius: "10px",
-              marginTop:"3px",
+              marginTop: isMobile ? "9px": "3px",
               padding: "0.2em",
               paddingRight: "1em",
               paddingLeft: "1em",
@@ -270,7 +270,7 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon, menuOpen, setM
             aria-label="open sidebar"
             sx={{marginLeft: isSmallView ? "" : "auto", marginRight: isSmallView ? "" : "",}} 
           >
-            <Box sx={{ display: "flex", marginTop: "12px" }}>
+            <Box sx={{ display: "flex", marginTop: isMobile ? "15px": "12px" }}>
               <Link href={`/`}>
                 <ChatIcon sx={{ color: "white" }} />
               </Link>
@@ -288,7 +288,7 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon, menuOpen, setM
                   fontSize: "24px",
                 }}
               >
-                <Box sx={{ display: "flex", marginTop: "4px" }}>
+                <Box sx={{ display: "flex",marginTop: isMobile ? "7px":"4px" }}>
                   <CircleNotificationsIcon sx={{ color: "white" }} />
                 </Box>
               </IconButton>
@@ -508,7 +508,7 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon, menuOpen, setM
                 display: "flex",
                 alignItems: "center",
                 marginLeft: { xs: "0", md: "2.5em" },
-                marginTop: "3px",
+                marginTop: isMobile ? "7px": "3px",
               }}
             >
               <Avatar
