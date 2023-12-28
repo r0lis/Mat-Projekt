@@ -80,7 +80,7 @@ const Content: React.FC<TeamsProps> = (teamId) => {
   if (subteamError) return <Typography>Chyba</Typography>;
 
   return (
-    <Box sx={{ marginLeft: "2%", marginRight: "2%" }}>
+    <Box sx={{ marginLeft: "", marginRight: "2%" }}>
       {subteams.length === 1 ? (
         <Box ml={2}>
           {subteams.map((subteam: Subteam) => (

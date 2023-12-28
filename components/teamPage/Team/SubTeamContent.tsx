@@ -79,6 +79,7 @@ const Content: React.FC<ContentProps> = ({ subteamId, idTeam }) => {
   };
 
   const isSmallView = window.innerWidth >= 1200;
+  const isMobile = window.innerWidth <= 600;
 
   return (
     <Box sx={{ display: isSmallView ? "flex" : "block", marginBottom: "2em" }}>
@@ -323,7 +324,7 @@ const Content: React.FC<ContentProps> = ({ subteamId, idTeam }) => {
               boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.3)",
               height: "auto",
               display: isSmallView ? "" : "block",
-              marginLeft: "2em",
+              marginLeft:  isMobile ? "0.5em" : "2em",
             }}
           >
             <Box sx={{}}>
