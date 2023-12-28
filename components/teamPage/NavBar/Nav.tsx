@@ -174,6 +174,7 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon }) => {
           display: "flex",
           justifyContent: "space-between",
           height: "4.2em",
+          alignItems:"hotizontal",
         }}
       >
         <Toolbar>
@@ -182,7 +183,7 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon }) => {
             aria-label="open sidebar"
             onClick={toggleContentVisibility}
           >
-            <Box sx={{ marginTop: "10px" }}>
+            <Box sx={{ marginTop: "11px" }}>
               <MenuIcon sx={{ color: "white" }} />
             </Box>
           </IconButton>
@@ -200,7 +201,7 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon }) => {
                 width: "3em",
                 height: "3em",
                 marginRight: "30px",
-                marginTop: "2px",
+                marginTop: "3px",
               }}
             />
             <Box sx={{ display: "inline-block" }}>
@@ -210,7 +211,7 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon }) => {
                   fontWeight: "bold",
                   fontSize: "1.6em",
                   marginLeft: "%",
-                  marginTop: "3px",
+                  marginTop: "4px",
                   whiteSpace: "nowrap",
                 }}
               >
@@ -227,6 +228,7 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon }) => {
               marginRight: "1%",
               backgroundColor: "rgba(255, 255, 255, 0.2)",
               borderRadius: "10px",
+              marginTop:"3px",
               padding: "0.2em",
               paddingRight: "1em",
               paddingLeft: "1em",
@@ -237,7 +239,6 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon }) => {
                 color: "white",
                 fontWeight: "bold",
                 fontSize: "1.4vw",
-                marginTop: "3px",
               }}
             >
               {role === "1" && "Management"}
@@ -251,7 +252,7 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon }) => {
             aria-label="open sidebar"
             sx={{marginLeft: isSmallView ? "" : "auto", marginRight: isSmallView ? "" : "",}} 
           >
-            <Box sx={{ display: "flex", marginTop: "10px" }}>
+            <Box sx={{ display: "flex", marginTop: "12px" }}>
               <Link href={`/`}>
                 <ChatIcon sx={{ color: "white" }} />
               </Link>
@@ -269,7 +270,7 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon }) => {
                   fontSize: "24px",
                 }}
               >
-                <Box sx={{ display: "flex", marginTop: "3px" }}>
+                <Box sx={{ display: "flex", marginTop: "4px" }}>
                   <CircleNotificationsIcon sx={{ color: "white" }} />
                 </Box>
               </IconButton>
