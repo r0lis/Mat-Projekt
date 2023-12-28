@@ -55,6 +55,7 @@ const PhotoProvider: React.FC = () => {
             .then((response) => {
               // Handle success, e.g., show a success message or update UI
               console.log("Image uploaded successfully:", response.data);
+              
             })
             .catch((error) => {
               // Handle error, e.g., show an error message or log the error

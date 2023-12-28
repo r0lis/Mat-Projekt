@@ -161,6 +161,10 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon }) => {
     border: "1px solid #ff96fc",
   };
 
+  const isSmallView = window.innerWidth >= 850;
+  console.log(isSmallView);
+
+
   return (
     <Box>
       <AppBar
@@ -186,7 +190,7 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon }) => {
             sx={{
               display: "flex",
               alignItems: "center",
-              marginLeft: "8%",
+              marginLeft: isSmallView ? "8%" : "2%",
             }}
           >
             <img
@@ -207,6 +211,7 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon }) => {
                   fontSize: "1.6em",
                   marginLeft: "%",
                   marginTop: "3px",
+                  whiteSpace: "nowrap",
                 }}
               >
                 {teamName}
@@ -216,9 +221,10 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon }) => {
 
           <Box
             sx={{
-              display: "flex",
+              display: isSmallView ? "flex": "none",
               alignItems: "center",
               marginLeft: { xs: "auto", md: "auto" },
+              marginRight: "1%",
               backgroundColor: "rgba(255, 255, 255, 0.2)",
               borderRadius: "10px",
               padding: "0.2em",
@@ -243,7 +249,7 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon }) => {
           <IconButton
             color="inherit"
             aria-label="open sidebar"
-            sx={{ display: "flex", marginLeft: "3%", fontSize: "24px" }}
+            sx={{marginLeft: isSmallView ? "" : "auto", marginRight: isSmallView ? "" : "",}} 
           >
             <Box sx={{ display: "flex", marginTop: "10px" }}>
               <Link href={`/`}>
@@ -252,14 +258,14 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon }) => {
             </Box>
           </IconButton>
 
-          <Box>
+          <Box sx={{marginLeft: isSmallView ? "" : "", marginRight: isSmallView ? "2%" : "",}} >
             <Box onClick={handleOpenMenu2}>
               <IconButton
                 color="inherit"
                 aria-label="open sidebar"
                 sx={{
                   display: "flex",
-                  marginLeft: { xs: "0.1%", md: "0.5%" },
+                  marginLeft:  "0.5%",
                   fontSize: "24px",
                 }}
               >
@@ -476,7 +482,7 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon }) => {
             </Menu>
           </Box>
 
-          <Box>
+          <Box sx={{marginLeft: isSmallView ? "" : "auto", marginRight: isSmallView ? "" : "5%",  }}>
             <Box
               onClick={handleOpenMenu}
               sx={{
@@ -706,7 +712,7 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon }) => {
             </Menu>
           </Box>
 
-          <Box sx={{ display: "flex", alignItems: "center", marginLeft: "1%" }}>
+          <Box sx={{ display: isSmallView ? "flex": "none", alignItems: "center", marginLeft: "1%", marginRight: isSmallView ? "1%":"" }}>
             <Typography
               sx={{
                 color: "white",
