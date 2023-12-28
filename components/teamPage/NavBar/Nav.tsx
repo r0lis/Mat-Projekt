@@ -219,7 +219,7 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon, menuOpen, setM
                 width: "3em",
                 height: "3em",
                 marginRight: "30px",
-                marginTop: isMobile ? "8px": "3px",
+                marginTop: isMobile ? "5px": "3px",
               }}
             />
             <Box sx={{  display: isSmallView2 ? "flex": "none",}}>
