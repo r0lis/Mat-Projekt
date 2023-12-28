@@ -162,7 +162,7 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon }) => {
   };
 
   const isSmallView = window.innerWidth >= 850;
-  console.log(isSmallView);
+  const isSmallView2 = window.innerWidth >= 550;
 
 
   return (
@@ -204,7 +204,7 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon }) => {
                 marginTop: "3px",
               }}
             />
-            <Box sx={{ display: "inline-block" }}>
+            <Box sx={{  display: isSmallView2 ? "flex": "none",}}>
               <Typography
                 sx={{
                   color: "white",
@@ -483,7 +483,7 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon }) => {
             </Menu>
           </Box>
 
-          <Box sx={{marginLeft: isSmallView ? "" : "auto", marginRight: isSmallView ? "" : "5%",  }}>
+          <Box sx={{marginLeft: isSmallView ? "" : "5%", marginRight: isSmallView ? "" : "5%",  }}>
             <Box
               onClick={handleOpenMenu}
               sx={{
