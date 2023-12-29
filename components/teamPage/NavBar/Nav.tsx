@@ -11,7 +11,7 @@ import {
 import React, { useState } from "react";
 import CircleNotificationsIcon from "@mui/icons-material/CircleNotifications";
 import MenuIcon from "@mui/icons-material/Menu";
-import ChatIcon from "@mui/icons-material/Chat";
+import HomeIcon from '@mui/icons-material/Home';
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
@@ -270,9 +270,9 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon, menuOpen, setM
             aria-label="open sidebar"
             sx={{marginLeft: isSmallView ? "" : "auto", marginRight: isSmallView ? "" : "",}} 
           >
-            <Box sx={{ display: "flex", marginTop: isMobile ? "15px": "12px" }}>
+            <Box sx={{ display: "flex", marginTop: isMobile ? "15px": "10px" }}>
               <Link href={`/`}>
-                <ChatIcon sx={{ color: "white" }} />
+                <HomeIcon sx={{ color: "white", marginTop: isMobile ? "15´´px": ""  }} />
               </Link>
             </Box>
           </IconButton>
@@ -288,7 +288,7 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon, menuOpen, setM
                   fontSize: "24px",
                 }}
               >
-                <Box sx={{ display: "flex",marginTop: isMobile ? "7px":"4px" }}>
+                <Box sx={{ display: "flex",marginTop: isMobile ? "9px":"4px" }}>
                   <CircleNotificationsIcon sx={{ color: "white" }} />
                 </Box>
               </IconButton>
@@ -508,7 +508,7 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon, menuOpen, setM
                 display: "flex",
                 alignItems: "center",
                 marginLeft: { xs: "0", md: "2.5em" },
-                marginTop: isMobile ? "7px": "3px",
+                marginTop: isMobile ? "6px": "3px",
               }}
             >
               <Avatar
