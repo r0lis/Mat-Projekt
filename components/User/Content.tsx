@@ -123,7 +123,7 @@ const Content: React.FC = () => {
         marginRight: "auto",
         boxShadow: "0px 3px 15px rgba(0, 0, 0, 0.3)",
         marginTop: "2em",
-        padding: "2em",
+        padding: "3%",
         borderRadius: "10px",
       }}
     >
