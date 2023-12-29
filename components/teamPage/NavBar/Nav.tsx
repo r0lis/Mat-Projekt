@@ -17,7 +17,6 @@ import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import { gql, useQuery } from "@apollo/client";
 import { authUtils } from "../../../firebase/auth.utils";
-import LogoTeam from "@/public/assets/logotym.png";
 import { useRouter } from "next/router";
 
 const GET_USER_INFO = gql`
@@ -36,6 +35,7 @@ const GET_TEAM_DETAILS = gql`
   query GetTeamDetails($teamId: String!) {
     getTeamDetails(teamId: $teamId) {
       Name
+      Logo
     }
   }
 `;
@@ -105,6 +105,7 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon, menuOpen, setM
 
   const team = data.getTeamDetails;
   const teamName = team ? team.Name : "";
+  const teamLogo = team ? team.Logo : "";
   const name = userInfoData?.getUserByNameAndSurname.Name || "";
   const surname = userInfoData?.getUserByNameAndSurname.Surname || "";
   const userId = userInfoData?.getUserByNameAndSurname.Id || "";
@@ -212,12 +213,12 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon, menuOpen, setM
               marginLeft: isSmallView ? "8%" : "2%",
             }}
           >
-            <img
-              src={LogoTeam.src}
+            <Avatar
+              src={teamLogo}
               alt="Team Logo"
               style={{
-                width: "3em",
-                height: "3em",
+                width: "2.8em",
+                height: "2.8em",
                 marginRight: "30px",
                 marginTop: isMobile ? "5px": "3px",
               }}

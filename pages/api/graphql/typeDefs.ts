@@ -91,6 +91,7 @@ export const typeDefs = gql`
 
   type TeamDetails {
     Name: String!
+    Logo: String!
   }
 
 

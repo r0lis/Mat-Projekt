@@ -52,6 +52,7 @@ export const teamQueries = {
         const teamData = teamSnapshot.docs[0].data() as Team;
         return {
           Name: teamData.Name,
+          Logo: teamData.Logo,
         };
       }
     }

@@ -37,6 +37,7 @@ const GET_TEAM_NAMES = gql`
     getUserTeamsByEmail(email: $email) {
       teamId
       Name
+      Logo
     }
   }
 `;
@@ -44,6 +45,7 @@ const GET_TEAM_NAMES = gql`
 type Team = {
   teamId: string;
   Name: string;
+  Logo: string;
 };
 
 const pages = ["Obsah", "Ukázky", "Použití", "Kontakt"];
@@ -203,7 +205,7 @@ const Navbar: React.FC = () => {
           <Box
             sx={{
               position: "relative",
-              marginLeft: ["25%","40%","20%"],
+              marginLeft: ["25%", "40%", "20%"],
               flexGrow: 1,
               display: { xs: "flex", md: "none" },
             }}
@@ -256,7 +258,7 @@ const Navbar: React.FC = () => {
                   height: "2.7em",
                   width: "2.7em",
                   marginLeft: "auto",
-                  marginRight: ["0.5rem", "1.5rem", "1rem"]
+                  marginRight: ["0.5rem", "1.5rem", "1rem"],
                 }}
                 alt={initials}
                 src={user ? userPicture : LoginIcon.src} // Set src to user's picture URL if it exists
@@ -300,16 +302,15 @@ const Navbar: React.FC = () => {
                               }}
                             >
                               {userInfoLoading ? (
-                                 <Box
-                                 sx={{
-                                   display: "flex",
-                                   alignItems: "center",
-                                   justifyContent: "center",
-                                   
-                                 }}
-                               >
-                                 <CircularProgress color="primary" size={30} />
-                               </Box>
+                                <Box
+                                  sx={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                  }}
+                                >
+                                  <CircularProgress color="primary" size={30} />
+                                </Box>
                               ) : userInfoError ? (
                                 "Chyba"
                               ) : (
@@ -339,15 +340,14 @@ const Navbar: React.FC = () => {
                           >
                             {userIdLoading ? (
                               <Box
-                              sx={{
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                
-                              }}
-                            >
-                              <CircularProgress color="primary" size={30} />
-                            </Box>
+                                sx={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                  justifyContent: "center",
+                                }}
+                              >
+                                <CircularProgress color="primary" size={30} />
+                              </Box>
                             ) : userIdError ? (
                               "Chyba"
                             ) : userTeamsData &&
@@ -373,9 +373,9 @@ const Navbar: React.FC = () => {
                                         alignItems: "center",
                                       }}
                                     >
-                                      <img
-                                        src={TeamLogoImg.src}
+                                      <Avatar
                                         alt="Team Logo"
+                                        src={team.Logo}
                                         style={{
                                           width: "50px",
                                           height: "50px",
@@ -548,7 +548,7 @@ const Navbar: React.FC = () => {
                   sx={{
                     color: "white",
                     fontWeight: "bold",
-                    fontSize:[ "0.8rem","0.8rem", "1.2rem" ],
+                    fontSize: ["0.8rem", "0.8rem", "1.2rem"],
                     lineHeight: "15px",
                     fontFamily: "Roboto",
                   }}

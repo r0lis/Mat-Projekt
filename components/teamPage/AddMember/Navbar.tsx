@@ -1,34 +1,23 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-import React, { useState } from "react";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Link from "next/link";
-import IconButton from "@mui/material/IconButton";
-import LogoTeam from "@/public/assets/logotym.png";
-import { useRouter } from "next/router";
-import { gql, useQuery } from "@apollo/client";
 import {
-  Typography,
-  CircularProgress,
   Avatar,
+  Box,
   Button,
+  CircularProgress,
+  Link,
   Menu,
-  Toolbar,
-} from "@mui/material"; // Importujte CircularProgress z MUI
-import ChatIcon from "@mui/icons-material/Chat";
+  Typography,
+} from "@mui/material";
+import React, { useState } from "react";
 import CircleNotificationsIcon from "@mui/icons-material/CircleNotifications";
-import demoUser from "@/public/assets/demoUser.png";
+import MenuIcon from "@mui/icons-material/Menu";
+import HomeIcon from '@mui/icons-material/Home';
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
+import { gql, useQuery } from "@apollo/client";
 import { authUtils } from "../../../firebase/auth.utils";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-
-const GET_TEAM_DETAILS = gql`
-  query GetTeamDetails($teamId: String!) {
-    getTeamDetails(teamId: $teamId) {
-      Name
-    }
-  }
-`;
+import { useRouter } from "next/router";
 
 const GET_USER_INFO = gql`
   query GetUserInfo($email: String!) {
@@ -36,6 +25,17 @@ const GET_USER_INFO = gql`
       Name
       Surname
       Id
+      DateOfBirth
+      Picture
+    }
+  }
+`;
+
+const GET_TEAM_DETAILS = gql`
+  query GetTeamDetails($teamId: String!) {
+    getTeamDetails(teamId: $teamId) {
+      Name
+      Logo
     }
   }
 `;
@@ -48,8 +48,14 @@ const GET_USER_ROLE_IN_TEAM = gql`
     }
   }
 `;
+interface NavProps {
+  showOnlyIcon: boolean;
+  setShowOnlyIcon: React.Dispatch<React.SetStateAction<boolean>>;
+  menuOpen: boolean;
+  setMenu: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
-const Navbar: React.FC = () => {
+const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon, menuOpen, setMenu }) => {
   const router = useRouter();
   const { id } = router.query;
   const user = authUtils.getCurrentUser();
@@ -57,6 +63,15 @@ const Navbar: React.FC = () => {
   const [anchorEl2, setAnchorEl2] = useState<null | HTMLElement>(null);
   const [, setMenuOpen2] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
+  const {
+    loading: roleLoading,
+    error: roleError,
+    data: roleData,
+  } = useQuery(GET_USER_ROLE_IN_TEAM, {
+    variables: { teamId: id, email: user?.email || "" },
+    skip: !user,
+  });
 
   const { loading, error, data } = useQuery(GET_TEAM_DETAILS, {
     variables: { teamId: id },
@@ -71,18 +86,7 @@ const Navbar: React.FC = () => {
     skip: !user,
   });
 
-  const {
-    loading: roleLoading,
-    error: roleError,
-    data: roleData,
-  } = useQuery(GET_USER_ROLE_IN_TEAM, {
-    variables: { teamId: id, email: user?.email || "" },
-    skip: !user,
-  });
-
-
-
-  if (loading  || roleLoading)
+  if (loading || roleLoading)
     return (
       <Box
       sx={{
@@ -93,21 +97,29 @@ const Navbar: React.FC = () => {
         
       }}
     >
-      <CircularProgress color="primary" size={50} />
+      <CircularProgress color="primary" size={30} />
     </Box>
-    ); 
+    );
   if (error) return <p>Chyba: {error.message}</p>;
   if (roleError) return <p>Chyba: {roleError.message}</p>;
 
-
   const team = data.getTeamDetails;
   const teamName = team ? team.Name : "";
+  const teamLogo = team ? team.Logo : "";
   const name = userInfoData?.getUserByNameAndSurname.Name || "";
   const surname = userInfoData?.getUserByNameAndSurname.Surname || "";
-  const initials = name[0] + surname[0];
   const userId = userInfoData?.getUserByNameAndSurname.Id || "";
   const role = roleData?.getUserRoleInTeam.role || "";
   const userPicture = userInfoData?.getUserByNameAndSurname.Picture || "";
+  const initials = name[0] + surname[0];
+
+  const toggleContentVisibility = () => {
+    setShowOnlyIcon(!showOnlyIcon);
+  };
+  const toggleContentVisibilityMobile = () => {
+    setMenu(!menuOpen);
+    };
+
 
   const handleOpenMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl2(event.currentTarget);
@@ -129,15 +141,11 @@ const Navbar: React.FC = () => {
 
   const handleLogout = async () => {
     try {
+      router.push("/");
       await authUtils.logout();
-      window.location.reload();
     } catch (error) {
       console.error("Chyba při odhlašování: ", error);
     }
-  };
-
-  const handleBackClick = () => {
-    router.back();
   };
 
   const buttonStyle = {
@@ -160,52 +168,70 @@ const Navbar: React.FC = () => {
     border: "1px solid #ff96fc",
   };
 
+  const isSmallView = window.innerWidth >= 850;
+  const isSmallView2 = window.innerWidth >= 550;
+  const isMobile = window.innerWidth < 600; 
+
+
   return (
-    <div>
+    <Box>
       <AppBar
-        position="static"
+        position="fixed"
         sx={{
           backgroundColor: "#A020F0",
           display: "flex",
           justifyContent: "space-between",
-          height: "4.5em",
+          height: "4.2em",
+          alignItems:"hotizontal",
         }}
       >
         <Toolbar>
-          <IconButton
+          {isMobile ?
+          ( <IconButton
             color="inherit"
             aria-label="open sidebar"
-            onClick={handleBackClick}
+            onClick={toggleContentVisibilityMobile}
           >
-            <Box sx={{ marginTop: "18px" }}>
-              <ArrowBackIcon sx={{ color: "white" }} />
+            <Box sx={{ marginTop: isMobile ? "14px": "11px" }}>
+              <MenuIcon sx={{ color: "white" }} />
             </Box>
-          </IconButton>
+          </IconButton>):(
+              <IconButton
+              color="inherit"
+              aria-label="open sidebar"
+              onClick={toggleContentVisibility}
+            >
+              <Box sx={{ marginTop: "11px" }}>
+                <MenuIcon sx={{ color: "white" }} />
+              </Box>
+            </IconButton>)}
+                  
           <Box
             sx={{
               display: "flex",
               alignItems: "center",
-              marginLeft: "8%",
+              marginLeft: isSmallView ? "8%" : "2%",
             }}
           >
-            <img
-              src={LogoTeam.src}
+            <Avatar
+              src={teamLogo}
               alt="Team Logo"
               style={{
-                width: "3em",
-                height: "3em",
+                width: "2.8em",
+                height: "2.8em",
                 marginRight: "30px",
-                marginTop: "2px",
+                marginTop: isMobile ? "5px": "3px",
               }}
             />
-            <Box sx={{ display: "inline-block" }}>
+            <Box sx={{  display: isSmallView2 ? "flex": "none",}}>
               <Typography
                 sx={{
                   color: "white",
                   fontWeight: "bold",
-                  fontSize: "1.7vw",
+                  fontSize: "1.6em",
                   marginLeft: "%",
-                  marginTop: "8px",
+                  marginTop: isMobile ? "9px": "4px",
+                  whiteSpace: "nowrap",
                 }}
               >
                 {teamName}
@@ -215,16 +241,16 @@ const Navbar: React.FC = () => {
 
           <Box
             sx={{
-             
-              display: "flex",
+              display: isSmallView ? "flex": "none",
               alignItems: "center",
               marginLeft: { xs: "auto", md: "auto" },
+              marginRight: "1%",
               backgroundColor: "rgba(255, 255, 255, 0.2)",
               borderRadius: "10px",
+              marginTop: isMobile ? "9px": "3px",
               padding: "0.2em",
               paddingRight: "1em",
               paddingLeft: "1em",
-             
             }}
           >
             <Typography
@@ -232,7 +258,6 @@ const Navbar: React.FC = () => {
                 color: "white",
                 fontWeight: "bold",
                 fontSize: "1.4vw",
-                marginTop: "3px",
               }}
             >
               {role === "1" && "Management"}
@@ -244,27 +269,27 @@ const Navbar: React.FC = () => {
           <IconButton
             color="inherit"
             aria-label="open sidebar"
-            sx={{ display: "flex", marginLeft: "3%", fontSize: "24px" }}
+            sx={{marginLeft: isSmallView ? "" : "auto", marginRight: isSmallView ? "" : "",}} 
           >
-            <Box sx={{ display: "flex", marginTop: "14px" }}>
+            <Box sx={{ display: "flex", marginTop: isMobile ? "15px": "10px" }}>
               <Link href={`/`}>
-                <ChatIcon sx={{ color: "white" }} />
+                <HomeIcon sx={{ color: "white", marginTop: isMobile ? "15´´px": ""  }} />
               </Link>
             </Box>
           </IconButton>
 
-          <Box>
+          <Box sx={{marginLeft: isSmallView ? "" : "", marginRight: isSmallView ? "2%" : "",}} >
             <Box onClick={handleOpenMenu2}>
               <IconButton
                 color="inherit"
                 aria-label="open sidebar"
                 sx={{
                   display: "flex",
-                  marginLeft: { xs: "0.1%", md: "0.5%" },
+                  marginLeft:  "0.5%",
                   fontSize: "24px",
                 }}
               >
-                <Box sx={{ display: "flex", marginTop: "8px" }}>
+                <Box sx={{ display: "flex",marginTop: isMobile ? "9px":"4px" }}>
                   <CircleNotificationsIcon sx={{ color: "white" }} />
                 </Box>
               </IconButton>
@@ -275,7 +300,11 @@ const Navbar: React.FC = () => {
               open={Boolean(anchorEl)}
               onClose={handleCloseMenu2}
               sx={{
-                display: { xs: "block", marginTop: "1em", marginLeft: "2em" },
+                display: {
+                  xs: "block",
+                  marginTop: "1em",
+                  marginLeft: "2em",
+                },
               }}
               transformOrigin={{
                 vertical: "top",
@@ -355,7 +384,7 @@ const Navbar: React.FC = () => {
                           }}
                         >
                           <Link href={`/User/${userId}`}>
-                          <Button sx={buttonStyle}>
+                            <Button sx={buttonStyle}>
                               <Typography
                                 sx={{
                                   color: "black",
@@ -369,7 +398,8 @@ const Navbar: React.FC = () => {
                               </Typography>
                             </Button>
                           </Link>
-                          <Button onClick={handleLogout} style={buttonStyle2}>
+
+                          <Button onClick={handleLogout} sx={buttonStyle2}>
                             <Typography
                               sx={{
                                 color: "black",
@@ -472,17 +502,17 @@ const Navbar: React.FC = () => {
             </Menu>
           </Box>
 
-          <Box>
+          <Box sx={{marginLeft: isSmallView ? "" : "5%", marginRight: isSmallView ? "" : "5%",  }}>
             <Box
               onClick={handleOpenMenu}
               sx={{
                 display: "flex",
                 alignItems: "center",
-                marginLeft: { xs: "0.1%", md: "2.5em" },
-                marginTop: "8px",
+                marginLeft: { xs: "0", md: "2.5em" },
+                marginTop: isMobile ? "6px": "3px",
               }}
             >
-               <Avatar
+              <Avatar
                 sx={{
                   height: "2.5em",
                   width: "2.5em",
@@ -490,7 +520,7 @@ const Navbar: React.FC = () => {
                   marginRight: "1em",
                 }}
                 alt={initials}
-                src={userPicture} 
+                src={userPicture} // Set src to user's picture URL if it exists
               />
             </Box>
             <Menu
@@ -499,7 +529,11 @@ const Navbar: React.FC = () => {
               open={Boolean(anchorEl2)}
               onClose={handleCloseMenu}
               sx={{
-                display: { xs: "block", marginTop: "1em", marginLeft: "2em" },
+                display: {
+                  xs: "block",
+                  marginTop: "1em",
+                  marginLeft: "2em",
+                },
               }}
               transformOrigin={{
                 vertical: "top",
@@ -579,7 +613,7 @@ const Navbar: React.FC = () => {
                           }}
                         >
                           <Link href={`/User/${userId}`}>
-                          <Button sx={buttonStyle}>
+                            <Button sx={buttonStyle}>
                               <Typography
                                 sx={{
                                   color: "black",
@@ -645,6 +679,7 @@ const Navbar: React.FC = () => {
                         display: "flex",
                         flexDirection: "column",
                         justifyContent: "center",
+                        buttonStyle2,
                       }}
                     >
                       <Link href="/LoginPage">
@@ -672,6 +707,7 @@ const Navbar: React.FC = () => {
                         flexDirection: "column",
                         marginBottom: "1em",
                         justifyContent: "center",
+                        buttonStyle2,
                       }}
                     >
                       <Link href="/UserRegistration">
@@ -696,14 +732,14 @@ const Navbar: React.FC = () => {
             </Menu>
           </Box>
 
-          <Box sx={{ display: "flex", alignItems: "center", marginLeft: "1%" }}>
+          <Box sx={{ display: isSmallView ? "flex": "none", alignItems: "center", marginLeft: "1%", marginRight: isSmallView ? "1%":"" }}>
             <Typography
               sx={{
                 color: "white",
                 fontWeight: "bold",
                 fontSize: "1.4vw",
                 marginLeft: "%",
-                marginTop: "8px",
+                marginTop: "3px",
               }}
             >
               {name} {surname}
@@ -711,8 +747,8 @@ const Navbar: React.FC = () => {
           </Box>
         </Toolbar>
       </AppBar>
-    </div>
+    </Box>
   );
 };
 
-export default Navbar;
+export default Nav;

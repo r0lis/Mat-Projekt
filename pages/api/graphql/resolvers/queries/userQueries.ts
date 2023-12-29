@@ -110,7 +110,7 @@ export const userQueries = {
           const teamSnapshot = await teamQuery.get();
           if (!teamSnapshot.empty) {
             const teamData = teamSnapshot.docs[0].data() as Team;
-            teams.push({ teamId: teamData.teamId, Name: teamData.Name });
+            teams.push({ teamId: teamData.teamId, Name: teamData.Name, Logo: teamData.Logo });
           }
         }
 
