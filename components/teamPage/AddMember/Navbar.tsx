@@ -48,14 +48,9 @@ const GET_USER_ROLE_IN_TEAM = gql`
     }
   }
 `;
-interface NavProps {
-  showOnlyIcon: boolean;
-  setShowOnlyIcon: React.Dispatch<React.SetStateAction<boolean>>;
-  menuOpen: boolean;
-  setMenu: React.Dispatch<React.SetStateAction<boolean>>;
-}
 
-const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon, menuOpen, setMenu }) => {
+
+const Nav: React.FC= () => {
   const router = useRouter();
   const { id } = router.query;
   const user = authUtils.getCurrentUser();
@@ -112,13 +107,6 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon, menuOpen, setM
   const role = roleData?.getUserRoleInTeam.role || "";
   const userPicture = userInfoData?.getUserByNameAndSurname.Picture || "";
   const initials = name[0] + surname[0];
-
-  const toggleContentVisibility = () => {
-    setShowOnlyIcon(!showOnlyIcon);
-  };
-  const toggleContentVisibilityMobile = () => {
-    setMenu(!menuOpen);
-    };
 
 
   const handleOpenMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -190,7 +178,6 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon, menuOpen, setM
           ( <IconButton
             color="inherit"
             aria-label="open sidebar"
-            onClick={toggleContentVisibilityMobile}
           >
             <Box sx={{ marginTop: isMobile ? "14px": "11px" }}>
               <MenuIcon sx={{ color: "white" }} />
@@ -199,7 +186,6 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon, menuOpen, setM
               <IconButton
               color="inherit"
               aria-label="open sidebar"
-              onClick={toggleContentVisibility}
             >
               <Box sx={{ marginTop: "11px" }}>
                 <MenuIcon sx={{ color: "white" }} />
