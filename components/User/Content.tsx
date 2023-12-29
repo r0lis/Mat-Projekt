@@ -81,6 +81,8 @@ const Content: React.FC = () => {
   const surname = userInfoData?.getUserByNameAndSurname.Surname || "";
   const userPicture = userInfoData?.getUserByNameAndSurname.Picture || "";
   const initials = name[0] + surname[0];
+  const isMobile = window.innerWidth < 600; 
+
 
   if (userInfoLoading || userIdLoading)
     return (
@@ -123,8 +125,9 @@ const Content: React.FC = () => {
         marginRight: "auto",
         boxShadow: "0px 3px 15px rgba(0, 0, 0, 0.3)",
         marginTop: "2em",
-        padding: "3%",
-        borderRadius: "10px",
+        padding: isMobile ? "0.5em" : "3%",
+        paddingTop: isMobile ? "1em" : "",
+        borderRadius: "10px", 
       }}
     >
       <Box sx={{ display: "flex", marginBottom: "2em", marginLeft:"3em", marginRight:"3em" }}>
