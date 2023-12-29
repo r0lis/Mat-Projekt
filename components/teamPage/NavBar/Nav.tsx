@@ -97,7 +97,7 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon, menuOpen, setM
         
       }}
     >
-      <CircularProgress color="primary" size={30} />
+      <CircularProgress color="primary" size={50} />
     </Box>
     );
   if (error) return <p>Chyba: {error.message}</p>;
