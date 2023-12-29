@@ -232,6 +232,7 @@ export const teamQueries = {
               membersDetails.push({
                 Name: userData.Name,
                 Surname: userData.Surname,
+                Picture: userData.Picture ?? null, 
                 Role: role, // Add role to the returned details
                 Email: userData.Email,
                 DateOfBirth: userData.DateOfBirth,

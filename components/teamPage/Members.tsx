@@ -25,7 +25,6 @@ import { useQuery, useMutation } from "@apollo/client";
 import { gql } from "@apollo/client";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import { SelectChangeEvent } from "@mui/material";
-import demoUser from "@/public/assets/demoUser.png";
 import { authUtils } from "@/firebase/auth.utils";
 
 const GET_TEAM_MEMBERS_DETAILS = gql`
@@ -35,6 +34,7 @@ const GET_TEAM_MEMBERS_DETAILS = gql`
       Surname
       Role
       Email
+      Picture
       DateOfBirth
       Subteams {
         Name
@@ -75,6 +75,7 @@ interface Member {
   Surname: string;
   Role: string;
   Email: string;
+  Picture: string;
   DateOfBirth: string;
   Subteams: { Name: string; subteamId: string }[];
 }
@@ -93,6 +94,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
     Role: string;
     Email: string;
     DateOfBirth: string;
+    Picture: string;
     Subteams: { Name: string; subteamId: string }[];
   } | null>(null);
   const [selectedRole, setSelectedRole] = useState("");
@@ -247,6 +249,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
           <TableHead sx={{ borderBottom: "1px solid #ddd" }}>
             <TableRow>
               <TableCell></TableCell>
+              <TableCell></TableCell>
               <TableCell>
                 <Typography sx={{ fontFamily: "Roboto", fontWeight: "800" }}>
                   Jméno
@@ -301,6 +304,13 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                           <ModeEditIcon />
                         </Box>
                       )}
+                    </TableCell>
+                    <TableCell>
+                      <Avatar
+                        sx={{ width: 50, height: 50 }}
+                        alt={member.Name[0] + member.Surname[0]}
+                        src={member.Picture}
+                      />
                     </TableCell>
                     <TableCell>
                       {member.Surname} {member.Name}
@@ -430,9 +440,11 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
             p: 4,
             borderRadius: "8px",
             width: 400,
-            backgroundImage: `
+            backgroundImage: selectedMember && selectedMember.Email == currentUserEmail ? `
             linear-gradient(to bottom, #808080 0, #909090 100px, #ffffff 100px, #ffffff calc(100% - 110px), #909090 calc(100% - 110px), #909090 100%)
-          `,
+          `: `
+          linear-gradient(to bottom, #808080 0, #909090 100px, #ffffff 100px, #ffffff calc(100% - 140px), #909090 calc(100% - 140px), #909090 100%)
+        `,
           }}
         >
           <Box
@@ -470,14 +482,14 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
             </Box>
             <Avatar
               sx={{
-                width: 50,
-                height: 50,
+                width: 60,
+                height: 60,
                 marginLeft: "0.5em",
-                top: "-24px",
+                top: "-30px",
                 right: "1em",
               }}
               alt="Remy Sharp"
-              src={demoUser.src}
+              src={selectedMember?.Picture}
             />
           </Box>
           <Box
