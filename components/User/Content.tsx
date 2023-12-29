@@ -86,11 +86,17 @@ const Content: React.FC = () => {
 
   if (userInfoLoading || userIdLoading)
     return (
-      <CircularProgress
-        color="primary"
-        size={50}
-        style={{ position: "absolute", top: "50%", left: "50%" }}
-      />
+      <Box
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        height: "100vh",
+        
+      }}
+    >
+      <CircularProgress color="primary" size={50} />
+    </Box>
     );
 
   if (userIdError || userInfoError) return <Typography>Chyba</Typography>;
