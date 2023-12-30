@@ -277,5 +277,44 @@ export const teamQueries = {
     }
   },
 
+  getTeam: async (
+    _: any,
+    { teamId }: { teamId: string },
+    context: Context
+  ) => {
+    if (context.user) {
+      try {
+        const teamQuery = context.db
+          .collection("Team")
+          .where("teamId", "==", teamId);
+        const teamSnapshot = await teamQuery.get();
+  
+        if (!teamSnapshot.empty) {
+          const teamData = teamSnapshot.docs[0].data() as Team;
+  
+          // Create a new object with the desired fields
+          const teamDetailsWithoutMembers = {
+            AdminEmail: teamData.AdminEmail,
+            Email: teamData.Email,
+            Logo: teamData.Logo,
+            Name: teamData.Name,
+            OwnerName: teamData.OwnerName,
+            OwnerSurname: teamData.OwnerSurname,
+            Place: teamData.Place,
+            TimeCreated: teamData.TimeCreated,
+            teamId: teamData.teamId,
+          };
+  
+          return teamDetailsWithoutMembers;
+        }
+      } catch (error) {
+        console.error("Error getting team details without members:", error);
+        throw error;
+      }
+    }
+  
+    return null;
+  },
+
   
 };

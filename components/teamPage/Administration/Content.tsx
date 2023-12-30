@@ -8,18 +8,44 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useState } from "react";
+import Edit from "./Edit";
+
+const GET_TEAM_DETAILS = gql`
+  query GetTeam($teamId: String!) {
+    getTeam(teamId: $teamId) {
+      AdminEmail
+      Email
+      Logo
+      Name
+      OwnerName
+      OwnerSurname
+      Place
+      TimeCreated
+      teamId
+    }
+  }
+`;
 
 const GET_TEAM_IMG = gql`
   query GetTeamImg($teamId: String!) {
     getTeamImg(teamId: $teamId)
   }
 `;
+
 type Props = {
   id: string;
 };
 
 const Content: React.FC<Props> = (teamId) => {
   const [editMode, setEditMode] = useState(false);
+
+  const {
+    loading: loadingDetails,
+    error: errorDetails,
+    data: dataDetails,
+  } = useQuery(GET_TEAM_DETAILS, {
+    variables: { teamId: teamId.id },
+  });
 
   const {
     loading,
@@ -29,7 +55,7 @@ const Content: React.FC<Props> = (teamId) => {
     variables: { teamId: teamId.id },
   });
 
-  if (loading)
+  if (loading || loadingDetails)
     return (
       <Box
         sx={{
@@ -42,8 +68,10 @@ const Content: React.FC<Props> = (teamId) => {
         <CircularProgress color="primary" size={50} />
       </Box>
     );
-  if (error) return <Typography>Chyba</Typography>;
+  if (error || errorDetails) return <Typography>Chyba</Typography>;
   console.log(error);
+
+  const teamDetails = dataDetails.getTeam;
   const teamImage = dataImg.getTeamImg;
 
   const handleEditClick = () => {
@@ -55,29 +83,41 @@ const Content: React.FC<Props> = (teamId) => {
   };
 
   return (
-    <Box>
-    {editMode === false ? (
-    <Box>
-      <Box sx={{ marginTop: "1.5em" }}>
-        <Avatar
-          sx={{ height: "6em", width: "6em" }}
-          src={teamImage}
-          alt="Team Image"
-        />
-      </Box>
-      <Box sx={{ marginTop: "1.5em" }}>
-        <Button variant="contained" color="primary" onClick={handleEditClick}>
-          Upravit
-        </Button>
-      </Box>
-    </Box>
-    ) : (
+    <Box sx={{width:"75%",}}>
+      {editMode === false ? (
         <Box>
-        <Button variant="contained" color="primary" onClick={handleBackClick}>
-          Zpět
-        </Button>
+          <Box>
+            <Typography sx={{ fontFamily: "Roboto", fontWeight: "600" }}>
+              {teamDetails.Name}
+            </Typography>
+          </Box>
+          <Box sx={{ marginTop: "1.5em" }}>
+            <Avatar
+              sx={{ height: "6em", width: "6em" }}
+              src={teamImage}
+              alt="Team Image"
+            />
+          </Box>
+          <Box sx={{ marginTop: "1.5em" }}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleEditClick}
+            >
+              Upravit
+            </Button>
+          </Box>
         </Box>
-    )}
+      ) : (
+        <Box>
+          <Box>
+            <Edit id={teamId.id}  />
+          </Box>
+          <Button variant="contained" color="primary" onClick={handleBackClick}>
+            Zpět
+          </Button>
+        </Box>
+      )}
     </Box>
   );
 };

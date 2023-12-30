@@ -60,6 +60,7 @@ export const typeDefs = gql`
     Place: String!
     OwnerName: String!
     OwnerSurname: String!
+    TimeCreated: String!
   }
 
   type TeamDetails2 {
@@ -165,6 +166,7 @@ export const typeDefs = gql`
     getSubteamDetails(subteamId: String!): Subteam
     getCompleteSubteamDetail(subteamId: String!): CompleteSubteam
     getMissingSubteamMembers(subteamId: String!): [SubteamMember2]
+    getTeam(teamId: String!): Team
 
   }
 

@@ -17,9 +17,9 @@ const SettingsComponent: React.FC = () => {
       <Box>
         <Typography
           sx={{ fontFamily: "Roboto", fontWeight: "600" }}
-          variant="h4"
+          variant="h5"
         >
-          Správa týmu
+          Správa klubu
         </Typography>
       </Box>
 

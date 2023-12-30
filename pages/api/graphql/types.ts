@@ -30,6 +30,7 @@ export type Team = {
   Place: string;
   OwnerName: string;
   OwnerSurname: string;
+  TimeCreated: string;
 };
 
 export type UpdatedMemberInput = {
