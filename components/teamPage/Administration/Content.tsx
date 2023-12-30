@@ -97,6 +97,7 @@ const Content: React.FC<Props> = (teamId) => {
       sx={{
         width: "80%",
         boxShadow: "0px 3px 15px rgba(0, 0, 0, 0.3)",
+        borderRadius:"10px",
         padding: "3%",
         marginTop: "1em",
         marginLeft: "6%",
@@ -105,7 +106,7 @@ const Content: React.FC<Props> = (teamId) => {
     >
      
         <Box>
-          <Box sx={{ display: "flex" }}>
+          <Box sx={{ display: "flex",  }}>
             <Box>
               <Typography
                 sx={{
@@ -123,13 +124,14 @@ const Content: React.FC<Props> = (teamId) => {
                   height: "6em",
                   width: "6em",
                   boxShadow: "0px 3px 15px rgba(0, 0, 0, 0.3)",
+                  
                 }}
                 src={teamImage}
                 alt="Team Image"
               />
             </Box>
           </Box>
-          <Box sx={{display:"flex"}}>
+          <Box sx={{display:"flex", backgroundColor:"#c2c3c4", marginTop:"1.5em", paddingLeft:"2%", paddingRight:"2%", borderRadius:"10px", marginBottom:"0.5em" }}>
             <Box>
             <Button
             style={{

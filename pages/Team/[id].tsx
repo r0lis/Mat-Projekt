@@ -32,15 +32,16 @@ import RoleError from "@/components/teamPage/error/RoleError";
 import LoginError from "@/components/teamPage/error/LoginError";
 import MembershipError from "@/components/teamPage/error/MembershipError";
 
+
 const items = [
-  { label: "Přehled", image: Overview },
-  { label: "Kalendář", image: Calendar },
-  { label: "Události", image: Events },
-  { label: "Tréninky", image: Trainings },
-  { label: "Zápasy", image: Nominations },
-  { label: "Soupisky", image: Rousters },
-  { label: "Tým", image: TeamIcon },
-  { label: "Členové", image: Members },
+  { label: "Overview", image: Overview },
+  { label: "Kalendar", image: Calendar },
+  { label: "Events", image: Events },
+  { label: "Trainings", image: Trainings },
+  { label: "Matchs", image: Nominations },
+  { label: "Rousters", image: Rousters },
+  { label: "Team", image: TeamIcon },
+  { label: "Members", image: Members },
 ];
 
 const GET_TEAM_DETAILS = gql`
@@ -89,8 +90,15 @@ const Team: React.FC = () => {
       }
     };
 
+    const handleHashChange = () => {
+      const hash = window.location.hash.substring(1);
+      setActiveLink(hash || "Overview"); // Default to "Přehled" if no hash is present
+    };
+
     window.addEventListener("resize", handleResize);
     handleResizeThrottled();
+    handleHashChange();
+
 
     return () => {
       window.removeEventListener("resize", handleResize);
@@ -168,13 +176,15 @@ const Team: React.FC = () => {
     role == 1
       ? [
           ...items,
-          { label: "Platby", image: Pay },
-          { label: "Správa", image: Settings },
+          { label: "Payment", image: Pay },
+          { label: "Settings", image: Settings },
         ]
       : items;
 
   const handleLinkClick = (label: string) => {
     setActiveLink(label);
+    const newUrl = `${window.location.pathname!}#${label}`;
+    window.history.pushState(null, '', newUrl);
   };
 
   const handleHover = (isHovering: boolean) => {
@@ -182,6 +192,9 @@ const Team: React.FC = () => {
       setIsHovered(isHovering);
     }
   };
+
+ 
+
 
   const isMobile = windowWidth < 600; 
   console.log(menuOpen);
@@ -342,16 +355,16 @@ const Team: React.FC = () => {
               height: "auto",
             }}
           >
-            {activeLink === "Přehled" && <OverviewComponent />}
-            {activeLink === "Tréninky" && <TrainingsComponent />}
-            {activeLink === "Kalendář" && <CalendarComponent />}
-            {activeLink === "Soupisky" && <RoustersComponent />}
-            {activeLink === "Zápasy" && <NominationsComponent />}
-            {activeLink === "Události" && <EventsComponent />}
-            {activeLink === "Tým" && <TeamComponent id={id as string} />}
-            {activeLink === "Členové" && <MembersComponent id={id as string} />}
-            {activeLink === "Platby" && <PayComponent />}
-            {activeLink === "Správa" && <SettingsComponent />}
+            {activeLink === "Overview" && <OverviewComponent />}
+            {activeLink === "Trainings" && <TrainingsComponent />}
+            {activeLink === "Kalendar" && <CalendarComponent />}
+            {activeLink === "Rousters" && <RoustersComponent />}
+            {activeLink === "Matchs" && <NominationsComponent />}
+            {activeLink === "Events" && <EventsComponent />}
+            {activeLink === "Team" && <TeamComponent id={id as string} />}
+            {activeLink === "Members" && <MembersComponent id={id as string} />}
+            {activeLink === "Payment" && <PayComponent />}
+            {activeLink === "Settings" && <SettingsComponent />}
           </Box>
         </Box>
       )}
