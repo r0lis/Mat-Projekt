@@ -9,6 +9,9 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import Edit from "./Edit";
+import Halls from "./Halls";
+import Info from "./Info";
+import Contacts from "./Contacts";
 
 const GET_TEAM_DETAILS = gql`
   query GetTeam($teamId: String!) {
@@ -31,29 +34,28 @@ const GET_TEAM_IMG = gql`
     getTeamImg(teamId: $teamId)
   }
 `;
-
-function convertToDateString(timestamp: string) {
-  const timestampNumber = parseFloat(timestamp);
-
-  const isMilliseconds = timestamp.length > 10;
-
-  const date = isMilliseconds
-    ? new Date(timestampNumber)
-    : new Date(timestampNumber * 1000);
-
-  const day = String(date.getUTCDate()).padStart(2, "0");
-  const month = String(date.getUTCMonth() + 1).padStart(2, "0");
-  const year = date.getUTCFullYear();
-
-  return `${day}.${month}.${year}`;
-}
-
 type Props = {
-  id: string;
-};
+    id: string;
+  };
+
 
 const Content: React.FC<Props> = (teamId) => {
-  const [editMode, setEditMode] = useState(false);
+  const [selectedButton, setSelectedButton] = useState("info");
+
+  const renderContent = () => {
+    switch (selectedButton) {
+      case "info":
+        return <Info id={teamId.id} />;
+      case "hall":
+        return <Halls id={teamId.id} />;
+      case "contacts":
+        return <Contacts id={teamId.id} />;
+      case "edit":
+        return <Edit id={teamId.id} />;
+      default:
+        return null;
+    }
+  };
 
   const {
     loading: loadingDetails,
@@ -90,14 +92,6 @@ const Content: React.FC<Props> = (teamId) => {
   const teamDetails = dataDetails.getTeam;
   const teamImage = dataImg.getTeamImg;
 
-  const handleEditClick = () => {
-    setEditMode(true); // Set editMode to true
-  };
-
-  const handleBackClick = () => {
-    setEditMode(false); // Set editMode to false
-  };
-
   return (
     <Box
       sx={{
@@ -109,7 +103,7 @@ const Content: React.FC<Props> = (teamId) => {
         marginRight: "5%",
       }}
     >
-      {editMode === false ? (
+     
         <Box>
           <Box sx={{ display: "flex" }}>
             <Box>
@@ -135,60 +129,116 @@ const Content: React.FC<Props> = (teamId) => {
               />
             </Box>
           </Box>
-          <Box sx={{ marginTop: "1em" }}>
-            <Typography sx={{ fontFamily: "Roboto", fontWeight: "600" }}>
-              Vytvořeno
-            </Typography>
-            <Typography sx={{ fontFamily: "Roboto" }}>
-              {convertToDateString(teamDetails.TimeCreated)}
-            </Typography>
-            <Typography sx={{ fontFamily: "Roboto", fontWeight: "600" }}>
-              Místo
-            </Typography>
-            <Typography sx={{ fontFamily: "Roboto" }}>
-              {teamDetails.Place}
-            </Typography>
-            <Typography sx={{ fontFamily: "Roboto", fontWeight: "600" }}>
-              Email
-            </Typography>
-            <Typography sx={{ fontFamily: "Roboto" }}>
-              {teamDetails.Email}
-            </Typography>
-            <Typography sx={{ fontFamily: "Roboto", fontWeight: "600" }}>
-              Majitel
-            </Typography>
-            <Typography sx={{ fontFamily: "Roboto" }}>
-              {teamDetails.OwnerName} {teamDetails.OwnerSurname}
-            </Typography>
-            <Typography sx={{ fontFamily: "Roboto", fontWeight: "600" }}>
-              Email majitele
-            </Typography>
-            <Typography sx={{ fontFamily: "Roboto" }}>
-              {teamDetails.AdminEmail}
-            </Typography>
-            
-          </Box>
-
-          <Box sx={{ marginTop: "1.5em" }}>
+          <Box sx={{display:"flex"}}>
+            <Box>
             <Button
-              variant="contained"
-              color="primary"
-              onClick={handleEditClick}
+            style={{
+                backgroundColor:
+                  selectedButton === "info" ? "white" : "#F0F2F5",
+                border:
+                  selectedButton === "info" ? "2px solid black" : "",
+                boxShadow:
+                  selectedButton === "info"
+                    ? "0px 0px 8px rgba(0, 0, 0, 0.6)"
+                    : "0px 0px 0px rgba(0, 0, 0, 0.2)",
+                marginRight: "2em",
+                color: "black",
+                fontFamily: "Roboto",
+                marginTop: "0.5em",
+                marginBottom: "0.5em",
+              }}
+              onClick={() => setSelectedButton("info")}
             >
-              Upravit
+            <Typography sx={{ fontFamily: "Roboto", fontWeight: "600" }}>
+              Informace
+            </Typography>
             </Button>
+            </Box>
+            <Box>
+            <Button
+             style={{
+                backgroundColor:
+                  selectedButton === "hall" ? "white" : "#F0F2F5",
+                border:
+                  selectedButton === "hall" ? "2px solid black" : "",
+                boxShadow:
+                  selectedButton === "hall"
+                    ? "0px 0px 8px rgba(0, 0, 0, 0.6)"
+                    : "0px 0px 0px rgba(0, 0, 0, 0.2)",
+                marginRight: "2em",
+                color: "black",
+                fontFamily: "Roboto",
+                marginLeft: "5%",
+                marginTop: "0.5em",
+                marginBottom: "0.5em",
+              }}
+              onClick={() => setSelectedButton("hall")}>
+            <Typography sx={{ fontFamily: "Roboto", fontWeight: "600", whiteSpace:"nowrap" }}>
+              Treninkové haly
+            </Typography>
+            </Button>
+            </Box>
+            <Box>
+            <Button
+             style={{
+                backgroundColor:
+                  selectedButton === "contacts" ? "white" : "#F0F2F5",
+                border:
+                  selectedButton === "contacts" ? "2px solid black" : "",
+                boxShadow:
+                  selectedButton === "contacts"
+                    ? "0px 0px 8px rgba(0, 0, 0, 0.6)"
+                    : "0px 0px 0px rgba(0, 0, 0, 0.2)",
+                marginRight: "2em",
+                color: "black",
+                fontFamily: "Roboto",
+                marginLeft: "5%",
+                marginTop: "0.5em",
+                marginBottom: "0.5em",
+              }}
+              onClick={() => setSelectedButton("contacts")}>
+            <Typography sx={{ fontFamily: "Roboto", fontWeight: "600" }}>
+              Kontakty
+            </Typography>
+            </Button>
+            </Box>
+            <Box>
+            <Button
+               style={{
+                backgroundColor:
+                  selectedButton === "edit" ? "white" : "#F0F2F5",
+                border:
+                  selectedButton === "edit" ? "2px solid black" : "",
+                boxShadow:
+                  selectedButton === "edit"
+                    ? "0px 0px 8px rgba(0, 0, 0, 0.6)"
+                    : "0px 0px 0px rgba(0, 0, 0, 0.2)",
+                marginRight: "2em",
+                color: "black",
+                fontFamily: "Roboto",
+                marginLeft: "5%",
+                marginTop: "0.5em",
+                marginBottom: "0.5em",
+              }}
+              onClick={() => setSelectedButton("edit")}
+            >
+               <Typography sx={{ fontFamily: "Roboto", fontWeight: "600" }}>
+              Upravit
+            </Typography>
+            </Button>
+            </Box>
           </Box>
+          <Box
+            sx={{
+              borderBottom: "3px solid gray",
+              width: "100%",
+              position: "relative",
+              marginTop: "0.5em",
+            }}
+          ></Box>
+          {renderContent()}
         </Box>
-      ) : (
-        <Box>
-          <Box>
-            <Edit id={teamId.id} />
-          </Box>
-          <Button variant="contained" color="primary" onClick={handleBackClick}>
-            Zpět
-          </Button>
-        </Box>
-      )}
+     
     </Box>
   );
 };
