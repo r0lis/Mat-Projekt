@@ -32,6 +32,22 @@ const GET_TEAM_IMG = gql`
   }
 `;
 
+function convertToDateString(timestamp: string) {
+  const timestampNumber = parseFloat(timestamp);
+
+  const isMilliseconds = timestamp.length > 10;
+
+  const date = isMilliseconds
+    ? new Date(timestampNumber)
+    : new Date(timestampNumber * 1000);
+
+  const day = String(date.getUTCDate()).padStart(2, "0");
+  const month = String(date.getUTCMonth() + 1).padStart(2, "0");
+  const year = date.getUTCFullYear();
+
+  return `${day}.${month}.${year}`;
+}
+
 type Props = {
   id: string;
 };
@@ -83,21 +99,76 @@ const Content: React.FC<Props> = (teamId) => {
   };
 
   return (
-    <Box sx={{width:"75%",}}>
+    <Box
+      sx={{
+        width: "80%",
+        boxShadow: "0px 3px 15px rgba(0, 0, 0, 0.3)",
+        padding: "3%",
+        marginTop: "1em",
+        marginLeft: "6%",
+        marginRight: "5%",
+      }}
+    >
       {editMode === false ? (
         <Box>
-          <Box>
+          <Box sx={{ display: "flex" }}>
+            <Box>
+              <Typography
+                sx={{
+                  fontFamily: "Roboto",
+                  fontWeight: "600",
+                  fontSize: "2rem",
+                }}
+              >
+                {teamDetails.Name}
+              </Typography>
+            </Box>
+            <Box sx={{ marginLeft: "auto", marginRight: "5%" }}>
+              <Avatar
+                sx={{
+                  height: "6em",
+                  width: "6em",
+                  boxShadow: "0px 3px 15px rgba(0, 0, 0, 0.3)",
+                }}
+                src={teamImage}
+                alt="Team Image"
+              />
+            </Box>
+          </Box>
+          <Box sx={{ marginTop: "1em" }}>
             <Typography sx={{ fontFamily: "Roboto", fontWeight: "600" }}>
-              {teamDetails.Name}
+              Vytvořeno
             </Typography>
+            <Typography sx={{ fontFamily: "Roboto" }}>
+              {convertToDateString(teamDetails.TimeCreated)}
+            </Typography>
+            <Typography sx={{ fontFamily: "Roboto", fontWeight: "600" }}>
+              Místo
+            </Typography>
+            <Typography sx={{ fontFamily: "Roboto" }}>
+              {teamDetails.Place}
+            </Typography>
+            <Typography sx={{ fontFamily: "Roboto", fontWeight: "600" }}>
+              Email
+            </Typography>
+            <Typography sx={{ fontFamily: "Roboto" }}>
+              {teamDetails.Email}
+            </Typography>
+            <Typography sx={{ fontFamily: "Roboto", fontWeight: "600" }}>
+              Majitel
+            </Typography>
+            <Typography sx={{ fontFamily: "Roboto" }}>
+              {teamDetails.OwnerName} {teamDetails.OwnerSurname}
+            </Typography>
+            <Typography sx={{ fontFamily: "Roboto", fontWeight: "600" }}>
+              Email majitele
+            </Typography>
+            <Typography sx={{ fontFamily: "Roboto" }}>
+              {teamDetails.AdminEmail}
+            </Typography>
+            
           </Box>
-          <Box sx={{ marginTop: "1.5em" }}>
-            <Avatar
-              sx={{ height: "6em", width: "6em" }}
-              src={teamImage}
-              alt="Team Image"
-            />
-          </Box>
+
           <Box sx={{ marginTop: "1.5em" }}>
             <Button
               variant="contained"
@@ -111,7 +182,7 @@ const Content: React.FC<Props> = (teamId) => {
       ) : (
         <Box>
           <Box>
-            <Edit id={teamId.id}  />
+            <Edit id={teamId.id} />
           </Box>
           <Button variant="contained" color="primary" onClick={handleBackClick}>
             Zpět
