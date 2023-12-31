@@ -7,6 +7,7 @@ import { gql } from "@apollo/client";
 import ContentManagement from "./Team/ContentManagement";
 import Content from "./Team/Content";
 
+
 type TeamsProps = {
   id: string;
 };

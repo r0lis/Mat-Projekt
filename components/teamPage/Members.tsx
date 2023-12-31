@@ -440,7 +440,9 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
             p: 4,
             borderRadius: "8px",
             width: 400,
-            backgroundImage: selectedMember && selectedMember.Email == currentUserEmail ? `
+            backgroundImage: editMode ?  `
+            linear-gradient(to bottom, #808080 0, #909090 100px, #ffffff 100px, #ffffff calc(100% - 100px), #909090 calc(100% - 100px), #909090 100%)
+          `: selectedMember && selectedMember.Email == currentUserEmail ? `
             linear-gradient(to bottom, #808080 0, #909090 100px, #ffffff 100px, #ffffff calc(100% - 110px), #909090 calc(100% - 110px), #909090 100%)
           `: `
           linear-gradient(to bottom, #808080 0, #909090 100px, #ffffff 100px, #ffffff calc(100% - 140px), #909090 calc(100% - 140px), #909090 100%)
@@ -786,7 +788,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                     )}
                     {(selectedMember?.Role === "0" ||
                       selectedMember?.Role === "No Role Assigned") && (
-                      <Box sx={{ maxWidth: "15em", marginBottom: "0.5em" }}>
+                      <Box sx={{ maxWidth: "15em", marginBottom: "1em" }}>
                         <Alert sx={{ maxHeight: "2.6em" }} severity="error">
                           <Typography sx={{fontSize:"1em", fontWeight:"600"}}>Zvolte !</Typography>
                         </Alert>
@@ -884,10 +886,12 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                     borderBottom: "2px solid gray", // Change the color as needed
                     position: "absolute",
                     top:
+                    (selectedMember?.Role === "0" ||
+                    selectedMember?.Role === "No Role Assigned")? "55%": 
                       selectedMember &&
                       selectedMember.Email === currentUserEmail
                         ? "56%"
-                        : "52%",
+                        : "53%",
                     transform: "translateY(-50%)",
                     marginLeft: "-3em",
                     zIndex: -1,
@@ -961,6 +965,8 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                     borderBottom: "2px solid gray", // Change the color as needed
                     position: "absolute",
                     top:
+                    (selectedMember?.Role === "0" ||
+                    selectedMember?.Role === "No Role Assigned")? "81%": 
                       selectedMember &&
                       selectedMember.Email === currentUserEmail
                         ? "68%"

@@ -30,7 +30,7 @@ type Props = {
   id: string;
 };
 
-const Edit: React.FC<Props> = (teamId ) => {
+const Halls: React.FC<Props> = (teamId ) => {
  
 
   const {
@@ -67,4 +67,4 @@ const Edit: React.FC<Props> = (teamId ) => {
   );
 };
 
-export default Edit;
+export default Halls;
