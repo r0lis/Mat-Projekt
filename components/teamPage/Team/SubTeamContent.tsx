@@ -24,15 +24,54 @@ const GET_SUBTEAM_DETAILS = gql`
   }
 `;
 
+const GET_COMPLETESUBTEAM_DETAILS = gql`
+  query GetCompleteSubteamDetail($subteamId: String!) {
+    getCompleteSubteamDetail(subteamId: $subteamId) {
+      Name
+      subteamId
+      teamId
+      subteamMembers {
+        name
+        surname
+        email
+        role
+        position
+      }
+    }
+  }
+`;
+
+const getPositionText = (position: string): string => {
+  switch (position) {
+    case "0":
+      return "Není zvolena pozice";
+    case "1":
+      return "Správce";
+    case "2":
+      return "Hlavní trenér";
+    case "3":
+      return "Asistent trenéra";
+    case "4":
+      return "Hráč";
+    default:
+      return "";
+  }
+};
+
+
 interface ContentProps {
   subteamId: string;
   idTeam: string;
 }
 
+
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface SubteamMember {
   email: string;
   role: string;
+  name: string;
+  surname: string;
   position: string;
 }
 
@@ -45,7 +84,16 @@ const Content: React.FC<ContentProps> = ({ subteamId, idTeam }) => {
     skip: !user,
   });
 
-  if (loading)
+  const {
+    loading: loadingComplete,
+    error: errorComplete,
+    data: dataComplete,
+  } = useQuery(GET_COMPLETESUBTEAM_DETAILS, {
+    variables: { subteamId },
+    skip: !user,
+  });
+
+  if (loading || loadingComplete)
     return (
       <Box
         sx={{
@@ -58,9 +106,14 @@ const Content: React.FC<ContentProps> = ({ subteamId, idTeam }) => {
         <CircularProgress color="primary" size={50} />
       </Box>
     );
-  if (error) return <Typography>Chyba</Typography>;
+  if (error || errorComplete) return <Typography>Chyba</Typography>;
 
   const subteam = data.getSubteamDetails;
+  const subteamComplete = dataComplete.getCompleteSubteamDetail;
+
+  const filteredMembers = subteamComplete.subteamMembers.filter(
+    (member: SubteamMember) => member.position == "1" || member.position == "2" || member.position == "3"
+  );
 
   const renderContent = () => {
     switch (selectedButton) {
@@ -132,7 +185,7 @@ const Content: React.FC<ContentProps> = ({ subteamId, idTeam }) => {
           }}
         >
           {isMobile ? (
-            <Box sx={{marginLeft:"auto", marginRight:"auto"}}>
+            <Box sx={{ marginLeft: "auto", marginRight: "auto" }}>
               <Box>
                 <Button
                   style={{
@@ -364,11 +417,22 @@ const Content: React.FC<ContentProps> = ({ subteamId, idTeam }) => {
                 fontSize: ["0.8rem", "1.1rem", "1.5rem"],
                 marginLeft: ["0.3rem", "0.6rem", "1rem"],
                 fontWeight: "600",
+                marginBottom: "0.5em",
                 whiteSpace: "nowrap",
               }}
             >
               Realizační tým
             </Typography>
+            {filteredMembers.map((member: SubteamMember) => (
+              <Box key={member.email}>
+                <Typography>
+                  {member.name} {member.surname}
+                </Typography>
+                <Typography>
+                  Position: {getPositionText( member.position)}
+                </Typography>
+              </Box>
+            ))}
           </Box>
         </Box>
       ) : (
