@@ -89,6 +89,11 @@ const Edit: React.FC<Props> = (teamId ) => {
     setImg(""); // Optional: Clear the image URL from the state
   };
 
+  const handleCloce = () => {
+    setSelectedImage(null);
+    setImg(""); // Optional: Clear the image URL from the state
+  };
+
   // Function to handle image upload
   const handleImageUpload = async () => {
     try {
@@ -109,6 +114,10 @@ const Edit: React.FC<Props> = (teamId ) => {
         });
 
         console.log("Image uploaded successfully");
+        setSelectedImage(null);
+        window.location.reload();
+
+
       } catch (error) {
         console.error("Error uploading image:", error);
       }
@@ -185,6 +194,17 @@ const Edit: React.FC<Props> = (teamId ) => {
             Uložit
           </Button>
         </Box>
+        {selectedImage && (
+          <Box sx={{ marginTop: "0.5em" }}>
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={handleCloce}
+            >
+              Zrušit
+            </Button>
+            </Box>
+        )}
       </Box>
     </Box>
   );
