@@ -45,6 +45,7 @@ const AddHall: React.FC<Props> = ({ onClose, id }) => {
     
           // Zavřít modální okno nebo provést další kroky
           onClose();
+          window.location.reload();
         } catch (mutationError) {
           console.error('Chyba při mutaci:', mutationError);
           // Zpracování chyby
