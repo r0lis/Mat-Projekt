@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Box, Button, CircularProgress, Typography } from "@mui/material";
 import React, { useState } from "react";
 import { gql, useQuery } from "@apollo/client";
@@ -19,6 +20,15 @@ const GET_TEAM_DETAILS = gql`
   }
 `;
 
+const GET_TEAM_HALLS = gql`
+query GetTeamHalls($teamId: String!) {
+  getHallsByTeamId(teamId: $teamId) {
+    name
+    location
+  }
+}
+`;
+
 type Props = {
   id: string;
 };
@@ -28,12 +38,21 @@ const Halls: React.FC<Props> = ({ id }) => {
   const {
     loading: loadingDetails,
     error: errorDetails,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     data: dataDetails,
   } = useQuery(GET_TEAM_DETAILS, {
     variables: { teamId: id },
   });
 
-  if (loadingDetails)
+  const {
+    loading: loadingHalls,
+    error: errorHalls,
+    data: dataHalls,
+  } = useQuery(GET_TEAM_HALLS, {
+    variables: { teamId: id },
+  });
+
+  if (loadingDetails || loadingHalls)
     return (
       <Box
         sx={{
@@ -46,7 +65,7 @@ const Halls: React.FC<Props> = ({ id }) => {
         <CircularProgress color="primary" size={50} />
       </Box>
     );
-  if (errorDetails) return <Typography>Chyba</Typography>;
+  if (errorDetails || errorHalls) return <Typography>Chyba</Typography>;
 
   const handleAddHall = () => {
     setAddHall(true);
@@ -56,8 +75,7 @@ const Halls: React.FC<Props> = ({ id }) => {
     setAddHall(false);
   };
 
-  const teamDetails = dataDetails.getTeam;
-  console.log(teamDetails.Name);
+  const halls = dataHalls?.getHallsByTeamId; 
 
   return (
     <Box>
@@ -68,6 +86,22 @@ const Halls: React.FC<Props> = ({ id }) => {
         <AddHall id={id} onClose={handleCloseAddHall} />
       ) : (
         <Box>
+          {halls !== null ? (
+            <Box>
+              {halls.map(
+                (
+                  hall: { name: any; location: any },
+                  index: React.Key | null | undefined
+                ) => (
+                  <div key={index}>
+                    <Typography>{`Název: ${hall.name}, Umístění: ${hall.location}`}</Typography>
+                  </div>
+                )
+              )}
+            </Box>
+          ) : (
+            <Typography>Žádné haly</Typography>
+          )}
           <Button variant="outlined" color="primary" onClick={handleAddHall}>
             Přidat
           </Button>

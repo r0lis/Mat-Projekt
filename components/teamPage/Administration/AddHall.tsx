@@ -53,7 +53,7 @@ const AddHall: React.FC<Props> = ({ onClose, id }) => {
 
   return (
     <Box>
-      <Box>AddHall {id}</Box>
+      <Box>AddHall </Box>
         <Box>
       <TextField
           label="Název haly"

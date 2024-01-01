@@ -179,6 +179,8 @@ export const typeDefs = gql`
     getCompleteSubteamDetail(subteamId: String!): CompleteSubteam
     getMissingSubteamMembers(subteamId: String!): [SubteamMember2]
     getTeam(teamId: String!): Team
+    getHallsByTeamId(teamId: String!): [Hall]
+
 
   }
 

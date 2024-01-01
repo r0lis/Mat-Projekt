@@ -31,6 +31,12 @@ export type Team = {
   OwnerName: string;
   OwnerSurname: string;
   TimeCreated: string;
+  Halls?: Hall[];
+};
+
+export type Hall = {
+  name: string;
+  location: string;
 };
 
 export type UpdatedMemberInput = {

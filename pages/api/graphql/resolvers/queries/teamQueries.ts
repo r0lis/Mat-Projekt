@@ -13,6 +13,7 @@ import {
   TeamDetails2,
   MemberDetails,
   Subteam,
+  Hall,
 } from "./../../types";
 import "firebase/storage";
 import * as admin from "firebase-admin";
@@ -313,6 +314,44 @@ export const teamQueries = {
       }
     }
   
+    return null;
+  },
+
+  getHallsByTeamId: async (
+    _: any,
+    { teamId }: { teamId: string },
+    context: Context
+  ) => {
+    if (context.user) {
+      try {
+        // Najít tým podle teamId
+        const teamQuery = context.db
+          .collection("Team")
+          .where("teamId", "==", teamId);
+
+        const teamSnapshot = await teamQuery.get();
+
+        if (!teamSnapshot.empty) {
+          const teamData = teamSnapshot.docs[0].data() as Team;
+
+          // Check if the team has associated halls
+          if (teamData.Halls) {
+            // Retrieve the list of halls
+            const halls = teamData.Halls as Hall[]; // Replace 'Hall' with the actual type of your hall data
+
+            // Optionally, you can process the halls data or return it directly
+            return halls;
+          } else {
+            // If no halls are associated, return null
+            return null;
+          }
+        }
+      } catch (error) {
+        console.error("Error getting halls by teamId:", error);
+        throw error;
+      }
+    }
+
     return null;
   },
 
