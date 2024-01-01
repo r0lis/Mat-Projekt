@@ -418,5 +418,51 @@ export const teamMutations = {
     }
   },
 
+  addHallToTeam: async (
+    _: any,
+    { teamId, hall }: { teamId: string; hall: { name: string; location: string } },
+    context: Context
+  ) => {
+    try {
+      // Najít tým podle teamId
+      const teamQuery = context.db
+        .collection("Team")
+        .where("teamId", "==", teamId);
+
+      const teamSnapshot = await teamQuery.get();
+
+      if (!teamSnapshot.empty) {
+        const teamDoc = teamSnapshot.docs[0];
+
+        // Získat stávající Halls
+        const existingHalls = teamDoc.data().Halls || [];
+
+        // Přidat novou halu do pole Halls
+        const updatedHalls = [...existingHalls, hall];
+
+        // Aktualizovat tým s novým polem Halls
+        await teamDoc.ref.update({ Halls: updatedHalls });
+
+        // Vrátit aktualizovaný tým
+        const updatedTeamQuery = context.db
+          .collection("Team")
+          .where("teamId", "==", teamId);
+
+        const updatedTeamSnapshot = await updatedTeamQuery.get();
+
+        if (!updatedTeamSnapshot.empty) {
+          const updatedTeamData = updatedTeamSnapshot.docs[0].data() as Team;
+
+          return updatedTeamData;
+        }
+      }
+
+      return null;
+    } catch (error) {
+      console.error("Chyba při přidávání haly do týmu:", error);
+      throw error;
+    }
+  },
+
   
 };

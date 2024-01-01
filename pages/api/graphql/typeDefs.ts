@@ -61,6 +61,7 @@ export const typeDefs = gql`
     OwnerName: String!
     OwnerSurname: String!
     TimeCreated: String!
+    
   }
 
   type TeamDetails2 {
@@ -145,6 +146,16 @@ export const typeDefs = gql`
     position: String!
   }
 
+  type Hall {
+    name: String!
+    location: String!
+  }
+
+  input HallInput {
+    name: String!
+    location: String!
+  }
+
   
   type Query {
     user(id: String): User
@@ -208,6 +219,8 @@ export const typeDefs = gql`
       email: String!
       position: String!
     ): Boolean
+    addHallToTeam(teamId: String!, hall: HallInput!): Team
+
   }
 
   
