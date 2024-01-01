@@ -1,4 +1,10 @@
-import { Box, Button, CircularProgress, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Button,
+  CircularProgress,
+  Typography,
+} from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import React, { useState } from "react";
@@ -33,6 +39,7 @@ const GET_COMPLETESUBTEAM_DETAILS = gql`
       subteamMembers {
         name
         surname
+        picture
         email
         role
         position
@@ -58,13 +65,10 @@ const getPositionText = (position: string): string => {
   }
 };
 
-
 interface ContentProps {
   subteamId: string;
   idTeam: string;
 }
-
-
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface SubteamMember {
@@ -72,6 +76,7 @@ interface SubteamMember {
   role: string;
   name: string;
   surname: string;
+  picture: string;
   position: string;
 }
 
@@ -111,8 +116,11 @@ const Content: React.FC<ContentProps> = ({ subteamId, idTeam }) => {
   const subteam = data.getSubteamDetails;
   const subteamComplete = dataComplete.getCompleteSubteamDetail;
 
+ 
+
   const filteredMembers = subteamComplete.subteamMembers.filter(
-    (member: SubteamMember) => member.position == "1" || member.position == "2" || member.position == "3"
+    (member: SubteamMember) =>
+      member.position == "1" || member.position == "2" || member.position == "3"
   );
 
   const renderContent = () => {
@@ -409,6 +417,7 @@ const Content: React.FC<ContentProps> = ({ subteamId, idTeam }) => {
               boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.3)",
               height: "48%",
               marginTop: isSmallView ? "10%" : "0%",
+              
             }}
           >
             <Typography
@@ -417,22 +426,39 @@ const Content: React.FC<ContentProps> = ({ subteamId, idTeam }) => {
                 fontSize: ["0.8rem", "1.1rem", "1.5rem"],
                 marginLeft: ["0.3rem", "0.6rem", "1rem"],
                 fontWeight: "600",
-                marginBottom: "0.5em",
+                marginBottom: "1em",
                 whiteSpace: "nowrap",
               }}
             >
               Realizační tým
             </Typography>
+            <Box sx={{maxHeight:"22em", overflowY:"auto" }}>
             {filteredMembers.map((member: SubteamMember) => (
-              <Box key={member.email}>
-                <Typography>
-                  {member.name} {member.surname}
-                </Typography>
-                <Typography>
-                  Position: {getPositionText( member.position)}
-                </Typography>
+              <Box
+                key={member.email}
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  marginBottom: "1em",
+                  marginLeft: "1em",
+                 
+                }}
+              >
+                <Avatar
+                  sx={{ width: 50, height: 50, marginRight: "1em" }}
+                  alt={member.name[0] + member.surname[0]}
+                  src={member.picture}
+                />
+                <Box>
+                  <Typography sx={{fontWeight:"600"}}>
+                    {member.name} {member.surname}
+                  </Typography>
+                  <Typography sx={{color:"#454545"}}>{getPositionText(member.position)}</Typography>
+                </Box>
               </Box>
             ))}
+            </Box>
+             
           </Box>
         </Box>
       ) : (
@@ -491,10 +517,37 @@ const Content: React.FC<ContentProps> = ({ subteamId, idTeam }) => {
                   marginLeft: "1rem",
                   fontWeight: "600",
                   paddingTop: ["1.4rem", "1rem", "0.5em"],
+                  marginBottom: "2em",
                 }}
               >
                 Realizační tým
               </Typography>
+              <Box sx={{maxHeight:"22em", overflowY:"auto" }}>
+            {filteredMembers.map((member: SubteamMember) => (
+              <Box
+                key={member.email}
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  marginBottom: "1em",
+                  marginLeft: "1em",
+                 
+                }}
+              >
+                <Avatar
+                  sx={{ width: 50, height: 50, marginRight: "1em" }}
+                  alt={member.name[0] + member.surname[0]}
+                  src={member.picture}
+                />
+                <Box>
+                  <Typography sx={{fontWeight:"600"}}>
+                    {member.name} {member.surname}
+                  </Typography>
+                  <Typography sx={{color:"#454545"}}>{getPositionText(member.position)}</Typography>
+                </Box>
+              </Box>
+            ))}
+            </Box>
             </Box>
           </Box>
         </Box>

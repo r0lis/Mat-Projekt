@@ -153,6 +153,7 @@ export const subteamQueries = {
                   name: userData.Name,
                   surname: userData.Surname,
                   email: userData.Email,
+                  picture: userData.Picture,
                   role: member.role,
                   position: member.position,
                 };

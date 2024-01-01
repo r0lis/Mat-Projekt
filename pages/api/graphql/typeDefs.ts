@@ -127,6 +127,7 @@ export const typeDefs = gql`
     name: String
     surname: String
     email: String
+    picture: String
     role: String
     position: String
   }
