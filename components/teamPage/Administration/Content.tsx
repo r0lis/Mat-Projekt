@@ -86,7 +86,6 @@ const Content: React.FC<Props> = (teamId) => {
       </Box>
     );
   if (error || errorDetails) return <Typography>Chyba</Typography>;
-  console.log(error);
 
   const teamDetails = dataDetails.getTeam;
   const teamImage = dataImg.getTeamImg;

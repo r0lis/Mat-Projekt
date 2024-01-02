@@ -193,11 +193,7 @@ const Team: React.FC = () => {
     }
   };
 
- 
-
-
   const isMobile = windowWidth < 600; 
-  console.log(menuOpen);
 
   return (
     <Box sx={{ display: "block", width: "100%", height: "100%" }}>
@@ -302,7 +298,7 @@ const Team: React.FC = () => {
                 </Box>
               ))}
 
-              {showOnlyIcon ? null : (
+              {showOnlyIcon ? null  : (
                 <span
                   style={{
                     fontSize: "1.1em",
@@ -314,6 +310,7 @@ const Team: React.FC = () => {
                     opacity: showOnlyIcon ? 0 : 1,
                     transition: "opacity 0.2s ease 0.2s",
                     cursor: "pointer",
+                    display: isMobile ? "none" : "inline-block",
                   }}
                 >
                   <Typography
