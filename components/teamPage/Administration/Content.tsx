@@ -176,7 +176,7 @@ const Content: React.FC<Props> = (teamId) => {
               }}
               onClick={() => setSelectedButton("hall")}>
             <Typography sx={{ fontFamily: "Roboto", fontWeight: "600", whiteSpace:"nowrap" }}>
-               Haly
+               Sportovní centra
             </Typography>
             </Button>
             </Box>

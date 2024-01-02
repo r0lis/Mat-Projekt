@@ -32,12 +32,19 @@ export type Team = {
   OwnerSurname: string;
   TimeCreated: string;
   Halls?: Hall[];
+  TreningHalls?: TreningHall[];
 };
 
 export type Hall = {
   name: string;
   location: string;
   hallId: string;
+};
+
+export type TreningHall = {
+  name: string;
+  location: string;
+  treningHallId: string;
 };
 
 export type UpdatedMemberInput = {

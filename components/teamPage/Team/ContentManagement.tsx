@@ -144,14 +144,11 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
   const members = dataMembers?.getTeamMembersDetails || [];
 
   useEffect(() => {
-    // Vaše existující useEffect kód
     if (members) {
-      // Filtrujte členy s Role === "1"
       const membersWithRoleOne = members.filter(
         (member) => member.Role === "1"
       );
 
-      // Nastavte membersWithRoleOne do addMembers pole
       setAddMembers(
         membersWithRoleOne.map(({Name,Surname, Email, Role }) => ({
           name: Name,
@@ -162,10 +159,8 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
         }))
       );
 
-      // Zkontrolujte, zda existuje alespoň jeden člen s rolí 1
       setHasRole1(membersWithRoleOne.length > 0);
 
-      // Zkontrolujte, zda existuje alespoň jeden člen s rolí 2 nebo 3
       const hasRole2Or3 = members.some(
         (member) => member.Role === "2" || member.Role === "3"
       );
@@ -189,7 +184,6 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
     if (role === "1") {
       // If Role is "1", do nothing, already handled in useEffect
     } else {
-      // If Role is not "1", toggle the member in addMembers array
       if (memberIndex !== -1) {
         setAddMembers((prevMembers) => [
           ...prevMembers.slice(0, memberIndex),
@@ -236,7 +230,6 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
       return;
     }
 
-    // Validace členů
     if (
       addMembers.length < 2 ||
       addMembers.some((member) => member.position == "0")
@@ -260,8 +253,7 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
     }
 
     try {
-      // Perform your mutation here using createSubteam mutation
-      // Pass teamId and name as variables to the mutation
+     
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const membersWithoutNameAndSurname = addMembers.map(({ name, surname, ...rest }) => rest);
 
@@ -270,18 +262,17 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
           teamId: teamId,
           inputName: name,
           subteamMembers: membersWithoutNameAndSurname,
-        }, // Ensure teamId is a string
+        }, 
       });
 
       setName("");
       setAddMembers([]);
-      setError(null); // Clear any previous errors
+      setError(null); 
       setAddMode(false);
-      setError(null); // Clear any previous errors
+      setError(null); 
       refetch();
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      // Handle the error and set it in the state
       setError(error.message);
     }
   };
@@ -308,7 +299,6 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
   };
 
   const isMobile = window.innerWidth <= 600;
-
 
   return (
     <Box sx={{}}>

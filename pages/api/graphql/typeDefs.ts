@@ -62,6 +62,7 @@ export const typeDefs = gql`
     OwnerSurname: String!
     TimeCreated: String!
     Halls: [Hall]
+    TreningHalls: [TreningHall]
   }
 
   type TeamDetails2 {
@@ -152,7 +153,18 @@ export const typeDefs = gql`
     hallId: String!
   }
 
+  type TreningHall {
+    name: String!
+    location: String!
+    treningHallId: String!
+  }
+
   input HallInput {
+    name: String!
+    location: String!
+  }
+
+  input TreningHallInput {
     name: String!
     location: String!
   }
@@ -181,7 +193,7 @@ export const typeDefs = gql`
     getMissingSubteamMembers(subteamId: String!): [SubteamMember2]
     getTeam(teamId: String!): Team
     getHallsByTeamId(teamId: String!): [Hall]
-
+    getTreningHallsByTeamId(teamId: String!): [TreningHall]
 
   }
 
@@ -224,7 +236,8 @@ export const typeDefs = gql`
     ): Boolean
     addHallToTeam(teamId: String!, hall: HallInput!): Team
     deleteHallFromTeam(teamId: String!, hallId: String!): Team
-
+    addTreningHallToTeam(teamId: String!, treningHall: TreningHallInput!): Team
+    deleteTreningHallFromTeam(teamId: String!, treningHallId: String!): Team
   }
 
   
