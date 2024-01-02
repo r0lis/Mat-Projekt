@@ -159,6 +159,17 @@ export const typeDefs = gql`
     treningHallId: String!
   }
 
+  type Gym {
+    name: String!
+    location: String!
+    gymId: String!
+  }
+
+  input GymInput {
+    name: String!
+    location: String!
+  }
+
   input HallInput {
     name: String!
     location: String!
@@ -194,6 +205,7 @@ export const typeDefs = gql`
     getTeam(teamId: String!): Team
     getHallsByTeamId(teamId: String!): [Hall]
     getTreningHallsByTeamId(teamId: String!): [TreningHall]
+    getGymsByTeamId(teamId: String!): [Gym]
 
   }
 
@@ -238,6 +250,8 @@ export const typeDefs = gql`
     deleteHallFromTeam(teamId: String!, hallId: String!): Team
     addTreningHallToTeam(teamId: String!, treningHall: TreningHallInput!): Team
     deleteTreningHallFromTeam(teamId: String!, treningHallId: String!): Team
+    addGymToTeam(teamId: String!, gym: GymInput!): Team
+    deleteGymFromTeam(teamId: String!, gymId: String!): Team
   }
 
   
@@ -245,6 +259,3 @@ export const typeDefs = gql`
 
 
 `;
-
-
-

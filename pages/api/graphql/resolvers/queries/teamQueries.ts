@@ -15,6 +15,7 @@ import {
   Subteam,
   Hall,
   TreningHall,
+  Gym,
 } from "./../../types";
 import "firebase/storage";
 import * as admin from "firebase-admin";
@@ -380,6 +381,44 @@ export const teamQueries = {
 
             // Optionally, you can process the halls data or return it directly
             return treningHalls;
+          } else {
+            // If no halls are associated, return null
+            return null;
+          }
+        }
+      } catch (error) {
+        console.error("Error getting halls by teamId:", error);
+        throw error;
+      }
+    }
+
+    return null;
+  },
+
+  getGymsByTeamId: async (
+    _: any,
+    { teamId }: { teamId: string },
+    context: Context
+  ) => {
+    if (context.user) {
+      try {
+        // Najít tým podle teamId
+        const teamQuery = context.db
+          .collection("Team")
+          .where("teamId", "==", teamId);
+
+        const teamSnapshot = await teamQuery.get();
+
+        if (!teamSnapshot.empty) {
+          const teamData = teamSnapshot.docs[0].data() as Team;
+
+          // Check if the team has associated halls
+          if (teamData.Gyms) {
+            // Retrieve the list of halls
+            const gyms = teamData.Gyms as Gym[]; // Replace 'Hall' with the actual type of your hall data
+
+            // Optionally, you can process the halls data or return it directly
+            return gyms;
           } else {
             // If no halls are associated, return null
             return null;

@@ -608,6 +608,103 @@ export const teamMutations = {
     }
   },
 
+  addGymToTeam: async (
+    _: any,
+    { teamId, gym }: { teamId: string; gym: { name: string; location: string } },
+    context: Context
+  ) => {
+    try {
+      // Najít tým podle teamId
+      const teamQuery = context.db
+        .collection("Team")
+        .where("teamId", "==", teamId);
+
+      const teamSnapshot = await teamQuery.get();
+
+      if (!teamSnapshot.empty) {
+        const teamDoc = teamSnapshot.docs[0];
+
+        // Získat stávající Halls
+        const existingGyms= teamDoc.data().Gyms || [];
+
+        const gymId =  generateRandomString(30);
+
+        const treningHallWithId = { ...gym, gymId };
+
+        const updatedGyms = [...existingGyms, treningHallWithId];
+
+        // Aktualizovat tým s novým polem Halls
+        await teamDoc.ref.update({ Gyms: updatedGyms });
+
+        // Vrátit aktualizovaný tým
+        const updatedTeamQuery = context.db
+          .collection("Team")
+          .where("teamId", "==", teamId);
+
+        const updatedTeamSnapshot = await updatedTeamQuery.get();
+
+        if (!updatedTeamSnapshot.empty) {
+          const updatedTeamData = updatedTeamSnapshot.docs[0].data() as Team;
+
+          return updatedTeamData;
+        }
+      }
+
+      return null;
+    } catch (error) {
+      console.error("Chyba při přidávání haly do týmu:", error);
+      throw error;
+    }
+  },
+  deleteGymFromTeam: async (
+    _: any,
+    { teamId, gymId }: { teamId: string; gymId: string },
+    context: Context
+  ) => {
+    try {
+      // Find the team by teamId
+      const teamQuery = context.db
+        .collection("Team")
+        .where("teamId", "==", teamId);
+      const teamSnapshot = await teamQuery.get();
+
+      if (!teamSnapshot.empty) {
+        const teamDoc = teamSnapshot.docs[0];
+
+        // Get existing Halls or initialize as an empty array
+        const existingHalls = teamDoc.data().Gyms || [];
+
+        // Filter out the hall with the specified hallId
+        const updatedGyms = existingHalls.filter(
+          (gym: { gymId: string }) => gym.gymId !== gymId
+        );
+
+        // Update the team with the new Halls array
+        await teamDoc.ref.update({ Gyms: updatedGyms });
+
+        // Return the updated team
+        const updatedTeamQuery = context.db
+          .collection("Team")
+          .where("teamId", "==", teamId);
+
+        const updatedTeamSnapshot = await updatedTeamQuery.get();
+
+        if (!updatedTeamSnapshot.empty) {
+          const updatedTeamData = updatedTeamSnapshot.docs[0].data() as Team;
+
+          return updatedTeamData;
+        }
+      }
+
+      return null;
+    } catch (error) {
+      console.error("Error deleting hall from team:", error);
+      throw error;
+    }
+  },
+
+
+
 
  
   

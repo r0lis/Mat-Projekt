@@ -9,6 +9,7 @@ import React, { useState } from "react";
 import { gql, useQuery, useMutation } from "@apollo/client";
 import AddHall from "./AddHall";
 import AddTrainingHall from "./AddTreningHall";
+import AddGym from "./AddGym";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 
 const GET_TEAM_DETAILS = gql`
@@ -73,6 +74,29 @@ const DELETE_HALL = gql`
   }
 `;
 
+const GET_TEAM_GYMS = gql`
+  query GetTeamGyms($teamId: String!) {
+    getGymsByTeamId(teamId: $teamId) {
+      name
+      location
+      gymId
+    }
+  }
+`;
+
+const DELETE_GYM = gql`
+  mutation DeleteGym($teamId: String!, $gymId: String!) {
+    deleteGymFromTeam(teamId: $teamId, gymId: $gymId) {
+      teamId
+      Gyms {
+        name
+        location
+        gymId
+      }
+    }
+  }
+`;
+
 type Hall = {
   name: string;
   location: string;
@@ -85,6 +109,12 @@ type TreningHall = {
   treningHallId: string;
 };
 
+type Gym = {
+  name: string;
+  location: string;
+  gymId: string;
+};
+
 type Props = {
   id: string;
 };
@@ -92,8 +122,10 @@ type Props = {
 const Halls: React.FC<Props> = ({ id }) => {
   const [addHall, setAddHall] = useState(false);
   const[addTreningHall, setAddTreningHall] = useState(false);
+  const[addGym, setAddGym] = useState(false);
   const [infoModalOpen, setInfoModalOpen] = useState(false);
   const [infoModalOpenTrening, setInfoModalOpenTrening] = useState(false);
+  const [infoModalOpenGym, setInfoModalOpenGym] = useState(false);
   const [selectedHall, setSelectedHall] = useState<{
     name: string;
     location: string;
@@ -103,6 +135,11 @@ const Halls: React.FC<Props> = ({ id }) => {
     name: string;
     location: string;
     treningHallId: string;
+  } | null>(null);
+  const [selectedGym, setSelectedGym] = useState<{
+    name: string;
+    location: string;
+    gymId: string;
   } | null>(null);
 
   const {
@@ -145,7 +182,22 @@ const Halls: React.FC<Props> = ({ id }) => {
     ],
   });
 
-  if (loadingDetails || loadingHalls || loadingTrainingHalls)
+  const {
+    loading: loadingGyms,
+    error: errorGyms,
+    data: dataGyms,
+  } = useQuery(GET_TEAM_GYMS, {
+    variables: { teamId: id },
+  });
+
+  const [deleteGymMutation] = useMutation(DELETE_GYM, {
+    refetchQueries: [
+      { query: GET_TEAM_DETAILS, variables: { teamId: id } },
+      { query: GET_TEAM_GYMS, variables: { teamId: id } },
+    ],
+  });
+
+  if (loadingDetails || loadingHalls || loadingTrainingHalls || loadingGyms)
     return (
       <Box
         sx={{
@@ -158,7 +210,7 @@ const Halls: React.FC<Props> = ({ id }) => {
         <CircularProgress color="primary" size={50} />
       </Box>
     );
-  if (errorDetails || errorHalls || errorTrainingHalls) return <Typography>Chyba</Typography>;
+  if (errorDetails || errorHalls || errorTrainingHalls || errorGyms) return <Typography>Chyba</Typography>;
 
   const handleAddHall = () => {
     setAddHall(true);
@@ -220,8 +272,39 @@ const Halls: React.FC<Props> = ({ id }) => {
     }
   };
 
+  const handleAddGym = () => {
+    setAddGym(true);
+  };
+
+  const handleCloseAddGym = () => {
+    setAddGym(false);
+  };
+
+  const handleOpenInfoModalGym = (gym: Gym) => {
+    setSelectedGym(gym);
+    setInfoModalOpenGym(true);
+  };
+
+  const handleCloseInfoModalGym = () => {
+    setSelectedGym(null);
+    setInfoModalOpenGym(false);
+  };
+
+  const handleDeleteGym = async () => {
+    if (selectedGym) {
+      const { gymId } = selectedGym;
+      try {
+        await deleteGymMutation({ variables: { teamId: id, gymId } });
+        handleCloseInfoModalGym();
+      } catch (error) {
+        console.error("Error deleting hall:", error);
+      }
+    }
+  };
+
   const halls: Hall[] | undefined = dataHalls?.getHallsByTeamId;
   const treningHalls: TreningHall[] | undefined = dataTreningHalls?.getTreningHallsByTeamId;
+  const gyms: Gym[] | undefined = dataGyms?.getGymsByTeamId;
 
 
   return (
@@ -334,18 +417,18 @@ const Halls: React.FC<Props> = ({ id }) => {
             </Typography>
           </Box>
           <Box sx={{ marginLeft: "auto", backgroundColor: "#027ef2",  }}>
-            <Button variant="contained" color="primary" onClick={handleAddHall}>
+            <Button variant="contained" color="primary" onClick={handleAddGym}>
               Přidat
             </Button>
           </Box>
         </Box>
-        {addHall ? (
-          <AddHall id={id} onClose={handleCloseAddHall} />
+        {addGym ? (
+          <AddGym id={id} onClose={handleCloseAddGym} />
         ) : (
           <Box sx={{ marginLeft: "2%" }}>
-            {halls && halls.length > 0 ? (
+            {gyms && gyms.length > 0 ? (
               <Box>
-                {halls.map((hall: Hall, index: number) => (
+                {gyms.map((gym: Gym, index: number) => (
                   <Box
                     key={index}
                     sx={{ alignItems: "center", display: "block" }}
@@ -355,26 +438,26 @@ const Halls: React.FC<Props> = ({ id }) => {
                         {" "}
                         <Typography
                           sx={{ fontSize: "1.2em", whiteSpace:"nowrap" }}
-                        >{`Název: ${hall.name} `}</Typography>
+                        >{`Název: ${gym.name} `}</Typography>
                       </Box>
 
                       <InfoOutlinedIcon
                         sx={{ marginLeft: "8px", cursor: "pointer" }}
-                        onClick={() => handleOpenInfoModal(hall)}
+                        onClick={() => handleOpenInfoModalGym(gym)}
                       />
                     </Box>
                   </Box>
                 ))}
               </Box>
             ) : (
-              <Typography>Žádné zápasové haly</Typography>
+              <Typography>Žádné posilovny</Typography>
             )}
           </Box>
         )}
 
         <Modal
-          open={infoModalOpen}
-          onClose={handleCloseInfoModal}
+          open={infoModalOpenGym}
+          onClose={handleCloseInfoModalGym}
           aria-labelledby="info-modal-title"
           aria-describedby="info-modal-description"
         >
@@ -396,15 +479,15 @@ const Halls: React.FC<Props> = ({ id }) => {
           >
             <Box>
               <Typography id="info-modal-title" variant="h6" component="h2">
-                Název: {selectedHall?.name}
+                Název: {selectedGym?.name}
               </Typography>
             </Box>
             <Box sx={{ paddingTop: "1em" }}>
               <Typography id="info-modal-description" sx={{ mt: 2 }}>
-                Umístění: {selectedHall?.location}
+                Umístění: {selectedGym?.location}
               </Typography>
               <Box>
-                <Button onClick={handleDeleteHall}>Smazat</Button>
+                <Button onClick={handleDeleteGym}>Smazat</Button>
               </Box>
             </Box>
           </Box>

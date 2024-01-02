@@ -33,6 +33,7 @@ export type Team = {
   TimeCreated: string;
   Halls?: Hall[];
   TreningHalls?: TreningHall[];
+  Gyms?: Gym[];
 };
 
 export type Hall = {
@@ -45,6 +46,12 @@ export type TreningHall = {
   name: string;
   location: string;
   treningHallId: string;
+};
+
+export type Gym	= {
+  name: string;
+  location: string;
+  gymId: string;
 };
 
 export type UpdatedMemberInput = {
