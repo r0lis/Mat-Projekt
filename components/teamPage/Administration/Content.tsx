@@ -35,9 +35,8 @@ const GET_TEAM_IMG = gql`
   }
 `;
 type Props = {
-    id: string;
-  };
-
+  id: string;
+};
 
 const Content: React.FC<Props> = (teamId) => {
   const [selectedButton, setSelectedButton] = useState("info");
@@ -91,156 +90,292 @@ const Content: React.FC<Props> = (teamId) => {
 
   const teamDetails = dataDetails.getTeam;
   const teamImage = dataImg.getTeamImg;
+  const isMediumWindow = window.innerWidth < 800;
 
   return (
     <Box
       sx={{
         width: "80%",
         boxShadow: "0px 3px 15px rgba(0, 0, 0, 0.3)",
-        borderRadius:"10px",
+        borderRadius: "10px",
         padding: "3%",
         marginTop: "1em",
         marginLeft: "6%",
         marginRight: "5%",
       }}
     >
-     
-        <Box>
-          <Box sx={{ display: "flex",  }}>
-            <Box>
-              <Typography
-                sx={{
-                  fontFamily: "Roboto",
-                  fontWeight: "600",
-                  fontSize: "2rem",
-                }}
-              >
-                {teamDetails.Name}
-              </Typography>
-            </Box>
-            <Box sx={{ marginLeft: "auto", marginRight: "5%" }}>
-              <Avatar
-                sx={{
-                  height: "6em",
-                  width: "6em",
-                  boxShadow: "0px 3px 15px rgba(0, 0, 0, 0.3)",
-                  
-                }}
-                src={teamImage}
-                alt="Team Image"
-              />
-            </Box>
-          </Box>
-          <Box sx={{display:"flex", backgroundColor:"#c2c3c4", marginTop:"1.5em", paddingLeft:"2%", paddingRight:"2%", borderRadius:"10px", marginBottom:"0.5em" }}>
-            <Box>
-            <Button
-            style={{
-                backgroundColor:
-                  selectedButton === "info" ? "white" : "#F0F2F5",
-                border:
-                  selectedButton === "info" ? "2px solid black" : "",
-                boxShadow:
-                  selectedButton === "info"
-                    ? "0px 0px 8px rgba(0, 0, 0, 0.6)"
-                    : "0px 0px 0px rgba(0, 0, 0, 0.2)",
-                marginRight: "2em",
-                color: "black",
+      <Box>
+        <Box sx={{ display: "flex" }}>
+          <Box>
+            <Typography
+              sx={{
                 fontFamily: "Roboto",
-                marginTop: "0.5em",
-                marginBottom: "0.5em",
+                fontWeight: "600",
+                fontSize: "2rem",
               }}
-              onClick={() => setSelectedButton("info")}
             >
-            <Typography sx={{ fontFamily: "Roboto", fontWeight: "600" }}>
-              Informace
+              {teamDetails.Name}
             </Typography>
-            </Button>
-            </Box>
-            <Box>
-            <Button
-             style={{
-                backgroundColor:
-                  selectedButton === "hall" ? "white" : "#F0F2F5",
-                border:
-                  selectedButton === "hall" ? "2px solid black" : "",
-                boxShadow:
-                  selectedButton === "hall"
-                    ? "0px 0px 8px rgba(0, 0, 0, 0.6)"
-                    : "0px 0px 0px rgba(0, 0, 0, 0.2)",
-                marginRight: "2em",
-                color: "black",
-                fontFamily: "Roboto",
-                marginLeft: "5%",
-                marginTop: "0.5em",
-                marginBottom: "0.5em",
-              }}
-              onClick={() => setSelectedButton("hall")}>
-            <Typography sx={{ fontFamily: "Roboto", fontWeight: "600", whiteSpace:"nowrap" }}>
-               Sportovní centra
-            </Typography>
-            </Button>
-            </Box>
-            <Box>
-            <Button
-             style={{
-                backgroundColor:
-                  selectedButton === "contacts" ? "white" : "#F0F2F5",
-                border:
-                  selectedButton === "contacts" ? "2px solid black" : "",
-                boxShadow:
-                  selectedButton === "contacts"
-                    ? "0px 0px 8px rgba(0, 0, 0, 0.6)"
-                    : "0px 0px 0px rgba(0, 0, 0, 0.2)",
-                marginRight: "2em",
-                color: "black",
-                fontFamily: "Roboto",
-                marginLeft: "5%",
-                marginTop: "0.5em",
-                marginBottom: "0.5em",
-              }}
-              onClick={() => setSelectedButton("contacts")}>
-            <Typography sx={{ fontFamily: "Roboto", fontWeight: "600" }}>
-              Kontakty
-            </Typography>
-            </Button>
-            </Box>
-            <Box>
-            <Button
-               style={{
-                backgroundColor:
-                  selectedButton === "edit" ? "white" : "#F0F2F5",
-                border:
-                  selectedButton === "edit" ? "2px solid black" : "",
-                boxShadow:
-                  selectedButton === "edit"
-                    ? "0px 0px 8px rgba(0, 0, 0, 0.6)"
-                    : "0px 0px 0px rgba(0, 0, 0, 0.2)",
-                marginRight: "2em",
-                color: "black",
-                fontFamily: "Roboto",
-                marginLeft: "5%",
-                marginTop: "0.5em",
-                marginBottom: "0.5em",
-              }}
-              onClick={() => setSelectedButton("edit")}
-            >
-               <Typography sx={{ fontFamily: "Roboto", fontWeight: "600" }}>
-              Upravit
-            </Typography>
-            </Button>
-            </Box>
           </Box>
+          <Box sx={{ marginLeft: "auto", marginRight: "5%" }}>
+            <Avatar
+              sx={{
+                height: "6em",
+                width: "6em",
+                boxShadow: "0px 3px 15px rgba(0, 0, 0, 0.3)",
+              }}
+              src={teamImage}
+              alt="Team Image"
+            />
+          </Box>
+        </Box>
+        {isMediumWindow ? (
           <Box
             sx={{
-              borderBottom: "3px solid gray",
-              width: "100%",
-              position: "relative",
-              marginTop: "0.5em",
+              display: "block",
+              backgroundColor: "#c2c3c4",
+              marginTop: "1.5em",
+              paddingLeft: "2%",
+              paddingRight: "2%",
+              borderRadius: "10px",
+              marginBottom: "0.5em",
             }}
-          ></Box>
-          {renderContent()}
-        </Box>
-     
+          >
+            <Box sx={{ display: "flex" }}>
+            <Box>
+              <Button
+                style={{
+                  backgroundColor:
+                    selectedButton === "info" ? "white" : "#F0F2F5",
+                  border: selectedButton === "info" ? "2px solid black" : "",
+                  boxShadow:
+                    selectedButton === "info"
+                      ? "0px 0px 8px rgba(0, 0, 0, 0.6)"
+                      : "0px 0px 0px rgba(0, 0, 0, 0.2)",
+                  marginRight: "2em",
+                  color: "black",
+                  fontFamily: "Roboto",
+                  marginTop: "0.5em",
+                  minWidth: "8em",
+                  marginBottom: "0.5em",
+                }}
+                onClick={() => setSelectedButton("info")}
+              >
+                <Typography sx={{ fontFamily: "Roboto", fontWeight: "600" }}>
+                  Informace
+                </Typography>
+              </Button>
+            </Box>
+            <Box>
+              <Button
+                style={{
+                  backgroundColor:
+                    selectedButton === "hall" ? "white" : "#F0F2F5",
+                  border: selectedButton === "hall" ? "2px solid black" : "",
+                  boxShadow:
+                    selectedButton === "hall"
+                      ? "0px 0px 8px rgba(0, 0, 0, 0.6)"
+                      : "0px 0px 0px rgba(0, 0, 0, 0.2)",
+                  marginRight: "2em",
+                  color: "black",
+                  fontFamily: "Roboto",
+                  minWidth: "8em",
+                  marginTop: "0.5em",
+                  marginBottom: "0.5em",
+                }}
+                onClick={() => setSelectedButton("hall")}
+              >
+                <Typography
+                  sx={{
+                    fontFamily: "Roboto",
+                    fontWeight: "600",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  Sportovní centra
+                </Typography>
+              </Button>
+            </Box>
+            </Box>
+            <Box sx={{ display: "flex" }}>
+            <Box>
+              <Button
+                style={{
+                  backgroundColor:
+                    selectedButton === "contacts" ? "white" : "#F0F2F5",
+                  border:
+                    selectedButton === "contacts" ? "2px solid black" : "",
+                  boxShadow:
+                    selectedButton === "contacts"
+                      ? "0px 0px 8px rgba(0, 0, 0, 0.6)"
+                      : "0px 0px 0px rgba(0, 0, 0, 0.2)",
+                  marginRight: "2em",
+                  color: "black",
+                  fontFamily: "Roboto",
+                  marginTop: "0.5em",
+                  marginBottom: "0.5em",
+                  minWidth: "8em",
+                }}
+                onClick={() => setSelectedButton("contacts")}
+              >
+                <Typography sx={{ fontFamily: "Roboto", fontWeight: "600" }}>
+                  Kontakty
+                </Typography>
+              </Button>
+            </Box>
+            <Box>
+              <Button
+                style={{
+                  backgroundColor:
+                    selectedButton === "edit" ? "white" : "#F0F2F5",
+                  border: selectedButton === "edit" ? "2px solid black" : "",
+                  boxShadow:
+                    selectedButton === "edit"
+                      ? "0px 0px 8px rgba(0, 0, 0, 0.6)"
+                      : "0px 0px 0px rgba(0, 0, 0, 0.2)",
+                  marginRight: "2em",
+                  color: "black",
+                  fontFamily: "Roboto",
+                  marginTop: "0.5em",
+                  marginBottom: "0.5em",
+                  minWidth: "8em",
+                }}
+                onClick={() => setSelectedButton("edit")}
+              >
+                <Typography sx={{ fontFamily: "Roboto", fontWeight: "600" }}>
+                  Upravit
+                </Typography>
+              </Button>
+            </Box>
+            </Box>
+          </Box>
+        ) : (
+          <Box
+            sx={{
+              display: "flex",
+              backgroundColor: "#c2c3c4",
+              marginTop: "1.5em",
+              paddingLeft: "2%",
+              paddingRight: "2%",
+              borderRadius: "10px",
+              marginBottom: "0.5em",
+            }}
+          >
+            <Box>
+              <Button
+                style={{
+                  backgroundColor:
+                    selectedButton === "info" ? "white" : "#F0F2F5",
+                  border: selectedButton === "info" ? "2px solid black" : "",
+                  boxShadow:
+                    selectedButton === "info"
+                      ? "0px 0px 8px rgba(0, 0, 0, 0.6)"
+                      : "0px 0px 0px rgba(0, 0, 0, 0.2)",
+                  marginRight: "2em",
+                  color: "black",
+                  fontFamily: "Roboto",
+                  marginTop: "0.5em",
+                  marginBottom: "0.5em",
+                }}
+                onClick={() => setSelectedButton("info")}
+              >
+                <Typography sx={{ fontFamily: "Roboto", fontWeight: "600" }}>
+                  Informace
+                </Typography>
+              </Button>
+            </Box>
+            <Box>
+              <Button
+                style={{
+                  backgroundColor:
+                    selectedButton === "hall" ? "white" : "#F0F2F5",
+                  border: selectedButton === "hall" ? "2px solid black" : "",
+                  boxShadow:
+                    selectedButton === "hall"
+                      ? "0px 0px 8px rgba(0, 0, 0, 0.6)"
+                      : "0px 0px 0px rgba(0, 0, 0, 0.2)",
+                  marginRight: "2em",
+                  color: "black",
+                  fontFamily: "Roboto",
+                  marginLeft: "5%",
+                  marginTop: "0.5em",
+                  marginBottom: "0.5em",
+                }}
+                onClick={() => setSelectedButton("hall")}
+              >
+                <Typography
+                  sx={{
+                    fontFamily: "Roboto",
+                    fontWeight: "600",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  Sportovní centra
+                </Typography>
+              </Button>
+            </Box>
+            <Box>
+              <Button
+                style={{
+                  backgroundColor:
+                    selectedButton === "contacts" ? "white" : "#F0F2F5",
+                  border:
+                    selectedButton === "contacts" ? "2px solid black" : "",
+                  boxShadow:
+                    selectedButton === "contacts"
+                      ? "0px 0px 8px rgba(0, 0, 0, 0.6)"
+                      : "0px 0px 0px rgba(0, 0, 0, 0.2)",
+                  marginRight: "2em",
+                  color: "black",
+                  fontFamily: "Roboto",
+                  marginLeft: "5%",
+                  marginTop: "0.5em",
+                  marginBottom: "0.5em",
+                }}
+                onClick={() => setSelectedButton("contacts")}
+              >
+                <Typography sx={{ fontFamily: "Roboto", fontWeight: "600" }}>
+                  Kontakty
+                </Typography>
+              </Button>
+            </Box>
+            <Box>
+              <Button
+                style={{
+                  backgroundColor:
+                    selectedButton === "edit" ? "white" : "#F0F2F5",
+                  border: selectedButton === "edit" ? "2px solid black" : "",
+                  boxShadow:
+                    selectedButton === "edit"
+                      ? "0px 0px 8px rgba(0, 0, 0, 0.6)"
+                      : "0px 0px 0px rgba(0, 0, 0, 0.2)",
+                  marginRight: "2em",
+                  color: "black",
+                  fontFamily: "Roboto",
+                  marginLeft: "5%",
+                  marginTop: "0.5em",
+                  marginBottom: "0.5em",
+                }}
+                onClick={() => setSelectedButton("edit")}
+              >
+                <Typography sx={{ fontFamily: "Roboto", fontWeight: "600" }}>
+                  Upravit
+                </Typography>
+              </Button>
+            </Box>
+          </Box>
+        )}
+
+        <Box
+          sx={{
+            borderBottom: "3px solid gray",
+            width: "100%",
+            position: "relative",
+            marginTop: "0.5em",
+          }}
+        ></Box>
+        {renderContent()}
+      </Box>
     </Box>
   );
 };
