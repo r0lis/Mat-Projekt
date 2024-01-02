@@ -63,6 +63,7 @@ export const typeDefs = gql`
     TimeCreated: String!
     Halls: [Hall]
     TreningHalls: [TreningHall]
+    Gyms: [Gym]
   }
 
   type TeamDetails2 {

@@ -4,6 +4,10 @@ import {
   CircularProgress,
   Typography,
   Modal,
+  List,
+  ListItemIcon,
+  ListItem,
+  ListItemText,
 } from "@mui/material";
 import React, { useState } from "react";
 import { gql, useQuery, useMutation } from "@apollo/client";
@@ -121,8 +125,8 @@ type Props = {
 
 const Halls: React.FC<Props> = ({ id }) => {
   const [addHall, setAddHall] = useState(false);
-  const[addTreningHall, setAddTreningHall] = useState(false);
-  const[addGym, setAddGym] = useState(false);
+  const [addTreningHall, setAddTreningHall] = useState(false);
+  const [addGym, setAddGym] = useState(false);
   const [infoModalOpen, setInfoModalOpen] = useState(false);
   const [infoModalOpenTrening, setInfoModalOpenTrening] = useState(false);
   const [infoModalOpenGym, setInfoModalOpenGym] = useState(false);
@@ -166,14 +170,13 @@ const Halls: React.FC<Props> = ({ id }) => {
     ],
   });
 
-  const{
+  const {
     loading: loadingTrainingHalls,
     error: errorTrainingHalls,
     data: dataTreningHalls,
   } = useQuery(GET_TEAM_TRENING_HALLS, {
     variables: { teamId: id },
   });
-  
 
   const [deleteTreningHallMutation] = useMutation(DELETE_TRENING_HALL, {
     refetchQueries: [
@@ -210,7 +213,8 @@ const Halls: React.FC<Props> = ({ id }) => {
         <CircularProgress color="primary" size={50} />
       </Box>
     );
-  if (errorDetails || errorHalls || errorTrainingHalls || errorGyms) return <Typography>Chyba</Typography>;
+  if (errorDetails || errorHalls || errorTrainingHalls || errorGyms)
+    return <Typography>Chyba</Typography>;
 
   const handleAddHall = () => {
     setAddHall(true);
@@ -264,7 +268,9 @@ const Halls: React.FC<Props> = ({ id }) => {
     if (selectedTreningHall) {
       const { treningHallId } = selectedTreningHall;
       try {
-        await deleteTreningHallMutation({ variables: { teamId: id, treningHallId } });
+        await deleteTreningHallMutation({
+          variables: { teamId: id, treningHallId },
+        });
         handleCloseInfoModalTrening();
       } catch (error) {
         console.error("Error deleting hall:", error);
@@ -303,15 +309,20 @@ const Halls: React.FC<Props> = ({ id }) => {
   };
 
   const halls: Hall[] | undefined = dataHalls?.getHallsByTeamId;
-  const treningHalls: TreningHall[] | undefined = dataTreningHalls?.getTreningHallsByTeamId;
+  const treningHalls: TreningHall[] | undefined =
+    dataTreningHalls?.getTreningHallsByTeamId;
   const gyms: Gym[] | undefined = dataGyms?.getGymsByTeamId;
 
   const isSmallWindow = window.innerWidth < 1200;
 
-
   return (
-    <Box sx={{ display: isSmallWindow ? "block" : "flex", marginTop:"0.5em" }}>
-      <Box sx={{marginLeft: isSmallWindow ? "0" :"auto", marginRight: isSmallWindow? "" : "auto"}}>
+    <Box sx={{ display: isSmallWindow ? "block" : "flex", marginTop: "0.5em" }}>
+      <Box
+        sx={{
+          marginLeft: isSmallWindow ? "0" : "",
+          marginRight: isSmallWindow ? "" : "auto",
+        }}
+      >
         <Box
           sx={{
             display: "flex",
@@ -321,44 +332,54 @@ const Halls: React.FC<Props> = ({ id }) => {
             width: "18em",
           }}
         >
-          <Box>
-            <Typography sx={{ fontWeight: "500" }} variant="h5">
-              Zápasové haly
-            </Typography>
-          </Box>
-          <Box sx={{ marginLeft: "auto", backgroundColor: "#027ef2",  }}>
-            <Button variant="contained" color="primary" onClick={handleAddHall}>
-              Přidat
-            </Button>
+          <Box sx={{ display: "flex", width: "100%" }}>
+            <Box>
+              <Typography
+                sx={{ fontWeight: "500", whiteSpace: "nowrap" }}
+                variant="h5"
+              >
+                Zápasové haly
+              </Typography>
+            </Box>
+            <Box sx={{ marginLeft: isSmallWindow ? "20%" : "10%", display: addHall ? "none":"" }}>
+              <Button
+                sx={{ backgroundColor: "#027ef2" }}
+                variant="contained"
+                color="primary"
+                onClick={handleAddHall}
+              >
+                Přidat
+              </Button>
+            </Box>
           </Box>
         </Box>
         {addHall ? (
           <AddHall id={id} onClose={handleCloseAddHall} />
         ) : (
-          <Box sx={{ marginLeft: "2%" }}>
+          <Box sx={{ marginLeft: "2%", marginTop: "0.5em" }}>
             {halls && halls.length > 0 ? (
-              <Box>
+              <List>
                 {halls.map((hall: Hall, index: number) => (
-                  <Box
+                  <ListItem
                     key={index}
-                    sx={{ alignItems: "center", display: "block" }}
+                    button
+                    onClick={() => handleOpenInfoModal(hall)}
                   >
-                    <Box sx={{ display: "flex" }}>
-                      <Box>
-                        {" "}
+                    <ListItemText
+                      primary={
                         <Typography
-                          sx={{ fontSize: "1.2em", whiteSpace:"nowrap" }}
-                        >{`Název: ${hall.name} `}</Typography>
-                      </Box>
-
-                      <InfoOutlinedIcon
-                        sx={{ marginLeft: "8px", cursor: "pointer" }}
-                        onClick={() => handleOpenInfoModal(hall)}
-                      />
-                    </Box>
-                  </Box>
+                          sx={{ fontSize: "1.2em", whiteSpace: "nowrap" }}
+                        >
+                          {`Název: ${hall.name} `}
+                        </Typography>
+                      }
+                    />
+                    <ListItemIcon>
+                      <InfoOutlinedIcon sx={{ cursor: "pointer" }} />
+                    </ListItemIcon>
+                  </ListItem>
                 ))}
-              </Box>
+              </List>
             ) : (
               <Typography>Žádné zápasové haly</Typography>
             )}
@@ -403,7 +424,12 @@ const Halls: React.FC<Props> = ({ id }) => {
           </Box>
         </Modal>
       </Box>
-      <Box sx={{marginLeft: isSmallWindow ? "0" :"auto", marginRight: isSmallWindow? "" : "auto"}}>
+      <Box
+        sx={{
+          marginLeft: isSmallWindow ? "0" : "auto",
+          marginRight: isSmallWindow ? "" : "auto",
+        }}
+      >
         <Box
           sx={{
             display: "flex",
@@ -413,44 +439,53 @@ const Halls: React.FC<Props> = ({ id }) => {
             width: "18em",
           }}
         >
-          <Box>
-            <Typography sx={{ fontWeight: "500" }} variant="h5">
-              Posilovny 
-            </Typography>
-          </Box>
-          <Box sx={{ marginLeft: "auto", backgroundColor: "#027ef2",  }}>
-            <Button variant="contained" color="primary" onClick={handleAddGym}>
-              Přidat
-            </Button>
+          <Box sx={{ display: "flex", width: "100%" }}>
+            <Box>
+              <Typography sx={{ fontWeight: "500" }} variant="h5">
+                Posilovny
+              </Typography>
+            </Box>
+            <Box sx={{ marginLeft: isSmallWindow ? "20%" : "30%", display: addGym ? "none":"" }}>
+              <Button
+                sx={{ backgroundColor: "#027ef2" }}
+                variant="contained"
+                color="primary"
+                onClick={handleAddGym}
+              >
+                Přidat
+              </Button>
+            </Box>
           </Box>
         </Box>
         {addGym ? (
           <AddGym id={id} onClose={handleCloseAddGym} />
         ) : (
-          <Box sx={{ marginLeft: "2%" }}>
+          <Box
+            sx={{ marginLeft: isSmallWindow ? "3%" : "", marginTop: "0.5em" }}
+          >
             {gyms && gyms.length > 0 ? (
-              <Box>
+              <List>
                 {gyms.map((gym: Gym, index: number) => (
-                  <Box
+                  <ListItem
                     key={index}
-                    sx={{ alignItems: "center", display: "block" }}
+                    button
+                    onClick={() => handleOpenInfoModalGym(gym)}
                   >
-                    <Box sx={{ display: "flex" }}>
-                      <Box>
-                        {" "}
+                    <ListItemText
+                      primary={
                         <Typography
-                          sx={{ fontSize: "1.2em", whiteSpace:"nowrap" }}
-                        >{`Název: ${gym.name} `}</Typography>
-                      </Box>
-
-                      <InfoOutlinedIcon
-                        sx={{ marginLeft: "8px", cursor: "pointer" }}
-                        onClick={() => handleOpenInfoModalGym(gym)}
-                      />
-                    </Box>
-                  </Box>
+                          sx={{ fontSize: "1.2em", whiteSpace: "nowrap" }}
+                        >
+                          {`Název: ${gym.name} `}
+                        </Typography>
+                      }
+                    />
+                    <ListItemIcon>
+                      <InfoOutlinedIcon sx={{ cursor: "pointer" }} />
+                    </ListItemIcon>
+                  </ListItem>
                 ))}
-              </Box>
+              </List>
             ) : (
               <Typography>Žádné posilovny</Typography>
             )}
@@ -495,7 +530,12 @@ const Halls: React.FC<Props> = ({ id }) => {
           </Box>
         </Modal>
       </Box>
-      <Box sx={{marginLeft: isSmallWindow ? "0" :"auto", marginRight: isSmallWindow? "" : "auto"}}>
+      <Box
+        sx={{
+          marginLeft: isSmallWindow ? "0" : "auto",
+          marginRight: isSmallWindow ? "" : "",
+        }}
+      >
         <Box
           sx={{
             display: "flex",
@@ -505,44 +545,60 @@ const Halls: React.FC<Props> = ({ id }) => {
             width: "18em",
           }}
         >
-          <Box>
-            <Typography sx={{ fontWeight: "500" }} variant="h5">
-              Treninkové haly
-            </Typography>
-          </Box>
-          <Box sx={{ marginLeft: "auto", backgroundColor: "#027ef2",  }}>
-            <Button variant="contained" color="primary" onClick={handleAddTreningHall}>
-              Přidat
-            </Button>
+          <Box sx={{ display: "flex", width: "100%" }}>
+            <Box>
+              <Typography
+                sx={{ fontWeight: "500", whiteSpace: "nowrap" }}
+                variant="h5"
+              >
+                Treninkové haly
+              </Typography>
+            </Box>
+            <Box sx={{ marginLeft: isSmallWindow ? "auto" : "10%",  display: addTreningHall ? "none":"" }}>
+              <Button
+                sx={{ backgroundColor: "#027ef2" }}
+                variant="contained"
+                color="primary"
+                onClick={handleAddTreningHall}
+              >
+                Přidat
+              </Button>
+            </Box>
           </Box>
         </Box>
         {addTreningHall ? (
           <AddTrainingHall id={id} onClose={handleCloseAddTreningHall} />
         ) : (
-          <Box sx={{ marginLeft: "2%" }}>
+          <Box
+            sx={{
+              marginLeft: isSmallWindow ? "3%" : "",
+              marginTop: "0.5em",
+              boxShadow: "",
+            }}
+          >
             {treningHalls && treningHalls.length > 0 ? (
-              <Box>
-                {treningHalls.map((treningHalls: TreningHall, index: number) => (
-                  <Box
+              <List>
+                {treningHalls.map((treningHall: TreningHall, index: number) => (
+                  <ListItem
                     key={index}
-                    sx={{ alignItems: "center", display: "block" }}
+                    button
+                    onClick={() => handleOpenInfoModalTrening(treningHall)}
                   >
-                    <Box sx={{ display: "flex" }}>
-                      <Box>
-                        {" "}
+                    <ListItemText
+                      primary={
                         <Typography
-                          sx={{ fontSize: "1.2em", whiteSpace:"nowrap" }}
-                        >{`Název: ${treningHalls.name} `}</Typography>
-                      </Box>
-
-                      <InfoOutlinedIcon
-                        sx={{ marginLeft: "8px", cursor: "pointer" }}
-                        onClick={() => handleOpenInfoModalTrening(treningHalls)}
-                      />
-                    </Box>
-                  </Box>
+                          sx={{ fontSize: "1.2em", whiteSpace: "nowrap" }}
+                        >
+                          {`Název: ${treningHall.name} `}
+                        </Typography>
+                      }
+                    />
+                    <ListItemIcon>
+                      <InfoOutlinedIcon sx={{ cursor: "pointer" }} />
+                    </ListItemIcon>
+                  </ListItem>
                 ))}
-              </Box>
+              </List>
             ) : (
               <Typography>Žádné treninkové haly</Typography>
             )}
