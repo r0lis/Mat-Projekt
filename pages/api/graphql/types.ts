@@ -37,6 +37,7 @@ export type Team = {
 export type Hall = {
   name: string;
   location: string;
+  hallId: string;
 };
 
 export type UpdatedMemberInput = {

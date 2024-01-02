@@ -437,8 +437,11 @@ export const teamMutations = {
         // Získat stávající Halls
         const existingHalls = teamDoc.data().Halls || [];
 
-        // Přidat novou halu do pole Halls
-        const updatedHalls = [...existingHalls, hall];
+        const hallId =  generateRandomString(30);
+
+        const hallWithId = { ...hall, hallId };
+
+        const updatedHalls = [...existingHalls, hallWithId];
 
         // Aktualizovat tým s novým polem Halls
         await teamDoc.ref.update({ Halls: updatedHalls });
@@ -464,5 +467,6 @@ export const teamMutations = {
     }
   },
 
+ 
   
 };

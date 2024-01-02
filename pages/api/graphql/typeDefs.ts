@@ -149,6 +149,7 @@ export const typeDefs = gql`
   type Hall {
     name: String!
     location: String!
+    hallId: String!
   }
 
   input HallInput {

@@ -1,8 +1,14 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { Box, Button, CircularProgress, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Typography,
+  Modal,
+} from "@mui/material";
 import React, { useState } from "react";
 import { gql, useQuery } from "@apollo/client";
 import AddHall from "./AddHall";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 
 const GET_TEAM_DETAILS = gql`
   query GetTeam($teamId: String!) {
@@ -21,13 +27,20 @@ const GET_TEAM_DETAILS = gql`
 `;
 
 const GET_TEAM_HALLS = gql`
-query GetTeamHalls($teamId: String!) {
-  getHallsByTeamId(teamId: $teamId) {
-    name
-    location
+  query GetTeamHalls($teamId: String!) {
+    getHallsByTeamId(teamId: $teamId) {
+      name
+      location
+      hallId
+    }
   }
-}
 `;
+
+type Hall = {
+  name: string;
+  location: string;
+  hallId: string;
+};
 
 type Props = {
   id: string;
@@ -35,6 +48,13 @@ type Props = {
 
 const Halls: React.FC<Props> = ({ id }) => {
   const [addHall, setAddHall] = useState(false);
+  const [infoModalOpen, setInfoModalOpen] = useState(false);
+  const [selectedHall, setSelectedHall] = useState<{
+    name: string;
+    location: string;
+    hallId: string;
+  } | null>(null);
+
   const {
     loading: loadingDetails,
     error: errorDetails,
@@ -75,38 +95,92 @@ const Halls: React.FC<Props> = ({ id }) => {
     setAddHall(false);
   };
 
-  const halls = dataHalls?.getHallsByTeamId; 
+  const handleOpenInfoModal = (hall: Hall) => {
+    setSelectedHall(hall);
+    setInfoModalOpen(true);
+  };
+
+  const handleCloseInfoModal = () => {
+    setSelectedHall(null);
+    setInfoModalOpen(false);
+  };
+
+  const halls = dataHalls?.getHallsByTeamId;
 
   return (
     <Box>
-      <Box>
-        <Typography variant="h5">Haly</Typography>
+      <Box
+        sx={{
+          display: "flex",
+          marginTop: "0.5em",
+          marginRight: "2%",
+          marginLeft: "2%",
+        }}
+      >
+        <Box>
+          <Typography sx={{ fontWeight: "500" }} variant="h5">
+            Haly
+          </Typography>
+        </Box>
+        <Box sx={{ marginLeft: "auto", backgroundColor: "#027ef2" }}>
+          <Button variant="contained" color="primary" onClick={handleAddHall}>
+            Přidat
+          </Button>
+        </Box>
       </Box>
       {addHall ? (
         <AddHall id={id} onClose={handleCloseAddHall} />
       ) : (
-        <Box>
+        <Box sx={{ marginLeft: "2%" }}>
           {halls !== null ? (
             <Box>
-              {halls.map(
-                (
-                  hall: { name: any; location: any },
-                  index: React.Key | null | undefined
-                ) => (
-                  <div key={index}>
-                    <Typography>{`Název: ${hall.name}, Umístění: ${hall.location}`}</Typography>
-                  </div>
-                )
-              )}
+              {halls.map((hall: Hall, index: number) => (
+                <Box key={index} sx={{ display: "flex", alignItems: "center" }}>
+                  <Typography
+                    sx={{ fontSize: "1.2em" }}
+                  >{`Název: ${hall.name} `}</Typography>
+                  <InfoOutlinedIcon
+                    sx={{ marginLeft: "8px", cursor: "pointer" }}
+                    onClick={() => handleOpenInfoModal(hall)}
+                  />
+                </Box>
+              ))}
             </Box>
           ) : (
             <Typography>Žádné haly</Typography>
           )}
-          <Button variant="outlined" color="primary" onClick={handleAddHall}>
-            Přidat
-          </Button>
         </Box>
       )}
+
+      <Modal
+        open={infoModalOpen}
+        onClose={handleCloseInfoModal}
+        aria-labelledby="info-modal-title"
+        aria-describedby="info-modal-description"
+      >
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: 400,
+            bgcolor: "background.paper",
+            boxShadow: 24,
+            p: 4,
+          }}
+        >
+          <Typography id="info-modal-title" variant="h6" component="h2">
+            Název: {selectedHall?.name}
+          </Typography>
+          <Typography id="info-modal-description" sx={{ mt: 2 }}>
+            Umístění: {selectedHall?.location}
+          </Typography>
+          <Typography sx={{ mt: 2 }}>
+            {selectedHall?.hallId}
+          </Typography>
+        </Box>
+      </Modal>
     </Box>
   );
 };
