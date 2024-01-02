@@ -307,17 +307,16 @@ const Halls: React.FC<Props> = ({ id }) => {
   const gyms: Gym[] | undefined = dataGyms?.getGymsByTeamId;
 
   const isSmallWindow = window.innerWidth < 1200;
-  const isMediumWindow = window.innerWidth < 800;
 
 
   return (
     <Box sx={{ display: isSmallWindow ? "block" : "flex", marginTop:"0.5em" }}>
-      <Box>
+      <Box sx={{marginLeft: isSmallWindow ? "0" :"auto", marginRight: isSmallWindow? "" : "auto"}}>
         <Box
           sx={{
             display: "flex",
             marginTop: "0.5em",
-            marginRight: "auto",
+            marginRight: "4%",
             marginLeft: "2%",
             width: "18em",
           }}
@@ -404,7 +403,7 @@ const Halls: React.FC<Props> = ({ id }) => {
           </Box>
         </Modal>
       </Box>
-      <Box sx={{marginLeft: isSmallWindow ? "0" :"2em"}}>
+      <Box sx={{marginLeft: isSmallWindow ? "0" :"auto", marginRight: isSmallWindow? "" : "auto"}}>
         <Box
           sx={{
             display: "flex",
@@ -496,7 +495,7 @@ const Halls: React.FC<Props> = ({ id }) => {
           </Box>
         </Modal>
       </Box>
-      <Box sx={{marginLeft: isSmallWindow ? "0" :"2em"}}>
+      <Box sx={{marginLeft: isSmallWindow ? "0" :"auto", marginRight: isSmallWindow? "" : "auto"}}>
         <Box
           sx={{
             display: "flex",
