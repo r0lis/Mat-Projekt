@@ -100,6 +100,7 @@ const Content: React.FC<Props> = (teamId) => {
         padding: "3%",
         marginTop: "1em",
         marginLeft: "6%",
+        marginBottom: "2em",
         marginRight: "5%",
       }}
     >
