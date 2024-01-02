@@ -466,6 +466,53 @@ export const teamMutations = {
       throw error;
     }
   },
+  deleteHallFromTeam: async (
+    _: any,
+    { teamId, hallId }: { teamId: string; hallId: string },
+    context: Context
+  ) => {
+    try {
+      // Find the team by teamId
+      const teamQuery = context.db
+        .collection("Team")
+        .where("teamId", "==", teamId);
+      const teamSnapshot = await teamQuery.get();
+
+      if (!teamSnapshot.empty) {
+        const teamDoc = teamSnapshot.docs[0];
+
+        // Get existing Halls or initialize as an empty array
+        const existingHalls = teamDoc.data().Halls || [];
+
+        // Filter out the hall with the specified hallId
+        const updatedHalls = existingHalls.filter(
+          (hall: { hallId: string }) => hall.hallId !== hallId
+        );
+
+        // Update the team with the new Halls array
+        await teamDoc.ref.update({ Halls: updatedHalls });
+
+        // Return the updated team
+        const updatedTeamQuery = context.db
+          .collection("Team")
+          .where("teamId", "==", teamId);
+
+        const updatedTeamSnapshot = await updatedTeamQuery.get();
+
+        if (!updatedTeamSnapshot.empty) {
+          const updatedTeamData = updatedTeamSnapshot.docs[0].data() as Team;
+
+          return updatedTeamData;
+        }
+      }
+
+      return null;
+    } catch (error) {
+      console.error("Error deleting hall from team:", error);
+      throw error;
+    }
+  },
+
 
  
   

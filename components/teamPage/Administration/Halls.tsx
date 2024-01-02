@@ -6,7 +6,7 @@ import {
   Modal,
 } from "@mui/material";
 import React, { useState } from "react";
-import { gql, useQuery } from "@apollo/client";
+import { gql, useQuery, useMutation } from "@apollo/client";
 import AddHall from "./AddHall";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 
@@ -32,6 +32,19 @@ const GET_TEAM_HALLS = gql`
       name
       location
       hallId
+    }
+  }
+`;
+
+const DELETE_HALL = gql`
+  mutation DeleteHall($teamId: String!, $hallId: String!) {
+    deleteHallFromTeam(teamId: $teamId, hallId: $hallId) {
+      teamId
+      Halls {
+        name
+        location
+        hallId
+      }
     }
   }
 `;
@@ -72,6 +85,14 @@ const Halls: React.FC<Props> = ({ id }) => {
     variables: { teamId: id },
   });
 
+  const [deleteHallMutation] = useMutation(DELETE_HALL, {
+    refetchQueries: [
+      { query: GET_TEAM_DETAILS, variables: { teamId: id } },
+      { query: GET_TEAM_HALLS, variables: { teamId: id } },
+    ],
+  });
+
+
   if (loadingDetails || loadingHalls)
     return (
       <Box
@@ -103,6 +124,18 @@ const Halls: React.FC<Props> = ({ id }) => {
   const handleCloseInfoModal = () => {
     setSelectedHall(null);
     setInfoModalOpen(false);
+  };
+
+  const handleDeleteHall = async () => {
+    if (selectedHall) {
+      const { hallId } = selectedHall;
+      try {
+        await deleteHallMutation({ variables: { teamId: id, hallId } });
+        handleCloseInfoModal();
+      } catch (error) {
+        console.error("Error deleting hall:", error);
+      }
+    }
   };
 
   const halls = dataHalls?.getHallsByTeamId;
@@ -179,6 +212,9 @@ const Halls: React.FC<Props> = ({ id }) => {
           <Typography sx={{ mt: 2 }}>
             {selectedHall?.hallId}
           </Typography>
+          <Box>
+            <Button onClick={handleDeleteHall}>Smazat</Button>
+          </Box>
         </Box>
       </Modal>
     </Box>

@@ -61,7 +61,7 @@ export const typeDefs = gql`
     OwnerName: String!
     OwnerSurname: String!
     TimeCreated: String!
-    
+    Halls: [Hall]
   }
 
   type TeamDetails2 {
@@ -223,6 +223,7 @@ export const typeDefs = gql`
       position: String!
     ): Boolean
     addHallToTeam(teamId: String!, hall: HallInput!): Team
+    deleteHallFromTeam(teamId: String!, hallId: String!): Team
 
   }
 
