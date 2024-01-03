@@ -17,15 +17,19 @@ import {
   Select,
   MenuItem,
   Avatar,
+  TextField,
+  Autocomplete,
 } from "@mui/material";
 import Collapse from "@mui/material/Collapse";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useQuery, useMutation } from "@apollo/client";
 import { gql } from "@apollo/client";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import { SelectChangeEvent } from "@mui/material";
 import { authUtils } from "@/firebase/auth.utils";
+import { useRef } from "react";
+
 
 const GET_TEAM_MEMBERS_DETAILS = gql`
   query GetTeamMembersDetails($teamId: String!) {
@@ -105,6 +109,9 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
   const [expandedSelectedMember, setExpandedSelectedMember] = useState<
     string | null
   >(null);
+  const [searchInput, setSearchInput] = useState("");
+  const [filteredMembers, setFilteredMembers] = useState<Member[]>([]);
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
   const {
     loading: roleLoading,
@@ -115,12 +122,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
     skip: !user,
   });
 
-  const handleRowClick = (member: Member) => {
-    setSelectedMember(member);
-    setSelectedRole(member.Role);
-    setModalOpen(true);
-  };
-
+ 
   const handleCloseModal = () => {
     setSelectedMember(null);
     setModalOpen(false);
@@ -211,6 +213,58 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
     return age;
   };
 
+  useEffect(() => {
+    if (searchInput.trim() === "") {
+      setFilteredMembers(members);
+    } else {
+      const searchRegex = new RegExp(searchInput.trim(), "i");
+      const filtered = members.filter(
+        (member) =>
+          searchRegex.test(member.Name) || searchRegex.test(member.Surname)
+      );
+      setFilteredMembers(filtered);
+    }
+
+    setSelectedIndex(calculateSelectedIndex());
+  }, [searchInput, members, selectedMember]);
+
+  const handleRowClick = (member: Member) => {
+    setSelectedMember(member);
+    setSelectedRole(member.Role);
+    setModalOpen(true);
+
+    // Update the selected index based on the filtered list
+    setSelectedIndex(calculateSelectedIndex());
+  };
+
+
+  const calculateSelectedIndex = () => {
+    if (selectedMember) {
+      return filteredMembers.findIndex(
+        (member) =>
+          member.Email === selectedMember.Email && member.Role === selectedMember.Role
+      );
+    }
+    return null;
+  };
+
+  const tableBodyRef = useRef<HTMLTableSectionElement>(null);
+  useEffect(() => {
+    if (tableBodyRef.current && selectedIndex !== null) {
+      const rowElement = tableBodyRef.current.children[selectedIndex] as HTMLDivElement;
+      if (rowElement) {
+        rowElement.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+      }
+    }
+  }, [selectedIndex]);
+
+  const allMembers = data?.getTeamMembersDetails || [];
+
+
+
   return (
     <Box>
       <Box
@@ -228,11 +282,40 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
         >
           Členové klubu
         </Typography>
+      
         {role === "1" && (
           <Link href={`/Team/AddMember/${id}/`}>
             <Button variant="contained">Přidat člena</Button>
           </Link>
         )}
+      </Box>
+
+      <Box sx={{
+         marginLeft: "5%",
+         marginRight: "5%",
+      }}>
+        <Autocomplete
+        options={allMembers}
+        getOptionLabel={(option) => {
+          if (searchInput.length < 2) return '';
+          return `${option.Name} ${option.Surname}`;
+        }}
+        isOptionEqualToValue={(option, value) =>
+          option.Name.toLowerCase() === value.Name.toLowerCase() &&
+          option.Surname.toLowerCase() === value.Surname.toLowerCase()
+        }
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            label="Hledat podle jména a příjmení"
+            variant="outlined"
+            value={searchInput}
+            sx={{width: "100%", marginTop: "2em",marginBottom: searchInput.length < 1 ? "0em" : "2em"}}
+            onChange={(e) => setSearchInput(e.target.value)}
+          />
+        )}
+      />
+
       </Box>
 
       <TableContainer
@@ -282,8 +365,8 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
               </TableCell>
             </TableRow>
           </TableHead>
-          <TableBody>
-            {members.map(
+          <TableBody ref={tableBodyRef}>
+            {filteredMembers.map(
               (member: Member, index: React.Key | null | undefined) =>
                 (role === "1" || member.Email === currentUserEmail) && (
                   <TableRow
@@ -313,7 +396,9 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                       />
                     </TableCell>
                     <TableCell>
+                      <Typography sx={{ fontFamily: "Roboto", fontWeight:"450" }}>
                       {member.Surname} {member.Name}
+                      </Typography>
                     </TableCell>
                     <TableCell>
                       <Typography sx={{ fontFamily: "Roboto" }}>
