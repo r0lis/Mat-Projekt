@@ -16,10 +16,10 @@ import Members from "../../public/assets/Members.png";
 import Settings from "../../public/assets/Settings.png";
 import Image from "next/image";
 import OverviewComponent from "@/components/teamPage/Overview";
-import TrainingsComponent from "@/components/teamPage/Training";
+import TrainingsComponent from "@/components/teamPage/Trenining";
 import CalendarComponent from "@/components/teamPage/Calendar";
 import RoustersComponent from "@/components/teamPage/Rousters";
-import NominationsComponent from "@/components/teamPage/Nominations";
+import NominationsComponent from "@/components/teamPage/Matchs";
 import PayComponent from "@/components/teamPage/Paying";
 import EventsComponent from "@/components/teamPage/Events";
 import MembersComponent from "@/components/teamPage/Members";
@@ -353,10 +353,10 @@ const Team: React.FC = () => {
             }}
           >
             {activeLink === "Overview" && <OverviewComponent />}
-            {activeLink === "Trainings" && <TrainingsComponent />}
+            {activeLink === "Trainings" && <TrainingsComponent teamId={id as string} />}
             {activeLink === "Kalendar" && <CalendarComponent />}
             {activeLink === "Rouster" && <RoustersComponent />}
-            {activeLink === "Matchs" && <NominationsComponent />}
+            {activeLink === "Matchs" && <NominationsComponent teamId={id as string}/>}
             {activeLink === "Events" && <EventsComponent />}
             {activeLink === "Team" && <TeamComponent id={id as string} />}
             {activeLink === "Members" && <MembersComponent id={id as string} />}
