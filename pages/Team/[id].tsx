@@ -34,14 +34,14 @@ import MembershipError from "@/components/teamPage/error/MembershipError";
 
 
 const items = [
-  { label: "Overview", image: Overview },
-  { label: "Kalendar", image: Calendar },
-  { label: "Events", image: Events },
-  { label: "Trainings", image: Trainings },
-  { label: "Matchs", image: Nominations },
-  { label: "Rousters", image: Rousters },
-  { label: "Team", image: TeamIcon },
-  { label: "Members", image: Members },
+  { label: "Overview", caption:"Přehled", image: Overview },
+  { label: "Kalendar", caption:"Kalendář", image: Calendar },
+  { label: "Events", caption:"Události", image: Events },
+  { label: "Trainings", caption:"Treninky", image: Trainings },
+  { label: "Matchs", caption:"Zápasy", image: Nominations },
+  { label: "Rouster", caption:"Soupisky", image: Rousters },
+  { label: "Team", caption:"Tým", image: TeamIcon },
+  { label: "Members", caption:"Členové", image: Members },
 ];
 
 const GET_TEAM_DETAILS = gql`
@@ -176,8 +176,8 @@ const Team: React.FC = () => {
     role == 1
       ? [
           ...items,
-          { label: "Payment", image: Pay },
-          { label: "Settings", image: Settings },
+          { label: "Payment", caption:"Platby", image: Pay },
+          { label: "Settings", caption:"Správa",image: Settings },
         ]
       : items;
 
@@ -291,7 +291,7 @@ const Team: React.FC = () => {
                           cursor: "pointer",
                         }}
                       >
-                        {item.label}
+                        {item.caption}
                       </span>
                     )}
                   </Box>
@@ -355,7 +355,7 @@ const Team: React.FC = () => {
             {activeLink === "Overview" && <OverviewComponent />}
             {activeLink === "Trainings" && <TrainingsComponent />}
             {activeLink === "Kalendar" && <CalendarComponent />}
-            {activeLink === "Rousters" && <RoustersComponent />}
+            {activeLink === "Rouster" && <RoustersComponent />}
             {activeLink === "Matchs" && <NominationsComponent />}
             {activeLink === "Events" && <EventsComponent />}
             {activeLink === "Team" && <TeamComponent id={id as string} />}
