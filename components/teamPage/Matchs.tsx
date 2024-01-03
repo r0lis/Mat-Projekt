@@ -204,6 +204,8 @@ const Matchs: React.FC<Props> = (id) => {
             width: "100%",
             marginTop: "1em",
             minHeight: "100vh",
+            maxHeight: "100vh",
+            overflowY: "auto",
           }}
         >
           <Box
