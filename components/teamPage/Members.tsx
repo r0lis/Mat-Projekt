@@ -89,6 +89,10 @@ type MembersProps = {
 };
 
 const MembersComponent: React.FC<MembersProps> = ({ id }) => {
+  const [searchInput, setSearchInput] = useState("");
+  const [filteredMembers, setFilteredMembers] = useState<Member[]>([]);
+  const tableBodyRef = useRef<HTMLTableSectionElement>(null);
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const currentUserEmail = authUtils.getCurrentUser()?.email || "";
@@ -109,9 +113,12 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
   const [expandedSelectedMember, setExpandedSelectedMember] = useState<
     string | null
   >(null);
-  const [searchInput, setSearchInput] = useState("");
-  const [filteredMembers, setFilteredMembers] = useState<Member[]>([]);
-  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+
+  const { loading, error, data, refetch } = useQuery<{
+    getTeamMembersDetails: Member[];
+  }>(GET_TEAM_MEMBERS_DETAILS, {
+    variables: { teamId: id },
+  });
 
   const {
     loading: roleLoading,
@@ -121,6 +128,80 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
     variables: { teamId: id, email: user?.email || "" },
     skip: !user,
   });
+  
+
+  const members = data?.getTeamMembersDetails || [];
+
+
+
+  useEffect(() => {
+    if (tableBodyRef.current && selectedIndex !== null) {
+      const rowElement = tableBodyRef.current.children[selectedIndex] as HTMLDivElement;
+      if (rowElement) {
+        rowElement.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+      }
+    }
+  }, [selectedIndex]);
+
+  useEffect(() => {
+    if (searchInput.trim() === "") {
+      setFilteredMembers(members);
+    } else {
+      const searchRegex = new RegExp(searchInput.trim(), "i");
+      const filtered = members.filter(
+        (member) =>
+          searchRegex.test(member.Name) || searchRegex.test(member.Surname)
+      );
+      setFilteredMembers(filtered);
+    }
+
+    setSelectedIndex(calculateSelectedIndex());
+  }, [searchInput, members, selectedMember]);
+
+  const handleRowClick = (member: Member) => {
+    setSelectedMember(member);
+    setSelectedRole(member.Role);
+    setModalOpen(true);
+
+    // Update the selected index based on the filtered list
+    setSelectedIndex(calculateSelectedIndex());
+  };
+
+
+  const calculateSelectedIndex = () => {
+    if (selectedMember) {
+      return filteredMembers.findIndex(
+        (member) =>
+          member.Email === selectedMember.Email && member.Role === selectedMember.Role
+      );
+    }
+    return null;
+  };
+
+  
+
+  if (loading || roleLoading)
+    return (
+      <Box
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        height: "80vh",
+        
+      }}
+    >
+      <CircularProgress color="primary" size={50} />
+    </Box>
+    );
+
+  if (error || roleError) return <Typography>Chyba</Typography>;
+
+  const role = roleData?.getUserRoleInTeam.role || "";
+  const allMembers = data?.getTeamMembersDetails || [];
 
  
   const handleCloseModal = () => {
@@ -158,30 +239,8 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
     setSelectedRole(event.target.value);
   };
 
-  const { loading, error, data, refetch } = useQuery<{
-    getTeamMembersDetails: Member[];
-  }>(GET_TEAM_MEMBERS_DETAILS, {
-    variables: { teamId: id },
-  });
 
-  if (loading || roleLoading)
-    return (
-      <Box
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        height: "80vh",
-        
-      }}
-    >
-      <CircularProgress color="primary" size={50} />
-    </Box>
-    );
-  if (error || roleError) return <Typography>Chyba</Typography>;
 
-  const members = data?.getTeamMembersDetails || [];
-  const role = roleData?.getUserRoleInTeam.role || "";
 
   const handleDeleteClick = async () => {
     if (selectedMember && selectedMember.Email !== currentUserEmail) {
@@ -213,56 +272,8 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
     return age;
   };
 
-  useEffect(() => {
-    if (searchInput.trim() === "") {
-      setFilteredMembers(members);
-    } else {
-      const searchRegex = new RegExp(searchInput.trim(), "i");
-      const filtered = members.filter(
-        (member) =>
-          searchRegex.test(member.Name) || searchRegex.test(member.Surname)
-      );
-      setFilteredMembers(filtered);
-    }
-
-    setSelectedIndex(calculateSelectedIndex());
-  }, [searchInput, members, selectedMember]);
-
-  const handleRowClick = (member: Member) => {
-    setSelectedMember(member);
-    setSelectedRole(member.Role);
-    setModalOpen(true);
-
-    // Update the selected index based on the filtered list
-    setSelectedIndex(calculateSelectedIndex());
-  };
-
-
-  const calculateSelectedIndex = () => {
-    if (selectedMember) {
-      return filteredMembers.findIndex(
-        (member) =>
-          member.Email === selectedMember.Email && member.Role === selectedMember.Role
-      );
-    }
-    return null;
-  };
-
-  const tableBodyRef = useRef<HTMLTableSectionElement>(null);
-  useEffect(() => {
-    if (tableBodyRef.current && selectedIndex !== null) {
-      const rowElement = tableBodyRef.current.children[selectedIndex] as HTMLDivElement;
-      if (rowElement) {
-        rowElement.scrollIntoView({
-          behavior: "smooth",
-          block: "center",
-        });
-      }
-    }
-  }, [selectedIndex]);
-
-  const allMembers = data?.getTeamMembersDetails || [];
-
+ 
+  
 
 
   return (
@@ -293,6 +304,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
       <Box sx={{
          marginLeft: "5%",
          marginRight: "5%",
+         marginTop: "2em",
       }}>
         <Autocomplete
         options={allMembers}
@@ -310,7 +322,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
             label="Hledat podle jména a příjmení"
             variant="outlined"
             value={searchInput}
-            sx={{width: "100%", marginTop: "2em",marginBottom: searchInput.length < 1 ? "0em" : "2em"}}
+            sx={{marginBottom: searchInput.length < 1 ? "0em" : "2em"}}
             onChange={(e) => setSearchInput(e.target.value)}
           />
         )}
