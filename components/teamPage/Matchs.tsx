@@ -1,20 +1,54 @@
-import {
-  Box,
-  Button,
-  Typography,
-} from "@mui/material";
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
+import { Box, Button, CircularProgress, Typography } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import React, { useState }  from "react";
+import React, { useState } from "react";
 import AddMatch from "./Match/Add";
+import { authUtils } from "@/firebase/auth.utils";
+import { useQuery } from "@apollo/client";
+import { gql } from "@apollo/client";
+
+const GET_USER_ROLE_IN_TEAM = gql`
+  query GetUserRoleInTeam($teamId: String!, $email: String!) {
+    getUserRoleInTeam(teamId: $teamId, email: $email) {
+      email
+      role
+    }
+  }
+`;
 
 type Props = {
   teamId: string;
 };
 
 const Matchs: React.FC<Props> = (id) => {
-
+  const user = authUtils.getCurrentUser();
   const [addMatch, setAddMatch] = useState(false);
 
+  const {
+    loading: roleLoading,
+    error: roleError,
+    data: roleData,
+  } = useQuery(GET_USER_ROLE_IN_TEAM, {
+    variables: { teamId: id.teamId, email: user?.email || "" },
+    skip: !user,
+  });
+
+  if (roleLoading)
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "80vh",
+        }}
+      >
+        <CircularProgress color="primary" size={50} />
+      </Box>
+    );
+  if (roleError) return <Typography>Chyba</Typography>;
+
+  const role = roleData?.getUserRoleInTeam.role || "";
 
   const isSmallView = window.innerWidth >= 1200;
   const isMobile = window.innerWidth <= 600;
@@ -24,7 +58,13 @@ const Matchs: React.FC<Props> = (id) => {
   };
 
   return (
-    <Box sx={{ display: isSmallView ? "flex" : "block", marginBottom: "2em", marginRight:"2%" }}>
+    <Box
+      sx={{
+        display: isSmallView ? "flex" : "block",
+        marginBottom: "2em",
+        marginRight: "2%",
+      }}
+    >
       <Box
         sx={{
           marginTop: "1em",
@@ -46,25 +86,25 @@ const Matchs: React.FC<Props> = (id) => {
           >
             Zápasy
           </Typography>
-          <Button
-          variant="contained"
-            onClick={() => setAddMatch(!addMatch)}
-            sx={{
-              marginLeft: "auto",
-              display: addMatch ? "none" : "block",
-            }}
-          >
-            Přidat
-          </Button>
-          <MenuIcon
-            sx={{
-              marginLeft: addMatch ? "auto" : "1em",
-              width: "1.5em",
-              height: "1.5em",
-              marginRight: "5%",
-              color: "#404040",
-            }}
-          />
+          {(role === "1" || role === "2") && (
+            <><Button
+              variant="contained"
+              onClick={() => setAddMatch(!addMatch)}
+              sx={{
+                marginLeft: "auto",
+                display: addMatch ? "none" : "block",
+              }}
+            >
+              Přidat
+            </Button><MenuIcon
+                sx={{
+                  marginLeft: addMatch ? "auto" : "1em",
+                  width: "1.5em",
+                  height: "1.5em",
+                  marginRight: "5%",
+                  color: "#404040",
+                }} /></>
+          )}
         </Box>
         <Box
           sx={{
@@ -75,10 +115,7 @@ const Matchs: React.FC<Props> = (id) => {
 
             boxShadow: "0px 3px 15px rgba(0, 0, 0, 0.3)",
           }}
-        >
-          
-             
-        </Box>
+        ></Box>
         <Box
           sx={{
             boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.3)",
@@ -91,7 +128,7 @@ const Matchs: React.FC<Props> = (id) => {
         >
           {addMatch ? (
             <Box>
-              <AddMatch teamId={id.teamId} closeAddMatch={closeAddMatch}  />
+              <AddMatch teamId={id.teamId} closeAddMatch={closeAddMatch} />
             </Box>
           ) : (
             <Box>
@@ -142,7 +179,6 @@ const Matchs: React.FC<Props> = (id) => {
               boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.3)",
               height: "48%",
               marginTop: isSmallView ? "10%" : "0%",
-              
             }}
           >
             <Typography
@@ -157,10 +193,7 @@ const Matchs: React.FC<Props> = (id) => {
             >
               Poslední zápasy
             </Typography>
-            <Box sx={{maxHeight:"22em", overflowY:"auto" }}>
-           
-            </Box>
-             
+            <Box sx={{ maxHeight: "22em", overflowY: "auto" }}></Box>
           </Box>
         </Box>
       ) : (
@@ -224,9 +257,7 @@ const Matchs: React.FC<Props> = (id) => {
               >
                 Poslední zápasy
               </Typography>
-              <Box sx={{maxHeight:"22em", overflowY:"auto" }}>
-          
-            </Box>
+              <Box sx={{ maxHeight: "22em", overflowY: "auto" }}></Box>
             </Box>
           </Box>
         </Box>

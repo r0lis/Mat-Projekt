@@ -1,14 +1,55 @@
-import { Box, Button, Typography } from "@mui/material";
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
+import { Box, Button, CircularProgress, Typography } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import React, { useState } from "react";
 import AddTrening from "./Trenings/Add";
+import { useQuery } from "@apollo/client";
+import { authUtils } from "@/firebase/auth.utils";
+import { gql } from "@apollo/client";
+
+const GET_USER_ROLE_IN_TEAM = gql`
+  query GetUserRoleInTeam($teamId: String!, $email: String!) {
+    getUserRoleInTeam(teamId: $teamId, email: $email) {
+      email
+      role
+    }
+  }
+`;
 
 type Props = {
   teamId: string;
 };
 
 const TreniningComponent: React.FC<Props> = (id) => {
+  const user = authUtils.getCurrentUser();
   const [addTrenining, setAddTrenining] = useState(false);
+
+  const {
+    loading: roleLoading,
+    error: roleError,
+    data: roleData,
+  } = useQuery(GET_USER_ROLE_IN_TEAM, {
+    variables: { teamId: id.teamId, email: user?.email || "" },
+    skip: !user,
+  });
+
+  if (roleLoading)
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "80vh",
+        }}
+      >
+        <CircularProgress color="primary" size={50} />
+      </Box>
+    );
+  if (roleError) return <Typography>Chyba</Typography>;
+
+  const role = roleData?.getUserRoleInTeam.role || "";
+
 
   const isSmallView = window.innerWidth >= 1200;
   const isMobile = window.innerWidth <= 600;
@@ -46,25 +87,26 @@ const TreniningComponent: React.FC<Props> = (id) => {
           >
             Tréninky
           </Typography>
-          <Button
-          variant="contained"
-            onClick={() => setAddTrenining(!addTrenining)}
-            sx={{
-              marginLeft: "auto",
-              display: addTrenining ? "none" : "block",
-            }}
-          >
-            Přidat
-          </Button>
-          <MenuIcon
-            sx={{
-              marginLeft: addTrenining ? "auto" : "1em",
-              width: "1.5em",
-              height: "1.5em",
-              marginRight: "5%",
-              color: "#404040",
-            }}
-          />
+          {(role === "1" || role === "2") && (
+
+          <><Button
+              variant="contained"
+              onClick={() => setAddTrenining(!addTrenining)}
+              sx={{
+                marginLeft: "auto",
+                display: addTrenining ? "none" : "block",
+              }}
+            >
+              Přidat
+            </Button><MenuIcon
+                sx={{
+                  marginLeft: addTrenining ? "auto" : "1em",
+                  width: "1.5em",
+                  height: "1.5em",
+                  marginRight: "5%",
+                  color: "#404040",
+                }} /></>
+          )}
         </Box>
         <Box
           sx={{

@@ -22,12 +22,10 @@ import * as admin from "firebase-admin";
 const getSubteamDetails = async (subteamId: string, context: Context): Promise<Subteam | null> => {
   try {
     const subteamDoc = await context.db.collection("Teams").doc(subteamId).get();
-
     if (subteamDoc.exists) {
       const subteamData = subteamDoc.data() as Subteam;
       return subteamData;
     }
-
     return null;
   } catch (error) {
     console.error("Error fetching subteam details:", error);
@@ -44,7 +42,7 @@ export const subteamQueries = {
     try {
       if (context.user) {
         const subteamQuery = context.db
-          .collection("Teams") // Ujistěte se, že používáte správné jméno kolekce
+          .collection("Teams") 
           .where("teamId", "==", teamId);
         const subteamSnapshot = await subteamQuery.get();
 

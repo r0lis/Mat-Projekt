@@ -391,7 +391,7 @@ const Content: React.FC<ContentProps> = ({ subteamId, idTeam }) => {
              linear-gradient(to bottom, #c2c3c4 60px, #ffffff 60px)
              `,
               boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.3)",
-              height: "49%",
+              height: "48.5%",
               display: isSmallView ? "" : "block",
             }}
           >
@@ -506,6 +506,7 @@ const Content: React.FC<ContentProps> = ({ subteamId, idTeam }) => {
       `,
               boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.3)",
               height: "auto",
+              
               display: isSmallView ? "" : "block",
               marginLeft: isMobile ? "0.5em" : "2em",
             }}
