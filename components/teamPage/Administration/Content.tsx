@@ -1,13 +1,15 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { gql, useQuery } from "@apollo/client";
 import {
+  Alert,
   Avatar,
   Box,
   Button,
   CircularProgress,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Edit from "./Edit";
 import Halls from "./Halls";
 import Info from "./Info";
@@ -29,6 +31,36 @@ const GET_TEAM_DETAILS = gql`
   }
 `;
 
+const GET_TEAM_HALLS = gql`
+  query GetTeamHalls($teamId: String!) {
+    getHallsByTeamId(teamId: $teamId) {
+      name
+      location
+      hallId
+    }
+  }
+`;
+
+const GET_TEAM_TRENING_HALLS = gql`
+  query GetTeamTreningHalls($teamId: String!) {
+    getTreningHallsByTeamId(teamId: $teamId) {
+      name
+      location
+      treningHallId
+    }
+  }
+`;
+
+const GET_TEAM_GYMS = gql`
+  query GetTeamGyms($teamId: String!) {
+    getGymsByTeamId(teamId: $teamId) {
+      name
+      location
+      gymId
+    }
+  }
+`;
+
 const GET_TEAM_IMG = gql`
   query GetTeamImg($teamId: String!) {
     getTeamImg(teamId: $teamId)
@@ -38,8 +70,30 @@ type Props = {
   id: string;
 };
 
+type Hall = {
+  name: string;
+  location: string;
+  hallId: string;
+};
+
+type TreningHall = {
+  name: string;
+  location: string;
+  treningHallId: string;
+};
+
+type Gym = {
+  name: string;
+  location: string;
+  gymId: string;
+};
+
 const Content: React.FC<Props> = (teamId) => {
   const [selectedButton, setSelectedButton] = useState("info");
+  const [showWarning, setShowWarning] = useState(false);
+  const [warningMessage, setWarningMessage] = useState("");
+
+ 
 
   const renderContent = () => {
     switch (selectedButton) {
@@ -72,7 +126,45 @@ const Content: React.FC<Props> = (teamId) => {
     variables: { teamId: teamId.id },
   });
 
-  if (loading || loadingDetails)
+  const {
+    loading: loadingHalls,
+    error: errorHalls,
+    data: dataHalls,
+  } = useQuery(GET_TEAM_HALLS, {
+    variables: { teamId: teamId.id },
+  });
+
+  const {
+    loading: loadingTrainingHalls,
+    error: errorTrainingHalls,
+    data: dataTreningHalls,
+  } = useQuery(GET_TEAM_TRENING_HALLS, {
+    variables: { teamId: teamId.id },
+  });
+
+  const {
+    loading: loadingGyms,
+    error: errorGyms,
+    data: dataGyms,
+  } = useQuery(GET_TEAM_GYMS, {
+    variables: { teamId: teamId.id },
+  });
+  const halls: Hall[] | undefined = dataHalls?.getHallsByTeamId;
+  const treningHalls: TreningHall[] | undefined =
+    dataTreningHalls?.getTreningHallsByTeamId;
+  const gyms: Gym[] | undefined = dataGyms?.getGymsByTeamId;
+
+  useEffect(() => {
+    if (!halls || !treningHalls || !gyms || halls.length === 0 || treningHalls.length === 0 || gyms.length === 0) {
+      setShowWarning(true);
+      setWarningMessage("Některá sportovní nejsou přidány. Přidejte prosím.");
+    } else {
+      setShowWarning(false);
+      setWarningMessage("");
+    }
+  }, [dataHalls, dataTreningHalls, dataGyms]);
+
+  if (loading || loadingDetails || loadingHalls || loadingTrainingHalls || loadingGyms)
     return (
       <Box
         sx={{
@@ -85,7 +177,7 @@ const Content: React.FC<Props> = (teamId) => {
         <CircularProgress color="primary" size={50} />
       </Box>
     );
-  if (error || errorDetails) return <Typography>Chyba</Typography>;
+  if (error || errorDetails || errorGyms || errorHalls || errorTrainingHalls) return <Typography>Chyba</Typography>;
 
   const teamDetails = dataDetails.getTeam;
   const teamImage = dataImg.getTeamImg;
@@ -129,6 +221,11 @@ const Content: React.FC<Props> = (teamId) => {
             />
           </Box>
         </Box>
+        {showWarning && (
+        <Box sx={{ marginBottom: "1em" }}>
+          <Alert severity="warning">{warningMessage}</Alert>
+        </Box>
+      )}
         {isMediumWindow ? (
           <Box
             sx={{
