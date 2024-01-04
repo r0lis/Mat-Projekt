@@ -19,8 +19,9 @@ import {
   TableBody,
   Checkbox,
   Avatar,
+  Alert,
 } from "@mui/material";
-import { gql, useQuery } from "@apollo/client";
+import { gql, useMutation, useQuery } from "@apollo/client";
 import { authUtils } from "@/firebase/auth.utils";
 
 const GET_SUBTEAMS = gql`
@@ -103,6 +104,15 @@ const getPositionText = (position: string): string => {
   }
 };
 
+const ADD_MATCH = gql`
+  mutation AddMatch($teamId: String!, $input: AddMatchInput!) {
+    addMatch(teamId: $teamId, input: $input) {
+      matchId
+      opponentName
+    }
+  }
+`;
+
 const AddMatch: React.FC<Props> = ({ teamId, closeAddMatch }) => {
   const user = authUtils.getCurrentUser();
   const [subteams, setSubteams] = useState<Subteam[]>([]);
@@ -114,8 +124,10 @@ const AddMatch: React.FC<Props> = ({ teamId, closeAddMatch }) => {
   const [date, setDate] = useState<string>("");
   const [time, setTime] = useState<string>("");
   const [selectedMembers, setSelectedMembers] = useState<string[]>([]);
-  const [matchType, setMatchType] = useState<string>("home"); 
-  const [completeData, setCompleteData] = useState<any>(null); // Declare completeData here
+  const [matchType, setMatchType] = useState<string>("home");
+  const [completeData, setCompleteData] = useState<any>(null);
+  const [errorMessages, setErrorMessages] = useState<string[]>([]);
+  const [addMatch] = useMutation(ADD_MATCH);
 
   const {
     loading,
@@ -137,10 +149,12 @@ const AddMatch: React.FC<Props> = ({ teamId, closeAddMatch }) => {
     }
 
     if (completeData?.getCompleteSubteamDetail) {
-      // Set initial selectedMembers with members having positions "1", "2", or "3"
-      initialSelectedMembers = completeData.getCompleteSubteamDetail.subteamMembers
-        .filter((member: SubteamMember) => ["1", "2", "3"].includes(member.position))
-        .map((member: SubteamMember) => member.email);
+      initialSelectedMembers =
+        completeData.getCompleteSubteamDetail.subteamMembers
+          .filter((member: SubteamMember) =>
+            ["1", "2", "3"].includes(member.position)
+          )
+          .map((member: SubteamMember) => member.email);
     }
 
     setSelectedMembers(initialSelectedMembers);
@@ -149,11 +163,12 @@ const AddMatch: React.FC<Props> = ({ teamId, closeAddMatch }) => {
   const handleSubteamChange = (event: SelectChangeEvent<string | null>) => {
     setSubteamIdSelected(event.target.value);
     setSelectedMembers([]);
-    // Add the current user's email to selectedMembers
     setSelectedMembers((prevSelected) => [...prevSelected, user?.email || ""]);
   };
 
-  const handleOpponentNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleOpponentNameChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     setOpponentName(event.target.value);
   };
 
@@ -167,7 +182,7 @@ const AddMatch: React.FC<Props> = ({ teamId, closeAddMatch }) => {
 
   const handleMatchTypeChange = (type: string) => {
     setMatchType(type);
-    setSelectedHallId(null); // Reset selected hall when changing match type
+    setSelectedHallId(null);
   };
 
   const {
@@ -183,17 +198,17 @@ const AddMatch: React.FC<Props> = ({ teamId, closeAddMatch }) => {
     setSelectedHallId(hallId);
   };
 
-  const {
-    loading: completeLoading,
-    error: completeError,
-  } = useQuery(GET_COMPLETESUBTEAM_DETAILS, {
-    variables: { subteamId: subteamIdSelected || "" },
-    skip: !subteamIdSelected,
-    onCompleted: (data) => {
-      setCompleteData(data);
-      console.log("Complete data:", data);
-    },
-  });
+  const { loading: completeLoading, error: completeError } = useQuery(
+    GET_COMPLETESUBTEAM_DETAILS,
+    {
+      variables: { subteamId: subteamIdSelected || "" },
+      skip: !subteamIdSelected,
+      onCompleted: (data) => {
+        setCompleteData(data);
+        console.log("Complete data:", data);
+      },
+    }
+  );
 
   const handleCheckboxChange = (email: string) => {
     if (selectedMembers.includes(email)) {
@@ -206,14 +221,97 @@ const AddMatch: React.FC<Props> = ({ teamId, closeAddMatch }) => {
   };
 
   const handleSelectAllPlayers = () => {
-    const playersPosition4 = completeData?.getCompleteSubteamDetail?.subteamMembers
-      .filter((member: SubteamMember) => member.position === "4")
-      .map((player: SubteamMember) => player.email) || [];
+    const playersPosition4 =
+      completeData?.getCompleteSubteamDetail?.subteamMembers
+        .filter((member: SubteamMember) => member.position === "4")
+        .map((player: SubteamMember) => player.email) || [];
 
     setSelectedMembers((prevSelected) => {
-      const newSelected = Array.from(new Set([...prevSelected, ...playersPosition4]));
+      const newSelected = Array.from(
+        new Set([...prevSelected, ...playersPosition4])
+      );
       return newSelected;
     });
+  };
+
+  const hasPosition4Member = selectedMembers.some((email) =>
+  completeData?.getCompleteSubteamDetail?.subteamMembers.some(
+    (member: SubteamMember) => member.email === email && member.position === "4"
+  )
+);
+
+  const handleAddMatch = async () => {
+    setErrorMessages([]);
+
+    if (!subteamIdSelected) {
+      setErrorMessages((prevMessages) => [...prevMessages, "Vyberte tým."]);
+    }
+
+    if (opponentName.length < 2 || !/^[A-Z]/.test(opponentName)) {
+      setErrorMessages((prevMessages) => [
+        ...prevMessages,
+        "Zadejte platné jméno soupeře (alespoň 2 znaky, začínající velkým písmenem).",
+      ]);
+    }
+
+    if (!selectedHallId) {
+      setErrorMessages((prevMessages) => [...prevMessages, "Vyberte halu."]);
+    }
+
+    if (!date || !time) {
+      setErrorMessages((prevMessages) => [
+        ...prevMessages,
+        "Zadejte platné datum a čas.",
+      ]);
+    }
+
+    if (selectedMembers.length === 0) {
+      setErrorMessages((prevMessages) => [
+        ...prevMessages,
+        "Vyberte alespoň jednoho člena týmu.",
+      ]);
+    }
+
+    if (!matchType) {
+      setErrorMessages((prevMessages) => [
+        ...prevMessages,
+        "Vyberte typ zápasu.",
+      ]);
+    }
+
+    if (!hasPosition4Member) {
+      setErrorMessages((prevMessages) => [
+        ...prevMessages,
+        "Vyberte alespoň jednoho člena týmu s pozicí hráč.",
+      ]);
+      return;
+    }
+
+    if (errorMessages.length > 0) {
+      return;
+    }
+
+    const input = {
+      subteamIdSelected,
+      opponentName,
+      selectedHallId,
+      date,
+      time,
+      selectedMembers,
+      matchType,
+    };
+
+    try {
+      const { data } = await addMatch({
+        variables: { teamId, input },
+      });
+
+      console.log("Match added successfully:", data.addMatch);
+
+      closeAddMatch();
+    } catch (error) {
+      console.error("Error adding match:", error);
+    }
   };
 
   if (loading || completeLoading || loadingHalls)
@@ -302,7 +400,7 @@ const AddMatch: React.FC<Props> = ({ teamId, closeAddMatch }) => {
               }}
             />
           </Box>
-          <Box sx={{marginTop:"0.5em"}}>
+          <Box sx={{ marginTop: "0.5em" }}>
             <Typography variant="body2">Typ zápasu</Typography>
             <Button
               variant={matchType === "home" ? "contained" : "outlined"}
@@ -319,7 +417,7 @@ const AddMatch: React.FC<Props> = ({ teamId, closeAddMatch }) => {
               Hostující
             </Button>
           </Box>
-          <Box sx={{marginTop:"0.5em"}}>
+          <Box sx={{ marginTop: "0.5em" }}>
             <Typography variant="h6">Seznam členů týmu</Typography>
             <Button
               variant="outlined"
@@ -399,48 +497,63 @@ const AddMatch: React.FC<Props> = ({ teamId, closeAddMatch }) => {
           </Box>
 
           <Box>
-          {matchType !== "away" ? (
-            <Box>
-            <Typography variant="h6">Dostupné Haly</Typography>
-            <TableContainer>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell></TableCell>
-                    <TableCell>Název</TableCell>
-                    <TableCell>Lokace</TableCell>
-                    <TableCell>Vybrat</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {dataHalls?.getHallsByTeamId.map((hall: Hall) => (
-                    <TableRow key={hall.hallId}>
-                      <TableCell></TableCell>
-                      <TableCell>{hall.name}</TableCell>
-                      <TableCell>{hall.location}</TableCell>
-                      <TableCell>
-                        <Checkbox
-                          onChange={() => handleHallCheckboxChange(hall.hallId)}
-                          checked={selectedHallId === hall.hallId}
-                        />
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-            </Box>
-            ):(
+            {matchType !== "away" ? (
+              <Box>
+                <Typography variant="h6">Dostupné Haly</Typography>
+                <TableContainer>
+                  <Table>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell></TableCell>
+                        <TableCell>Název</TableCell>
+                        <TableCell>Lokace</TableCell>
+                        <TableCell>Vybrat</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {dataHalls?.getHallsByTeamId.map((hall: Hall) => (
+                        <TableRow key={hall.hallId}>
+                          <TableCell></TableCell>
+                          <TableCell>{hall.name}</TableCell>
+                          <TableCell>{hall.location}</TableCell>
+                          <TableCell>
+                            <Checkbox
+                              onChange={() =>
+                                handleHallCheckboxChange(hall.hallId)
+                              }
+                              checked={selectedHallId === hall.hallId}
+                            />
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </Box>
+            ) : (
               <Typography variant="h6">Hala hostí</Typography>
             )}
-           
           </Box>
-        
-
+          {errorMessages.length > 0 && (
+            <Box sx={{ marginBottom: "1em" }}>
+              {errorMessages.map((message, index) => (
+                <Alert sx={{marginBottom:"0.5em"}} key={index} severity="error">
+                  {message}
+                </Alert>
+              ))}
+            </Box>
+          )}
           <Box sx={{ marginTop: "1em" }}>
-            <Button variant="contained" onClick={closeAddMatch}>
-              Zavřít
-            </Button>
+            <Box sx={{ marginBottom: "0.5em" }}>
+              <Button variant="contained" onClick={handleAddMatch}>
+                Přidat zápas
+              </Button>
+            </Box>
+            <Box sx={{ marginBottom: "1em" }}>
+              <Button variant="contained" onClick={closeAddMatch}>
+                Zavřít
+              </Button>
+            </Box>
           </Box>
         </Box>
       </Box>
