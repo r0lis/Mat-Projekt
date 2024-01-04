@@ -23,11 +23,20 @@ const GET_MATCHES_BY_SUBTEAM = gql`
         teamId
         opponentName
         selectedHallId
+        subteamIdSelected
         date
         time
         selectedMembers
         matchType
       }
+    }
+  }
+`;
+
+const GET_SUBTEAM_DETAILS = gql`
+  query GetSubteamDetails($subteamId: String!) {
+    getCompleteSubteamDetail(subteamId: $subteamId) {
+      Name
     }
   }
 `;
@@ -50,6 +59,7 @@ interface Match {
   matchId: string;
   opponentName: string;
   selectedHallId: string;
+  subteamIdSelected: string;
   date: string;
   time: string;
   selectedMembers: string[];
@@ -59,6 +69,7 @@ interface Match {
 const Content: React.FC<Props> = ({ teamId }) => {
   const user = authUtils.getCurrentUser();
   const [subteamIds, setSubteamIds] = useState<string[]>([]);
+
 
   const {
     loading: subteamLoading,
@@ -104,26 +115,43 @@ const Content: React.FC<Props> = ({ teamId }) => {
 
   return (
     <Box>
-      {matchesData?.getMatchesBySubteam.map((subteam: { subteamId: string; matches: Match[] }) => (
-        <Box key={subteam.subteamId}>
-          {subteam.matches.map((match: Match) => (
-            <Box sx={{}} key={match.matchId}>
-              <Typography>Date: {match.date}</Typography>
-              <Typography>Time: {match.time}</Typography>
-              <Typography>Opponent: {match.opponentName}</Typography>
-              <Typography>Members: {match.selectedMembers}</Typography>
-              <Typography>Match type: {match.matchType}</Typography>
-              <Typography>Hall:</Typography>
+      {subteamIds.map((subteamId) => {
+        const subteamMatches = matchesData?.getMatchesBySubteam
+          .filter(
+            (subteam: { subteamId: string }) => subteam.subteamId === subteamId
+          )
+          .map(
+            (subteam: { subteamId: string; matches: Match[] }) =>
+              subteam.matches
+          )
+          .flat(); // Získáme pole zápasů pro konkrétní subteam
 
+        return (
+          <Box key={subteamId}>
+            {subteamMatches.map((match: Match) => (
+              <Box sx={{}} key={match.matchId}>
+                <Typography>Date: {match.date}</Typography>
+                <Typography>Time: {match.time}</Typography>
+                <Typography>Opponent: {match.opponentName}</Typography>
+                <Typography>Members: {match.selectedMembers}</Typography>
+                <Typography>Match type: {match.matchType}</Typography>
+                <Typography>Subteam:</Typography>
               <Box>
-                {match.selectedHallId && (
-                  <HallInfo teamId={teamId} hallId={match.selectedHallId} />
+                {match.subteamIdSelected && (
+                  <SubteamDetails subteamId={match.subteamIdSelected} />
                 )}
               </Box>
-            </Box>
-          ))}
-        </Box>
-      ))}
+                <Typography>Hall:</Typography>
+                <Box>
+                  {match.selectedHallId && (
+                    <HallInfo teamId={teamId} hallId={match.selectedHallId} />
+                  )}
+                </Box>
+              </Box>
+            ))}
+          </Box>
+        );
+      })}
     </Box>
   );
 };
@@ -149,5 +177,17 @@ const HallInfo: React.FC<HallInfoProps> = ({ teamId, hallId }) => {
     </>
   );
 };
+
+const SubteamDetails: React.FC<{ subteamId: string }> = ({ subteamId }) => {
+    const { loading, error, data } = useQuery(GET_SUBTEAM_DETAILS, {
+      variables: { subteamId },
+    });
+  
+    if (loading) return <CircularProgress color="primary" size={20} />;
+    if (error) return <Typography>Error loading subteam information</Typography>;
+  
+    const subteamDetails = data.getCompleteSubteamDetail;
+    return <Typography>Name: {subteamDetails.Name}</Typography>;
+  };
 
 export default Content;
