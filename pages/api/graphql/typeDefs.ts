@@ -40,6 +40,22 @@ export const typeDefs = gql`
     OwnerSurname: String!
   }
 
+  input AddMatchInput {
+    subteamIdSelected: String! 
+    opponentName: String!
+    selectedHallId: String!
+    date: String!
+    time: String!
+    selectedMembers: [String!]!
+    matchType: String!
+  }
+
+  type Match {
+    matchId: String!
+    opponentName: String!
+  }
+  
+
   input UpdatedMemberInput {
     member: String!
     role: Int!
@@ -253,6 +269,8 @@ export const typeDefs = gql`
     deleteTreningHallFromTeam(teamId: String!, treningHallId: String!): Team
     addGymToTeam(teamId: String!, gym: GymInput!): Team
     deleteGymFromTeam(teamId: String!, gymId: String!): Team
+    addMatch(teamId: String!, input: AddMatchInput!): Match
+
   }
 
   

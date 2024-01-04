@@ -292,7 +292,7 @@ const AddMatch: React.FC<Props> = ({ teamId, closeAddMatch }) => {
     }
 
     const input = {
-      subteamIdSelected,
+     subteamIdSelected,
       opponentName,
       selectedHallId,
       date,
@@ -300,7 +300,6 @@ const AddMatch: React.FC<Props> = ({ teamId, closeAddMatch }) => {
       selectedMembers,
       matchType,
     };
-
     try {
       const { data } = await addMatch({
         variables: { teamId, input },

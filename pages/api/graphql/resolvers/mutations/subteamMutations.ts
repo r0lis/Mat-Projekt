@@ -34,6 +34,17 @@ type UpdatedSubteamMemberInput = {
   position: string;
 };
 
+type AddMatchInput = {
+  subteamIdSelected: String
+  opponentName: String
+  selectedHallId: String
+  date: String
+  time: String
+  selectedMembers: [String]
+  matchType: String
+}
+
+
 const generateRandomString = (length: number) => {
     let result = "";
     const characters =
@@ -150,6 +161,42 @@ export const subteamMutations = {
         return true;
       } catch (error) {
         console.error("Error updating subteam member:", error);
+        throw error;
+      }
+    },
+
+    addMatch: async (
+      _: any,
+      { teamId, input }: { teamId: string; input: AddMatchInput },
+      context: Context
+    ) => {
+      try {
+        const { subteamIdSelected, opponentName, selectedHallId, date, time, selectedMembers, matchType } = input;
+  
+  
+        // Create a new match document
+        const matchId = generateRandomString(30);
+        const newMatchDoc = context.db.collection("Match").doc(matchId);
+  
+        // Define the data for the new match
+        const newMatchData = {
+          matchId: matchId,
+          teamId: teamId,
+          subteamIdSelected: subteamIdSelected,
+          opponentName: opponentName,
+          selectedHallId: selectedHallId,
+          date: date,
+          time: time,
+          selectedMembers: selectedMembers,
+          matchType: matchType,
+        };
+  
+        // Set the data for the new match
+        await newMatchDoc.set(newMatchData);
+  
+        return newMatchData;
+      } catch (error) {
+        console.error("Error adding match:", error);
         throw error;
       }
     },
