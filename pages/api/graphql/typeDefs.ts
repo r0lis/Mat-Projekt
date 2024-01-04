@@ -52,7 +52,14 @@ export const typeDefs = gql`
 
   type Match {
     matchId: String!
+    teamId: String!
+    subteamIdSelected: String!
     opponentName: String!
+    selectedHallId: String!
+    date: String!
+    time: String!
+    selectedMembers: [String!]!
+    matchType: String!
   }
   
 
@@ -64,6 +71,10 @@ export const typeDefs = gql`
   input MemberInput {
     name: String!
     UpdatedMemberInput: [String]
+  }
+
+  input MatchesBySubteamInput {
+    subteamIds: [String!]!
   }
   
   type Team {
@@ -197,6 +208,14 @@ export const typeDefs = gql`
     location: String!
   }
 
+  input MatchesBySubteamInput {
+    subteamIds: [String!]!
+  }
+  
+  type SubteamMatches {
+    subteamId: String!
+    matches: [Match]
+  }
   
   type Query {
     user(id: String): User
@@ -223,6 +242,7 @@ export const typeDefs = gql`
     getHallsByTeamId(teamId: String!): [Hall]
     getTreningHallsByTeamId(teamId: String!): [TreningHall]
     getGymsByTeamId(teamId: String!): [Gym]
+    getMatchesBySubteam(input: MatchesBySubteamInput): [SubteamMatches]
 
   }
 

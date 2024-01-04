@@ -6,6 +6,7 @@ import AddMatch from "./Match/Add";
 import { authUtils } from "@/firebase/auth.utils";
 import { useQuery } from "@apollo/client";
 import { gql } from "@apollo/client";
+import Content from "./Match/Content";
 
 const GET_USER_ROLE_IN_TEAM = gql`
   query GetUserRoleInTeam($teamId: String!, $email: String!) {
@@ -132,7 +133,7 @@ const Matchs: React.FC<Props> = (id) => {
             </Box>
           ) : (
             <Box>
-              <Typography sx={{ marginLeft: "1em" }}>Content</Typography>
+              <Content teamId={id.teamId}/>
             </Box>
           )}
         </Box>

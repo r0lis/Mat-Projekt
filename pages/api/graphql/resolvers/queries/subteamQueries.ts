@@ -264,4 +264,27 @@ export const subteamQueries = {
       throw error;
     }
   },
+
+  getMatchesBySubteam: async (
+    _: any,
+    { input }: { input: { subteamIds: string[] } },
+    context: { db: { collection: (arg0: string) => any } }
+) => {
+    try {
+        const matchesSnapshot = await context.db
+            .collection("Match")
+            .where("subteamIdSelected", "in", input.subteamIds)
+            .get();
+
+        const matches = matchesSnapshot.docs.map((doc: any) => doc.data() as any);
+
+        const validMatches = matches.filter((match: any) => match.subteamIdSelected !== null);
+
+        return [{ subteamId: input.subteamIds[0], matches: validMatches }];
+    } catch (error) {
+        console.error("Error fetching matches by subteams:", error);
+        throw error;
+    }
+},
+
 };
