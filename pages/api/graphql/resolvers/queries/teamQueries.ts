@@ -433,5 +433,39 @@ export const teamQueries = {
     return null;
   },
 
+  getHallByTeamAndHallId: async (
+    _: any,
+    { teamId, hallId }: { teamId: string; hallId: string },
+    context: Context
+  ) => {
+    try {
+      if (context.user) {
+        const teamQuery = context.db
+          .collection("Team")
+          .where("teamId", "==", teamId);
+        const teamSnapshot = await teamQuery.get();
+  
+        if (!teamSnapshot.empty) {
+          const teamDoc = teamSnapshot.docs[0];
+  
+          if (teamDoc.data().Halls) {
+            const halls = teamDoc.data().Halls as Hall[];
+  
+            const hall = halls.find((h) => h.hallId === hallId);
+  
+            if (hall) {
+              return hall;
+            }
+          }
+        }
+      }
+    } catch (error) {
+      console.error("Error getting hall by teamId and hallId:", error);
+      throw error;
+    }
+  
+    return null;
+  },
+
   
 };

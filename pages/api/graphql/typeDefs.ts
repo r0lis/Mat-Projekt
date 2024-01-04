@@ -243,6 +243,7 @@ export const typeDefs = gql`
     getTreningHallsByTeamId(teamId: String!): [TreningHall]
     getGymsByTeamId(teamId: String!): [Gym]
     getMatchesBySubteam(input: MatchesBySubteamInput): [SubteamMatches]
+    getHallByTeamAndHallId(teamId: String!, hallId: String!): Hall 
 
   }
 
