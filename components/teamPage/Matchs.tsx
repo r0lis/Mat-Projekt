@@ -125,6 +125,8 @@ const Matchs: React.FC<Props> = (id) => {
             borderRadius: "15px",
             marginTop: "1em",
             minHeight: "100vh",
+            maxHeight: "100vh",
+            overflowY: "auto",
           }}
         >
           {addMatch ? (
