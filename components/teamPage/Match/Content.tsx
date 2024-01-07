@@ -9,6 +9,7 @@ import {
   TableRow,
   TableCell,
   Grid,
+  Avatar,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
@@ -63,6 +64,16 @@ const GET_HALL_BY_TEAM_AND_HALL_ID = gql`
   }
 `;
 
+const GET_USER_DETAILS = gql`
+  query GetUserDetails($email: String!) {
+    getUserByNameAndSurname(email: $email) {
+      Name
+      Surname
+      Picture
+    }
+  }
+`;
+
 type Props = {
   teamId: string;
 };
@@ -82,6 +93,8 @@ const Content: React.FC<Props> = ({ teamId }) => {
   const user = authUtils.getCurrentUser();
   const [subteamIds, setSubteamIds] = useState<string[]>([]);
   const [expandedMatchId, setExpandedMatchId] = useState<string | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [, setUserDetails] = useState<any>(null);
 
   const {
     loading: subteamLoading,
@@ -110,7 +123,23 @@ const Content: React.FC<Props> = ({ teamId }) => {
     skip: subteamIds.length === 0,
   });
 
-  if (subteamLoading || matchesLoading)
+  const {
+    loading: userDetailsLoading,
+    error: userDetailsError,
+    data: userDetailsData,
+  } = useQuery(GET_USER_DETAILS, {
+    variables: { email: user?.email || "" },
+    skip: !user,
+  });
+
+  useEffect(() => {
+    if (userDetailsData) {
+      setUserDetails(userDetailsData.getUserByNameAndSurname);
+    }
+  }, [userDetailsData]);
+
+
+  if (subteamLoading || matchesLoading || userDetailsLoading)
     return (
       <Box
         sx={{
@@ -123,10 +152,14 @@ const Content: React.FC<Props> = ({ teamId }) => {
         <CircularProgress color="primary" size={50} />
       </Box>
     );
-  if (subteamError || matchesError) return <Typography>Chyba</Typography>;
+  if (subteamError || matchesError || userDetailsError) return <Typography>Chyba</Typography>;
 
   const getMatchTypeLabel = (matchType: string) => {
-    return matchType === "home" ? "Domácí" : matchType === "away" ? "Hostí" : "";
+    return matchType === "home"
+      ? "Domácí"
+      : matchType === "away"
+      ? "Hostí"
+      : "";
   };
 
   return (
@@ -147,122 +180,162 @@ const Content: React.FC<Props> = ({ teamId }) => {
             {subteamMatches.map((match: Match) => (
               <Box
                 sx={{
-                  marginLeft: "2%",
-                  marginRight: "2%",
+                  marginLeft: "3%",
+                  marginRight: "3%",
                   marginBottom: "2em",
-                  
-                  paddingBottom: "1em",
                   borderRadius: "10px",
                   backgroundColor: "rgba(0, 56, 255, 0.24)",
                 }}
                 key={match.matchId}
               >
-                <Box sx={{paddingLeft:"1em", paddingRight:"1em" ,  backgroundColor: "rgba(0, 56, 255, 0.24)", borderRadius:"10px 10px 0 0",paddingTop: "1em", paddingBottom:"0.5em" }}>
-                <Typography variant="h6">
-                  Zápas Protivník: {match.opponentName}
-                </Typography>
-                <Box sx={{ display: "flex" }}>
-                  <Typography>
-                    Datum:{" "}
-                    {match.date &&
-                      new Date(match.date).toLocaleDateString("cs-CZ", {
-                        day: "2-digit",
-                        month: "2-digit",
-                        year: "numeric",
-                      })}
+                <Box
+                  sx={{
+                    paddingLeft: "1em",
+                    paddingRight: "1em",
+                    backgroundColor: "rgba(0, 56, 255, 0.24)",
+                    borderRadius: "10px 10px 0 0",
+                    borderBottom: "2px solid rgba(0, 34, 155, 1)", 
+                    paddingTop: "1em",
+                    paddingBottom: "0.5em",
+                  }}
+                >
+                  <Typography variant="h6">
+                    Zápas Protivník: {match.opponentName}
                   </Typography>
+                  <Box sx={{ display: "flex" }}>
+                    <Typography>
+                      Datum:{" "}
+                      {match.date &&
+                        new Date(match.date).toLocaleDateString("cs-CZ", {
+                          day: "2-digit",
+                          month: "2-digit",
+                          year: "numeric",
+                        })}
+                    </Typography>
 
-                  <Typography sx={{ marginLeft: "1em" }}>
-                    Čas: {match.time}
-                  </Typography>
-                </Box>
-                </Box>
-                <Box sx={{borderTop:"2px solid black", padding:0}}>
+                    <Typography sx={{ marginLeft: "1em" }}>
+                      Čas: {match.time}
+                    </Typography>
                   </Box>
-
-                  <Box sx={{paddingLeft:"1em", paddingRight:"1em", paddingTop:"0.5em"}}>
-                  <Grid container spacing={2}>
-                <Grid item xs={1.5}>
-                  <Typography sx={{fontWeight:"500"}}>Váš tým:</Typography>
-                  <Typography sx={{fontWeight:"500"}}>Typ zápasu:</Typography>
                   
-                </Grid>
-                <Grid item xs={6}>
-                <Box>
-                    {match.subteamIdSelected && (
-                      <SubteamDetails subteamId={match.subteamIdSelected} />
-                    )}
-                  </Box>
-                  <Typography>{getMatchTypeLabel(match.matchType)}</Typography>
-                </Grid>
-              </Grid>
-
-                <Typography sx={{fontWeight:"500", paddingTop:"0.5em", }}>Info haly</Typography>
-                <Box>
-                  {match.selectedHallId && (
-                    <HallInfo teamId={teamId} hallId={match.selectedHallId} />
-                  )}
                 </Box>
-
-                { expandedMatchId === match.matchId ? (
-                  <Box>
-                    <Box sx={{display:"flex"}}>
-                    <Typography sx={{fontWeight:"500"}}>Nominovaní hráči:</Typography>
-                    <Box>
-                      
-                    <ExpandLessIcon
-                        onClick={() => setExpandedMatchId(null)}
-                      />
-                    </Box>
-                    </Box>
-                    {match.selectedMembers &&
-                    match.selectedMembers.length > 0 ? (
-                      <Table>
-                        <TableHead>
-                          <TableRow>
-                            <TableCell>Číslo hráče</TableCell>
-                            <TableCell>Jméno hráče</TableCell>
-                          </TableRow>
-                        </TableHead>
-                        <TableBody>
-                          {match.selectedMembers.map((member, index) => (
-                            <TableRow key={index}>
-                              <TableCell>{index + 1}</TableCell>
-                              <TableCell>{member}</TableCell>
-                            </TableRow>
-                          ))}
-                        </TableBody>
-                      </Table>
-                    ) : (
+                <Box
+                  sx={{
+                    paddingLeft: "1em",
+                    paddingRight: "1em",
+                    paddingTop: "0.5em",
+                  }}
+                >
+                  <Grid container spacing={2}>
+                    <Grid item xs={1.5}>
+                      <Typography sx={{ fontWeight: "500" }}>
+                        Váš tým:
+                      </Typography>
+                      <Typography sx={{ fontWeight: "500" }}>
+                        Typ zápasu:
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={6}>
                       <Box>
-                        <Typography sx={{fontWeight:"500"}}>Nominovaní hráči:</Typography>
-                        <Typography>Žádní nominovaní hráči.</Typography>
+                        {match.subteamIdSelected && (
+                          <SubteamDetails subteamId={match.subteamIdSelected} />
+                        )}
                       </Box>
+                      <Typography>
+                        {getMatchTypeLabel(match.matchType)}
+                      </Typography>
+                    </Grid>
+                  </Grid>
+
+                  <Typography sx={{ fontWeight: "500", paddingTop: "0.5em" }}>
+                    Info haly
+                  </Typography>
+                  <Box>
+                    {match.selectedHallId && (
+                      <HallInfo teamId={teamId} hallId={match.selectedHallId} />
                     )}
                   </Box>
-                ) : (
-                  <Box>
-                     <Box sx={{display:"flex"}}>
-                    <Typography sx={{fontWeight:"500"}}>Nominovaní hráči:</Typography>
+                 
+                </Box>
+                <Box
+                  sx={{
+                    paddingLeft: "1em",
+                    paddingRight: "1em",
+                    backgroundColor: "rgba(0, 56, 255, 0.15)",
+                    borderRadius: "0px 0px 10px 10px",
+                    borderTop: "2px solid rgba(0, 34, 155, 1)", 
+                    paddingBottom: "0.5em",
+                    paddingTop: "0.5em",
+                  }}
+                >
+                {expandedMatchId === match.matchId ? (
                     <Box>
-                    <ExpandMoreIcon
-                        onClick={() => setExpandedMatchId(match.matchId)}
-                      />
+                      <Box sx={{ display: "flex" }}>
+                        <Typography sx={{ fontWeight: "500" }}>
+                          Nominovaní hráči:
+                        </Typography>
+                        <Box>
+                          <ExpandLessIcon
+                            onClick={() => setExpandedMatchId(null)}
+                          />
+                        </Box>
+                      </Box>
+                      <Box sx={{backgroundColor:"white", borderRadius:"10px", marginTop:"0.5em", paddingBottom:"1em", marginBottom:"1em"}}>
+                      {match.selectedMembers &&
+                          match.selectedMembers.length > 0 ? (
+                            <Table sx={{ borderRadius: "10px", width:"80%", marginLeft:"auto", marginRight:"auto",   }}>
+                                <TableHead>
+                                  <TableRow>
+                                   
+                                    <TableCell></TableCell>
+                                    <TableCell></TableCell>
+                                    <TableCell></TableCell>
+
+                                  </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                  {match.selectedMembers.map((member, index) => (
+                                    <TableRow  sx={{borderBottom:"2px solid gray"}} key={index}>
+                                        <UserDetails email={member} />
+                                    </TableRow>
+                                  ))}
+                                </TableBody>
+                              </Table>
+                      ) : (
+                        <Box>
+                          <Typography sx={{ fontWeight: "500" }}>
+                            Nominovaní hráči:
+                          </Typography>
+                          <Typography>Žádní nominovaní hráči.</Typography>
+                        </Box>
+                      )}
                     </Box>
                     </Box>
-                  </Box>
-                )}
+                  ) : (
+                    <Box>
+                      <Box sx={{ display: "flex" }}>
+                        <Typography sx={{ fontWeight: "500" }}>
+                          Nominovaní hráči:
+                        </Typography>
+                        <Box>
+                          <ExpandMoreIcon
+                            onClick={() => setExpandedMatchId(match.matchId)}
+                          />
+                        </Box>
+                      </Box>
+                    </Box>
+                    
+                  )}
+                  
               </Box>
-           </Box>
+              </Box>
+            ))}
+            
 
-            )) }
+           
           </Box>
-          
-
         );
-      
       })}
-      
     </Box>
   );
 };
@@ -282,19 +355,17 @@ const HallInfo: React.FC<HallInfoProps> = ({ teamId, hallId }) => {
 
   const hall = data.getHallByTeamAndHallId;
   return (
-    <Box sx={{paddingBottom:"0.5em"}}>
+    <Box sx={{ paddingBottom: "0.5em" }}>
       <Grid container spacing={2}>
         <Grid item xs={1.5}>
-        <Typography sx={{fontWeight:"500"}}>Název: </Typography>
-        <Typography sx={{fontWeight:"500"}}>Umístení: </Typography>
+          <Typography sx={{ fontWeight: "500" }}>Název: </Typography>
+          <Typography sx={{ fontWeight: "500" }}>Umístení: </Typography>
         </Grid>
         <Grid item xs={6}>
-        <Typography >{hall.name}</Typography>
-        <Typography>{hall.location}</Typography>
+          <Typography>{hall.name}</Typography>
+          <Typography>{hall.location}</Typography>
         </Grid>
       </Grid>
-     
-     
     </Box>
   );
 };
@@ -309,6 +380,32 @@ const SubteamDetails: React.FC<{ subteamId: string }> = ({ subteamId }) => {
 
   const subteamDetails = data.getCompleteSubteamDetail;
   return <Typography> {subteamDetails.Name}</Typography>;
+};
+
+const UserDetails: React.FC<{ email: string }> = ({ email }) => {
+  const { loading, error, data } = useQuery(GET_USER_DETAILS, {
+    variables: { email },
+  });
+
+  if (loading) return <CircularProgress color="primary" size={20} />;
+  if (error) return <Typography>Error loading user details</Typography>;
+
+  const userDetails = data.getUserByNameAndSurname;
+  return (
+    <>
+      <TableCell>{userDetails.Name}</TableCell>
+      <TableCell>{userDetails.Surname}</TableCell>
+      <TableCell>
+        {userDetails.Picture && (
+          <Avatar
+            src={userDetails.Picture}
+            alt={`Avatar for ${userDetails.Name}`}
+            sx={{ width: "50px", height: "50px", borderRadius: "50%" }}
+          />
+        )}
+      </TableCell>
+    </>
+  );
 };
 
 export default Content;
