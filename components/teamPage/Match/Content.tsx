@@ -285,8 +285,8 @@ const HallInfo: React.FC<HallInfoProps> = ({ teamId, hallId }) => {
     <Box sx={{paddingBottom:"0.5em"}}>
       <Grid container spacing={2}>
         <Grid item xs={1.5}>
-        <Typography sx={{fontWeight:"500"}}>Name: </Typography>
-        <Typography sx={{fontWeight:"500"}}>Location: </Typography>
+        <Typography sx={{fontWeight:"500"}}>Název: </Typography>
+        <Typography sx={{fontWeight:"500"}}>Umístení: </Typography>
         </Grid>
         <Grid item xs={6}>
         <Typography >{hall.name}</Typography>
