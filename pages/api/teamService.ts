@@ -28,7 +28,7 @@ async function processTeams() {
 
       const timeDifference = currentTime - teamCreationTime.getTime();
       const timeDifferenceInMinutes = Math.floor(timeDifference / 60000);
-      if (timeDifferenceInMinutes > 20) {
+      if (timeDifferenceInMinutes > 40) {
         await teamDoc.ref.delete();
         console.log(`Tým ${teamData.Name} byl smazán. Protože vytvořen před více než 5 minutami.`);
       }

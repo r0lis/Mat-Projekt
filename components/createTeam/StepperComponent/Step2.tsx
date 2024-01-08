@@ -22,6 +22,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { gql, useMutation, useQuery } from "@apollo/client";
+import { authUtils } from "@/firebase/auth.utils";
 
 type Step2Props = {
   teamEmail: string;
@@ -61,7 +62,8 @@ const TableDivider = () => (
   />
 );
 
-const Step2: React.FC<Step2Props> = ({ teamEmail, onCompleteStep  }) => {
+const Step2: React.FC<Step2Props> = ({ teamEmail, onCompleteStep }) => {
+  const user = authUtils.getCurrentUser();
   const { loading, error, data } = useQuery(GET_TEAM_MEMBERS, {
     variables: { teamEmail },
   });
@@ -87,20 +89,35 @@ const Step2: React.FC<Step2Props> = ({ teamEmail, onCompleteStep  }) => {
     });
   }, [members]);
 
+  React.useEffect(() => {
+    const userIndex = members.findIndex((member: string | null | undefined) => member === user?.email);
+
+    if (userIndex !== -1) {
+      setRoles((prevRoles) => ({
+        ...prevRoles,
+        [userIndex]: "Manegement",
+      }));
+
+      setSelectedMembers((prevMembers) => ({
+        ...prevMembers,
+        Manegement: [...(prevMembers.Manegement || []), members[userIndex]],
+      }));
+    }
+  }, [members, user]);
+
   if (loading) {
     return (
       <Box
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        height: "80vh",
-        
-      }}
-    >
-      <CircularProgress color="primary" size={50} />
-    </Box>)
-    ;
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "80vh",
+        }}
+      >
+        <CircularProgress color="primary" size={50} />
+      </Box>
+    );
   }
 
   if (error) {
@@ -116,17 +133,22 @@ const Step2: React.FC<Step2Props> = ({ teamEmail, onCompleteStep  }) => {
     setSelectedMembers((prevMembers) => {
       const updatedMembers: SelectedMembers = { ...prevMembers };
 
-      // Odebrat člena z původní role
       Object.keys(updatedMembers).forEach((key) => {
         updatedMembers[key as keyof SelectedMembers] = updatedMembers[
           key as keyof SelectedMembers
         ].filter((member) => member !== members[index]);
       });
 
-      // Kontrola, zda je role různé od "None"
       if (role !== "None") {
         updatedMembers[role as keyof SelectedMembers] = [
-          ...(updatedMembers[role as keyof SelectedMembers] || []), // Přidávání pouze tehdy, pokud pole není undefined
+          ...(updatedMembers[role as keyof SelectedMembers] || []),
+          members[index],
+        ];
+      }
+
+      if (members[index] === user?.email && role === "None") {
+        updatedMembers["Manegement"] = [
+          ...(updatedMembers["Manegement"] || []),
           members[index],
         ];
       }
@@ -135,23 +157,20 @@ const Step2: React.FC<Step2Props> = ({ teamEmail, onCompleteStep  }) => {
     });
   };
 
+
   const handleComplete = async () => {
     try {
-      // Kontrola, zda má každý člen týmu vybranou roli
       const rolesAreSelected = Object.values(roles).every(
         (role) => role !== "None"
       );
 
       if (!rolesAreSelected) {
-        // Zobrazit chybový alert a nastavit viditelnost
         setErrorSliderVisible(true);
 
-        // Skrýt chybový alert po určité době (např. po 5 sekundách)
         setTimeout(() => {
           setErrorSliderVisible(false);
         }, 5000);
 
-        // Ukončit funkci, protože nejsou vybrány role pro všechny členy týmu
         return;
       }
 
@@ -164,7 +183,6 @@ const Step2: React.FC<Step2Props> = ({ teamEmail, onCompleteStep  }) => {
 
       console.log(updatedMembersArray);
 
-      // Use the updateUserRoles mutation
       const { data: updatedTeamData } = await updateUserRoles({
         variables: {
           teamEmail,
@@ -173,11 +191,7 @@ const Step2: React.FC<Step2Props> = ({ teamEmail, onCompleteStep  }) => {
       });
       setIsCompleted(true);
 
-      // Handle the response as needed
       console.log(updatedTeamData);
-
-      // Update state or perform other actions if needed
-      // ...
     } catch (error) {
       // Handle errors
     }
@@ -309,7 +323,7 @@ const Step2: React.FC<Step2Props> = ({ teamEmail, onCompleteStep  }) => {
                 marginRight: "auto",
                 width: "14em",
               }}
-              onClick={onCompleteStep}             
+              onClick={onCompleteStep}
             >
               <Typography sx={{ fontWeight: "bold", color: "black" }}>
                 Dokončit
@@ -343,17 +357,19 @@ const Step2: React.FC<Step2Props> = ({ teamEmail, onCompleteStep  }) => {
 
               {members.map((member: string, index: number) => (
                 <Box
-                  key={index}
-                  sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                    alignItems: "center",
-                    padding: "30px",
-                    borderRadius: "10px",
-                    marginBottom: "2em",
-                    boxShadow: "0 0 10px rgba(0, 0, 0, 0.4)",
-                  }}
-                >
+                key={index}
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  padding: "30px",
+                  borderRadius: "10px",
+                  marginBottom: "2em",
+                  boxShadow: "0 0 10px rgba(0, 0, 0, 0.4)",
+                  // Correct the spelling of "lightgray"
+                  backgroundColor: member === user?.email ? "lightgray" : "transparent",
+                }}
+              >
                   <Typography sx={{ marginRight: "1em", marginLeft: "2em" }}>
                     {member}
                   </Typography>
