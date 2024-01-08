@@ -124,7 +124,6 @@ export const subteamQueries = {
   ): Promise<CompleteSubteam | null> => {
     try {
       if (context.user) {
-        // Retrieve subteam details
         const subteamDoc = await context.db
           .collection("Teams")
           .doc(subteamId)
@@ -133,7 +132,6 @@ export const subteamQueries = {
         if (subteamDoc.exists) {
           const subteamData = subteamDoc.data() as Subteam;
 
-          // Retrieve member details for each subteam member
           const subteamMembersPromises = subteamData.subteamMembers.map(
             async (member: {
               email: string;
@@ -163,17 +161,15 @@ export const subteamQueries = {
             }
           );
 
-          // Resolve all promises to get the complete subteam members' details
           const subteamMembers = await Promise.all(subteamMembersPromises);
 
-          // Create the CompleteSubteam object
           const completeSubteam: CompleteSubteam = {
             Name: subteamData.Name,
             teamId: subteamData.teamId,
             subteamId: subteamData.subteamId,
             subteamMembers: subteamMembers.filter(
               Boolean
-            ) as CompleteSubteamMember[], // Filter out null values
+            ) as CompleteSubteamMember[], 
           };
 
           return completeSubteam;
@@ -194,22 +190,18 @@ export const subteamQueries = {
   ): Promise<{ email: string; role: number; name: string; surname: string }[] | null> => {
     try {
       if (context.user) {
-        // Fetch subteam details using the helper function
         const subteamDetails = await getSubteamDetails(subteamId, context);
 
         if (subteamDetails && subteamDetails.subteamMembers) {
-          // Extracting emails and roles from subteamMembers array
           const subteamMembers = subteamDetails.subteamMembers.map((member: any) => ({
             email: member.email,
             role: member.role,
           }));
 
-          // Fetch team details using the provided teamId
           const teamQuery = context.db.collection("Team").where("teamId", "==", subteamDetails.teamId);
           const teamSnapshot = await teamQuery.get();
 
           if (!teamSnapshot.empty) {
-            // Extracting emails and roles from Members array of the Team collection
             const teamData = teamSnapshot.docs[0].data() as Team;
             const teamMembers = teamData.Members.map((member: any) => ({
               email: member.member,
@@ -218,16 +210,13 @@ export const subteamQueries = {
 
             const allMembers: { email: string; role: number }[] = [...subteamMembers, ...teamMembers];
 
-            // Create a map to track email occurrences
             const emailOccurrences: Record<string, number> = {};
             allMembers.forEach((member) => {
               emailOccurrences[member.email] = (emailOccurrences[member.email] || 0) + 1;
             });
 
-            // Filter members where email occurrences are 1 (unique)
             const uniqueMembers = allMembers.filter((member) => emailOccurrences[member.email] === 1);
 
-            // Fetch name and surname for unique members
             const completeMembers = await Promise.all(
               uniqueMembers.map(async (member) => {
                 const userDoc = await context.db.collection("User").where("Email", "==", member.email).get();

@@ -32,7 +32,7 @@ export const teamQueries = {
           .collection("Team")
           .where("Email", "==", email);
         const teamSnapshot = await teamQuery.get();
-        return !teamSnapshot.empty; // Returns true if the email is found in any team
+        return !teamSnapshot.empty;
       }
       return false;
     } catch (error) {
@@ -112,7 +112,6 @@ export const teamQueries = {
     context: Context
   ) => {
     try {
-      // Find the team by teamId
       const teamQuery = context.db
         .collection("Team")
         .where("teamId", "==", teamId);
@@ -121,13 +120,12 @@ export const teamQueries = {
       if (!teamSnapshot.empty) {
         const teamDoc = teamSnapshot.docs[0];
 
-        // Find the member in the Members array
         const members = teamDoc.data().Members || [];
         const member = members.find((m: any) => m.member === email);
 
         if (member) {
           return {
-            email: member.member, // Ensure you return a non-null value for the 'email' field
+            email: member.member,
             role: member.role,
           };
         }
@@ -137,7 +135,7 @@ export const teamQueries = {
       throw error;
     }
 
-    return null; // Ensure you return a non-null value for the 'email' field
+    return null;
   },
 
   checkEmailsInTeam: async (
@@ -146,7 +144,6 @@ export const teamQueries = {
     context: Context
   ) => {
     try {
-      // Získat team podle teamId
       const teamQuery = context.db
         .collection("Team")
         .where("teamId", "==", teamId);
@@ -155,12 +152,10 @@ export const teamQueries = {
       if (!teamSnapshot.empty) {
         const teamData = teamSnapshot.docs[0].data() as Team;
 
-        // Najít shodné e-maily v poli MembersEmails
         const duplicateEmails = emails.filter((email) =>
           teamData.MembersEmails?.includes(email)
         );
 
-        // Vrátit e-maily, které již existují v kolekci
         return duplicateEmails;
       }
 
@@ -214,7 +209,7 @@ export const teamQueries = {
 
           for (let i = 0; i < membersEmails.length; i++) {
             const email = membersEmails[i];
-            const role = membersRoles[i]?.role || "No Role Assigned"; // Default role if not present
+            const role = membersRoles[i]?.role || "No Role Assigned";
 
             const userQuery = context.db
               .collection("User")
@@ -224,20 +219,24 @@ export const teamQueries = {
             const subteamQuery = context.db
               .collection("Teams")
               .where("teamId", "==", teamId);
-            
+
             const subteamSnapshot = await subteamQuery.get();
 
             if (!userSnapshot.empty) {
               const userData = userSnapshot.docs[0].data() as User;
-              const subteamsData = subteamSnapshot.docs.map((doc) => doc.data() as Subteam);
+              const subteamsData = subteamSnapshot.docs.map(
+                (doc) => doc.data() as Subteam
+              );
               const filteredSubteams = subteamsData.filter((subteam) => {
-                return subteam.subteamMembers.some((member: { email: string; }) => member.email === email);
+                return subteam.subteamMembers.some(
+                  (member: { email: string }) => member.email === email
+                );
               });
               membersDetails.push({
                 Name: userData.Name,
                 Surname: userData.Surname,
-                Picture: userData.Picture ?? null, 
-                Role: role, // Add role to the returned details
+                Picture: userData.Picture ?? null,
+                Role: role,
                 Email: userData.Email,
                 DateOfBirth: userData.DateOfBirth,
                 Subteams: filteredSubteams,
@@ -280,22 +279,17 @@ export const teamQueries = {
     }
   },
 
-  getTeam: async (
-    _: any,
-    { teamId }: { teamId: string },
-    context: Context
-  ) => {
+  getTeam: async (_: any, { teamId }: { teamId: string }, context: Context) => {
     if (context.user) {
       try {
         const teamQuery = context.db
           .collection("Team")
           .where("teamId", "==", teamId);
         const teamSnapshot = await teamQuery.get();
-  
+
         if (!teamSnapshot.empty) {
           const teamData = teamSnapshot.docs[0].data() as Team;
-  
-          // Create a new object with the desired fields
+
           const teamDetailsWithoutMembers = {
             AdminEmail: teamData.AdminEmail,
             Email: teamData.Email,
@@ -307,7 +301,7 @@ export const teamQueries = {
             TimeCreated: teamData.TimeCreated,
             teamId: teamData.teamId,
           };
-  
+
           return teamDetailsWithoutMembers;
         }
       } catch (error) {
@@ -315,7 +309,7 @@ export const teamQueries = {
         throw error;
       }
     }
-  
+
     return null;
   },
 
@@ -326,7 +320,6 @@ export const teamQueries = {
   ) => {
     if (context.user) {
       try {
-        // Najít tým podle teamId
         const teamQuery = context.db
           .collection("Team")
           .where("teamId", "==", teamId);
@@ -336,15 +329,11 @@ export const teamQueries = {
         if (!teamSnapshot.empty) {
           const teamData = teamSnapshot.docs[0].data() as Team;
 
-          // Check if the team has associated halls
           if (teamData.Halls) {
-            // Retrieve the list of halls
-            const halls = teamData.Halls as Hall[]; // Replace 'Hall' with the actual type of your hall data
+            const halls = teamData.Halls as Hall[];
 
-            // Optionally, you can process the halls data or return it directly
             return halls;
           } else {
-            // If no halls are associated, return null
             return null;
           }
         }
@@ -364,7 +353,6 @@ export const teamQueries = {
   ) => {
     if (context.user) {
       try {
-        // Najít tým podle teamId
         const teamQuery = context.db
           .collection("Team")
           .where("teamId", "==", teamId);
@@ -374,15 +362,11 @@ export const teamQueries = {
         if (!teamSnapshot.empty) {
           const teamData = teamSnapshot.docs[0].data() as Team;
 
-          // Check if the team has associated halls
           if (teamData.TreningHalls) {
-            // Retrieve the list of halls
-            const treningHalls = teamData.TreningHalls as TreningHall[]; // Replace 'Hall' with the actual type of your hall data
+            const treningHalls = teamData.TreningHalls as TreningHall[];
 
-            // Optionally, you can process the halls data or return it directly
             return treningHalls;
           } else {
-            // If no halls are associated, return null
             return null;
           }
         }
@@ -402,7 +386,6 @@ export const teamQueries = {
   ) => {
     if (context.user) {
       try {
-        // Najít tým podle teamId
         const teamQuery = context.db
           .collection("Team")
           .where("teamId", "==", teamId);
@@ -412,15 +395,10 @@ export const teamQueries = {
         if (!teamSnapshot.empty) {
           const teamData = teamSnapshot.docs[0].data() as Team;
 
-          // Check if the team has associated halls
           if (teamData.Gyms) {
-            // Retrieve the list of halls
-            const gyms = teamData.Gyms as Gym[]; // Replace 'Hall' with the actual type of your hall data
-
-            // Optionally, you can process the halls data or return it directly
+            const gyms = teamData.Gyms as Gym[];
             return gyms;
           } else {
-            // If no halls are associated, return null
             return null;
           }
         }
@@ -444,15 +422,15 @@ export const teamQueries = {
           .collection("Team")
           .where("teamId", "==", teamId);
         const teamSnapshot = await teamQuery.get();
-  
+
         if (!teamSnapshot.empty) {
           const teamDoc = teamSnapshot.docs[0];
-  
+
           if (teamDoc.data().Halls) {
             const halls = teamDoc.data().Halls as Hall[];
-  
+
             const hall = halls.find((h) => h.hallId === hallId);
-  
+
             if (hall) {
               return hall;
             }
@@ -463,9 +441,7 @@ export const teamQueries = {
       console.error("Error getting hall by teamId and hallId:", error);
       throw error;
     }
-  
+
     return null;
   },
-
-  
 };
