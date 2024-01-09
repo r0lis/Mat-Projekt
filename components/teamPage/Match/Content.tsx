@@ -74,8 +74,6 @@ const GET_USER_DETAILS = gql`
   }
 `;
 
-
-
 type Props = {
   teamId: string;
 };
@@ -140,7 +138,6 @@ const Content: React.FC<Props> = ({ teamId }) => {
     }
   }, [userDetailsData]);
 
-
   if (subteamLoading || matchesLoading || userDetailsLoading)
     return (
       <Box
@@ -154,7 +151,8 @@ const Content: React.FC<Props> = ({ teamId }) => {
         <CircularProgress color="primary" size={50} />
       </Box>
     );
-  if (subteamError || matchesError || userDetailsError) return <Typography>Chyba</Typography>;
+  if (subteamError || matchesError || userDetailsError)
+    return <Typography>Chyba</Typography>;
 
   const getMatchTypeLabel = (matchType: string) => {
     return matchType === "home"
@@ -163,6 +161,10 @@ const Content: React.FC<Props> = ({ teamId }) => {
       ? "Hostí"
       : "";
   };
+
+  if (!matchesData || !matchesData.getMatchesBySubteam) {
+    return <Typography>Nemáte naplánován žádný zápas.</Typography>;
+  }
 
   return (
     <Box>
@@ -196,7 +198,7 @@ const Content: React.FC<Props> = ({ teamId }) => {
                     paddingRight: "1em",
                     backgroundColor: "rgba(0, 56, 255, 0.24)",
                     borderRadius: "10px 10px 0 0",
-                    borderBottom: "2px solid rgba(0, 34, 155, 1)", 
+                    borderBottom: "2px solid rgba(0, 34, 155, 1)",
                     paddingTop: "1em",
                     paddingBottom: "0.5em",
                   }}
@@ -219,7 +221,6 @@ const Content: React.FC<Props> = ({ teamId }) => {
                       Čas: {match.time}
                     </Typography>
                   </Box>
-                  
                 </Box>
                 <Box
                   sx={{
@@ -257,7 +258,6 @@ const Content: React.FC<Props> = ({ teamId }) => {
                       <HallInfo teamId={teamId} hallId={match.selectedHallId} />
                     )}
                   </Box>
-                 
                 </Box>
                 <Box
                   sx={{
@@ -265,12 +265,12 @@ const Content: React.FC<Props> = ({ teamId }) => {
                     paddingRight: "1em",
                     backgroundColor: "rgba(0, 56, 255, 0.15)",
                     borderRadius: "0px 0px 10px 10px",
-                    borderTop: "2px solid rgba(0, 34, 155, 1)", 
+                    borderTop: "2px solid rgba(0, 34, 155, 1)",
                     paddingBottom: "0.5em",
                     paddingTop: "0.5em",
                   }}
                 >
-                {expandedMatchId === match.matchId ? (
+                  {expandedMatchId === match.matchId ? (
                     <Box>
                       <Box sx={{ display: "flex" }}>
                         <Typography sx={{ fontWeight: "500" }}>
@@ -282,36 +282,52 @@ const Content: React.FC<Props> = ({ teamId }) => {
                           />
                         </Box>
                       </Box>
-                      <Box sx={{backgroundColor:"white", borderRadius:"10px", marginTop:"0.5em", paddingBottom:"1em", marginBottom:"1em"}}>
-                      {match.selectedMembers &&
-                          match.selectedMembers.length > 0 ? (
-                            <Table sx={{ borderRadius: "10px", width:"80%", marginLeft:"auto", marginRight:"auto",   }}>
-                                <TableHead>
-                                  <TableRow>
-                                   
-                                    <TableCell></TableCell>
-                                    <TableCell></TableCell>
-                                    <TableCell></TableCell>
-
-                                  </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                  {match.selectedMembers.map((member, index) => (
-                                    <TableRow  sx={{borderBottom:"2px solid gray"}} key={index}>
-                                        <UserDetails email={member} />
-                                    </TableRow>
-                                  ))}
-                                </TableBody>
-                              </Table>
-                      ) : (
-                        <Box>
-                          <Typography sx={{ fontWeight: "500" }}>
-                            Nominovaní hráči:
-                          </Typography>
-                          <Typography>Žádní nominovaní hráči.</Typography>
-                        </Box>
-                      )}
-                    </Box>
+                      <Box
+                        sx={{
+                          backgroundColor: "white",
+                          borderRadius: "10px",
+                          marginTop: "0.5em",
+                          paddingBottom: "1em",
+                          marginBottom: "1em",
+                        }}
+                      >
+                        {match.selectedMembers &&
+                        match.selectedMembers.length > 0 ? (
+                          <Table
+                            sx={{
+                              borderRadius: "10px",
+                              width: "80%",
+                              marginLeft: "auto",
+                              marginRight: "auto",
+                            }}
+                          >
+                            <TableHead>
+                              <TableRow>
+                                <TableCell></TableCell>
+                                <TableCell></TableCell>
+                                <TableCell></TableCell>
+                              </TableRow>
+                            </TableHead>
+                            <TableBody>
+                              {match.selectedMembers.map((member, index) => (
+                                <TableRow
+                                  sx={{ borderBottom: "2px solid gray" }}
+                                  key={index}
+                                >
+                                  <UserDetails email={member} />
+                                </TableRow>
+                              ))}
+                            </TableBody>
+                          </Table>
+                        ) : (
+                          <Box>
+                            <Typography sx={{ fontWeight: "500" }}>
+                              Nominovaní hráči:
+                            </Typography>
+                            <Typography>Žádní nominovaní hráči.</Typography>
+                          </Box>
+                        )}
+                      </Box>
                     </Box>
                   ) : (
                     <Box>
@@ -326,15 +342,10 @@ const Content: React.FC<Props> = ({ teamId }) => {
                         </Box>
                       </Box>
                     </Box>
-                    
                   )}
-                  
-              </Box>
+                </Box>
               </Box>
             ))}
-            
-
-           
           </Box>
         );
       })}
