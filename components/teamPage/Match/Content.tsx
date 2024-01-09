@@ -74,6 +74,8 @@ const GET_USER_DETAILS = gql`
   }
 `;
 
+
+
 type Props = {
   teamId: string;
 };
@@ -106,7 +108,7 @@ const Content: React.FC<Props> = ({ teamId }) => {
   });
 
   useEffect(() => {
-    if (subteamData) {
+    if (subteamData && subteamData.getYourSubteamData) {
       const ids = subteamData.getYourSubteamData.map(
         (subteam: { subteamId: string }) => subteam.subteamId
       );
