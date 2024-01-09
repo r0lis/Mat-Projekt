@@ -192,6 +192,10 @@ export const subteamMutations = {
           selectedManagement: management,
           selectedMembers: [...players, ...management],
           matchType: matchType,
+          attendance: players.map((player) => ({
+            player: player,
+            hisAttendance: 0,
+          })),
         };
   
         // Set the data for the new match

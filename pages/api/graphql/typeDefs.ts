@@ -63,9 +63,14 @@ export const typeDefs = gql`
     selectedPlayers: [String!]
     selectedManagement: [String!]
     matchType: String!
+    attendance: [AttendanceEntry!]!
+  }
+
+  type AttendanceEntry {
+    player: String!
+    hisAttendance: Int!
   }
   
-
   input UpdatedMemberInput {
     member: String!
     role: Int!

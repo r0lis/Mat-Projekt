@@ -16,14 +16,9 @@ import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import React, { useEffect, useState } from "react";
 import { gql, useQuery } from "@apollo/client";
 import { authUtils } from "@/firebase/auth.utils";
-import HelpIcon from "@mui/icons-material/Help";
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
-import DialogActions from "@mui/material/DialogActions";
-import Button from "@mui/material/Button";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
+import HelpIcon from "@mui/icons-material/Help";
 
 const GET_SUBTEAMS = gql`
   query GetYourSubteamData($teamId: String!, $email: String!) {
@@ -60,6 +55,10 @@ const GET_MATCHES_BY_SUBTEAM = gql`
         selectedPlayers
         selectedManagement
         matchType
+        attendance {
+          player
+          hisAttendance
+        }
       }
     }
   }
@@ -108,6 +107,10 @@ interface Match {
   time: string;
   selectedMembers: string[];
   matchType: string;
+  attendance?: {
+    player: string;
+    hisAttendance: number;
+  }[];
 }
 
 const Content: React.FC<Props> = ({ teamId }) => {
@@ -116,9 +119,6 @@ const Content: React.FC<Props> = ({ teamId }) => {
   const [expandedMatchId, setExpandedMatchId] = useState<string | null>(null);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [, setUserDetails] = useState<any>(null);
-  const [openModal, setOpenModal] = useState(false);
-  const [attendanceConfirmed, setAttendanceConfirmed] = useState(false);
-  const [selectedMatchId, setSelectedMatchId] = useState<string | null>(null);
 
   const {
     loading: roleLoading,
@@ -190,14 +190,6 @@ const Content: React.FC<Props> = ({ teamId }) => {
   const userRole = roleData?.getUserRoleInTeam?.role;
   const isRole3 = userRole == 3;
 
-  const handleAttendanceConfirmation = (matchId: string, confirm: boolean) => {
-    console.log(`User ${user?.email} ${confirm ? "confirmed" : "declined"} attendance for match ${matchId}`);
-    
-    setAttendanceConfirmed(confirm);
-    setSelectedMatchId(matchId);
-    setOpenModal(false);
-  };
-
   const getMatchTypeLabel = (matchType: string) => {
     return matchType === "home"
       ? "Domácí"
@@ -265,30 +257,50 @@ const Content: React.FC<Props> = ({ teamId }) => {
                       Čas: {match.time}
                     </Typography>
                     <Box sx={{ marginLeft: "auto" }}>
-                    {isRole3 && (
+                      {isRole3 && (
                         <Box sx={{ display: "flex", alignItems: "center" }}>
-                          <Box
-                            sx={{ marginLeft: "auto", cursor: "pointer" }}
-                            onClick={() => {
-                              setOpenModal(true);
-                              setSelectedMatchId(match.matchId);
-                            }}
-                          >
-                            {attendanceConfirmed === null && selectedMatchId === match.matchId ? ( <HelpIcon sx={{ color: "" }} />):(
-                              <Box>
-                                <Typography sx={{ fontWeight: "500" }}>
-                                  zmenit účast
-                                </Typography>
-                              </Box>
-                            )}
-                           
+                          <Box sx={{ marginLeft: "auto", cursor: "pointer" }}>
+                            <Box sx={{ display: "flex", alignItems: "center" }}>
+                              <Typography sx={{ fontWeight: "500" }}>
+                                Změnit účast
+                              </Typography>
+                              {match.attendance?.map(
+                                (attendanceRecord) =>
+                                  user?.email === attendanceRecord.player && (
+                                    <Box
+                                      key={attendanceRecord.player}
+                                      sx={{ marginLeft: "1em" }}
+                                    >
+                                      {user?.email ===
+                                        attendanceRecord.player && (
+                                        <>
+                                          {attendanceRecord.hisAttendance ===
+                                            0 && <HelpIcon />}
+                                          {attendanceRecord.hisAttendance ===
+                                            1 && (
+                                            <CheckCircleIcon
+                                              style={{
+                                                color: "green",
+                                                marginLeft: "0.5em",
+                                              }}
+                                            />
+                                          )}
+                                          {attendanceRecord.hisAttendance ===
+                                            2 && (
+                                            <CancelIcon
+                                              style={{
+                                                color: "red",
+                                                marginLeft: "0.5em",
+                                              }}
+                                            />
+                                          )}
+                                        </>
+                                      )}
+                                    </Box>
+                                  )
+                              )}
+                            </Box>
                           </Box>
-                          {attendanceConfirmed && selectedMatchId === match.matchId ? (
-                            <CheckCircleIcon sx={{ color: "green", marginLeft: "0.5em" }} />
-                          ) : null}
-                          {attendanceConfirmed === false && selectedMatchId === match.matchId ? (
-                            <CancelIcon sx={{ color: "red", marginLeft: "0.5em" }} />
-                          ) : null}
                         </Box>
                       )}
                     </Box>
@@ -531,20 +543,6 @@ const Content: React.FC<Props> = ({ teamId }) => {
           </Box>
         );
       })}
-        <Dialog open={openModal} onClose={() => setOpenModal(false)}>
-        <DialogTitle>Confirmation</DialogTitle>
-        <DialogContent>
-          <Typography>Do you confirm your attendance for this match?</Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => handleAttendanceConfirmation(selectedMatchId || "", true)}>
-            Confirm
-          </Button>
-          <Button onClick={() => handleAttendanceConfirmation(selectedMatchId || "", false)}>
-            Decline
-          </Button>
-        </DialogActions>
-      </Dialog>
     </Box>
   );
 };
