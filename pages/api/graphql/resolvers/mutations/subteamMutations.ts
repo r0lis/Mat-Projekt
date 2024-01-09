@@ -40,8 +40,9 @@ type AddMatchInput = {
   selectedHallId: String
   date: String
   time: String
-  selectedMembers: [String]
   matchType: String
+  players: [String]
+  management: [String]
 }
 
 
@@ -171,7 +172,7 @@ export const subteamMutations = {
       context: Context
     ) => {
       try {
-        const { subteamIdSelected, opponentName, selectedHallId, date, time, selectedMembers, matchType } = input;
+        const { subteamIdSelected, opponentName, selectedHallId, date, time, players, management, matchType } = input;
   
   
         // Create a new match document
@@ -187,7 +188,9 @@ export const subteamMutations = {
           selectedHallId: selectedHallId,
           date: date,
           time: time,
-          selectedMembers: selectedMembers,
+          selectedPlayers: players,
+          selectedManagement: management,
+          selectedMembers: [...players, ...management],
           matchType: matchType,
         };
   

@@ -46,7 +46,8 @@ export const typeDefs = gql`
     selectedHallId: String!
     date: String!
     time: String!
-    selectedMembers: [String!]!
+    players: [String!]!
+    management: [String!]!
     matchType: String!
   }
 
@@ -58,7 +59,9 @@ export const typeDefs = gql`
     selectedHallId: String!
     date: String!
     time: String!
-    selectedMembers: [String!]!
+    selectedMembers: [String!]
+    selectedPlayers: [String!]
+    selectedManagement: [String!]
     matchType: String!
   }
   

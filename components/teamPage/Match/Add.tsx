@@ -235,10 +235,11 @@ const AddMatch: React.FC<Props> = ({ teamId, closeAddMatch }) => {
   };
 
   const hasPosition4Member = selectedMembers.some((email) =>
-  completeData?.getCompleteSubteamDetail?.subteamMembers.some(
-    (member: SubteamMember) => member.email === email && member.position === "4"
-  )
-);
+    completeData?.getCompleteSubteamDetail?.subteamMembers.some(
+      (member: SubteamMember) =>
+        member.email === email && member.position === "4"
+    )
+  );
 
   const handleAddMatch = async () => {
     setErrorMessages([]);
@@ -291,13 +292,24 @@ const AddMatch: React.FC<Props> = ({ teamId, closeAddMatch }) => {
       return;
     }
 
+    const players = selectedMembers.filter((email) =>
+    completeData?.getCompleteSubteamDetail?.subteamMembers.some(
+      (member: SubteamMember) =>
+        member.email === email && member.position === "4"
+    )
+  );
+    const management = selectedMembers.filter((email) =>
+     !players.includes(email)
+    );
+
     const input = {
-     subteamIdSelected,
+      subteamIdSelected,
       opponentName,
       selectedHallId,
       date,
       time,
-      selectedMembers,
+      players,
+      management,
       matchType,
     };
     try {
@@ -343,12 +355,16 @@ const AddMatch: React.FC<Props> = ({ teamId, closeAddMatch }) => {
 
         <Box sx={{ width: "80%", marginLeft: "auto", marginRight: "auto" }}>
           <Box>
-            <Typography variant="body2">Tým</Typography>
+            <Typography variant="body2">Zvolte tým</Typography>
             <Select
               value={subteamIdSelected || ""}
               sx={{ width: "50%", marginTop: "1em" }}
               onChange={handleSubteamChange}
             >
+              <MenuItem value="" disabled>
+                Prosím, zvolte tým
+              </MenuItem>
+
               {subteams.map((subteam: Subteam) => (
                 <MenuItem key={subteam.subteamId} value={subteam.subteamId}>
                   {subteam.Name}
@@ -536,7 +552,11 @@ const AddMatch: React.FC<Props> = ({ teamId, closeAddMatch }) => {
           {errorMessages.length > 0 && (
             <Box sx={{ marginBottom: "1em" }}>
               {errorMessages.map((message, index) => (
-                <Alert sx={{marginBottom:"0.5em"}} key={index} severity="error">
+                <Alert
+                  sx={{ marginBottom: "0.5em" }}
+                  key={index}
+                  severity="error"
+                >
                   {message}
                 </Alert>
               ))}
