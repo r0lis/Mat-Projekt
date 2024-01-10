@@ -10,15 +10,15 @@ import {
   TableCell,
   Grid,
   Avatar,
+  Modal,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import React, { useEffect, useState } from "react";
-import { gql, useQuery } from "@apollo/client";
+import { gql, useMutation, useQuery } from "@apollo/client";
 import { authUtils } from "@/firebase/auth.utils";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
-import HelpIcon from "@mui/icons-material/Help";
 
 const GET_SUBTEAMS = gql`
   query GetYourSubteamData($teamId: String!, $email: String!) {
@@ -72,6 +72,20 @@ const GET_SUBTEAM_DETAILS = gql`
   }
 `;
 
+const UPDATE_ATTENDANCE = gql`
+  mutation UpdateAttendance(
+    $matchId: String!
+    $player: String!
+    $hisAttendance: Int!
+  ) {
+    updateAttendance(
+      matchId: $matchId
+      player: $player
+      hisAttendance: $hisAttendance
+    )
+  }
+`;
+
 const GET_HALL_BY_TEAM_AND_HALL_ID = gql`
   query GetHallByTeamAndHallId($teamId: String!, $hallId: String!) {
     getHallByTeamAndHallId(teamId: $teamId, hallId: $hallId) {
@@ -119,6 +133,9 @@ const Content: React.FC<Props> = ({ teamId }) => {
   const [expandedMatchId, setExpandedMatchId] = useState<string | null>(null);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [, setUserDetails] = useState<any>(null);
+  const [updatingMatchId, setUpdatingMatchId] = useState<string | null>(null);
+  const [updateAttendanceMutation] = useMutation(UPDATE_ATTENDANCE);
+  const [openModal, setOpenModal] = useState(false);
 
   const {
     loading: roleLoading,
@@ -202,6 +219,39 @@ const Content: React.FC<Props> = ({ teamId }) => {
     return <Typography>Nemáte naplánován žádný zápas.</Typography>;
   }
 
+  const handleAttendanceChange = (matchId: string) => {
+    setUpdatingMatchId(matchId);
+  };
+
+  const handleUpdateAttendance = (matchId: string, value: number) => {
+    const player = user?.email || "";
+
+    try {
+      updateAttendanceMutation({
+        variables: { matchId, player, hisAttendance: value },
+        refetchQueries: [
+          {
+            query: GET_MATCHES_BY_SUBTEAM,
+            variables: { input: { subteamIds } },
+          },
+        ],
+      });
+      setExpandedMatchId(null);
+
+      setUpdatingMatchId(null);
+    } catch (error) {
+      console.error("Chyba při aktualizaci účasti:", error);
+    }
+  };
+
+  const handleOpenModal = () => {
+    setOpenModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
+
   return (
     <Box>
       {subteamIds.map((subteamId) => {
@@ -259,23 +309,30 @@ const Content: React.FC<Props> = ({ teamId }) => {
                     <Box sx={{ marginLeft: "auto" }}>
                       {isRole3 && (
                         <Box sx={{ display: "flex", alignItems: "center" }}>
-                          <Box sx={{ marginLeft: "auto", cursor: "pointer" }}>
+                          <Box
+                            sx={{ marginLeft: "auto", cursor: "pointer" }}
+                            onClick={() =>
+                              handleAttendanceChange(match.matchId)
+                            }
+                          >
                             <Box sx={{ display: "flex", alignItems: "center" }}>
-                              <Typography sx={{ fontWeight: "500" }}>
+                              <Typography  onClick={handleOpenModal}  sx={{ fontWeight: "500" }}>
                                 Změnit účast
                               </Typography>
+
                               {match.attendance?.map(
                                 (attendanceRecord) =>
                                   user?.email === attendanceRecord.player && (
                                     <Box
                                       key={attendanceRecord.player}
-                                      sx={{ marginLeft: "1em" }}
+                                      sx={{
+                                        marginLeft: "1em",
+                                        display: "flex",
+                                        alignItems: "center",
+                                      }}
                                     >
-                                      {user?.email ===
-                                        attendanceRecord.player && (
+                                      <>
                                         <>
-                                          {attendanceRecord.hisAttendance ===
-                                            0 && <HelpIcon />}
                                           {attendanceRecord.hisAttendance ===
                                             1 && (
                                             <CheckCircleIcon
@@ -294,6 +351,59 @@ const Content: React.FC<Props> = ({ teamId }) => {
                                               }}
                                             />
                                           )}
+                                        </>
+                                      </>
+
+                                      {updatingMatchId === match.matchId && (
+                                        <>
+                                          <Modal
+                                            open={openModal}
+                                            onClose={handleCloseModal}
+                                            aria-labelledby="modal-title"
+                                            aria-describedby="modal-description"
+                                          >
+                                            <Box
+                                              sx={{
+                                                position: "absolute",
+                                                top: "50%",
+                                                left: "50%",
+                                                transform:
+                                                  "translate(-50%, -50%)",
+                                                backgroundColor: "white",
+                                                border: "1px solid #ccc",
+                                                borderRadius: "5px",
+                                                padding: "1em",
+                                              }}
+                                            >
+                                              <Typography
+                                                sx={{
+                                                  cursor: "pointer",
+                                                  marginBottom: "0.5em",
+                                                }}
+                                                onClick={() => {
+                                                  handleUpdateAttendance(
+                                                    match.matchId,
+                                                    1
+                                                  );
+                                                  handleCloseModal();
+                                                }}
+                                              >
+                                                Ano
+                                              </Typography>
+                                              <Typography
+                                                sx={{ cursor: "pointer" }}
+                                                onClick={() => {
+                                                  handleUpdateAttendance(
+                                                    match.matchId,
+                                                    2
+                                                  );
+                                                  handleCloseModal();
+                                                }}
+                                              >
+                                                Ne
+                                              </Typography>
+                                            </Box>
+                                          </Modal>
                                         </>
                                       )}
                                     </Box>
