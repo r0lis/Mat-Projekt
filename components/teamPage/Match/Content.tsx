@@ -256,6 +256,7 @@ const Content: React.FC<Props> = ({ teamId }) => {
 
   const handleCloseModal = () => {
     setOpenModal(false);
+    setUserSelection(null);
   };
 
   return (
@@ -376,54 +377,153 @@ const Content: React.FC<Props> = ({ teamId }) => {
                                                 position: "absolute",
                                                 top: "50%",
                                                 left: "50%",
+                                                width: "30%",
+                                                height:
+                                                  userSelection == 2
+                                                    ? "43%"
+                                                    : "30%",
                                                 transform:
                                                   "translate(-50%, -50%)",
                                                 backgroundColor: "white",
-                                                border: "1px solid #ccc",
-                                                borderRadius: "5px",
-                                                padding: "1em",
+                                                borderRadius: "10px",
+                                                padding: "1.5em",
                                               }}
                                             >
                                               <Typography
                                                 sx={{
-                                                  cursor: "pointer",
+                                                  fontWeight: "500",
+                                                  marginBottom: "0.2em",
+                                                }}
+                                              >
+                                                Zvolte docházku na zápas proti:{" "}
+                                                {match.opponentName}
+                                              </Typography>
+                                              <Typography
+                                                sx={{
+                                                  fontWeight: "500",
                                                   marginBottom: "0.5em",
                                                 }}
+                                              >
+                                                Datum: {match.date}
+                                              </Typography>
+                                              <Box
                                                 onClick={() =>
                                                   setUserSelection(1)
                                                 }
+                                                sx={{
+                                                  width: "30%",
+                                                  backgroundColor:
+                                                    userSelection == 1
+                                                      ? "rgba(3, 195, 17, 0.3)"
+                                                      : "",
+                                                  display: "flex",
+                                                  flexDirection: "column",
+                                                  alignItems: "center",
+                                                  justifyContent: "center",
+                                                  border:
+                                                    "1px solid rgba(3, 195, 17, 1)",
+                                                  borderRadius: "10px",
+                                                  padding: "0.5em",
+                                                  marginBottom: "0.5em",
+                                                }}
                                               >
-                                                Ano
-                                              </Typography>
-                                              <Typography
-                                                sx={{ cursor: "pointer" }}
+                                                <Typography
+                                                  sx={{
+                                                    cursor: "pointer",
+                                                    fontWeight: "500",
+                                                    fontSize: "1em",
+                                                  }}
+                                                >
+                                                  Ano
+                                                </Typography>
+                                              </Box>
+
+                                              <Box
+                                                sx={{
+                                                  width: "30%",
+                                                  backgroundColor:
+                                                    userSelection == 2
+                                                      ? "rgba(250, 0, 0, 0.2)"
+                                                      : "",
+                                                  display: "flex",
+                                                  flexDirection: "column",
+                                                  alignItems: "center",
+                                                  justifyContent: "center",
+                                                  border:
+                                                    "1px solid rgba(250, 0, 0, 1)",
+                                                  borderRadius: "10px",
+                                                  padding: "0.5em",
+                                                  marginBottom: "0.5em",
+                                                }}
                                                 onClick={() =>
                                                   setUserSelection(2)
                                                 }
                                               >
-                                                Ne
-                                              </Typography>
+                                                <Typography
+                                                  sx={{ cursor: "pointer" }}
+                                                >
+                                                  Ne
+                                                </Typography>
+                                              </Box>
 
                                               {userSelection !== null && (
                                                 <>
-                                                  <TextField
-                                                    label="Reason"
-                                                    variant="outlined"
-                                                    fullWidth
-                                                    value={reason}
-                                                    onChange={(e) =>
-                                                      setReason(e.target.value)
-                                                    }
-                                                  />
+                                                  {userSelection === 2 && (
+                                                    <TextField
+                                                      label="Důvod"
+                                                      variant="outlined"
+                                                      fullWidth
+                                                      value={reason}
+                                                      sx={{
+                                                      }}
+                                                      onChange={(e) =>
+                                                        setReason(
+                                                          e.target.value
+                                                        )
+                                                      }
+                                                    />
+                                                  )}
+                                                  {userSelection === 2 &&
+                                                    reason.length < 3 && (
+                                                      <Box>
+                                                         <Typography
+                                                        variant="caption"
+                                                        sx={{
+                                                          color: "red",
+                                                          marginBottom: "1em",
+
+                                                        }}
+                                                      >
+                                                        Důvod musí mít alespoň 3
+                                                        znaky.
+                                                      </Typography>
+                                                      </Box>
+                                                    )}
+
                                                   <Button
                                                     variant="contained"
                                                     color="primary"
+                                                    sx={{marginTop:"1em"}}
                                                     onClick={() => {
-                                                      handleUpdateAttendance(
-                                                        match.matchId,
-                                                        userSelection
-                                                      );
-                                                      handleCloseModal();
+                                                      if (
+                                                        userSelection == 2 &&
+                                                        reason.length >= 3
+                                                      ) {
+                                                        handleUpdateAttendance(
+                                                          match.matchId,
+                                                          userSelection
+                                                        );
+                                                        handleCloseModal();
+                                                      }
+                                                      if (
+                                                        userSelection == 1 
+                                                      ) {
+                                                        handleUpdateAttendance(
+                                                          match.matchId,
+                                                          userSelection
+                                                        );
+                                                        handleCloseModal();
+                                                      }
                                                     }}
                                                   >
                                                     Potvrdit
