@@ -210,33 +210,36 @@ export const subteamMutations = {
 
     updateAttendance: async (
       _: any,
-      { matchId, player, hisAttendance }: { matchId: string; player: string; hisAttendance: number },
+      { matchId, player, hisAttendance, reason }: { matchId: string; player: string; hisAttendance: number; reason?: string },
       context: Context
     ) => {
       try {
         const matchDoc = context.db.collection("Match").doc(matchId);
         const matchSnapshot = await matchDoc.get();
-  
+    
         if (!matchSnapshot.exists) {
           throw new Error(`Match with ID ${matchId} not found`);
         }
-  
+    
         const existingAttendance = matchSnapshot.data()?.attendance || [];
-  
+    
         const attendanceIndex = existingAttendance.findIndex(
           (attendanceRecord: { player: string }) => attendanceRecord.player === player
         );
-  
+    
         if (attendanceIndex === -1) {
           throw new Error(`Attendance record for player ${player} not found in match ${matchId}`);
         }
-  
+    
         existingAttendance[attendanceIndex].hisAttendance = hisAttendance;
-  
+        
+          existingAttendance[attendanceIndex].reason = reason;
+       
+    
         await matchDoc.update({
           attendance: existingAttendance,
         });
-  
+    
         return true;
       } catch (error) {
         console.error("Error updating attendance:", error);

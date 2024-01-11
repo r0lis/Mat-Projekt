@@ -299,7 +299,7 @@ export const typeDefs = gql`
     addGymToTeam(teamId: String!, gym: GymInput!): Team
     deleteGymFromTeam(teamId: String!, gymId: String!): Team
     addMatch(teamId: String!, input: AddMatchInput!): Match
-    updateAttendance(matchId: String!, player: String!, hisAttendance: Int!): Boolean
+    updateAttendance(matchId: String!, player: String!, hisAttendance: Int!, reason: String!): Boolean
 
 
 

@@ -11,6 +11,8 @@ import {
   Grid,
   Avatar,
   Modal,
+  Button,
+  TextField,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
@@ -77,11 +79,13 @@ const UPDATE_ATTENDANCE = gql`
     $matchId: String!
     $player: String!
     $hisAttendance: Int!
+    $reason: String!
   ) {
     updateAttendance(
       matchId: $matchId
       player: $player
       hisAttendance: $hisAttendance
+      reason: $reason
     )
   }
 `;
@@ -136,6 +140,8 @@ const Content: React.FC<Props> = ({ teamId }) => {
   const [updatingMatchId, setUpdatingMatchId] = useState<string | null>(null);
   const [updateAttendanceMutation] = useMutation(UPDATE_ATTENDANCE);
   const [openModal, setOpenModal] = useState(false);
+  const [reason, setReason] = useState("");
+  const [userSelection, setUserSelection] = useState<number | null>(null);
 
   const {
     loading: roleLoading,
@@ -228,7 +234,7 @@ const Content: React.FC<Props> = ({ teamId }) => {
 
     try {
       updateAttendanceMutation({
-        variables: { matchId, player, hisAttendance: value },
+        variables: { matchId, player, hisAttendance: value, reason },
         refetchQueries: [
           {
             query: GET_MATCHES_BY_SUBTEAM,
@@ -237,7 +243,6 @@ const Content: React.FC<Props> = ({ teamId }) => {
         ],
       });
       setExpandedMatchId(null);
-
       setUpdatingMatchId(null);
     } catch (error) {
       console.error("Chyba při aktualizaci účasti:", error);
@@ -246,6 +251,7 @@ const Content: React.FC<Props> = ({ teamId }) => {
 
   const handleOpenModal = () => {
     setOpenModal(true);
+    setReason("");
   };
 
   const handleCloseModal = () => {
@@ -316,7 +322,10 @@ const Content: React.FC<Props> = ({ teamId }) => {
                             }
                           >
                             <Box sx={{ display: "flex", alignItems: "center" }}>
-                              <Typography  onClick={handleOpenModal}  sx={{ fontWeight: "500" }}>
+                              <Typography
+                                onClick={handleOpenModal}
+                                sx={{ fontWeight: "500" }}
+                              >
                                 Změnit účast
                               </Typography>
 
@@ -380,28 +389,47 @@ const Content: React.FC<Props> = ({ teamId }) => {
                                                   cursor: "pointer",
                                                   marginBottom: "0.5em",
                                                 }}
-                                                onClick={() => {
-                                                  handleUpdateAttendance(
-                                                    match.matchId,
-                                                    1
-                                                  );
-                                                  handleCloseModal();
-                                                }}
+                                                onClick={() =>
+                                                  setUserSelection(1)
+                                                }
                                               >
                                                 Ano
                                               </Typography>
                                               <Typography
                                                 sx={{ cursor: "pointer" }}
-                                                onClick={() => {
-                                                  handleUpdateAttendance(
-                                                    match.matchId,
-                                                    2
-                                                  );
-                                                  handleCloseModal();
-                                                }}
+                                                onClick={() =>
+                                                  setUserSelection(2)
+                                                }
                                               >
                                                 Ne
                                               </Typography>
+
+                                              {userSelection !== null && (
+                                                <>
+                                                  <TextField
+                                                    label="Reason"
+                                                    variant="outlined"
+                                                    fullWidth
+                                                    value={reason}
+                                                    onChange={(e) =>
+                                                      setReason(e.target.value)
+                                                    }
+                                                  />
+                                                  <Button
+                                                    variant="contained"
+                                                    color="primary"
+                                                    onClick={() => {
+                                                      handleUpdateAttendance(
+                                                        match.matchId,
+                                                        userSelection
+                                                      );
+                                                      handleCloseModal();
+                                                    }}
+                                                  >
+                                                    Potvrdit
+                                                  </Button>
+                                                </>
+                                              )}
                                             </Box>
                                           </Modal>
                                         </>
