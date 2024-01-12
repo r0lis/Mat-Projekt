@@ -60,6 +60,7 @@ const GET_MATCHES_BY_SUBTEAM = gql`
         attendance {
           player
           hisAttendance
+          reason
         }
       }
     }
@@ -128,6 +129,7 @@ interface Match {
   attendance?: {
     player: string;
     hisAttendance: number;
+    reason?: string;
   }[];
 }
 
@@ -142,6 +144,7 @@ const Content: React.FC<Props> = ({ teamId }) => {
   const [openModal, setOpenModal] = useState(false);
   const [reason, setReason] = useState("");
   const [userSelection, setUserSelection] = useState<number | null>(null);
+  const [showReason, setShowReason] = useState(false);
 
   const {
     loading: roleLoading,
@@ -257,6 +260,10 @@ const Content: React.FC<Props> = ({ teamId }) => {
   const handleCloseModal = () => {
     setOpenModal(false);
     setUserSelection(null);
+  };
+
+  const handleCloseModalReason = () => {
+    setShowReason(false);
   };
 
   return (
@@ -474,8 +481,7 @@ const Content: React.FC<Props> = ({ teamId }) => {
                                                       variant="outlined"
                                                       fullWidth
                                                       value={reason}
-                                                      sx={{
-                                                      }}
+                                                      sx={{}}
                                                       onChange={(e) =>
                                                         setReason(
                                                           e.target.value
@@ -486,24 +492,23 @@ const Content: React.FC<Props> = ({ teamId }) => {
                                                   {userSelection === 2 &&
                                                     reason.length < 3 && (
                                                       <Box>
-                                                         <Typography
-                                                        variant="caption"
-                                                        sx={{
-                                                          color: "red",
-                                                          marginBottom: "1em",
-
-                                                        }}
-                                                      >
-                                                        Důvod musí mít alespoň 3
-                                                        znaky.
-                                                      </Typography>
+                                                        <Typography
+                                                          variant="caption"
+                                                          sx={{
+                                                            color: "red",
+                                                            marginBottom: "1em",
+                                                          }}
+                                                        >
+                                                          Důvod musí mít alespoň
+                                                          3 znaky.
+                                                        </Typography>
                                                       </Box>
                                                     )}
 
                                                   <Button
                                                     variant="contained"
                                                     color="primary"
-                                                    sx={{marginTop:"1em"}}
+                                                    sx={{ marginTop: "1em" }}
                                                     onClick={() => {
                                                       if (
                                                         userSelection == 2 &&
@@ -515,9 +520,7 @@ const Content: React.FC<Props> = ({ teamId }) => {
                                                         );
                                                         handleCloseModal();
                                                       }
-                                                      if (
-                                                        userSelection == 1 
-                                                      ) {
+                                                      if (userSelection == 1) {
                                                         handleUpdateAttendance(
                                                           match.matchId,
                                                           userSelection
@@ -640,8 +643,6 @@ const Content: React.FC<Props> = ({ teamId }) => {
                             <TableHead>
                               <TableRow>
                                 <TableCell></TableCell>
-                                <TableCell></TableCell>
-                                <TableCell></TableCell>
                               </TableRow>
                             </TableHead>
                             <TableBody>
@@ -687,21 +688,64 @@ const Content: React.FC<Props> = ({ teamId }) => {
                               <TableHead>
                                 <TableRow>
                                   <TableCell></TableCell>
-                                  <TableCell></TableCell>
-                                  <TableCell></TableCell>
+                                  <TableCell>Docházka</TableCell>
                                 </TableRow>
                               </TableHead>
                               <TableBody>
-                                {match.selectedPlayers
-                                  .filter((player) => player === user?.email)
-                                  .map((member, index) => (
-                                    <TableRow
-                                      sx={{ borderBottom: "2px solid gray" }}
-                                      key={index}
-                                    >
-                                      <UserDetails email={member} />
-                                    </TableRow>
-                                  ))}
+                                {match.selectedPlayers.map((member, index) => (
+                                  <TableRow
+                                    sx={{ borderBottom: "2px solid gray" }}
+                                    key={index}
+                                  >
+                                    <UserDetails email={member} />
+                                    {match.attendance?.map(
+                                      (attendanceRecord) =>
+                                        attendanceRecord.player === member && (
+                                          <>
+                                            {attendanceRecord.hisAttendance ===
+                                              1 && (
+                                              <CheckCircleIcon
+                                                key={attendanceRecord.player}
+                                                style={{
+                                                  color: "green",
+                                                  marginLeft: "0.5em",
+                                                  width: "1.5em",
+                                                  height: "1.5em",
+                                                  marginTop: "0.8em",
+                                                }}
+                                              />
+                                            )}
+                                            {attendanceRecord.hisAttendance ===
+                                              2 && (
+                                              <CancelIcon
+                                                key={attendanceRecord.player}
+                                                style={{
+                                                  color: "red",
+                                                  marginLeft: "0.5em",
+                                                  width: "1.5em",
+                                                  height: "1.5em",
+                                                  marginTop: "0.8em",
+                                                }}
+                                              />
+                                            )}
+                                            {attendanceRecord.hisAttendance ===
+                                              0 && (
+                                              <CancelIcon
+                                                key={attendanceRecord.player}
+                                                style={{
+                                                  color: "gray",
+                                                  marginLeft: "0.5em",
+                                                  width: "1.5em",
+                                                  height: "1.5em",
+                                                  marginTop: "0.8em",
+                                                }}
+                                              />
+                                            )}
+                                          </>
+                                        )
+                                    )}
+                                  </TableRow>
+                                ))}
                               </TableBody>
                             </Table>
                           </>
@@ -732,8 +776,7 @@ const Content: React.FC<Props> = ({ teamId }) => {
                                 <TableHead>
                                   <TableRow>
                                     <TableCell></TableCell>
-                                    <TableCell></TableCell>
-                                    <TableCell></TableCell>
+                                    <TableCell>Docházka</TableCell>
                                   </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -744,6 +787,107 @@ const Content: React.FC<Props> = ({ teamId }) => {
                                         key={index}
                                       >
                                         <UserDetails email={member} />
+                                        {match.attendance?.map(
+                                          (attendanceRecord) =>
+                                            attendanceRecord.player ===
+                                              member && (
+                                              <>
+                                                {attendanceRecord.hisAttendance ===
+                                                  1 && (
+                                                  <CheckCircleIcon
+                                                    key={
+                                                      attendanceRecord.player
+                                                    }
+                                                    style={{
+                                                      color: "green",
+                                                      marginLeft: "0.5em",
+                                                      width: "1.5em",
+                                                      height: "1.5em",
+                                                      marginTop: "0.8em",
+                                                    }}
+                                                  />
+                                                )}
+                                                <Box
+                                                  sx={{
+                                                    display: "flex",
+                                                    alignItems: "center",
+                                                  }}
+                                                >
+                                                  {attendanceRecord.hisAttendance ===
+                                                    2 && (
+                                                    <CancelIcon
+                                                      key={
+                                                        attendanceRecord.player
+                                                      }
+                                                      onClick={() =>
+                                                        setShowReason(true)
+                                                      }
+                                                      style={{
+                                                        color: "red",
+                                                        marginLeft: "0.5em",
+                                                        width: "1.5em",
+                                                        height: "1.5em",
+                                                        marginTop: "0.8em",
+                                                      }}
+                                                    />
+                                                  )}
+
+                                                  {attendanceRecord.reason && showReason == true && (
+                                                    <Modal
+                                                    open={showReason}
+                                                    onClose={handleCloseModalReason}
+                                                    aria-labelledby="modal-title"
+                                                    aria-describedby="modal-description"
+                                                  >
+                                                    <Box
+                                                      sx={{
+                                                        position: "absolute",
+                                                        top: "50%",
+                                                        left: "50%",
+                                                        width: "30%",
+                                                        height:
+                                                          userSelection == 2
+                                                            ? "43%"
+                                                            : "30%",
+                                                        transform:
+                                                          "translate(-50%, -50%)",
+                                                        backgroundColor: "white",
+                                                        borderRadius: "10px",
+                                                        padding: "1.5em",
+                                                      }}
+                                                    >
+                                                    <Typography
+                                                      variant="caption"
+                                                      sx={{
+                                                        color: "",
+                                                        marginLeft: "0.5em",
+                                                        fontSize: "0.8em",
+                                                      }}
+                                                    >
+                                                      {attendanceRecord.reason}
+                                                    </Typography>
+                                                    </Box>
+                                                    </Modal>
+                                                  )}
+                                                </Box>
+                                                {attendanceRecord.hisAttendance ===
+                                                  0 && (
+                                                  <CancelIcon
+                                                    key={
+                                                      attendanceRecord.player
+                                                    }
+                                                    style={{
+                                                      color: "gray",
+                                                      marginLeft: "0.5em",
+                                                      width: "1.5em",
+                                                      height: "1.5em",
+                                                      marginTop: "0.8em",
+                                                    }}
+                                                  />
+                                                )}
+                                              </>
+                                            )
+                                        )}
                                       </TableRow>
                                     )
                                   )}
@@ -838,16 +982,24 @@ const UserDetails: React.FC<{ email: string }> = ({ email }) => {
   const userDetails = data.getUserByNameAndSurname;
   return (
     <>
-      <TableCell>{userDetails.Name}</TableCell>
-      <TableCell>{userDetails.Surname}</TableCell>
       <TableCell>
-        {userDetails.Picture && (
-          <Avatar
-            src={userDetails.Picture}
-            alt={`Avatar for ${userDetails.Name}`}
-            sx={{ width: "50px", height: "50px", borderRadius: "50%" }}
-          />
-        )}
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center", // Center items vertically
+          }}
+        >
+          {userDetails.Picture && (
+            <Avatar
+              src={userDetails.Picture}
+              alt={`Avatar for ${userDetails.Name}`}
+              sx={{ width: "50px", height: "50px", borderRadius: "50%" }}
+            />
+          )}
+          <Typography sx={{ marginLeft: "1em", fontWeight: "500" }}>
+            {userDetails.Name} {userDetails.Surname}
+          </Typography>
+        </Box>
       </TableCell>
     </>
   );

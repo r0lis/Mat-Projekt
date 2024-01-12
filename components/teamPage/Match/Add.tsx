@@ -121,13 +121,20 @@ const AddMatch: React.FC<Props> = ({ teamId, closeAddMatch }) => {
   );
   const [opponentName, setOpponentName] = useState<string>("");
   const [selectedHallId, setSelectedHallId] = useState<string | null>(null);
-  const [date, setDate] = useState<string>("");
   const [time, setTime] = useState<string>("");
   const [selectedMembers, setSelectedMembers] = useState<string[]>([]);
   const [matchType, setMatchType] = useState<string>("home");
   const [completeData, setCompleteData] = useState<any>(null);
   const [errorMessages, setErrorMessages] = useState<string[]>([]);
   const [addMatch] = useMutation(ADD_MATCH);
+
+  const [date, setDate] = useState<string>(() => {
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    const currentMonth = String(currentDate.getMonth() + 1).padStart(2, '0');
+    const currentDay = String(currentDate.getDate()).padStart(2, '0');
+    return `${currentYear}-${currentMonth}-${currentDay}`;
+  });
 
   const {
     loading,
@@ -173,7 +180,20 @@ const AddMatch: React.FC<Props> = ({ teamId, closeAddMatch }) => {
   };
 
   const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setDate(event.target.value);
+    const selectedDate = new Date(event.target.value);
+    const currentYear = new Date().getFullYear();
+    const nextYear = currentYear + 1;
+
+    // Check if the selected date is in the current or next year
+    if (selectedDate.getFullYear() === currentYear || selectedDate.getFullYear() === nextYear) {
+      setDate(event.target.value);
+    } else {
+      // Display an error message or handle it as needed
+      setErrorMessages((prevMessages) => [
+        ...prevMessages,
+        "Zadejte platné datum v aktuálním nebo příštím roce.",
+      ]);
+    }
   };
 
   const handleTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {

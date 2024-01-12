@@ -69,6 +69,7 @@ export const typeDefs = gql`
   type AttendanceEntry {
     player: String!
     hisAttendance: Int!
+    reason: String
   }
   
   input UpdatedMemberInput {
