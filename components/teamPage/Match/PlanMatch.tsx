@@ -32,8 +32,8 @@ const GET_USER_ROLE_IN_TEAM = gql`
 `;
 
 const GET_MATCHES_BY_SUBTEAM = gql`
-  query GetMatchesBySubteam($input: MatchesBySubteamInput!) {
-    getMatchesBySubteam(input: $input) {
+  query GetFutureMatchesBySubteam($input: MatchesBySubteamInput!) {
+    getFutureMatchesBySubteam(input: $input) {
       subteamId
       matches {
         matchId
@@ -166,7 +166,8 @@ const PlanMatch: React.FC<Props> = ({ teamId }) => {
   const userRole = roleData?.getUserRoleInTeam?.role;
   const isRole3 = userRole == 3;
 
-  if (!matchesData || !matchesData.getMatchesBySubteam) {
+
+  if (!matchesData || !matchesData.getFutureMatchesBySubteam) {
     return <Typography>Nemáte naplánován žádný zápas.</Typography>;
   }
 
@@ -175,7 +176,7 @@ const PlanMatch: React.FC<Props> = ({ teamId }) => {
   return (
     <Box>
       {subteamIds.map((subteamId) => {
-        const subteamMatches = matchesData?.getMatchesBySubteam
+        const subteamMatches = matchesData?.getFutureMatchesBySubteam
           .filter(
             (subteam: { subteamId: string }) => subteam.subteamId === subteamId
           )

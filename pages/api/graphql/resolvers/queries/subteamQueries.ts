@@ -19,9 +19,15 @@ import {
 import "firebase/storage";
 import * as admin from "firebase-admin";
 
-const getSubteamDetails = async (subteamId: string, context: Context): Promise<Subteam | null> => {
+const getSubteamDetails = async (
+  subteamId: string,
+  context: Context
+): Promise<Subteam | null> => {
   try {
-    const subteamDoc = await context.db.collection("Teams").doc(subteamId).get();
+    const subteamDoc = await context.db
+      .collection("Teams")
+      .doc(subteamId)
+      .get();
     if (subteamDoc.exists) {
       const subteamData = subteamDoc.data() as Subteam;
       return subteamData;
@@ -42,7 +48,7 @@ export const subteamQueries = {
     try {
       if (context.user) {
         const subteamQuery = context.db
-          .collection("Teams") 
+          .collection("Teams")
           .where("teamId", "==", teamId);
         const subteamSnapshot = await subteamQuery.get();
 
@@ -169,7 +175,7 @@ export const subteamQueries = {
             subteamId: subteamData.subteamId,
             subteamMembers: subteamMembers.filter(
               Boolean
-            ) as CompleteSubteamMember[], 
+            ) as CompleteSubteamMember[],
           };
 
           return completeSubteam;
@@ -187,18 +193,24 @@ export const subteamQueries = {
     _: any,
     { subteamId }: { subteamId: string },
     context: Context
-  ): Promise<{ email: string; role: number; name: string; surname: string }[] | null> => {
+  ): Promise<
+    { email: string; role: number; name: string; surname: string }[] | null
+  > => {
     try {
       if (context.user) {
         const subteamDetails = await getSubteamDetails(subteamId, context);
 
         if (subteamDetails && subteamDetails.subteamMembers) {
-          const subteamMembers = subteamDetails.subteamMembers.map((member: any) => ({
-            email: member.email,
-            role: member.role,
-          }));
+          const subteamMembers = subteamDetails.subteamMembers.map(
+            (member: any) => ({
+              email: member.email,
+              role: member.role,
+            })
+          );
 
-          const teamQuery = context.db.collection("Team").where("teamId", "==", subteamDetails.teamId);
+          const teamQuery = context.db
+            .collection("Team")
+            .where("teamId", "==", subteamDetails.teamId);
           const teamSnapshot = await teamQuery.get();
 
           if (!teamSnapshot.empty) {
@@ -208,18 +220,27 @@ export const subteamQueries = {
               role: member.role,
             }));
 
-            const allMembers: { email: string; role: number }[] = [...subteamMembers, ...teamMembers];
+            const allMembers: { email: string; role: number }[] = [
+              ...subteamMembers,
+              ...teamMembers,
+            ];
 
             const emailOccurrences: Record<string, number> = {};
             allMembers.forEach((member) => {
-              emailOccurrences[member.email] = (emailOccurrences[member.email] || 0) + 1;
+              emailOccurrences[member.email] =
+                (emailOccurrences[member.email] || 0) + 1;
             });
 
-            const uniqueMembers = allMembers.filter((member) => emailOccurrences[member.email] === 1);
+            const uniqueMembers = allMembers.filter(
+              (member) => emailOccurrences[member.email] === 1
+            );
 
             const completeMembers = await Promise.all(
               uniqueMembers.map(async (member) => {
-                const userDoc = await context.db.collection("User").where("Email", "==", member.email).get();
+                const userDoc = await context.db
+                  .collection("User")
+                  .where("Email", "==", member.email)
+                  .get();
 
                 if (!userDoc.empty) {
                   const userData = userDoc.docs[0].data() as User;
@@ -258,22 +279,75 @@ export const subteamQueries = {
     _: any,
     { input }: { input: { subteamIds: string[] } },
     context: { db: { collection: (arg0: string) => any } }
-) => {
+  ) => {
     try {
-        const matchesSnapshot = await context.db
-            .collection("Match")
-            .where("subteamIdSelected", "in", input.subteamIds)
-            .get();
+      const matchesSnapshot = await context.db
+        .collection("Match")
+        .where("subteamIdSelected", "in", input.subteamIds)
+        .get();
 
-        const matches = matchesSnapshot.docs.map((doc: any) => doc.data() as any);
+      const matches = matchesSnapshot.docs.map((doc: any) => doc.data() as any);
 
-        const validMatches = matches.filter((match: any) => match.subteamIdSelected !== null);
+      const validMatches = matches.filter(
+        (match: any) => match.subteamIdSelected !== null
+      );
 
-        return [{ subteamId: input.subteamIds[0], matches: validMatches }];
+      return [{ subteamId: input.subteamIds[0], matches: validMatches }];
     } catch (error) {
-        console.error("Error fetching matches by subteams:", error);
-        throw error;
+      console.error("Error fetching matches by subteams:", error);
+      throw error;
     }
-},
+  },
 
+  getPastMatchesBySubteam: async (
+    _: any,
+    { input }: { input: { subteamIds: string[] } },
+    context: { db: { collection: (arg0: string) => any } }
+  ) => {
+    try {
+      const currentDate = new Date(); // Get the current date and time
+      const matchesSnapshot = await context.db
+        .collection("Match")
+        .where("subteamIdSelected", "in", input.subteamIds)
+        .get();
+  
+      const matches = matchesSnapshot.docs.map((doc: any) => doc.data() as any);
+  
+      const validMatches = matches.filter((match: any) => {
+        const matchDateTime = new Date(`${match.date} ${match.time}`);
+       
+        return matchDateTime < currentDate;
+      });
+  
+      return [{ subteamId: input.subteamIds[0], matches: validMatches }];
+    } catch (error) {
+      console.error("Error fetching matches by subteams:", error);
+      throw error;
+    }
+  },
+  getFutureMatchesBySubteam: async (
+    _: any,
+    { input }: { input: { subteamIds: string[] } },
+    context: { db: { collection: (arg0: string) => any } }
+  ) => {
+    try {
+      const currentDate = new Date(); // Get the current date and time
+      const matchesSnapshot = await context.db
+        .collection("Match")
+        .where("subteamIdSelected", "in", input.subteamIds)
+        .get();
+  
+      const matches = matchesSnapshot.docs.map((doc: any) => doc.data() as any);
+  
+      const validMatches = matches.filter((match: any) => {
+        const matchDateTime = new Date(`${match.date} ${match.time}`);
+        return matchDateTime >= currentDate;
+      });
+
+      return [{ subteamId: input.subteamIds[0], matches: validMatches }];
+    } catch (error) {
+      console.error("Error fetching future matches by subteams:", error);
+      throw error;
+    }
+  },
 };

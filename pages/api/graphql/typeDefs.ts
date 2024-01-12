@@ -253,7 +253,8 @@ export const typeDefs = gql`
     getGymsByTeamId(teamId: String!): [Gym]
     getMatchesBySubteam(input: MatchesBySubteamInput): [SubteamMatches]
     getHallByTeamAndHallId(teamId: String!, hallId: String!): Hall 
-
+    getPastMatchesBySubteam(input: MatchesBySubteamInput): [SubteamMatches]
+    getFutureMatchesBySubteam(input: MatchesBySubteamInput): [SubteamMatches]
   }
 
   type Mutation {

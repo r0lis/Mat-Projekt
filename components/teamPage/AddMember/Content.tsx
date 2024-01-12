@@ -155,7 +155,6 @@ const Content: React.FC = () => {
           {isCreated ? (
             <Alert severity="success">
             Uživatele byli přidáni!
-            {/* Add a button linking to the Team page with the specific id */}
             <Link href={`/Team/${id}`}>
               <Button variant="contained" sx={{ marginLeft: "10px" }}>
                 Přejít na Team

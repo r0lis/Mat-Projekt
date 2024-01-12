@@ -212,8 +212,8 @@ const Matchs: React.FC<Props> = (id) => {
       ) : (
         <Box
           sx={{
-            display: "flex", // Set display to flex
-            justifyContent: "space-between", // Add space between the two boxes
+            display: "flex", 
+            justifyContent: "space-between",
             width: "100%",
             marginTop: "1em",
             minHeight: "100vh",
@@ -223,7 +223,7 @@ const Matchs: React.FC<Props> = (id) => {
         >
           <Box
             sx={{
-              flex: 1, // Make the first box take up available space
+              flex: 1, 
               borderRadius: "15px",
               backgroundImage: `
         linear-gradient(to bottom, #c2c3c4 60px, #ffffff 60px)
@@ -252,7 +252,7 @@ const Matchs: React.FC<Props> = (id) => {
 
           <Box
             sx={{
-              flex: 1, // Make the first box take up available space
+              flex: 1, 
               borderRadius: "15px",
               backgroundImage: `
         linear-gradient(to bottom, #c2c3c4 60px, #ffffff 60px)
@@ -275,7 +275,7 @@ const Matchs: React.FC<Props> = (id) => {
                 Poslední zápasy
               </Typography>
               <Box sx={{ maxHeight: "22em", overflowY: "auto", marginTop:"1em" }}>
-              <PlanMatch teamId={id.teamId}/>
+              <PastMatch teamId={id.teamId}/>
               </Box>
             </Box>
           </Box>

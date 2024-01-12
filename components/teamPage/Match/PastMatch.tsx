@@ -32,8 +32,8 @@ import {
   `;
   
   const GET_MATCHES_BY_SUBTEAM = gql`
-    query GetMatchesBySubteam($input: MatchesBySubteamInput!) {
-      getMatchesBySubteam(input: $input) {
+    query GetPastMatchesBySubteam($input: MatchesBySubteamInput!) {
+        getPastMatchesBySubteam(input: $input) {
         subteamId
         matches {
           matchId
@@ -132,6 +132,7 @@ import {
       skip: subteamIds.length === 0,
     });
   
+    
     const {
       loading: userDetailsLoading,
       error: userDetailsError,
@@ -166,8 +167,8 @@ import {
     const userRole = roleData?.getUserRoleInTeam?.role;
     const isRole3 = userRole == 3;
   
-    if (!matchesData || !matchesData.getMatchesBySubteam) {
-      return <Typography>Nemáte naplánován žádný zápas.</Typography>;
+    if (!matchesData || !matchesData.getPastMatchesBySubteam) {
+      return <Typography>Nemáte žádný zápas který už proběhl.</Typography>;
     }
   
    
@@ -175,7 +176,7 @@ import {
     return (
       <Box>
         {subteamIds.map((subteamId) => {
-          const subteamMatches = matchesData?.getMatchesBySubteam
+          const subteamMatches = matchesData?.getPastMatchesBySubteam
             .filter(
               (subteam: { subteamId: string }) => subteam.subteamId === subteamId
             )

@@ -694,59 +694,67 @@ const Content: React.FC<Props> = ({ teamId }) => {
                                 </TableRow>
                               </TableHead>
                               <TableBody>
-  {match.selectedPlayers.map((member, index) => {
-    const attendanceRecord = match.attendance?.find(
-      (record) => record.player === member
-    );
+                                {match.selectedPlayers.map((member, index) => {
+                                  const attendanceRecord =
+                                    match.attendance?.find(
+                                      (record) => record.player === member
+                                    );
 
-    if (user?.email === member || attendanceRecord?.hisAttendance !== 0) {
-      return (
-        <TableRow
-          sx={{ borderBottom: "2px solid gray" }}
-          key={index}
-        >
-          <UserDetails email={member} />
-          {attendanceRecord && (
-            <>
-              {attendanceRecord.hisAttendance === 1 && (
-                <CheckCircleIcon
-                  style={{
-                    color: "green",
-                    marginLeft: "0.5em",
-                    width: "1.5em",
-                    height: "1.5em",
-                    marginTop: "0.8em",
-                  }}
-                />
-              )}
-              {attendanceRecord.hisAttendance === 2 && (
-                <CancelIcon
-                  style={{
-                    color: "red",
-                    marginLeft: "0.5em",
-                    width: "1.5em",
-                    height: "1.5em",
-                    marginTop: "0.8em",
-                  }}
-                />
-              )}
-              {attendanceRecord.hisAttendance === 0 && (
-                <HelpIcon
-                  style={{
-                    color: "gray",
-                    marginLeft: "0.5em",
-                    width: "1.5em",
-                    height: "1.5em",
-                    marginTop: "0.8em",
-                  }}
-                />
-              )}
-            </>
-          )}
-        </TableRow>
-                                );
-                }
-                return null;})}
+                                  if (
+                                    user?.email === member ||
+                                    attendanceRecord?.hisAttendance !== 0
+                                  ) {
+                                    return (
+                                      <TableRow
+                                        sx={{ borderBottom: "2px solid gray" }}
+                                        key={index}
+                                      >
+                                        <UserDetails email={member} />
+                                        {attendanceRecord && (
+                                          <>
+                                            {attendanceRecord.hisAttendance ===
+                                              1 && (
+                                              <CheckCircleIcon
+                                                style={{
+                                                  color: "green",
+                                                  marginLeft: "0.5em",
+                                                  width: "1.5em",
+                                                  height: "1.5em",
+                                                  marginTop: "0.8em",
+                                                }}
+                                              />
+                                            )}
+                                            {attendanceRecord.hisAttendance ===
+                                              2 && (
+                                              <CancelIcon
+                                                style={{
+                                                  color: "red",
+                                                  marginLeft: "0.5em",
+                                                  width: "1.5em",
+                                                  height: "1.5em",
+                                                  marginTop: "0.8em",
+                                                }}
+                                              />
+                                            )}
+                                            {attendanceRecord.hisAttendance ===
+                                              0 && (
+                                              <HelpIcon
+                                                style={{
+                                                  color: "gray",
+                                                  marginLeft: "0.5em",
+                                                  width: "1.5em",
+                                                  height: "1.5em",
+                                                  marginTop: "0.8em",
+                                                }}
+                                              />
+                                            )}
+                                          </>
+                                        )}
+                                      </TableRow>
+                                    );
+                                  }
+                                  return null;
+                                })}
                               </TableBody>
                             </Table>
                           </>
@@ -850,7 +858,7 @@ const Content: React.FC<Props> = ({ teamId }) => {
                                                             top: "50%",
                                                             left: "50%",
                                                             width: "30%",
-                                                            height:"40%",
+                                                            height: "40%",
                                                             transform:
                                                               "translate(-50%, -50%)",
                                                             backgroundColor:
@@ -870,20 +878,28 @@ const Content: React.FC<Props> = ({ teamId }) => {
                                                             {match.opponentName}
                                                             :
                                                           </Typography>
-                                                          <Card sx={{marginTop:"1em", padding:"1em", boxShadow: "0 0 10px rgba(0, 0, 0, 0.3)",}}>
-                                                          <Typography
-                                                            variant="caption"
+                                                          <Card
                                                             sx={{
-                                                              color: "",
-                                                              marginLeft:
-                                                                "0.5em",
-                                                              fontSize: "0.8em",
+                                                              marginTop: "1em",
+                                                              padding: "1em",
+                                                              boxShadow:
+                                                                "0 0 10px rgba(0, 0, 0, 0.3)",
                                                             }}
                                                           >
-                                                            {
-                                                              attendanceRecord.reason
-                                                            }
-                                                          </Typography>
+                                                            <Typography
+                                                              variant="caption"
+                                                              sx={{
+                                                                color: "",
+                                                                marginLeft:
+                                                                  "0.5em",
+                                                                fontSize:
+                                                                  "0.8em",
+                                                              }}
+                                                            >
+                                                              {
+                                                                attendanceRecord.reason
+                                                              }
+                                                            </Typography>
                                                           </Card>
                                                         </Box>
                                                       </Modal>
