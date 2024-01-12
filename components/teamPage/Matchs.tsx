@@ -7,6 +7,8 @@ import { authUtils } from "@/firebase/auth.utils";
 import { useQuery } from "@apollo/client";
 import { gql } from "@apollo/client";
 import Content from "./Match/Content";
+import PlanMatch from "./Match/PlanMatch";
+import PastMatch from "./Match/PastMatch";
 
 const GET_USER_ROLE_IN_TEAM = gql`
   query GetUserRoleInTeam($teamId: String!, $email: String!) {
@@ -161,6 +163,7 @@ const Matchs: React.FC<Props> = (id) => {
             }}
           >
             <Box sx={{}}>
+              <Box>
               <Typography
                 sx={{
                   fontSize: ["0.8rem", "1.1rem", "1.5rem"],
@@ -171,6 +174,11 @@ const Matchs: React.FC<Props> = (id) => {
               >
                 Nadcházející zápasy
               </Typography>
+              </Box>
+              <Box sx={{ maxHeight: "22em", overflowY: "auto", marginTop:"1em" }}>
+              <PlanMatch teamId={id.teamId}/>
+              </Box>
+              
             </Box>
           </Box>
           <Box
@@ -196,7 +204,9 @@ const Matchs: React.FC<Props> = (id) => {
             >
               Poslední zápasy
             </Typography>
-            <Box sx={{ maxHeight: "22em", overflowY: "auto" }}></Box>
+            <Box sx={{ maxHeight: "22em", overflowY: "auto", marginTop:"1em" }}>
+              <PastMatch teamId={id.teamId}/>
+              </Box>
           </Box>
         </Box>
       ) : (
@@ -234,6 +244,9 @@ const Matchs: React.FC<Props> = (id) => {
               >
                 Nadcházející zápasy
               </Typography>
+              <Box sx={{ maxHeight: "22em", overflowY: "auto", marginTop:"1em" }}>
+              <PlanMatch teamId={id.teamId}/>
+              </Box>
             </Box>
           </Box>
 
@@ -257,12 +270,13 @@ const Matchs: React.FC<Props> = (id) => {
                   marginLeft: "1rem",
                   fontWeight: "600",
                   paddingTop: ["1.4rem", "1rem", "0.5em"],
-                  marginBottom: "2em",
                 }}
               >
                 Poslední zápasy
               </Typography>
-              <Box sx={{ maxHeight: "22em", overflowY: "auto" }}></Box>
+              <Box sx={{ maxHeight: "22em", overflowY: "auto", marginTop:"1em" }}>
+              <PlanMatch teamId={id.teamId}/>
+              </Box>
             </Box>
           </Box>
         </Box>
