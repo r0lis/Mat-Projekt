@@ -13,6 +13,7 @@ import {
   Modal,
   Button,
   TextField,
+  Card,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
@@ -832,43 +833,61 @@ const Content: React.FC<Props> = ({ teamId }) => {
                                                     />
                                                   )}
 
-                                                  {attendanceRecord.reason && showReason == true && (
-                                                    <Modal
-                                                    open={showReason}
-                                                    onClose={handleCloseModalReason}
-                                                    aria-labelledby="modal-title"
-                                                    aria-describedby="modal-description"
-                                                  >
-                                                    <Box
-                                                      sx={{
-                                                        position: "absolute",
-                                                        top: "50%",
-                                                        left: "50%",
-                                                        width: "30%",
-                                                        height:
-                                                          userSelection == 2
-                                                            ? "43%"
-                                                            : "30%",
-                                                        transform:
-                                                          "translate(-50%, -50%)",
-                                                        backgroundColor: "white",
-                                                        borderRadius: "10px",
-                                                        padding: "1.5em",
-                                                      }}
-                                                    >
-                                                    <Typography
-                                                      variant="caption"
-                                                      sx={{
-                                                        color: "",
-                                                        marginLeft: "0.5em",
-                                                        fontSize: "0.8em",
-                                                      }}
-                                                    >
-                                                      {attendanceRecord.reason}
-                                                    </Typography>
-                                                    </Box>
-                                                    </Modal>
-                                                  )}
+                                                  {attendanceRecord.reason &&
+                                                    showReason == true && (
+                                                      <Modal
+                                                        open={showReason}
+                                                        onClose={
+                                                          handleCloseModalReason
+                                                        }
+                                                        aria-labelledby="modal-title"
+                                                        aria-describedby="modal-description"
+                                                      >
+                                                        <Box
+                                                          sx={{
+                                                            position:
+                                                              "absolute",
+                                                            top: "50%",
+                                                            left: "50%",
+                                                            width: "30%",
+                                                            height:"40%",
+                                                            transform:
+                                                              "translate(-50%, -50%)",
+                                                            backgroundColor:
+                                                              "white",
+                                                            borderRadius:
+                                                              "10px",
+                                                            padding: "1.5em",
+                                                          }}
+                                                        >
+                                                          <Typography>
+                                                            Důvod nepřítomnosti
+                                                            hráče{" "}
+                                                            <UserDetails
+                                                              email={member}
+                                                            />
+                                                            na zápas proti{" "}
+                                                            {match.opponentName}
+                                                            :
+                                                          </Typography>
+                                                          <Card sx={{marginTop:"1em", padding:"1em", boxShadow: "0 0 10px rgba(0, 0, 0, 0.3)",}}>
+                                                          <Typography
+                                                            variant="caption"
+                                                            sx={{
+                                                              color: "",
+                                                              marginLeft:
+                                                                "0.5em",
+                                                              fontSize: "0.8em",
+                                                            }}
+                                                          >
+                                                            {
+                                                              attendanceRecord.reason
+                                                            }
+                                                          </Typography>
+                                                          </Card>
+                                                        </Box>
+                                                      </Modal>
+                                                    )}
                                                 </Box>
                                                 {attendanceRecord.hisAttendance ===
                                                   0 && (
