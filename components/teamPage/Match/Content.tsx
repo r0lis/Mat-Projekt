@@ -17,6 +17,7 @@ import {
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import HelpIcon from "@mui/icons-material/Help";
 import React, { useEffect, useState } from "react";
 import { gql, useMutation, useQuery } from "@apollo/client";
 import { authUtils } from "@/firebase/auth.utils";
@@ -731,7 +732,7 @@ const Content: React.FC<Props> = ({ teamId }) => {
                                             )}
                                             {attendanceRecord.hisAttendance ===
                                               0 && (
-                                              <CancelIcon
+                                              <HelpIcon
                                                 key={attendanceRecord.player}
                                                 style={{
                                                   color: "gray",
@@ -891,7 +892,7 @@ const Content: React.FC<Props> = ({ teamId }) => {
                                                 </Box>
                                                 {attendanceRecord.hisAttendance ===
                                                   0 && (
-                                                  <CancelIcon
+                                                  <HelpIcon
                                                     key={
                                                       attendanceRecord.player
                                                     }
