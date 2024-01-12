@@ -694,60 +694,59 @@ const Content: React.FC<Props> = ({ teamId }) => {
                                 </TableRow>
                               </TableHead>
                               <TableBody>
-                                {match.selectedPlayers.map((member, index) => (
-                                  <TableRow
-                                    sx={{ borderBottom: "2px solid gray" }}
-                                    key={index}
-                                  >
-                                    <UserDetails email={member} />
-                                    {match.attendance?.map(
-                                      (attendanceRecord) =>
-                                        attendanceRecord.player === member && (
-                                          <>
-                                            {attendanceRecord.hisAttendance ===
-                                              1 && (
-                                              <CheckCircleIcon
-                                                key={attendanceRecord.player}
-                                                style={{
-                                                  color: "green",
-                                                  marginLeft: "0.5em",
-                                                  width: "1.5em",
-                                                  height: "1.5em",
-                                                  marginTop: "0.8em",
-                                                }}
-                                              />
-                                            )}
-                                            {attendanceRecord.hisAttendance ===
-                                              2 && (
-                                              <CancelIcon
-                                                key={attendanceRecord.player}
-                                                style={{
-                                                  color: "red",
-                                                  marginLeft: "0.5em",
-                                                  width: "1.5em",
-                                                  height: "1.5em",
-                                                  marginTop: "0.8em",
-                                                }}
-                                              />
-                                            )}
-                                            {attendanceRecord.hisAttendance ===
-                                              0 && (
-                                              <HelpIcon
-                                                key={attendanceRecord.player}
-                                                style={{
-                                                  color: "gray",
-                                                  marginLeft: "0.5em",
-                                                  width: "1.5em",
-                                                  height: "1.5em",
-                                                  marginTop: "0.8em",
-                                                }}
-                                              />
-                                            )}
-                                          </>
-                                        )
-                                    )}
-                                  </TableRow>
-                                ))}
+  {match.selectedPlayers.map((member, index) => {
+    const attendanceRecord = match.attendance?.find(
+      (record) => record.player === member
+    );
+
+    if (user?.email === member || attendanceRecord?.hisAttendance !== 0) {
+      return (
+        <TableRow
+          sx={{ borderBottom: "2px solid gray" }}
+          key={index}
+        >
+          <UserDetails email={member} />
+          {attendanceRecord && (
+            <>
+              {attendanceRecord.hisAttendance === 1 && (
+                <CheckCircleIcon
+                  style={{
+                    color: "green",
+                    marginLeft: "0.5em",
+                    width: "1.5em",
+                    height: "1.5em",
+                    marginTop: "0.8em",
+                  }}
+                />
+              )}
+              {attendanceRecord.hisAttendance === 2 && (
+                <CancelIcon
+                  style={{
+                    color: "red",
+                    marginLeft: "0.5em",
+                    width: "1.5em",
+                    height: "1.5em",
+                    marginTop: "0.8em",
+                  }}
+                />
+              )}
+              {attendanceRecord.hisAttendance === 0 && (
+                <HelpIcon
+                  style={{
+                    color: "gray",
+                    marginLeft: "0.5em",
+                    width: "1.5em",
+                    height: "1.5em",
+                    marginTop: "0.8em",
+                  }}
+                />
+              )}
+            </>
+          )}
+        </TableRow>
+                                );
+                }
+                return null;})}
                               </TableBody>
                             </Table>
                           </>
