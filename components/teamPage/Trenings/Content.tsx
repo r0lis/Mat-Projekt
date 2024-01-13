@@ -18,6 +18,7 @@ import {
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import HelpIcon from "@mui/icons-material/Help";
+import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { gql, useMutation, useQuery } from "@apollo/client";
 import { authUtils } from "@/firebase/auth.utils";
@@ -93,8 +94,8 @@ const UPDATE_ATTENDANCE = gql`
 `;
 
 const GET_HALL_BY_TEAM_AND_HALL_ID = gql`
-  query getTreningHallsByTeamId($teamId: String! ) {
-    getTreningHallsByTeamId(teamId: $teamId,) {
+  query getTreningHallsByTeamId($teamId: String!) {
+    getTreningHallsByTeamId(teamId: $teamId) {
       treningHallId
       name
       location
@@ -103,13 +104,18 @@ const GET_HALL_BY_TEAM_AND_HALL_ID = gql`
 `;
 
 const GET_HALL_BY_TEAM_AND_HALL_ID2 = gql`
-  query GetTrainingHallByTeamAndHallId($teamId: String!, $treningHallId: String!) {
-    getTrainingHallByTeamAndHallId(teamId: $teamId, treningHallId: $treningHallId) {
+  query GetTrainingHallByTeamAndHallId(
+    $teamId: String!
+    $treningHallId: String!
+  ) {
+    getTrainingHallByTeamAndHallId(
+      teamId: $teamId
+      treningHallId: $treningHallId
+    ) {
       treningHallId
       name
       location
-    },
-    
+    }
   }
 `;
 
@@ -156,6 +162,7 @@ const Content: React.FC<Props> = ({ teamId }) => {
   const [reason, setReason] = useState("");
   const [userSelection, setUserSelection] = useState<number | null>(null);
   const [showReason, setShowReason] = useState(false);
+  const router = useRouter();
 
   const {
     loading: roleLoading,
@@ -208,11 +215,21 @@ const Content: React.FC<Props> = ({ teamId }) => {
     }
   }, [userDetailsData]);
 
-  const { loading, error, data: dataHalls } = useQuery(GET_HALL_BY_TEAM_AND_HALL_ID, {
-    variables: { teamId, },
+  const {
+    loading,
+    error,
+    data: dataHalls,
+  } = useQuery(GET_HALL_BY_TEAM_AND_HALL_ID, {
+    variables: { teamId },
   });
 
-  if (subteamLoading || matchesLoading || userDetailsLoading || roleLoading || loading)
+  if (
+    subteamLoading ||
+    matchesLoading ||
+    userDetailsLoading ||
+    roleLoading ||
+    loading
+  )
     return (
       <Box
         sx={{
@@ -225,20 +242,100 @@ const Content: React.FC<Props> = ({ teamId }) => {
         <CircularProgress color="primary" size={50} />
       </Box>
     );
-  if (subteamError || matchesError || userDetailsError || roleError|| error)
+  if (subteamError || matchesError || userDetailsError || roleError || error)
     return <Typography>Chyba</Typography>;
 
   const userRole = roleData?.getUserRoleInTeam?.role;
   const isRole3 = userRole == 3;
 
-  if(!dataHalls || !dataHalls.getTreningHallsByTeamId || dataHalls.getTreningHallsByTeamId.length === 0 ){
-    return <Typography>Dokončete vytvoření klubu ve správě.</Typography>;
-  }
-  if (!matchesData || !matchesData.getTrainingsBySubteam || matchesData.getTrainingsBySubteam[0]?.trainings.length === 0) {
-    return <Typography>Nemáte naplánován žádný trenink.</Typography>;
-  }
+  const handleButtonClick = () => {
+    router.push(`/Team/${teamId}/#Settings`);
+    window.location.reload();
+  };
 
-  
+  if (
+    !dataHalls ||
+    !dataHalls.getTreningHallsByTeamId ||
+    dataHalls.getTreningHallsByTeamId.length === 0
+  ) {
+    return (
+      <Box
+        sx={{
+          backgroundColor: "	rgba(255,153,102, 0.3)",
+          height: "8em",
+          padding: "0em 0em 1.5em 0em",
+          width: "80%",
+          marginLeft: "auto",
+          marginRight: "auto",
+          borderRadius: "10px",
+          border: "1px solid rgba(255,153,102, 1)",
+        }}
+      >
+        <Box
+          sx={{
+            backgroundColor: "	rgba(255,153,102, 0.4)",
+            borderRadius: "10px 10px 0px 0px",
+            padding: "1em",
+            borderBottom: "2px solid rgba(255,153,102, 1)",
+          }}
+        >
+          <Typography sx={{ fontSize: "1.2em", fontWeight: "500" }}>
+            Varování
+          </Typography>
+        </Box>
+        <Box sx={{ padding: "1em", display: "flex" }}>
+          <Typography>Dokončete vytvoření klubu ve správě.</Typography>
+          <Button
+            onClick={handleButtonClick}
+            sx={{
+              marginLeft: "auto",
+              backgroundColor: "#027ef2",
+              color: "white",
+              fontWeight: "500",
+            }}
+          >
+            Správa
+          </Button>
+        </Box>
+      </Box>
+    );
+  }
+  if (
+    !matchesData ||
+    !matchesData.getTrainingsBySubteam ||
+    matchesData.getTrainingsBySubteam[0]?.trainings.length === 0
+  ) {
+    return (
+      <Box
+        sx={{
+          backgroundColor: "	rgba(255,153,102, 0.3)",
+          height: "8em",
+          padding: "0em 0em 1.5em 0em",
+          width: "80%",
+          marginLeft: "auto",
+          marginRight: "auto",
+          borderRadius: "10px",
+          border: "1px solid rgba(255,153,102, 1)",
+        }}
+      >
+        <Box
+          sx={{
+            backgroundColor: "	rgba(255,153,102, 0.4)",
+            borderRadius: "10px 10px 0px 0px",
+            padding: "1em",
+            borderBottom: "2px solid rgba(255,153,102, 1)",
+          }}
+        >
+          <Typography sx={{ fontSize: "1.2em", fontWeight: "500" }}>
+            Varování
+          </Typography>
+        </Box>
+        <Box sx={{ padding: "1em", display: "flex" }}>
+          <Typography>Nemáte naplánovaný žádný zápas.</Typography>
+        </Box>
+      </Box>
+    );
+  }
 
   const handleAttendanceChange = (matchId: string) => {
     setUpdatingMatchId(matchId);
@@ -278,6 +375,7 @@ const Content: React.FC<Props> = ({ teamId }) => {
     setShowReason(false);
   };
 
+ 
   return (
     <Box>
       {subteamIds.map((subteamId) => {
@@ -350,7 +448,10 @@ const Content: React.FC<Props> = ({ teamId }) => {
                               </Typography>
 
                               {training.attendance?.map(
-                                (attendanceRecord: { player: React.Key | null | undefined; hisAttendance: number; }) =>
+                                (attendanceRecord: {
+                                  player: React.Key | null | undefined;
+                                  hisAttendance: number;
+                                }) =>
                                   user?.email === attendanceRecord.player && (
                                     <Box
                                       key={attendanceRecord.player}
@@ -571,12 +672,13 @@ const Content: React.FC<Props> = ({ teamId }) => {
                       <Typography sx={{ fontWeight: "500" }}>
                         Váš tým:
                       </Typography>
-                      
                     </Grid>
                     <Grid item xs={6}>
                       <Box>
                         {training.subteamIdSelected && (
-                          <SubteamDetails subteamId={training.subteamIdSelected} />
+                          <SubteamDetails
+                            subteamId={training.subteamIdSelected}
+                          />
                         )}
                       </Box>
                     </Grid>
@@ -587,7 +689,10 @@ const Content: React.FC<Props> = ({ teamId }) => {
                   </Typography>
                   <Box>
                     {training.selectedHallId && (
-                      <HallInfo teamId={teamId} treningHallId={training.selectedHallId} />
+                      <HallInfo
+                        teamId={teamId}
+                        treningHallId={training.selectedHallId}
+                      />
                     )}
                   </Box>
                 </Box>
@@ -653,14 +758,19 @@ const Content: React.FC<Props> = ({ teamId }) => {
                               </TableRow>
                             </TableHead>
                             <TableBody>
-                              {training.selectedManagement.map((member: string, index: React.Key | null | undefined) => (
-                                <TableRow
-                                  sx={{ borderBottom: "2px solid gray" }}
-                                  key={index}
-                                >
-                                  <UserDetails email={member} />
-                                </TableRow>
-                              ))}
+                              {training.selectedManagement.map(
+                                (
+                                  member: string,
+                                  index: React.Key | null | undefined
+                                ) => (
+                                  <TableRow
+                                    sx={{ borderBottom: "2px solid gray" }}
+                                    key={index}
+                                  >
+                                    <UserDetails email={member} />
+                                  </TableRow>
+                                )
+                              )}
                             </TableBody>
                           </Table>
                         ) : (
@@ -699,67 +809,71 @@ const Content: React.FC<Props> = ({ teamId }) => {
                                 </TableRow>
                               </TableHead>
                               <TableBody>
-                                {training.selectedPlayers.map((member, index) => {
-                                  const attendanceRecord =
-                                  training.attendance?.find(
-                                      (record) => record.player === member
-                                    );
+                                {training.selectedPlayers.map(
+                                  (member, index) => {
+                                    const attendanceRecord =
+                                      training.attendance?.find(
+                                        (record) => record.player === member
+                                      );
 
-                                  if (
-                                    user?.email === member ||
-                                    attendanceRecord?.hisAttendance !== 0
-                                  ) {
-                                    return (
-                                      <TableRow
-                                        sx={{ borderBottom: "2px solid gray" }}
-                                        key={index}
-                                      >
-                                        <UserDetails email={member} />
-                                        {attendanceRecord && (
-                                          <>
-                                            {attendanceRecord.hisAttendance ===
-                                              1 && (
-                                              <CheckCircleIcon
-                                                style={{
-                                                  color: "green",
-                                                  marginLeft: "0.5em",
-                                                  width: "1.5em",
-                                                  height: "1.5em",
-                                                  marginTop: "0.8em",
-                                                }}
-                                              />
-                                            )}
-                                            {attendanceRecord.hisAttendance ===
-                                              2 && (
-                                              <CancelIcon
-                                                style={{
-                                                  color: "red",
-                                                  marginLeft: "0.5em",
-                                                  width: "1.5em",
-                                                  height: "1.5em",
-                                                  marginTop: "0.8em",
-                                                }}
-                                              />
-                                            )}
-                                            {attendanceRecord.hisAttendance ===
-                                              0 && (
-                                              <HelpIcon
-                                                style={{
-                                                  color: "gray",
-                                                  marginLeft: "0.5em",
-                                                  width: "1.5em",
-                                                  height: "1.5em",
-                                                  marginTop: "0.8em",
-                                                }}
-                                              />
-                                            )}
-                                          </>
-                                        )}
-                                      </TableRow>
-                                    );
+                                    if (
+                                      user?.email === member ||
+                                      attendanceRecord?.hisAttendance !== 0
+                                    ) {
+                                      return (
+                                        <TableRow
+                                          sx={{
+                                            borderBottom: "2px solid gray",
+                                          }}
+                                          key={index}
+                                        >
+                                          <UserDetails email={member} />
+                                          {attendanceRecord && (
+                                            <>
+                                              {attendanceRecord.hisAttendance ===
+                                                1 && (
+                                                <CheckCircleIcon
+                                                  style={{
+                                                    color: "green",
+                                                    marginLeft: "0.5em",
+                                                    width: "1.5em",
+                                                    height: "1.5em",
+                                                    marginTop: "0.8em",
+                                                  }}
+                                                />
+                                              )}
+                                              {attendanceRecord.hisAttendance ===
+                                                2 && (
+                                                <CancelIcon
+                                                  style={{
+                                                    color: "red",
+                                                    marginLeft: "0.5em",
+                                                    width: "1.5em",
+                                                    height: "1.5em",
+                                                    marginTop: "0.8em",
+                                                  }}
+                                                />
+                                              )}
+                                              {attendanceRecord.hisAttendance ===
+                                                0 && (
+                                                <HelpIcon
+                                                  style={{
+                                                    color: "gray",
+                                                    marginLeft: "0.5em",
+                                                    width: "1.5em",
+                                                    height: "1.5em",
+                                                    marginTop: "0.8em",
+                                                  }}
+                                                />
+                                              )}
+                                            </>
+                                          )}
+                                        </TableRow>
+                                      );
+                                    }
+                                    return null;
                                   }
-                                  return null;
-                                })}
+                                )}
                               </TableBody>
                             </Table>
                           </>
@@ -880,7 +994,9 @@ const Content: React.FC<Props> = ({ teamId }) => {
                                                               email={member}
                                                             />
                                                             na zápas proti{" "}
-                                                            {training.opponentName}
+                                                            {
+                                                              training.opponentName
+                                                            }
                                                             :
                                                           </Typography>
                                                           <Card
@@ -983,7 +1099,7 @@ const HallInfo: React.FC<HallInfoProps> = ({ teamId, treningHallId }) => {
   if (error) return <Typography>Error loading hall information</Typography>;
 
   const hall = data.getTrainingHallByTeamAndHallId;
-  console.log(hall)
+  console.log(hall);
   return (
     <Box sx={{ paddingBottom: "0.5em" }}>
       <Grid container spacing={2}>

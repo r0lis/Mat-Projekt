@@ -23,6 +23,7 @@ import { gql, useMutation, useQuery } from "@apollo/client";
 import { authUtils } from "@/firebase/auth.utils";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
+import { useRouter } from "next/router";
 
 const GET_SUBTEAMS = gql`
   query GetYourSubteamData($teamId: String!, $email: String!) {
@@ -159,6 +160,7 @@ const Content: React.FC<Props> = ({ teamId }) => {
   const [reason, setReason] = useState("");
   const [userSelection, setUserSelection] = useState<number | null>(null);
   const [showReason, setShowReason] = useState(false);
+  const router = useRouter();
 
   const {
     loading: roleLoading,
@@ -242,15 +244,87 @@ const Content: React.FC<Props> = ({ teamId }) => {
       : "";
   };
 
+  const handleButtonClick = () => {
+    router.push(`/Team/${teamId}/#Settings`);
+    window.location.reload();
+  };
+
   if(!dataHalls || !dataHalls.getHallsByTeamId || dataHalls.getHallsByTeamId.length === 0 ){
-    return <Typography>Dokončete vytvoření klubu ve správě.</Typography>;
+    return (
+      <Box
+        sx={{
+          backgroundColor: "	rgba(255,153,102, 0.3)",
+          height: "8em",
+          padding: "0em 0em 1.5em 0em",
+          width: "80%",
+          marginLeft: "auto",
+          marginRight: "auto",
+          borderRadius: "10px",
+          border: "1px solid rgba(255,153,102, 1)",
+        }}
+      >
+        <Box
+          sx={{
+            backgroundColor: "	rgba(255,153,102, 0.4)",
+            borderRadius: "10px 10px 0px 0px",
+            padding: "1em",
+            borderBottom: "2px solid rgba(255,153,102, 1)",
+          }}
+        >
+          <Typography sx={{ fontSize: "1.2em", fontWeight: "500" }}>
+            Varování
+          </Typography>
+        </Box>
+        <Box sx={{ padding: "1em", display: "flex" }}>
+          <Typography>Dokončete vytvoření klubu ve správě.</Typography>
+          <Button
+            onClick={handleButtonClick}
+            sx={{
+              marginLeft: "auto",
+              backgroundColor: "#027ef2",
+              color: "white",
+              fontWeight: "500",
+            }}
+          >
+            Správa
+          </Button>
+        </Box>
+      </Box>
+    );
   }
 
   if (!matchesData || !matchesData.getMatchesBySubteam || matchesData.getMatchesBySubteam[0]?.matches.length === 0) {
-    return <Typography>Nemáte naplánován žádný zápas.</Typography>;
+    return (
+      <Box
+        sx={{
+          backgroundColor: "	rgba(255,153,102, 0.3)",
+          height: "8em",
+          padding: "0em 0em 1.5em 0em",
+          width: "80%",
+          marginLeft: "auto",
+          marginRight: "auto",
+          borderRadius: "10px",
+          border: "1px solid rgba(255,153,102, 1)",
+        }}
+      >
+        <Box
+          sx={{
+            backgroundColor: "	rgba(255,153,102, 0.4)",
+            borderRadius: "10px 10px 0px 0px",
+            padding: "1em",
+            borderBottom: "2px solid rgba(255,153,102, 1)",
+          }}
+        >
+          <Typography sx={{ fontSize: "1.2em", fontWeight: "500" }}>
+            Varování
+          </Typography>
+        </Box>
+        <Box sx={{ padding: "1em", display: "flex" }}>
+          <Typography>Nemáte naplánovaný žádný zápas.</Typography>
+        </Box>
+      </Box>
+    );
   }
-
-
 
   const handleAttendanceChange = (matchId: string) => {
     setUpdatingMatchId(matchId);
