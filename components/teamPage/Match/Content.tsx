@@ -276,7 +276,10 @@ const Content: React.FC<Props> = ({ teamId }) => {
           </Typography>
         </Box>
         <Box sx={{ padding: "1em", display: "flex" }}>
-          <Typography>Dokončete vytvoření klubu ve správě.</Typography>
+        {isRole3 ? (
+            <Typography>Zápasy nejsou k dispozici</Typography>
+          ):(
+          <Typography>Dokončete vytvoření klubu ve správě.</Typography>)}
           <Button
             onClick={handleButtonClick}
             sx={{
