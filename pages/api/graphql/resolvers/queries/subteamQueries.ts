@@ -408,19 +408,19 @@ export const subteamQueries = {
   ) => {
     try {
       const currentDate = new Date();
-      const matchesSnapshot = await context.db
-        .collection("Match")
+      const trainingsSnapshot = await context.db
+        .collection("Training")
         .where("subteamIdSelected", "in", input.subteamIds)
         .get();
   
-      const matches = matchesSnapshot.docs.map((doc: any) => doc.data() as any);
+      const trainings = trainingsSnapshot.docs.map((doc: any) => doc.data() as any);
   
-      const validMatches = matches.filter((match: any) => {
-        const matchDateTime = new Date(`${match.date} ${match.time}`);
+      const validMatches = trainings.filter((training: any) => {
+        const matchDateTime = new Date(`${training.date} ${training.time}`);
         return matchDateTime >= currentDate;
       });
 
-      return [{ subteamId: input.subteamIds[0], matches: validMatches }];
+      return [{ subteamId: input.subteamIds[0], trainings: validMatches }];
     } catch (error) {
       console.error("Error fetching future matches by subteams:", error);
       throw error;

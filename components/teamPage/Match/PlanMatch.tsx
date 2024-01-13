@@ -188,7 +188,15 @@ const PlanMatch: React.FC<Props> = ({ teamId }) => {
 
         return (
           <Box key={subteamId}>
-            {subteamMatches.map((match: Match) => (
+          {subteamMatches
+            .filter((match: Match) => {
+              const isUserInMatch = match.selectedMembers.includes(user?.email || "");
+
+              const isUserRoleNot3 = userRole !== 3;
+
+              return isUserInMatch && isUserRoleNot3;
+            })
+            .map((match: Match) => (
               <Box
                 sx={{
                   marginLeft: "3%",
@@ -198,8 +206,7 @@ const PlanMatch: React.FC<Props> = ({ teamId }) => {
                   backgroundColor: "rgba(0, 56, 255, 0.24)",
                   border: "2px solid rgba(0, 34, 155, 1)",
                 }}
-                key={match.matchId}
-              >
+                key={match.matchId}>
                 <Box
                   sx={{
                     paddingLeft: "1em",

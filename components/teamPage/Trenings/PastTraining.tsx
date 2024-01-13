@@ -32,21 +32,19 @@ import {
   `;
   
   const GET_MATCHES_BY_SUBTEAM = gql`
-    query GetPastMatchesBySubteam($input: MatchesBySubteamInput!) {
-        getPastMatchesBySubteam(input: $input) {
+    query GetPastTrainingsBySubteam($input: MatchesBySubteamInput!) {
+      getPastTrainingsBySubteam(input: $input) {
         subteamId
-        matches {
+        trainings {
           matchId
           teamId
           opponentName
-          selectedHallId
           subteamIdSelected
           date
           time
           selectedMembers
           selectedPlayers
           selectedManagement
-          matchType
           attendance {
             player
             hisAttendance
@@ -71,7 +69,7 @@ import {
     teamId: string;
   };
   
-  interface Match {
+  interface Training {
     matchId: string;
     opponentName: string;
     selectedHallId: string;
@@ -80,8 +78,8 @@ import {
     selectedManagement: string[];
     date: string;
     time: string;
+    description: string;
     selectedMembers: string[];
-    matchType: string;
     attendance?: {
       player: string;
       hisAttendance: number;
@@ -89,7 +87,7 @@ import {
     }[];
   }
   
-  const PlanMatch: React.FC<Props> = ({ teamId }) => {
+  const PastTraining: React.FC<Props> = ({ teamId }) => {
     const user = authUtils.getCurrentUser();
     const [subteamIds, setSubteamIds] = useState<string[]>([]);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -167,7 +165,7 @@ import {
     const userRole = roleData?.getUserRoleInTeam?.role;
     const isRole3 = userRole == 3;
   
-    if (!matchesData || !matchesData.getPastMatchesBySubteam) {
+    if (!matchesData || !matchesData.getPastTrainingsBySubteam) {
       return <Typography>Nemáte žádný zápas který už proběhl.</Typography>;
     }
   
@@ -176,19 +174,28 @@ import {
     return (
       <Box>
         {subteamIds.map((subteamId) => {
-          const subteamMatches = matchesData?.getPastMatchesBySubteam
+          const subteamMatches = matchesData?.getPastTrainingsBySubteam
             .filter(
               (subteam: { subteamId: string }) => subteam.subteamId === subteamId
             )
             .map(
-              (subteam: { subteamId: string; matches: Match[] }) =>
-                subteam.matches
+              (subteam: { subteamId: string; trainings: Training[] }) =>
+                subteam.trainings
             )
             .flat();
   
           return (
             <Box key={subteamId}>
-              {subteamMatches.map((match: Match) => (
+            {subteamMatches
+              .filter((training: Training) => {
+                console.log(training.selectedMembers);
+                const isUserInMatch = training.selectedMembers.includes(user?.email || "");
+  
+                const isUserRoleNot3 = userRole !== 3;
+  
+                return isUserInMatch && isUserRoleNot3;
+              })
+              .map((training: Training) => (
                 <Box
                   sx={{
                     marginLeft: "3%",
@@ -198,7 +205,7 @@ import {
                     backgroundColor: "rgba(0, 56, 255, 0.24)",
                     border: "2px solid rgba(0, 34, 155, 1)",
                   }}
-                  key={match.matchId}
+                  key={training.matchId}
                 >
                   <Box
                     sx={{
@@ -211,20 +218,20 @@ import {
                     }}
                   >
                     <Typography variant="h6">
-                      Zápas Protivník: {match.opponentName}
+                      Trenink: {training.opponentName}
                     </Typography>
                     <Box sx={{ display: "flex" }}>
                       <Typography>
                         Datum:{" "}
-                        {match.date &&
-                          new Date(match.date).toLocaleDateString("cs-CZ", {
+                        {training.date &&
+                          new Date(training.date).toLocaleDateString("cs-CZ", {
                             day: "2-digit",
                             month: "2-digit",
                             year: "numeric",
                           })}
                       </Typography>
                       <Typography sx={{ marginLeft: "1em" }}>
-                        Čas: {match.time}
+                        Čas: {training.time}
                       </Typography>
                       <Box sx={{ marginLeft: "auto" }}>
                         {isRole3 && (
@@ -241,7 +248,7 @@ import {
                                   účast
                                 </Typography>
   
-                                {match.attendance?.map(
+                                {training.attendance?.map(
                                   (attendanceRecord) =>
                                     user?.email === attendanceRecord.player && (
                                       <Box
@@ -308,5 +315,5 @@ import {
   };
   
   
-  export default PlanMatch;
+  export default PastTraining;
   

@@ -26,8 +26,7 @@ import { authUtils } from "@/firebase/auth.utils";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
 import IconButton from "@mui/material/IconButton";
-import PlanTraining from "./PastTraining";
-import PastTraining from "./PastTraining";
+
 
 const GET_SUBTEAMS = gql`
   query GetYourSubteamData($teamId: String!, $email: String!) {
@@ -401,7 +400,15 @@ const Content: React.FC<Props> = ({ teamId }) => {
 
         return (
           <Box key={subteamId}>
-            {subteamMatches.map((training: Training) => (
+          {subteamMatches
+            .filter((training: Training) => {
+              const isUserInMatch = training.selectedMembers.includes(user?.email || "");
+
+              const isUserRoleNot3 = userRole !== 3;
+
+              return isUserInMatch && isUserRoleNot3;
+            })
+            .map((training: Training) => (
               <Box
                 sx={{
                   marginLeft: "3%",
