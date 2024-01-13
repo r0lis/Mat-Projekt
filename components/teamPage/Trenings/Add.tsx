@@ -120,8 +120,11 @@ const AddMatch: React.FC<Props> = ({ teamId, closeAddTraining }) => {
     null
   );
   const [opponentName, setOpponentName] = useState<string>("");
-  const [selectedTrainingHallId, setSelectedTrainingHallId] = useState<string | null>(null);
+  const [selectedTrainingHallId, setSelectedTrainingHallId] = useState<
+    string | null
+  >(null);
   const [time, setTime] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
   const [selectedMembers, setSelectedMembers] = useState<string[]>([]);
   const [completeData, setCompleteData] = useState<any>(null);
   const [errorMessages, setErrorMessages] = useState<string[]>([]);
@@ -202,6 +205,12 @@ const AddMatch: React.FC<Props> = ({ teamId, closeAddTraining }) => {
     setTime(event.target.value);
   };
 
+  const handleDescriptionChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setDescription(event.target.value);
+  };
+
   const {
     loading: loadingHalls,
     error: errorHalls,
@@ -276,6 +285,13 @@ const AddMatch: React.FC<Props> = ({ teamId, closeAddTraining }) => {
       setErrorMessages((prevMessages) => [...prevMessages, "Vyberte halu."]);
     }
 
+    if (description.length < 20 || description.length > 250) {
+      setErrorMessages((prevMessages) => [
+        ...prevMessages,
+        "Zadejte popis o délce minimálně 20 znaků a maximálně 250 znaků.",
+      ]);
+    }
+
     if (!date || !time) {
       setErrorMessages((prevMessages) => [
         ...prevMessages,
@@ -317,6 +333,7 @@ const AddMatch: React.FC<Props> = ({ teamId, closeAddTraining }) => {
       opponentName,
       selectedTrainingHallId,
       date,
+      description,
       time,
       players,
       management,
@@ -383,7 +400,7 @@ const AddMatch: React.FC<Props> = ({ teamId, closeAddTraining }) => {
           </Box>
           <Box>
             <TextField
-              label="Název soupeře"
+              label="Napis"
               type="text"
               value={opponentName}
               onChange={handleOpponentNameChange}
@@ -422,6 +439,21 @@ const AddMatch: React.FC<Props> = ({ teamId, closeAddTraining }) => {
                   </InputAdornment>
                 ),
               }}
+            />
+          </Box>
+          <Box>
+            <TextField
+              label="Popis"
+              type="text"
+              value={description}
+              onChange={handleDescriptionChange}
+              sx={{ width: "50%", marginTop: "1em" }}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              multiline
+              rows={4}
+              helperText={`Minimálně 20 znaků, maximálně 250 znaků (${description.length}/250)`}
             />
           </Box>
           <Box sx={{ marginTop: "0.5em" }}>
@@ -504,39 +536,40 @@ const AddMatch: React.FC<Props> = ({ teamId, closeAddTraining }) => {
           </Box>
 
           <Box>
-           
-              <Box>
-                <Typography variant="h6">Dostupné Haly</Typography>
-                <TableContainer>
-                  <Table>
-                    <TableHead>
-                      <TableRow>
+            <Box>
+              <Typography variant="h6">Dostupné Haly</Typography>
+              <TableContainer>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell></TableCell>
+                      <TableCell>Název</TableCell>
+                      <TableCell>Lokace</TableCell>
+                      <TableCell>Vybrat</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {dataHalls?.getTreningHallsByTeamId.map((hall: Hall) => (
+                      <TableRow key={hall.treningHallId}>
                         <TableCell></TableCell>
-                        <TableCell>Název</TableCell>
-                        <TableCell>Lokace</TableCell>
-                        <TableCell>Vybrat</TableCell>
+                        <TableCell>{hall.name}</TableCell>
+                        <TableCell>{hall.location}</TableCell>
+                        <TableCell>
+                          <Checkbox
+                            onChange={() =>
+                              handleHallCheckboxChange(hall.treningHallId)
+                            }
+                            checked={
+                              selectedTrainingHallId === hall.treningHallId
+                            }
+                          />
+                        </TableCell>
                       </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {dataHalls?.getTreningHallsByTeamId.map((hall: Hall) => (
-                        <TableRow key={hall.treningHallId}>
-                          <TableCell></TableCell>
-                          <TableCell>{hall.name}</TableCell>
-                          <TableCell>{hall.location}</TableCell>
-                          <TableCell>
-                            <Checkbox
-                              onChange={() =>
-                                handleHallCheckboxChange(hall.treningHallId)
-                              }
-                              checked={selectedTrainingHallId === hall.treningHallId}
-                            />
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </Box>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </Box>
           </Box>
           {errorMessages.length > 0 && (
             <Box sx={{ marginBottom: "1em" }}>

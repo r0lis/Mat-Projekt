@@ -14,6 +14,7 @@ import {
   Button,
   TextField,
   Card,
+  Collapse,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
@@ -24,6 +25,9 @@ import { gql, useMutation, useQuery } from "@apollo/client";
 import { authUtils } from "@/firebase/auth.utils";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
+import IconButton from "@mui/material/IconButton";
+import PlanTraining from "./PastTraining";
+import PastTraining from "./PastTraining";
 
 const GET_SUBTEAMS = gql`
   query GetYourSubteamData($teamId: String!, $email: String!) {
@@ -54,6 +58,7 @@ const GET_TRAININGS_BY_SUBTEAM = gql`
         opponentName
         selectedHallId
         subteamIdSelected
+        description
         date
         time
         selectedMembers
@@ -142,6 +147,7 @@ interface Training {
   selectedManagement: string[];
   date: string;
   time: string;
+  description: string;
   selectedMembers: string[];
   attendance?: {
     player: string;
@@ -162,6 +168,7 @@ const Content: React.FC<Props> = ({ teamId }) => {
   const [reason, setReason] = useState("");
   const [userSelection, setUserSelection] = useState<number | null>(null);
   const [showReason, setShowReason] = useState(false);
+  const [expandedTraining, setExpandedTraining] = useState<string | null>(null);
   const router = useRouter();
 
   const {
@@ -286,8 +293,9 @@ const Content: React.FC<Props> = ({ teamId }) => {
         <Box sx={{ padding: "1em", display: "flex" }}>
           {isRole3 ? (
             <Typography>Treninky nejsou k dispozici</Typography>
-          ):(
-          <Typography>Dokončete vytvoření klubu ve správě.</Typography>)}
+          ) : (
+            <Typography>Dokončete vytvoření klubu ve správě.</Typography>
+          )}
           <Button
             onClick={handleButtonClick}
             sx={{
@@ -378,7 +386,6 @@ const Content: React.FC<Props> = ({ teamId }) => {
     setShowReason(false);
   };
 
- 
   return (
     <Box>
       {subteamIds.map((subteamId) => {
@@ -418,7 +425,7 @@ const Content: React.FC<Props> = ({ teamId }) => {
                   }}
                 >
                   <Typography variant="h6">
-                    Zápas Protivník: {training.opponentName}
+                    Trenink: {training.opponentName}
                   </Typography>
                   <Box sx={{ display: "flex" }}>
                     <Typography>
@@ -697,6 +704,43 @@ const Content: React.FC<Props> = ({ teamId }) => {
                         treningHallId={training.selectedHallId}
                       />
                     )}
+                  </Box>
+                  <Box>
+                    <Box sx={{display:"flex"}}>
+                    <Typography sx={{ fontWeight: "500" }}>
+                      Popis treninku
+                    </Typography>
+                    <IconButton
+                      sx={{ marginLeft: "1%", marginTop:"-10px" }}
+                      onClick={() =>
+                        setExpandedTraining(
+                          expandedTraining === training.matchId
+                            ? null
+                            : training.matchId
+                        )
+                      }
+                    >
+                      {expandedTraining === training.matchId ? (
+                        <ExpandLessIcon />
+                      ) : (
+                        <ExpandMoreIcon />
+                      )}
+                    </IconButton>
+                    </Box>
+                    <Collapse
+                      in={expandedTraining === training.matchId}
+                      timeout="auto"
+                      unmountOnExit
+                    
+                    >
+                      <Card sx={{marginBottom:"1em"}}>
+                      <Typography
+                        sx={{ padding: "0.5em 0.5em", fontSize:"1rem"  }}
+                      >
+                        {training.description}
+                      </Typography>
+                      </Card>
+                    </Collapse>
                   </Box>
                 </Box>
 

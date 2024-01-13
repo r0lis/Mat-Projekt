@@ -7,6 +7,8 @@ import { useQuery } from "@apollo/client";
 import { authUtils } from "@/firebase/auth.utils";
 import { gql } from "@apollo/client";
 import Content from "./Trenings/Content";
+import PlanTraining from "./Trenings/PlanTraining";
+import PastTraining from "./Trenings/PastTraining";
 
 const GET_USER_ROLE_IN_TEAM = gql`
   query GetUserRoleInTeam($teamId: String!, $email: String!) {
@@ -186,6 +188,9 @@ const TreniningComponent: React.FC<Props> = (id) => {
               >
                 Nadcházející tréninky
               </Typography>
+              <Box sx={{ maxHeight: "22em", overflowY: "auto", marginTop:"1em" }}>
+              <PlanTraining teamId={id.teamId}/>
+              </Box>
             </Box>
           </Box>
           <Box
@@ -211,7 +216,9 @@ const TreniningComponent: React.FC<Props> = (id) => {
             >
               Poslední tréninky
             </Typography>
-            <Box sx={{ maxHeight: "22em", overflowY: "auto" }}></Box>
+            <Box sx={{ maxHeight: "22em", overflowY: "auto", marginTop:"1em" }}>
+              <PastTraining teamId={id.teamId}/>
+              </Box>
           </Box>
         </Box>
       ) : (

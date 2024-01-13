@@ -48,6 +48,7 @@ type AddMatchInput = {
 type AddTrainingInput = {
   subteamIdSelected: String
   opponentName: String
+  description: String
   selectedTrainingHallId: String
   date: String
   time: String
@@ -184,11 +185,9 @@ export const subteamMutations = {
         const { subteamIdSelected, opponentName, selectedHallId, date, time, players, management, matchType } = input;
   
   
-        // Create a new match document
         const matchId = generateRandomString(30);
         const newMatchDoc = context.db.collection("Match").doc(matchId);
   
-        // Define the data for the new match
         const newMatchData = {
           matchId: matchId,
           teamId: teamId,
@@ -207,7 +206,6 @@ export const subteamMutations = {
           })),
         };
   
-        // Set the data for the new match
         await newMatchDoc.set(newMatchData);
   
         return newMatchData;
@@ -223,14 +221,12 @@ export const subteamMutations = {
       context: Context
     ) => {
       try {
-        const { subteamIdSelected, opponentName, selectedTrainingHallId, date, time, players, management,  } = input;
+        const { subteamIdSelected, opponentName, selectedTrainingHallId, date, description, time, players, management,  } = input;
   
   
-        // Create a new match document
         const matchId = generateRandomString(30);
         const newMatchDoc = context.db.collection("Training").doc(matchId);
   
-        // Define the data for the new match
         const newMatchData = {
           matchId: matchId,
           teamId: teamId,
@@ -239,6 +235,7 @@ export const subteamMutations = {
           selectedHallId: selectedTrainingHallId,
           date: date,
           time: time,
+          description: description,
           selectedPlayers: players,
           selectedManagement: management,
           selectedMembers: [...players, ...management],
@@ -248,7 +245,6 @@ export const subteamMutations = {
           })),
         };
   
-        // Set the data for the new match
         await newMatchDoc.set(newMatchData);
   
         return newMatchData;

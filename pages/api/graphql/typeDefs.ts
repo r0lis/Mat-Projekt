@@ -57,6 +57,7 @@ export const typeDefs = gql`
     selectedTrainingHallId: String!
     date: String!
     time: String!
+    description: String!
     players: [String!]!
     management: [String!]!
   }
@@ -84,6 +85,7 @@ export const typeDefs = gql`
     selectedHallId: String!
     date: String!
     time: String!
+    description: String!
     selectedMembers: [String!]
     selectedPlayers: [String!]
     selectedManagement: [String!]
@@ -285,6 +287,8 @@ export const typeDefs = gql`
     getHallByTeamAndHallId(teamId: String!, hallId: String!): Hall 
     getPastMatchesBySubteam(input: MatchesBySubteamInput): [SubteamMatches]
     getFutureMatchesBySubteam(input: MatchesBySubteamInput): [SubteamMatches]
+    getPastTrainingsBySubteam(input: MatchesBySubteamInput): [SubteamTrainings]
+    getFutureTrainingsBySubteam(input: MatchesBySubteamInput): [SubteamTrainings]
     getTrainingHallByTeamAndHallId(teamId: String!, treningHallId: String!): TreningHall
   }
 

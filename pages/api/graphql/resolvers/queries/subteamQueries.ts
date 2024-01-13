@@ -349,13 +349,65 @@ export const subteamQueries = {
       throw error;
     }
   },
+
+  getPastTrainingsBySubteam: async (
+    _: any,
+    { input }: { input: { subteamIds: string[] } },
+    context: { db: { collection: (arg0: string) => any } }
+  ) => {
+    try {
+      const currentDate = new Date();
+      const trainingsSnapshot = await context.db
+        .collection("Training")
+        .where("subteamIdSelected", "in", input.subteamIds)
+        .get();
+  
+      const trainings = trainingsSnapshot.docs.map((doc: any) => doc.data() as any);
+  
+      const validTrainings = trainings.filter((training: any) => {
+        const trainingsDateTime = new Date(`${training.date} ${training.time}`);
+       
+        return trainingsDateTime < currentDate;
+      });
+  
+      return [{ subteamId: input.subteamIds[0], trainings: validTrainings }];
+    } catch (error) {
+      console.error("Error fetching matches by subteams:", error);
+      throw error;
+    }
+  },
   getFutureMatchesBySubteam: async (
     _: any,
     { input }: { input: { subteamIds: string[] } },
     context: { db: { collection: (arg0: string) => any } }
   ) => {
     try {
-      const currentDate = new Date(); // Get the current date and time
+      const currentDate = new Date(); 
+      const matchesSnapshot = await context.db
+        .collection("Match")
+        .where("subteamIdSelected", "in", input.subteamIds)
+        .get();
+  
+      const matches = matchesSnapshot.docs.map((doc: any) => doc.data() as any);
+  
+      const validMatches = matches.filter((match: any) => {
+        const matchDateTime = new Date(`${match.date} ${match.time}`);
+        return matchDateTime >= currentDate;
+      });
+
+      return [{ subteamId: input.subteamIds[0], matches: validMatches }];
+    } catch (error) {
+      console.error("Error fetching future matches by subteams:", error);
+      throw error;
+    }
+  },
+  getFutureTrainingsBySubteam: async (
+    _: any,
+    { input }: { input: { subteamIds: string[] } },
+    context: { db: { collection: (arg0: string) => any } }
+  ) => {
+    try {
+      const currentDate = new Date();
       const matchesSnapshot = await context.db
         .collection("Match")
         .where("subteamIdSelected", "in", input.subteamIds)
