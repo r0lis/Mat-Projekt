@@ -243,15 +243,14 @@ const Content: React.FC<Props> = ({ teamId }) => {
       : "";
   };
 
-  if(!dataHalls || !dataHalls.getHallsByTeamId || dataHalls.getHallsByTeamId.length === 0 ){
-    return <Typography>Dokončete vytvoření klubu ve správě.</Typography>;
-  }
-
+  console.log(matchesData?.getMatchesBySubteam)
   if (!matchesData || !matchesData.getMatchesBySubteam || matchesData.getMatchesBySubteam[0]?.matches.length === 0) {
     return <Typography>Nemáte naplánován žádný zápas.</Typography>;
   }
 
-
+  if(!dataHalls || !dataHalls.getHallsByTeamId ){
+    return <Typography>Dokončete vytvoření klubu ve správě.</Typography>;
+  }
 
   const handleAttendanceChange = (matchId: string) => {
     setUpdatingMatchId(matchId);

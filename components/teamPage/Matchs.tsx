@@ -19,6 +19,16 @@ const GET_USER_ROLE_IN_TEAM = gql`
   }
 `;
 
+const GET_HALL_BY_TEAM_AND_HALL_ID = gql`
+  query GetHallsByTeamId($teamId: String! ) {
+    getHallsByTeamId(teamId: $teamId,) {
+      hallId
+      name
+      location
+    }
+  }
+`;
+
 type Props = {
   teamId: string;
 };
@@ -36,7 +46,11 @@ const Matchs: React.FC<Props> = (id) => {
     skip: !user,
   });
 
-  if (roleLoading)
+  const { loading, error, data: dataHalls } = useQuery(GET_HALL_BY_TEAM_AND_HALL_ID, {
+    variables: { teamId: id.teamId,},
+  });
+
+  if (roleLoading || loading)
     return (
       <Box
         sx={{
@@ -49,7 +63,7 @@ const Matchs: React.FC<Props> = (id) => {
         <CircularProgress color="primary" size={50} />
       </Box>
     );
-  if (roleError) return <Typography>Chyba</Typography>;
+  if (roleError || error) return <Typography>Chyba</Typography>;
 
   const role = roleData?.getUserRoleInTeam.role || "";
 
@@ -59,6 +73,8 @@ const Matchs: React.FC<Props> = (id) => {
   const closeAddMatch = () => {
     setAddMatch(false);
   };
+
+  
 
   return (
     <Box
@@ -89,7 +105,7 @@ const Matchs: React.FC<Props> = (id) => {
           >
             Zápasy
           </Typography>
-          {(role === "1" || role === "2") && (
+          {(role === "1" || role === "2") && dataHalls && dataHalls.getHallsByTeamId && dataHalls.getHallsByTeamId.length > 0 && (
             <><Button
               variant="contained"
               onClick={() => setAddMatch(!addMatch)}

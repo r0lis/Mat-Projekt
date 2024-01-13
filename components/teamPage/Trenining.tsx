@@ -16,6 +16,16 @@ const GET_USER_ROLE_IN_TEAM = gql`
   }
 `;
 
+const GET_HALL_BY_TEAM_AND_HALL_ID = gql`
+  query GetHallsByTeamId($teamId: String! ) {
+    getHallsByTeamId(teamId: $teamId,) {
+      hallId
+      name
+      location
+    }
+  }
+`;
+
 type Props = {
   teamId: string;
 };
@@ -33,7 +43,11 @@ const TreniningComponent: React.FC<Props> = (id) => {
     skip: !user,
   });
 
-  if (roleLoading)
+  const { loading, error, data: dataHalls } = useQuery(GET_HALL_BY_TEAM_AND_HALL_ID, {
+    variables: { teamId: id.teamId,},
+  });
+
+  if (roleLoading || loading)
     return (
       <Box
         sx={{
@@ -46,7 +60,7 @@ const TreniningComponent: React.FC<Props> = (id) => {
         <CircularProgress color="primary" size={50} />
       </Box>
     );
-  if (roleError) return <Typography>Chyba</Typography>;
+  if (roleError || error) return <Typography>Chyba</Typography>;
 
   const role = roleData?.getUserRoleInTeam.role || "";
 
@@ -57,6 +71,10 @@ const TreniningComponent: React.FC<Props> = (id) => {
   const closeAddTraining = () => {
     setAddTrenining(false);
   };
+
+  if(!dataHalls || !dataHalls.getHallsByTeamId ){
+    return <Typography>Dokončete vytvoření klubu ve správě.</Typography>;
+  }
 
   return (
     <Box
@@ -87,7 +105,7 @@ const TreniningComponent: React.FC<Props> = (id) => {
           >
             Tréninky
           </Typography>
-          {(role === "1" || role === "2") && (
+          {(role === "1" || role === "2") && dataHalls && dataHalls.getHallsByTeamId && dataHalls.getHallsByTeamId.length > 0 && (
 
           <><Button
               variant="contained"
