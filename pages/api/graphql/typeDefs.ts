@@ -51,6 +51,16 @@ export const typeDefs = gql`
     matchType: String!
   }
 
+  input AddTrainingInput{
+    subteamIdSelected: String! 
+    opponentName: String!
+    selectedTrainingHallId: String!
+    date: String!
+    time: String!
+    players: [String!]!
+    management: [String!]!
+  }
+
   type Match {
     matchId: String!
     teamId: String!
@@ -63,6 +73,20 @@ export const typeDefs = gql`
     selectedPlayers: [String!]
     selectedManagement: [String!]
     matchType: String!
+    attendance: [AttendanceEntry!]!
+  }
+
+  type Training {
+    matchId: String!
+    teamId: String!
+    subteamIdSelected: String!
+    opponentName: String!
+    selectedTrainingHallId: String!
+    date: String!
+    time: String!
+    selectedMembers: [String!]
+    selectedPlayers: [String!]
+    selectedManagement: [String!]
     attendance: [AttendanceEntry!]!
   }
 
@@ -301,6 +325,7 @@ export const typeDefs = gql`
     addGymToTeam(teamId: String!, gym: GymInput!): Team
     deleteGymFromTeam(teamId: String!, gymId: String!): Team
     addMatch(teamId: String!, input: AddMatchInput!): Match
+    addTraining(teamId: String!, input: AddTrainingInput!): Training
     updateAttendance(matchId: String!, player: String!, hisAttendance: Int!, reason: String!): Boolean
 
 

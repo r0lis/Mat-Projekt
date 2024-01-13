@@ -45,6 +45,17 @@ type AddMatchInput = {
   management: [String]
 }
 
+type AddTrainingInput = {
+  subteamIdSelected: String
+  opponentName: String
+  selectedTrainingHallId: String
+  date: String
+  time: String
+  players: [String]
+  management: [String]
+  
+}
+
 
 const generateRandomString = (length: number) => {
     let result = "";
@@ -59,8 +70,6 @@ const generateRandomString = (length: number) => {
 
   
 export const subteamMutations = {
-    //subteam mutations
-    
 
     createSubteam: async (
       _: any,
@@ -192,6 +201,47 @@ export const subteamMutations = {
           selectedManagement: management,
           selectedMembers: [...players, ...management],
           matchType: matchType,
+          attendance: players.map((player) => ({
+            player: player,
+            hisAttendance: 0,
+          })),
+        };
+  
+        // Set the data for the new match
+        await newMatchDoc.set(newMatchData);
+  
+        return newMatchData;
+      } catch (error) {
+        console.error("Error adding match:", error);
+        throw error;
+      }
+    },
+
+    addTraining: async (
+      _: any,
+      { teamId, input }: { teamId: string; input: AddTrainingInput },
+      context: Context
+    ) => {
+      try {
+        const { subteamIdSelected, opponentName, selectedTrainingHallId, date, time, players, management,  } = input;
+  
+  
+        // Create a new match document
+        const matchId = generateRandomString(30);
+        const newMatchDoc = context.db.collection("Training").doc(matchId);
+  
+        // Define the data for the new match
+        const newMatchData = {
+          matchId: matchId,
+          teamId: teamId,
+          subteamIdSelected: subteamIdSelected,
+          opponentName: opponentName,
+          selectedHallId: selectedTrainingHallId,
+          date: date,
+          time: time,
+          selectedPlayers: players,
+          selectedManagement: management,
+          selectedMembers: [...players, ...management],
           attendance: players.map((player) => ({
             player: player,
             hisAttendance: 0,

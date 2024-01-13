@@ -94,6 +94,16 @@ const UPDATE_ATTENDANCE = gql`
 `;
 
 const GET_HALL_BY_TEAM_AND_HALL_ID = gql`
+  query GetHallsByTeamId($teamId: String! ) {
+    getHallsByTeamId(teamId: $teamId,) {
+      hallId
+      name
+      location
+    }
+  }
+`;
+
+const GET_HALL_BY_TEAM_AND_HALL_ID2 = gql`
   query GetHallByTeamAndHallId($teamId: String!, $hallId: String!) {
     getHallByTeamAndHallId(teamId: $teamId, hallId: $hallId) {
       hallId
@@ -134,6 +144,8 @@ interface Match {
     reason?: string;
   }[];
 }
+
+
 
 const Content: React.FC<Props> = ({ teamId }) => {
   const user = authUtils.getCurrentUser();
@@ -199,7 +211,11 @@ const Content: React.FC<Props> = ({ teamId }) => {
     }
   }, [userDetailsData]);
 
-  if (subteamLoading || matchesLoading || userDetailsLoading || roleLoading)
+  const { loading, error, data: dataHalls } = useQuery(GET_HALL_BY_TEAM_AND_HALL_ID, {
+    variables: { teamId, },
+  });
+
+  if (subteamLoading || matchesLoading || userDetailsLoading || roleLoading || loading)
     return (
       <Box
         sx={{
@@ -212,7 +228,7 @@ const Content: React.FC<Props> = ({ teamId }) => {
         <CircularProgress color="primary" size={50} />
       </Box>
     );
-  if (subteamError || matchesError || userDetailsError || roleError)
+  if (subteamError || matchesError || userDetailsError || roleError|| error)
     return <Typography>Chyba</Typography>;
 
   const userRole = roleData?.getUserRoleInTeam?.role;
@@ -226,8 +242,13 @@ const Content: React.FC<Props> = ({ teamId }) => {
       : "";
   };
 
-  if (!matchesData || !matchesData.getMatchesBySubteam) {
+  console.log(matchesData?.getMatchesBySubteam)
+  if (!matchesData || !matchesData.getMatchesBySubteam || matchesData.getMatchesBySubteam[0]?.matches.length === 0) {
     return <Typography>Nemáte naplánován žádný zápas.</Typography>;
+  }
+
+  if(!dataHalls || !dataHalls.getHallsByTeamId ){
+    return <Typography>Dokončete vytvoření klubu ve správě.</Typography>;
   }
 
   const handleAttendanceChange = (matchId: string) => {
@@ -970,7 +991,7 @@ interface HallInfoProps {
 }
 
 const HallInfo: React.FC<HallInfoProps> = ({ teamId, hallId }) => {
-  const { loading, error, data } = useQuery(GET_HALL_BY_TEAM_AND_HALL_ID, {
+  const { loading, error, data } = useQuery(GET_HALL_BY_TEAM_AND_HALL_ID2, {
     variables: { teamId, hallId },
   });
 
