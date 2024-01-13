@@ -43,11 +43,11 @@ const GET_USER_ROLE_IN_TEAM = gql`
   }
 `;
 
-const GET_MATCHES_BY_SUBTEAM = gql`
-  query GetMatchesBySubteam($input: MatchesBySubteamInput!) {
-    getMatchesBySubteam(input: $input) {
+const GET_TRAININGS_BY_SUBTEAM = gql`
+  query GetTrainingsBySubteam($input: MatchesBySubteamInput!) {
+    getTrainingsBySubteam(input: $input) {
       subteamId
-      matches {
+      trainings {
         matchId
         teamId
         opponentName
@@ -58,7 +58,6 @@ const GET_MATCHES_BY_SUBTEAM = gql`
         selectedMembers
         selectedPlayers
         selectedManagement
-        matchType
         attendance {
           player
           hisAttendance
@@ -94,9 +93,9 @@ const UPDATE_ATTENDANCE = gql`
 `;
 
 const GET_HALL_BY_TEAM_AND_HALL_ID = gql`
-  query GetHallsByTeamId($teamId: String! ) {
-    getHallsByTeamId(teamId: $teamId,) {
-      hallId
+  query getTreningHallsByTeamId($teamId: String! ) {
+    getTreningHallsByTeamId(teamId: $teamId,) {
+      treningHallId
       name
       location
     }
@@ -104,9 +103,9 @@ const GET_HALL_BY_TEAM_AND_HALL_ID = gql`
 `;
 
 const GET_HALL_BY_TEAM_AND_HALL_ID2 = gql`
-  query GetHallByTeamAndHallId($teamId: String!, $hallId: String!) {
-    getHallByTeamAndHallId(teamId: $teamId, hallId: $hallId) {
-      hallId
+  query GetTrainingHallByTeamAndHallId($teamId: String!, $treningHallId: String!) {
+    getTrainingHallByTeamAndHallId(teamId: $teamId, treningHallId: $treningHallId) {
+      treningHallId
       name
       location
     },
@@ -128,7 +127,7 @@ type Props = {
   teamId: string;
 };
 
-interface Match {
+interface Training {
   matchId: string;
   opponentName: string;
   selectedHallId: string;
@@ -138,15 +137,12 @@ interface Match {
   date: string;
   time: string;
   selectedMembers: string[];
-  matchType: string;
   attendance?: {
     player: string;
     hisAttendance: number;
     reason?: string;
   }[];
 }
-
-
 
 const Content: React.FC<Props> = ({ teamId }) => {
   const user = authUtils.getCurrentUser();
@@ -192,7 +188,7 @@ const Content: React.FC<Props> = ({ teamId }) => {
     loading: matchesLoading,
     error: matchesError,
     data: matchesData,
-  } = useQuery(GET_MATCHES_BY_SUBTEAM, {
+  } = useQuery(GET_TRAININGS_BY_SUBTEAM, {
     variables: { input: { subteamIds: subteamIds || [] } },
     skip: subteamIds.length === 0,
   });
@@ -235,22 +231,14 @@ const Content: React.FC<Props> = ({ teamId }) => {
   const userRole = roleData?.getUserRoleInTeam?.role;
   const isRole3 = userRole == 3;
 
-  const getMatchTypeLabel = (matchType: string) => {
-    return matchType === "home"
-      ? "Domácí"
-      : matchType === "away"
-      ? "Hostí"
-      : "";
-  };
-
-  console.log(matchesData?.getMatchesBySubteam)
-  if (!matchesData || !matchesData.getMatchesBySubteam || matchesData.getMatchesBySubteam[0]?.matches.length === 0) {
-    return <Typography>Nemáte naplánován žádný zápas.</Typography>;
-  }
-
-  if(!dataHalls || !dataHalls.getHallsByTeamId ){
+  if(!dataHalls || !dataHalls.getTreningHallsByTeamId || dataHalls.getTreningHallsByTeamId.length === 0 ){
     return <Typography>Dokončete vytvoření klubu ve správě.</Typography>;
   }
+  if (!matchesData || !matchesData.getTrainingsBySubteam || matchesData.getTrainingsBySubteam[0]?.trainings.length === 0) {
+    return <Typography>Nemáte naplánován žádný trenink.</Typography>;
+  }
+
+  
 
   const handleAttendanceChange = (matchId: string) => {
     setUpdatingMatchId(matchId);
@@ -264,7 +252,7 @@ const Content: React.FC<Props> = ({ teamId }) => {
         variables: { matchId, player, hisAttendance: value, reason },
         refetchQueries: [
           {
-            query: GET_MATCHES_BY_SUBTEAM,
+            query: GET_TRAININGS_BY_SUBTEAM,
             variables: { input: { subteamIds } },
           },
         ],
@@ -293,19 +281,19 @@ const Content: React.FC<Props> = ({ teamId }) => {
   return (
     <Box>
       {subteamIds.map((subteamId) => {
-        const subteamMatches = matchesData?.getMatchesBySubteam
+        const subteamMatches = matchesData?.getTrainingsBySubteam
           .filter(
             (subteam: { subteamId: string }) => subteam.subteamId === subteamId
           )
           .map(
-            (subteam: { subteamId: string; matches: Match[] }) =>
-              subteam.matches
+            (subteam: { subteamId: string; trainings: Training[] }) =>
+              subteam.trainings
           )
           .flat();
 
         return (
           <Box key={subteamId}>
-            {subteamMatches.map((match: Match) => (
+            {subteamMatches.map((training: Training) => (
               <Box
                 sx={{
                   marginLeft: "3%",
@@ -315,7 +303,7 @@ const Content: React.FC<Props> = ({ teamId }) => {
                   backgroundColor: "rgba(0, 56, 255, 0.24)",
                   border: "2px solid rgba(0, 34, 155, 1)",
                 }}
-                key={match.matchId}
+                key={training.matchId}
               >
                 <Box
                   sx={{
@@ -329,20 +317,20 @@ const Content: React.FC<Props> = ({ teamId }) => {
                   }}
                 >
                   <Typography variant="h6">
-                    Zápas Protivník: {match.opponentName}
+                    Zápas Protivník: {training.opponentName}
                   </Typography>
                   <Box sx={{ display: "flex" }}>
                     <Typography>
                       Datum:{" "}
-                      {match.date &&
-                        new Date(match.date).toLocaleDateString("cs-CZ", {
+                      {training.date &&
+                        new Date(training.date).toLocaleDateString("cs-CZ", {
                           day: "2-digit",
                           month: "2-digit",
                           year: "numeric",
                         })}
                     </Typography>
                     <Typography sx={{ marginLeft: "1em" }}>
-                      Čas: {match.time}
+                      Čas: {training.time}
                     </Typography>
                     <Box sx={{ marginLeft: "auto" }}>
                       {isRole3 && (
@@ -350,7 +338,7 @@ const Content: React.FC<Props> = ({ teamId }) => {
                           <Box
                             sx={{ marginLeft: "auto", cursor: "pointer" }}
                             onClick={() =>
-                              handleAttendanceChange(match.matchId)
+                              handleAttendanceChange(training.matchId)
                             }
                           >
                             <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -361,8 +349,8 @@ const Content: React.FC<Props> = ({ teamId }) => {
                                 Změnit účast
                               </Typography>
 
-                              {match.attendance?.map(
-                                (attendanceRecord) =>
+                              {training.attendance?.map(
+                                (attendanceRecord: { player: React.Key | null | undefined; hisAttendance: number; }) =>
                                   user?.email === attendanceRecord.player && (
                                     <Box
                                       key={attendanceRecord.player}
@@ -395,7 +383,7 @@ const Content: React.FC<Props> = ({ teamId }) => {
                                         </>
                                       </>
 
-                                      {updatingMatchId === match.matchId && (
+                                      {updatingMatchId === training.matchId && (
                                         <>
                                           <Modal
                                             open={openModal}
@@ -427,7 +415,7 @@ const Content: React.FC<Props> = ({ teamId }) => {
                                                 }}
                                               >
                                                 Zvolte docházku na zápas proti:{" "}
-                                                {match.opponentName}
+                                                {training.opponentName}
                                               </Typography>
                                               <Typography
                                                 sx={{
@@ -435,7 +423,7 @@ const Content: React.FC<Props> = ({ teamId }) => {
                                                   marginBottom: "0.5em",
                                                 }}
                                               >
-                                                Datum: {match.date}
+                                                Datum: {training.date}
                                               </Typography>
                                               <Box
                                                 onClick={() =>
@@ -539,14 +527,14 @@ const Content: React.FC<Props> = ({ teamId }) => {
                                                         reason.length >= 3
                                                       ) {
                                                         handleUpdateAttendance(
-                                                          match.matchId,
+                                                          training.matchId,
                                                           userSelection
                                                         );
                                                         handleCloseModal();
                                                       }
                                                       if (userSelection == 1) {
                                                         handleUpdateAttendance(
-                                                          match.matchId,
+                                                          training.matchId,
                                                           userSelection
                                                         );
                                                         handleCloseModal();
@@ -583,19 +571,14 @@ const Content: React.FC<Props> = ({ teamId }) => {
                       <Typography sx={{ fontWeight: "500" }}>
                         Váš tým:
                       </Typography>
-                      <Typography sx={{ fontWeight: "500" }}>
-                        Typ zápasu:
-                      </Typography>
+                      
                     </Grid>
                     <Grid item xs={6}>
                       <Box>
-                        {match.subteamIdSelected && (
-                          <SubteamDetails subteamId={match.subteamIdSelected} />
+                        {training.subteamIdSelected && (
+                          <SubteamDetails subteamId={training.subteamIdSelected} />
                         )}
                       </Box>
-                      <Typography>
-                        {getMatchTypeLabel(match.matchType)}
-                      </Typography>
                     </Grid>
                   </Grid>
 
@@ -603,8 +586,8 @@ const Content: React.FC<Props> = ({ teamId }) => {
                     Info haly
                   </Typography>
                   <Box>
-                    {match.selectedHallId && (
-                      <HallInfo teamId={teamId} hallId={match.selectedHallId} />
+                    {training.selectedHallId && (
+                      <HallInfo teamId={teamId} treningHallId={training.selectedHallId} />
                     )}
                   </Box>
                 </Box>
@@ -620,7 +603,7 @@ const Content: React.FC<Props> = ({ teamId }) => {
                     paddingTop: "0.5em",
                   }}
                 >
-                  {expandedMatchId === match.matchId ? (
+                  {expandedMatchId === training.matchId ? (
                     <Box>
                       <Box sx={{ display: "flex" }}>
                         <Typography sx={{ fontWeight: "500" }}>
@@ -654,8 +637,8 @@ const Content: React.FC<Props> = ({ teamId }) => {
                             Management a trenéři:
                           </Typography>
                         </Box>
-                        {match.selectedManagement &&
-                        match.selectedManagement.length > 0 ? (
+                        {training.selectedManagement &&
+                        training.selectedManagement.length > 0 ? (
                           <Table
                             sx={{
                               borderRadius: "10px",
@@ -670,7 +653,7 @@ const Content: React.FC<Props> = ({ teamId }) => {
                               </TableRow>
                             </TableHead>
                             <TableBody>
-                              {match.selectedManagement.map((member, index) => (
+                              {training.selectedManagement.map((member: string, index: React.Key | null | undefined) => (
                                 <TableRow
                                   sx={{ borderBottom: "2px solid gray" }}
                                   key={index}
@@ -716,9 +699,9 @@ const Content: React.FC<Props> = ({ teamId }) => {
                                 </TableRow>
                               </TableHead>
                               <TableBody>
-                                {match.selectedPlayers.map((member, index) => {
+                                {training.selectedPlayers.map((member, index) => {
                                   const attendanceRecord =
-                                    match.attendance?.find(
+                                  training.attendance?.find(
                                       (record) => record.player === member
                                     );
 
@@ -794,8 +777,8 @@ const Content: React.FC<Props> = ({ teamId }) => {
                                 Hráči:
                               </Typography>
                             </Box>
-                            {match.selectedPlayers &&
-                            match.selectedPlayers.length > 0 ? (
+                            {training.selectedPlayers &&
+                            training.selectedPlayers.length > 0 ? (
                               <Table
                                 sx={{
                                   borderRadius: "10px",
@@ -811,14 +794,14 @@ const Content: React.FC<Props> = ({ teamId }) => {
                                   </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                  {match.selectedPlayers.map(
+                                  {training.selectedPlayers.map(
                                     (member, index) => (
                                       <TableRow
                                         sx={{ borderBottom: "2px solid gray" }}
                                         key={index}
                                       >
                                         <UserDetails email={member} />
-                                        {match.attendance?.map(
+                                        {training.attendance?.map(
                                           (attendanceRecord) =>
                                             attendanceRecord.player ===
                                               member && (
@@ -897,7 +880,7 @@ const Content: React.FC<Props> = ({ teamId }) => {
                                                               email={member}
                                                             />
                                                             na zápas proti{" "}
-                                                            {match.opponentName}
+                                                            {training.opponentName}
                                                             :
                                                           </Typography>
                                                           <Card
@@ -970,7 +953,7 @@ const Content: React.FC<Props> = ({ teamId }) => {
                         </Typography>
                         <Box>
                           <ExpandMoreIcon
-                            onClick={() => setExpandedMatchId(match.matchId)}
+                            onClick={() => setExpandedMatchId(training.matchId)}
                           />
                         </Box>
                       </Box>
@@ -988,18 +971,19 @@ const Content: React.FC<Props> = ({ teamId }) => {
 
 interface HallInfoProps {
   teamId: string;
-  hallId: string;
+  treningHallId: string;
 }
 
-const HallInfo: React.FC<HallInfoProps> = ({ teamId, hallId }) => {
+const HallInfo: React.FC<HallInfoProps> = ({ teamId, treningHallId }) => {
   const { loading, error, data } = useQuery(GET_HALL_BY_TEAM_AND_HALL_ID2, {
-    variables: { teamId, hallId },
+    variables: { teamId, treningHallId },
   });
 
   if (loading) return <CircularProgress color="primary" size={20} />;
   if (error) return <Typography>Error loading hall information</Typography>;
 
-  const hall = data.getHallByTeamAndHallId;
+  const hall = data.getTrainingHallByTeamAndHallId;
+  console.log(hall)
   return (
     <Box sx={{ paddingBottom: "0.5em" }}>
       <Grid container spacing={2}>

@@ -147,7 +147,6 @@ interface Match {
 }
 
 
-
 const Content: React.FC<Props> = ({ teamId }) => {
   const user = authUtils.getCurrentUser();
   const [subteamIds, setSubteamIds] = useState<string[]>([]);

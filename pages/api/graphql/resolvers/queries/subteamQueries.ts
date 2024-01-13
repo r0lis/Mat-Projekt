@@ -299,6 +299,30 @@ export const subteamQueries = {
     }
   },
 
+  getTrainingsBySubteam: async (
+    _: any,
+    { input }: { input: { subteamIds: string[] } },
+    context: { db: { collection: (arg0: string) => any } }
+  ) => {
+    try {
+      const trainingsSnapshot = await context.db
+        .collection("Training")
+        .where("subteamIdSelected", "in", input.subteamIds)
+        .get();
+
+      const trainings = trainingsSnapshot.docs.map((doc: any) => doc.data() as any);
+
+      const validTrainings = trainings.filter(
+        (training: any) => training.subteamIdSelected !== null
+      );
+
+      return [{ subteamId: input.subteamIds[0], trainings: validTrainings }];
+    } catch (error) {
+      console.error("Error fetching trainings by subteams:", error);
+      throw error;
+    }
+  },
+
   getPastMatchesBySubteam: async (
     _: any,
     { input }: { input: { subteamIds: string[] } },

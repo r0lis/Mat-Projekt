@@ -6,6 +6,7 @@ import AddTrening from "./Trenings/Add";
 import { useQuery } from "@apollo/client";
 import { authUtils } from "@/firebase/auth.utils";
 import { gql } from "@apollo/client";
+import Content from "./Trenings/Content";
 
 const GET_USER_ROLE_IN_TEAM = gql`
   query GetUserRoleInTeam($teamId: String!, $email: String!) {
@@ -17,9 +18,9 @@ const GET_USER_ROLE_IN_TEAM = gql`
 `;
 
 const GET_HALL_BY_TEAM_AND_HALL_ID = gql`
-  query GetHallsByTeamId($teamId: String! ) {
-    getHallsByTeamId(teamId: $teamId,) {
-      hallId
+  query getTreningHallsByTeamId($teamId: String! ) {
+    getTreningHallsByTeamId(teamId: $teamId,) {
+      treningHallId
       name
       location
     }
@@ -72,10 +73,7 @@ const TreniningComponent: React.FC<Props> = (id) => {
     setAddTrenining(false);
   };
 
-  if(!dataHalls || !dataHalls.getHallsByTeamId ){
-    return <Typography>Dokončete vytvoření klubu ve správě.</Typography>;
-  }
-
+  
   return (
     <Box
       sx={{
@@ -105,7 +103,7 @@ const TreniningComponent: React.FC<Props> = (id) => {
           >
             Tréninky
           </Typography>
-          {(role === "1" || role === "2") && dataHalls && dataHalls.getHallsByTeamId && dataHalls.getHallsByTeamId.length > 0 && (
+          {(role === "1" || role === "2") && dataHalls && dataHalls.getTreningHallsByTeamId && dataHalls.getTreningHallsByTeamId.length > 0 && (
 
           <><Button
               variant="contained"
@@ -152,7 +150,7 @@ const TreniningComponent: React.FC<Props> = (id) => {
             </Box>
           ) : (
             <Box>
-              <Typography sx={{ marginLeft: "1em" }}>Content</Typography>
+              <Content teamId={id.teamId} />
             </Box>
           )}
         </Box>

@@ -81,7 +81,7 @@ export const typeDefs = gql`
     teamId: String!
     subteamIdSelected: String!
     opponentName: String!
-    selectedTrainingHallId: String!
+    selectedHallId: String!
     date: String!
     time: String!
     selectedMembers: [String!]
@@ -249,6 +249,11 @@ export const typeDefs = gql`
     subteamId: String!
     matches: [Match]
   }
+
+  type SubteamTrainings {
+    subteamId: String!
+    trainings: [Training]
+  }
   
   type Query {
     user(id: String): User
@@ -276,9 +281,11 @@ export const typeDefs = gql`
     getTreningHallsByTeamId(teamId: String!): [TreningHall]
     getGymsByTeamId(teamId: String!): [Gym]
     getMatchesBySubteam(input: MatchesBySubteamInput): [SubteamMatches]
+    getTrainingsBySubteam(input: MatchesBySubteamInput): [SubteamTrainings]
     getHallByTeamAndHallId(teamId: String!, hallId: String!): Hall 
     getPastMatchesBySubteam(input: MatchesBySubteamInput): [SubteamMatches]
     getFutureMatchesBySubteam(input: MatchesBySubteamInput): [SubteamMatches]
+    getTrainingHallByTeamAndHallId(teamId: String!, treningHallId: String!): TreningHall
   }
 
   type Mutation {
