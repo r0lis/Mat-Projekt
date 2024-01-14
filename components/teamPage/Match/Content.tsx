@@ -414,6 +414,7 @@ const Content: React.FC<Props> = ({ teamId }) => {
                 );
 
                 const isUserRoleNot3 = userRole !== 3;
+                
 
                 return isUserInMatch && isUserRoleNot3;
               })
@@ -441,48 +442,48 @@ const Content: React.FC<Props> = ({ teamId }) => {
                     }}
                   >
                     <Typography variant="h6">
-                      Zápas protivník: {match.opponentName}
-                      {(() => {
-                        const matchDate = new Date(
-                          `${match.date}T${match.time}`
-                        );
-                        const currentDate = new Date();
-                        const isTrainingPassed = matchDate < currentDate;
-                        const isTrainingToday =
-                          matchDate.toDateString() ===
-                          currentDate.toDateString();
-                        const isTrainingTomorrow =
-                          matchDate.toDateString() ===
-                          new Date(
-                            currentDate.getTime() + 24 * 60 * 60 * 1000
-                          ).toDateString();
+                    Zápas protivník: {match.opponentName}
+                    {(() => {
+                      const matchDate = new Date(
+                        `${match.date}T${match.time}`
+                      );
+                      const currentDate = new Date();
+                      const isTrainingPassed = matchDate < currentDate;
+                      const isTrainingToday =
+                        matchDate.toDateString() ===
+                        currentDate.toDateString();
+                      const isTrainingTomorrow =
+                        matchDate.toDateString() ===
+                        new Date(
+                          currentDate.getTime() + 24 * 60 * 60 * 1000
+                        ).toDateString();
 
-                        if (isTrainingPassed) {
-                          return (
-                            <Typography variant="body2" sx={{ color: "green" }}>
-                              Proběhl
-                            </Typography>
-                          );
-                        } else if (isTrainingToday) {
-                          return (
-                            <Typography variant="body2" sx={{ color: "blue" }}>
-                              Dnes
-                            </Typography>
-                          );
-                        } else if (isTrainingTomorrow) {
-                          return (
-                            <Typography
-                              variant="body2"
-                              sx={{ color: "orange" }}
-                            >
-                              Zítra
-                            </Typography>
-                          );
-                        } else {
-                          return null;
-                        }
-                      })()}
-                    </Typography>
+                      if (isTrainingPassed) {
+                        return (
+                          <Typography variant="body2" sx={{ color: "green" }}>
+                            Proběhl
+                          </Typography>
+                        );
+                      } else if (isTrainingToday) {
+                        return (
+                          <Typography variant="body2" sx={{ color: "blue" }}>
+                            Dnes
+                          </Typography>
+                        );
+                      } else if (isTrainingTomorrow) {
+                        return (
+                          <Typography
+                            variant="body2"
+                            sx={{ color: "orange" }}
+                          >
+                            Zítra
+                          </Typography>
+                        );
+                      } else {
+                        return null;
+                      }
+                    })()}
+                  </Typography>
                     <Box sx={{ display: "flex" }}>
                       <Typography>
                         Datum:{" "}
@@ -500,6 +501,7 @@ const Content: React.FC<Props> = ({ teamId }) => {
                       <Box sx={{ marginLeft: "auto" }}>
                         {isRole3 && (
                           <Box sx={{ display: "flex", alignItems: "center" }}>
+                            
                             <Box
                               sx={{ marginLeft: "auto", cursor: "pointer" }}
                               onClick={() =>
@@ -512,8 +514,12 @@ const Content: React.FC<Props> = ({ teamId }) => {
                                 <Typography
                                   onClick={handleOpenModal}
                                   sx={{ fontWeight: "500" }}
+                                  
                                 >
+                                  
+                                  
                                   Změnit účast
+                                
                                 </Typography>
 
                                 {match.attendance?.map(
@@ -527,6 +533,7 @@ const Content: React.FC<Props> = ({ teamId }) => {
                                           alignItems: "center",
                                         }}
                                       >
+                                        
                                         <>
                                           <>
                                             {attendanceRecord.hisAttendance ===

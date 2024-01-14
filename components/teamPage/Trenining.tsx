@@ -218,7 +218,7 @@ const TreniningComponent: React.FC<Props> = (id) => {
             >
               Poslední tréninky
             </Typography>
-            <Box sx={{maxHeight: "21.5em", overflowY: "auto", marginTop:"1em" }}>
+            <Box sx={{maxHeight: "20.5em", overflowY: "auto", marginTop:"1em" }}>
               <PastTraining teamId={id.teamId}/>
               </Box>
           </Box>

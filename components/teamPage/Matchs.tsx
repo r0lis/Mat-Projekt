@@ -219,7 +219,7 @@ const Matchs: React.FC<Props> = (id) => {
             >
               Poslední zápasy
             </Typography>
-            <Box sx={{ maxHeight: "21.5em", overflowY: "auto", marginTop:"1em",  }}>
+            <Box sx={{ maxHeight: "20.5em", overflowY: "auto", marginTop:"1em",  }}>
               <PastMatch teamId={id.teamId}/>
               </Box>
           </Box>
