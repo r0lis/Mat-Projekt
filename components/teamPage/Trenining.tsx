@@ -132,7 +132,6 @@ const TreniningComponent: React.FC<Props> = (id) => {
             backgroundColor: "#c2c3c4",
             borderRadius: "0px 0px 15px 15px",
             padding: "0.3em",
-
             boxShadow: "0px 3px 15px rgba(0, 0, 0, 0.3)",
           }}
         ></Box>
@@ -145,6 +144,8 @@ const TreniningComponent: React.FC<Props> = (id) => {
             marginTop: "1em",
             minHeight: "100vh",
             overflowY: "auto",
+            maxHeight: "100vh",
+
           }}
         >
           {addTrenining ? (

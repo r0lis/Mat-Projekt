@@ -207,7 +207,7 @@ const PlanMatch: React.FC<Props> = ({ teamId }) => {
                 sx={{
                   marginLeft: "3%",
                   marginRight: "3%",
-                  marginBottom: "2em",
+                  marginBottom: "1em",
                   borderRadius: "10px",
                   backgroundColor: "rgba(0, 56, 255, 0.24)",
                   border: "2px solid rgba(0, 34, 155, 1)",
