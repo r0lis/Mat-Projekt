@@ -341,7 +341,7 @@ export const typeDefs = gql`
     addMatch(teamId: String!, input: AddMatchInput!): Match
     addTraining(teamId: String!, input: AddTrainingInput!): Training
     updateAttendance(matchId: String!, player: String!, hisAttendance: Int!, reason: String!): Boolean
-
+    updateTrainingAttendance(matchId: String!, player: String!, hisAttendance: Int!, reason: String!): Boolean
 
 
   }

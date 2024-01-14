@@ -81,13 +81,13 @@ const GET_SUBTEAM_DETAILS = gql`
 `;
 
 const UPDATE_ATTENDANCE = gql`
-  mutation UpdateAttendance(
+  mutation UpdateTrainingAttendance(
     $matchId: String!
     $player: String!
     $hisAttendance: Int!
     $reason: String!
   ) {
-    updateAttendance(
+    updateTrainingAttendance(
       matchId: $matchId
       player: $player
       hisAttendance: $hisAttendance
