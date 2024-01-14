@@ -179,7 +179,7 @@ const TreniningComponent: React.FC<Props> = (id) => {
               display: isSmallView ? "" : "block",
             }}
           >
-            <Box sx={{}}>
+            <Box sx={{position:"relative"}}>
               <Typography
                 sx={{
                   fontSize: ["0.8rem", "1.1rem", "1.5rem"],
@@ -190,7 +190,9 @@ const TreniningComponent: React.FC<Props> = (id) => {
               >
                 Nadcházející tréninky
               </Typography>
-              <Box sx={{maxHeight: "21.5em", overflowY: "auto", marginTop:"1em" }}>
+              </Box>
+            <Box sx={{ height:"82%",  overflowY:"auto", marginTop:"1em"}}>
+              <Box sx={{  marginTop:"1em" }}>
               <PlanTraining teamId={id.teamId}/>
               </Box>
             </Box>
@@ -226,8 +228,8 @@ const TreniningComponent: React.FC<Props> = (id) => {
       ) : (
         <Box
           sx={{
-            display: "flex", // Set display to flex
-            justifyContent: "space-between", // Add space between the two boxes
+            display: "flex", 
+            justifyContent: "space-between", 
             width: "100%",
             marginTop: "1em",
             minHeight: "100vh",
@@ -235,7 +237,7 @@ const TreniningComponent: React.FC<Props> = (id) => {
         >
           <Box
             sx={{
-              flex: 1, // Make the first box take up available space
+              flex: 1, 
               borderRadius: "15px",
               backgroundImage: `
         linear-gradient(to bottom, #c2c3c4 60px, #ffffff 60px)
