@@ -384,6 +384,17 @@ const Content: React.FC<Props> = ({ teamId }) => {
     setShowReason(false);
   };
 
+  const isMatchEditable = (matchDate: string, matchTime: string): boolean => {
+    const currentDateTime = new Date();
+    const matchDateTime = new Date(`${matchDate}T${matchTime}`);
+  
+    if (matchDateTime > currentDateTime) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   return (
     <Box>
       {subteamIds.map((subteamId) => {
@@ -508,12 +519,14 @@ const Content: React.FC<Props> = ({ teamId }) => {
                               <Box
                                 sx={{ display: "flex", alignItems: "center" }}
                               >
-                                <Typography
-                                  onClick={handleOpenModal}
-                                  sx={{ fontWeight: "500" }}
-                                >
-                                  Změnit účast
-                                </Typography>
+                                  {isMatchEditable(training.date, training.time) ? (
+                                  <Typography
+                                    onClick={handleOpenModal}
+                                    sx={{ fontWeight: "500" }}
+                                  >
+                                    Změnit účast
+                                  </Typography>
+                                ) : (<Typography sx={{ fontWeight: "500" }}>Účast</Typography>)}
 
                                 {training.attendance?.map(
                                   (attendanceRecord: {
@@ -531,6 +544,15 @@ const Content: React.FC<Props> = ({ teamId }) => {
                                       >
                                         <>
                                           <>
+                                          {attendanceRecord.hisAttendance ===
+                                              0 && (
+                                              <HelpIcon
+                                                style={{
+                                                  color: "gray",
+                                                  marginLeft: "0.5em",
+                                                }}
+                                              />
+                                            )}
                                             {attendanceRecord.hisAttendance ===
                                               1 && (
                                               <CheckCircleIcon

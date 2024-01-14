@@ -386,6 +386,17 @@ const Content: React.FC<Props> = ({ teamId }) => {
     setShowReason(false);
   };
 
+  const isMatchEditable = (matchDate: string, matchTime: string): boolean => {
+    const currentDateTime = new Date();
+    const matchDateTime = new Date(`${matchDate}T${matchTime}`);
+  
+    if (matchDateTime > currentDateTime) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   return (
     <Box>
       {subteamIds.map((subteamId) => {
@@ -414,7 +425,6 @@ const Content: React.FC<Props> = ({ teamId }) => {
                 );
 
                 const isUserRoleNot3 = userRole !== 3;
-                
 
                 return isUserInMatch && isUserRoleNot3;
               })
@@ -442,48 +452,48 @@ const Content: React.FC<Props> = ({ teamId }) => {
                     }}
                   >
                     <Typography variant="h6">
-                    Zápas protivník: {match.opponentName}
-                    {(() => {
-                      const matchDate = new Date(
-                        `${match.date}T${match.time}`
-                      );
-                      const currentDate = new Date();
-                      const isTrainingPassed = matchDate < currentDate;
-                      const isTrainingToday =
-                        matchDate.toDateString() ===
-                        currentDate.toDateString();
-                      const isTrainingTomorrow =
-                        matchDate.toDateString() ===
-                        new Date(
-                          currentDate.getTime() + 24 * 60 * 60 * 1000
-                        ).toDateString();
+                      Zápas protivník: {match.opponentName}
+                      {(() => {
+                        const matchDate = new Date(
+                          `${match.date}T${match.time}`
+                        );
+                        const currentDate = new Date();
+                        const isTrainingPassed = matchDate < currentDate;
+                        const isTrainingToday =
+                          matchDate.toDateString() ===
+                          currentDate.toDateString();
+                        const isTrainingTomorrow =
+                          matchDate.toDateString() ===
+                          new Date(
+                            currentDate.getTime() + 24 * 60 * 60 * 1000
+                          ).toDateString();
 
-                      if (isTrainingPassed) {
-                        return (
-                          <Typography variant="body2" sx={{ color: "green" }}>
-                            Proběhl
-                          </Typography>
-                        );
-                      } else if (isTrainingToday) {
-                        return (
-                          <Typography variant="body2" sx={{ color: "blue" }}>
-                            Dnes
-                          </Typography>
-                        );
-                      } else if (isTrainingTomorrow) {
-                        return (
-                          <Typography
-                            variant="body2"
-                            sx={{ color: "orange" }}
-                          >
-                            Zítra
-                          </Typography>
-                        );
-                      } else {
-                        return null;
-                      }
-                    })()}
-                  </Typography>
+                        if (isTrainingPassed) {
+                          return (
+                            <Typography variant="body2" sx={{ color: "green" }}>
+                              Proběhl
+                            </Typography>
+                          );
+                        } else if (isTrainingToday) {
+                          return (
+                            <Typography variant="body2" sx={{ color: "blue" }}>
+                              Dnes
+                            </Typography>
+                          );
+                        } else if (isTrainingTomorrow) {
+                          return (
+                            <Typography
+                              variant="body2"
+                              sx={{ color: "orange" }}
+                            >
+                              Zítra
+                            </Typography>
+                          );
+                        } else {
+                          return null;
+                        }
+                      })()}
+                    </Typography>
                     <Box sx={{ display: "flex" }}>
                       <Typography>
                         Datum:{" "}
@@ -501,7 +511,6 @@ const Content: React.FC<Props> = ({ teamId }) => {
                       <Box sx={{ marginLeft: "auto" }}>
                         {isRole3 && (
                           <Box sx={{ display: "flex", alignItems: "center" }}>
-                            
                             <Box
                               sx={{ marginLeft: "auto", cursor: "pointer" }}
                               onClick={() =>
@@ -511,16 +520,14 @@ const Content: React.FC<Props> = ({ teamId }) => {
                               <Box
                                 sx={{ display: "flex", alignItems: "center" }}
                               >
-                                <Typography
-                                  onClick={handleOpenModal}
-                                  sx={{ fontWeight: "500" }}
-                                  
-                                >
-                                  
-                                  
-                                  Změnit účast
-                                
-                                </Typography>
+                                {isMatchEditable(match.date, match.time) ? (
+                                  <Typography
+                                    onClick={handleOpenModal}
+                                    sx={{ fontWeight: "500" }}
+                                  >
+                                    Změnit účast
+                                  </Typography>
+                                ) : (<Typography sx={{ fontWeight: "500" }}>Účast</Typography>)}
 
                                 {match.attendance?.map(
                                   (attendanceRecord) =>
@@ -533,9 +540,17 @@ const Content: React.FC<Props> = ({ teamId }) => {
                                           alignItems: "center",
                                         }}
                                       >
-                                        
                                         <>
                                           <>
+                                            {attendanceRecord.hisAttendance ===
+                                              0 && (
+                                              <HelpIcon
+                                                style={{
+                                                  color: "gray",
+                                                  marginLeft: "0.5em",
+                                                }}
+                                              />
+                                            )}
                                             {attendanceRecord.hisAttendance ===
                                               1 && (
                                               <CheckCircleIcon
@@ -777,17 +792,23 @@ const Content: React.FC<Props> = ({ teamId }) => {
                         />
                       ) : (
                         <Box sx={{ paddingBottom: "0.5em" }}>
-                        <Grid container spacing={2}>
-                          <Grid item xs={1.5}>
-                            <Typography sx={{ fontWeight: "500" }}>Název: </Typography>
-                            <Typography sx={{ fontWeight: "500" }}>Umístení: </Typography>
+                          <Grid container spacing={2}>
+                            <Grid item xs={1.5}>
+                              <Typography sx={{ fontWeight: "500" }}>
+                                Název:{" "}
+                              </Typography>
+                              <Typography sx={{ fontWeight: "500" }}>
+                                Umístení:{" "}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={6}>
+                              <Typography>{match.selectedHallId}</Typography>
+                              <Typography>
+                                {match.selectedHallPosition}
+                              </Typography>
+                            </Grid>
                           </Grid>
-                          <Grid item xs={6}>
-                            <Typography>{match.selectedHallId}</Typography>
-                            <Typography>{match.selectedHallPosition}</Typography>
-                          </Grid>
-                        </Grid>
-                      </Box>
+                        </Box>
                       )}
                     </Box>
                   </Box>
