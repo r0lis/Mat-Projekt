@@ -218,7 +218,7 @@ const TreniningComponent: React.FC<Props> = (id) => {
             >
               Poslední tréninky
             </Typography>
-            <Box sx={{ maxHeight: "21.5em", overflowY: "auto", marginTop:"1em" }}>
+            <Box sx={{maxHeight: "21.5em", overflowY: "auto", marginTop:"1em" }}>
               <PastTraining teamId={id.teamId}/>
               </Box>
           </Box>
@@ -245,17 +245,21 @@ const TreniningComponent: React.FC<Props> = (id) => {
               display: isSmallView ? "" : "block",
             }}
           >
-            <Box sx={{}}>
+            <Box sx={{maxHeight:"50vh"}}>
               <Typography
                 sx={{
                   fontSize: ["0.8rem", "1.1rem", "1.5rem"],
                   marginLeft: "1rem",
+                  marginBottom: "2em",
                   fontWeight: "600",
                   paddingTop: ["1.4rem", "1rem", "0.5em"],
                 }}
               >
                 Nadcházející zápasy
               </Typography>
+              <Box sx={{maxHeight:"80vh",  overflowY:"auto",  marginTop:"1em" }}>
+              <PlanTraining teamId={id.teamId}/>
+              </Box>
             </Box>
           </Box>
 
@@ -272,7 +276,7 @@ const TreniningComponent: React.FC<Props> = (id) => {
               marginLeft: isMobile ? "0.5em" : "2em",
             }}
           >
-            <Box sx={{}}>
+            <Box sx={{maxHeight:"50vh"}}>
               <Typography
                 sx={{
                   fontSize: ["0.8rem", "1.1rem", "1.5rem"],
@@ -284,7 +288,9 @@ const TreniningComponent: React.FC<Props> = (id) => {
               >
                 Poslední zápasy
               </Typography>
-              <Box sx={{ maxHeight: "22em", overflowY: "auto" }}></Box>
+              <Box sx={{ maxHeight:"80vh", overflowY: "auto", marginTop:"1em" }}>
+              <PastTraining teamId={id.teamId}/>
+              </Box>
             </Box>
           </Box>
         </Box>
