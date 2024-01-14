@@ -19,12 +19,14 @@ const Attendance: React.FC<AttendanceProps> = ({ subteamId }) => {
         <Button
           variant={selectedAttendance === "training" ? "contained" : "outlined"}
           onClick={() => setSelectedAttendance("training")}
+          sx={{width:"10em"}}
         >
           Treninky
         </Button>
         <Button
           variant={selectedAttendance === "match" ? "contained" : "outlined"}
           onClick={() => setSelectedAttendance("match")}
+          sx={{width:"10em"}}
         >
           Zápasy
         </Button>
