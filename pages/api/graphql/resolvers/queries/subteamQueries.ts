@@ -309,6 +309,26 @@ export const subteamQueries = {
   }
   },
 
+  getAllMatchBySubteamId: async (
+    _: any,
+    { subteamId }: { subteamId: string },
+    context: { db: { collection: (arg0: string) => any } }
+  ) => {
+    try {
+      const matchesSnapshot = await context.db
+        .collection("Match")
+        .where("subteamIdSelected", "==", subteamId)
+        .get();
+  
+      const matches = matchesSnapshot.docs.map((doc: any) => doc.data() as any);
+  
+      return matches;
+    } catch (error) {
+      console.error("Error fetching matches by subteamId:", error);
+      throw error;
+    }
+  },
+
   getTrainingsBySubteam: async (
     _: any,
     { input }: { input: { subteamIds: string[] } },
