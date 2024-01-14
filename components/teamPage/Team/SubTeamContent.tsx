@@ -130,7 +130,7 @@ const Content: React.FC<ContentProps> = ({ subteamId, idTeam }) => {
       case "wall":
         return <Wall subteamId={subteamId} />;
       case "attendance":
-        return <Attendance subteamId={subteamId} />;
+        return <Attendance subteamId={subteamId as string} />;
       case "members":
         return <Members subteamId={subteamId as string} idTeam={idTeam} />;
       default:

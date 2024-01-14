@@ -174,7 +174,7 @@ const PlanTraining: React.FC<Props> = ({ teamId }) => {
   return (
     <Box>
       {subteamIds.map((subteamId) => {
-        const subteamMatches = matchesData?.getFutureTrainingsBySubteam
+        const subteamTrainings = matchesData?.getFutureTrainingsBySubteam
           .filter(
             (subteam: { subteamId: string }) => subteam.subteamId === subteamId
           )
@@ -183,18 +183,28 @@ const PlanTraining: React.FC<Props> = ({ teamId }) => {
               subteam.trainings
           )
           .flat();
-
+  
+        const sortedTrainings = subteamTrainings.sort(
+          (a: Training, b: Training) => {
+            const dateA = new Date(`${a.date}T${a.time}`);
+            const dateB = new Date(`${b.date}T${b.time}`);
+            return dateA.getTime() - dateB.getTime(); // Compare timestamps in ascending order
+          }
+        );
+  
         return (
           <Box key={subteamId}>
-          {subteamMatches
-            .filter((training: Training) => {
-              const isUserInMatch = training.selectedMembers.includes(user?.email || "");
-
-              const isUserRoleNot3 = userRole !== 3;
-
-              return isUserInMatch && isUserRoleNot3;
-            })
-            .map((training: Training) => (
+            {sortedTrainings
+              .filter((training: Training) => {
+                const isUserInTraining = training.selectedMembers.includes(
+                  user?.email || ""
+                );
+  
+                const isUserRoleNot3 = userRole !== 3;
+  
+                return isUserInTraining && isUserRoleNot3;
+              })
+              .map((training: Training) => (
               <Box
                 sx={{
                   marginLeft: "3%",

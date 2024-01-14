@@ -279,24 +279,34 @@ export const subteamQueries = {
     _: any,
     { input }: { input: { subteamIds: string[] } },
     context: { db: { collection: (arg0: string) => any } }
+    
   ) => {
+    const { subteamIds } = input;
     try {
       const matchesSnapshot = await context.db
-        .collection("Match")
-        .where("subteamIdSelected", "in", input.subteamIds)
-        .get();
-
-      const matches = matchesSnapshot.docs.map((doc: any) => doc.data() as any);
-
-      const validMatches = matches.filter(
-        (match: any) => match.subteamIdSelected !== null
-      );
-
-      return [{ subteamId: input.subteamIds[0], matches: validMatches }];
-    } catch (error) {
+          .collection("Match")
+          .where("subteamIdSelected", "in", subteamIds)
+          .get();
+  
+      const currentDate = new Date();
+  
+      const matches = matchesSnapshot.docs
+          .map((doc: any) => doc.data() as any)
+          .filter((match: any) => {
+              const matchDate = new Date(`${match.date}T${match.time}`);
+              
+              const timeDifference = currentDate.getTime() - matchDate.getTime();
+  
+              const isWithinOneDay = timeDifference < 24 * 60 * 60 * 1000;
+  
+              return match.subteamIdSelected !== null && isWithinOneDay;
+          });
+  
+      return [{ subteamId: subteamIds[0], matches }];
+  } catch (error) {
       console.error("Error fetching matches by subteams:", error);
       throw error;
-    }
+  }
   },
 
   getTrainingsBySubteam: async (
@@ -304,19 +314,29 @@ export const subteamQueries = {
     { input }: { input: { subteamIds: string[] } },
     context: { db: { collection: (arg0: string) => any } }
   ) => {
+    const { subteamIds } = input;
+  
     try {
       const trainingsSnapshot = await context.db
         .collection("Training")
         .where("subteamIdSelected", "in", input.subteamIds)
         .get();
-
-      const trainings = trainingsSnapshot.docs.map((doc: any) => doc.data() as any);
-
-      const validTrainings = trainings.filter(
-        (training: any) => training.subteamIdSelected !== null
-      );
-
-      return [{ subteamId: input.subteamIds[0], trainings: validTrainings }];
+  
+      const currentDate = new Date();
+  
+      const trainings = trainingsSnapshot.docs
+        .map((doc: any) => doc.data() as any)
+        .filter((training: any) => {
+          const trainingDate = new Date(`${training.date}T${training.time}`);
+  
+          const timeDifference = currentDate.getTime() - trainingDate.getTime();
+  
+          const isWithinOneDay = timeDifference < 24 * 60 * 60 * 1000;
+  
+          return training.subteamIdSelected !== null && isWithinOneDay;
+        });
+  
+      return [{ subteamId: input.subteamIds[0], trainings }];
     } catch (error) {
       console.error("Error fetching trainings by subteams:", error);
       throw error;

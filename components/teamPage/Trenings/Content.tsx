@@ -27,7 +27,6 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
 import IconButton from "@mui/material/IconButton";
 
-
 const GET_SUBTEAMS = gql`
   query GetYourSubteamData($teamId: String!, $email: String!) {
     getYourSubteamData(teamId: $teamId, email: $email) {
@@ -388,7 +387,7 @@ const Content: React.FC<Props> = ({ teamId }) => {
   return (
     <Box>
       {subteamIds.map((subteamId) => {
-        const subteamMatches = matchesData?.getTrainingsBySubteam
+        const subteamTrainings = matchesData?.getTrainingsBySubteam
           .filter(
             (subteam: { subteamId: string }) => subteam.subteamId === subteamId
           )
@@ -398,456 +397,461 @@ const Content: React.FC<Props> = ({ teamId }) => {
           )
           .flat();
 
+        const sortedTrainings = subteamTrainings.sort(
+          (a: Training, b: Training) => {
+            const dateA = new Date(`${a.date}T${a.time}`);
+            const dateB = new Date(`${b.date}T${b.time}`);
+            return dateA.getTime() - dateB.getTime();
+          }
+        );
+
         return (
           <Box key={subteamId}>
-          {subteamMatches
-            .filter((training: Training) => {
-              const isUserInMatch = training.selectedMembers.includes(user?.email || "");
+            {sortedTrainings
+              .filter((training: Training) => {
+                const isUserInTraining = training.selectedMembers.includes(
+                  user?.email || ""
+                );
 
-              const isUserRoleNot3 = userRole !== 3;
+                const isUserRoleNot3 = userRole !== 3;
 
-              return isUserInMatch && isUserRoleNot3;
-            })
-            .map((training: Training) => (
-              <Box
-                sx={{
-                  marginLeft: "3%",
-                  marginRight: "3%",
-                  marginBottom: "2em",
-                  borderRadius: "10px",
-                  backgroundColor: "rgba(0, 56, 255, 0.24)",
-                  border: "2px solid rgba(0, 34, 155, 1)",
-                }}
-                key={training.matchId}
-              >
+                return isUserInTraining && isUserRoleNot3;
+              })
+              .map((training: Training) => (
                 <Box
                   sx={{
-                    paddingLeft: "1em",
-                    paddingRight: "1em",
+                    marginLeft: "3%",
+                    marginRight: "3%",
+                    marginBottom: "2em",
+                    borderRadius: "10px",
                     backgroundColor: "rgba(0, 56, 255, 0.24)",
-                    borderRadius: "10px 10px 0 0",
-                    borderBottom: "2px solid rgba(0, 34, 155, 1)",
-                    paddingTop: "1em",
-                    paddingBottom: "0.5em",
+                    border: "2px solid rgba(0, 34, 155, 1)",
                   }}
+                  key={training.matchId}
                 >
-                  <Typography variant="h6">
-                    Trenink: {training.opponentName}
-                  </Typography>
-                  <Box sx={{ display: "flex" }}>
-                    <Typography>
-                      Datum:{" "}
-                      {training.date &&
-                        new Date(training.date).toLocaleDateString("cs-CZ", {
-                          day: "2-digit",
-                          month: "2-digit",
-                          year: "numeric",
-                        })}
+                  <Box
+                    sx={{
+                      paddingLeft: "1em",
+                      paddingRight: "1em",
+                      backgroundColor: "rgba(0, 56, 255, 0.24)",
+                      borderRadius: "10px 10px 0 0",
+                      borderBottom: "2px solid rgba(0, 34, 155, 1)",
+                      paddingTop: "1em",
+                      paddingBottom: "0.5em",
+                    }}
+                  >
+                    <Typography variant="h6">
+                      Trenink: {training.opponentName}
+                      {(() => {
+                        const trainingDate = new Date(
+                          `${training.date}T${training.time}`
+                        );
+                        const currentDate = new Date();
+                        const isTrainingPassed = trainingDate < currentDate;
+                        const isTrainingToday =
+                          trainingDate.toDateString() ===
+                          currentDate.toDateString();
+                        const isTrainingTomorrow =
+                          trainingDate.toDateString() ===
+                          new Date(
+                            currentDate.getTime() + 24 * 60 * 60 * 1000
+                          ).toDateString();
+
+                        if (isTrainingPassed) {
+                          return (
+                            <Typography variant="body2" sx={{ color: "green" }}>
+                              Proběhl
+                            </Typography>
+                          );
+                        } else if (isTrainingToday) {
+                          return (
+                            <Typography variant="body2" sx={{ color: "blue" }}>
+                              Dnes
+                            </Typography>
+                          );
+                        } else if (isTrainingTomorrow) {
+                          return (
+                            <Typography
+                              variant="body2"
+                              sx={{ color: "orange" }}
+                            >
+                              Zítra
+                            </Typography>
+                          );
+                        } else {
+                          return null;
+                        }
+                      })()}
                     </Typography>
-                    <Typography sx={{ marginLeft: "1em" }}>
-                      Čas: {training.time}
-                    </Typography>
-                    <Box sx={{ marginLeft: "auto" }}>
-                      {isRole3 && (
-                        <Box sx={{ display: "flex", alignItems: "center" }}>
-                          <Box
-                            sx={{ marginLeft: "auto", cursor: "pointer" }}
-                            onClick={() =>
-                              handleAttendanceChange(training.matchId)
-                            }
-                          >
-                            <Box sx={{ display: "flex", alignItems: "center" }}>
-                              <Typography
-                                onClick={handleOpenModal}
-                                sx={{ fontWeight: "500" }}
+                    <Box sx={{ display: "flex" }}>
+                      <Typography>
+                        Datum:{" "}
+                        {training.date &&
+                          new Date(training.date).toLocaleDateString("cs-CZ", {
+                            day: "2-digit",
+                            month: "2-digit",
+                            year: "numeric",
+                          })}
+                      </Typography>
+                      <Typography sx={{ marginLeft: "1em" }}>
+                        Čas: {training.time}
+                      </Typography>
+                      <Box sx={{ marginLeft: "auto" }}>
+                        {isRole3 && (
+                          <Box sx={{ display: "flex", alignItems: "center" }}>
+                            <Box
+                              sx={{ marginLeft: "auto", cursor: "pointer" }}
+                              onClick={() =>
+                                handleAttendanceChange(training.matchId)
+                              }
+                            >
+                              <Box
+                                sx={{ display: "flex", alignItems: "center" }}
                               >
-                                Změnit účast
-                              </Typography>
+                                <Typography
+                                  onClick={handleOpenModal}
+                                  sx={{ fontWeight: "500" }}
+                                >
+                                  Změnit účast
+                                </Typography>
 
-                              {training.attendance?.map(
-                                (attendanceRecord: {
-                                  player: React.Key | null | undefined;
-                                  hisAttendance: number;
-                                }) =>
-                                  user?.email === attendanceRecord.player && (
-                                    <Box
-                                      key={attendanceRecord.player}
-                                      sx={{
-                                        marginLeft: "1em",
-                                        display: "flex",
-                                        alignItems: "center",
-                                      }}
-                                    >
-                                      <>
+                                {training.attendance?.map(
+                                  (attendanceRecord: {
+                                    player: React.Key | null | undefined;
+                                    hisAttendance: number;
+                                  }) =>
+                                    user?.email === attendanceRecord.player && (
+                                      <Box
+                                        key={attendanceRecord.player}
+                                        sx={{
+                                          marginLeft: "1em",
+                                          display: "flex",
+                                          alignItems: "center",
+                                        }}
+                                      >
                                         <>
-                                          {attendanceRecord.hisAttendance ===
-                                            1 && (
-                                            <CheckCircleIcon
-                                              style={{
-                                                color: "green",
-                                                marginLeft: "0.5em",
-                                              }}
-                                            />
-                                          )}
-                                          {attendanceRecord.hisAttendance ===
-                                            2 && (
-                                            <CancelIcon
-                                              style={{
-                                                color: "red",
-                                                marginLeft: "0.5em",
-                                              }}
-                                            />
-                                          )}
+                                          <>
+                                            {attendanceRecord.hisAttendance ===
+                                              1 && (
+                                              <CheckCircleIcon
+                                                style={{
+                                                  color: "green",
+                                                  marginLeft: "0.5em",
+                                                }}
+                                              />
+                                            )}
+                                            {attendanceRecord.hisAttendance ===
+                                              2 && (
+                                              <CancelIcon
+                                                style={{
+                                                  color: "red",
+                                                  marginLeft: "0.5em",
+                                                }}
+                                              />
+                                            )}
+                                          </>
                                         </>
-                                      </>
 
-                                      {updatingMatchId === training.matchId && (
-                                        <>
-                                          <Modal
-                                            open={openModal}
-                                            onClose={handleCloseModal}
-                                            aria-labelledby="modal-title"
-                                            aria-describedby="modal-description"
-                                          >
-                                            <Box
-                                              sx={{
-                                                position: "absolute",
-                                                top: "50%",
-                                                left: "50%",
-                                                width: "30%",
-                                                height:
-                                                  userSelection == 2
-                                                    ? "43%"
-                                                    : "30%",
-                                                transform:
-                                                  "translate(-50%, -50%)",
-                                                backgroundColor: "white",
-                                                borderRadius: "10px",
-                                                padding: "1.5em",
-                                              }}
+                                        {updatingMatchId ===
+                                          training.matchId && (
+                                          <>
+                                            <Modal
+                                              open={openModal}
+                                              onClose={handleCloseModal}
+                                              aria-labelledby="modal-title"
+                                              aria-describedby="modal-description"
                                             >
-                                              <Typography
-                                                sx={{
-                                                  fontWeight: "500",
-                                                  marginBottom: "0.2em",
-                                                }}
-                                              >
-                                                Zvolte docházku na zápas proti:{" "}
-                                                {training.opponentName}
-                                              </Typography>
-                                              <Typography
-                                                sx={{
-                                                  fontWeight: "500",
-                                                  marginBottom: "0.5em",
-                                                }}
-                                              >
-                                                Datum: {training.date}
-                                              </Typography>
                                               <Box
-                                                onClick={() =>
-                                                  setUserSelection(1)
-                                                }
                                                 sx={{
+                                                  position: "absolute",
+                                                  top: "50%",
+                                                  left: "50%",
                                                   width: "30%",
-                                                  backgroundColor:
-                                                    userSelection == 1
-                                                      ? "rgba(3, 195, 17, 0.3)"
-                                                      : "",
-                                                  display: "flex",
-                                                  flexDirection: "column",
-                                                  alignItems: "center",
-                                                  justifyContent: "center",
-                                                  border:
-                                                    "1px solid rgba(3, 195, 17, 1)",
+                                                  height:
+                                                    userSelection == 2
+                                                      ? "43%"
+                                                      : "30%",
+                                                  transform:
+                                                    "translate(-50%, -50%)",
+                                                  backgroundColor: "white",
                                                   borderRadius: "10px",
-                                                  padding: "0.5em",
-                                                  marginBottom: "0.5em",
+                                                  padding: "1.5em",
                                                 }}
                                               >
                                                 <Typography
                                                   sx={{
-                                                    cursor: "pointer",
                                                     fontWeight: "500",
-                                                    fontSize: "1em",
+                                                    marginBottom: "0.2em",
                                                   }}
                                                 >
-                                                  Ano
+                                                  Zvolte docházku na zápas
+                                                  proti: {training.opponentName}
                                                 </Typography>
-                                              </Box>
-
-                                              <Box
-                                                sx={{
-                                                  width: "30%",
-                                                  backgroundColor:
-                                                    userSelection == 2
-                                                      ? "rgba(250, 0, 0, 0.2)"
-                                                      : "",
-                                                  display: "flex",
-                                                  flexDirection: "column",
-                                                  alignItems: "center",
-                                                  justifyContent: "center",
-                                                  border:
-                                                    "1px solid rgba(250, 0, 0, 1)",
-                                                  borderRadius: "10px",
-                                                  padding: "0.5em",
-                                                  marginBottom: "0.5em",
-                                                }}
-                                                onClick={() =>
-                                                  setUserSelection(2)
-                                                }
-                                              >
                                                 <Typography
-                                                  sx={{ cursor: "pointer" }}
+                                                  sx={{
+                                                    fontWeight: "500",
+                                                    marginBottom: "0.5em",
+                                                  }}
                                                 >
-                                                  Ne
+                                                  Datum: {training.date}
                                                 </Typography>
-                                              </Box>
-
-                                              {userSelection !== null && (
-                                                <>
-                                                  {userSelection === 2 && (
-                                                    <TextField
-                                                      label="Důvod"
-                                                      variant="outlined"
-                                                      fullWidth
-                                                      value={reason}
-                                                      sx={{}}
-                                                      onChange={(e) =>
-                                                        setReason(
-                                                          e.target.value
-                                                        )
-                                                      }
-                                                    />
-                                                  )}
-                                                  {userSelection === 2 &&
-                                                    reason.length < 3 && (
-                                                      <Box>
-                                                        <Typography
-                                                          variant="caption"
-                                                          sx={{
-                                                            color: "red",
-                                                            marginBottom: "1em",
-                                                          }}
-                                                        >
-                                                          Důvod musí mít alespoň
-                                                          3 znaky.
-                                                        </Typography>
-                                                      </Box>
-                                                    )}
-
-                                                  <Button
-                                                    variant="contained"
-                                                    color="primary"
-                                                    sx={{ marginTop: "1em" }}
-                                                    onClick={() => {
-                                                      if (
-                                                        userSelection == 2 &&
-                                                        reason.length >= 3
-                                                      ) {
-                                                        handleUpdateAttendance(
-                                                          training.matchId,
-                                                          userSelection
-                                                        );
-                                                        handleCloseModal();
-                                                      }
-                                                      if (userSelection == 1) {
-                                                        handleUpdateAttendance(
-                                                          training.matchId,
-                                                          userSelection
-                                                        );
-                                                        handleCloseModal();
-                                                      }
+                                                <Box
+                                                  onClick={() =>
+                                                    setUserSelection(1)
+                                                  }
+                                                  sx={{
+                                                    width: "30%",
+                                                    backgroundColor:
+                                                      userSelection == 1
+                                                        ? "rgba(3, 195, 17, 0.3)"
+                                                        : "",
+                                                    display: "flex",
+                                                    flexDirection: "column",
+                                                    alignItems: "center",
+                                                    justifyContent: "center",
+                                                    border:
+                                                      "1px solid rgba(3, 195, 17, 1)",
+                                                    borderRadius: "10px",
+                                                    padding: "0.5em",
+                                                    marginBottom: "0.5em",
+                                                  }}
+                                                >
+                                                  <Typography
+                                                    sx={{
+                                                      cursor: "pointer",
+                                                      fontWeight: "500",
+                                                      fontSize: "1em",
                                                     }}
                                                   >
-                                                    Potvrdit
-                                                  </Button>
-                                                </>
-                                              )}
-                                            </Box>
-                                          </Modal>
-                                        </>
-                                      )}
-                                    </Box>
-                                  )
-                              )}
+                                                    Ano
+                                                  </Typography>
+                                                </Box>
+
+                                                <Box
+                                                  sx={{
+                                                    width: "30%",
+                                                    backgroundColor:
+                                                      userSelection == 2
+                                                        ? "rgba(250, 0, 0, 0.2)"
+                                                        : "",
+                                                    display: "flex",
+                                                    flexDirection: "column",
+                                                    alignItems: "center",
+                                                    justifyContent: "center",
+                                                    border:
+                                                      "1px solid rgba(250, 0, 0, 1)",
+                                                    borderRadius: "10px",
+                                                    padding: "0.5em",
+                                                    marginBottom: "0.5em",
+                                                  }}
+                                                  onClick={() =>
+                                                    setUserSelection(2)
+                                                  }
+                                                >
+                                                  <Typography
+                                                    sx={{ cursor: "pointer" }}
+                                                  >
+                                                    Ne
+                                                  </Typography>
+                                                </Box>
+
+                                                {userSelection !== null && (
+                                                  <>
+                                                    {userSelection === 2 && (
+                                                      <TextField
+                                                        label="Důvod"
+                                                        variant="outlined"
+                                                        fullWidth
+                                                        value={reason}
+                                                        sx={{}}
+                                                        onChange={(e) =>
+                                                          setReason(
+                                                            e.target.value
+                                                          )
+                                                        }
+                                                      />
+                                                    )}
+                                                    {userSelection === 2 &&
+                                                      reason.length < 3 && (
+                                                        <Box>
+                                                          <Typography
+                                                            variant="caption"
+                                                            sx={{
+                                                              color: "red",
+                                                              marginBottom:
+                                                                "1em",
+                                                            }}
+                                                          >
+                                                            Důvod musí mít
+                                                            alespoň 3 znaky.
+                                                          </Typography>
+                                                        </Box>
+                                                      )}
+
+                                                    <Button
+                                                      variant="contained"
+                                                      color="primary"
+                                                      sx={{ marginTop: "1em" }}
+                                                      onClick={() => {
+                                                        if (
+                                                          userSelection == 2 &&
+                                                          reason.length >= 3
+                                                        ) {
+                                                          handleUpdateAttendance(
+                                                            training.matchId,
+                                                            userSelection
+                                                          );
+                                                          handleCloseModal();
+                                                        }
+                                                        if (
+                                                          userSelection == 1
+                                                        ) {
+                                                          handleUpdateAttendance(
+                                                            training.matchId,
+                                                            userSelection
+                                                          );
+                                                          handleCloseModal();
+                                                        }
+                                                      }}
+                                                    >
+                                                      Potvrdit
+                                                    </Button>
+                                                  </>
+                                                )}
+                                              </Box>
+                                            </Modal>
+                                          </>
+                                        )}
+                                      </Box>
+                                    )
+                                )}
+                              </Box>
                             </Box>
                           </Box>
-                        </Box>
-                      )}
-                    </Box>
-                  </Box>
-                </Box>
-                <Box
-                  sx={{
-                    paddingLeft: "1em",
-                    paddingRight: "1em",
-                    paddingTop: "0.5em",
-                  }}
-                >
-                  <Grid container spacing={2}>
-                    <Grid item xs={1.5}>
-                      <Typography sx={{ fontWeight: "500" }}>
-                        Váš tým:
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={6}>
-                      <Box>
-                        {training.subteamIdSelected && (
-                          <SubteamDetails
-                            subteamId={training.subteamIdSelected}
-                          />
                         )}
                       </Box>
-                    </Grid>
-                  </Grid>
-
-                  <Typography sx={{ fontWeight: "500", paddingTop: "0.5em" }}>
-                    Info haly
-                  </Typography>
-                  <Box>
-                    {training.selectedHallId && (
-                      <HallInfo
-                        teamId={teamId}
-                        treningHallId={training.selectedHallId}
-                      />
-                    )}
-                  </Box>
-                  <Box>
-                    <Box sx={{display:"flex"}}>
-                    <Typography sx={{ fontWeight: "500" }}>
-                      Popis treninku
-                    </Typography>
-                    <IconButton
-                      sx={{ marginLeft: "1%", marginTop:"-10px" }}
-                      onClick={() =>
-                        setExpandedTraining(
-                          expandedTraining === training.matchId
-                            ? null
-                            : training.matchId
-                        )
-                      }
-                    >
-                      {expandedTraining === training.matchId ? (
-                        <ExpandLessIcon />
-                      ) : (
-                        <ExpandMoreIcon />
-                      )}
-                    </IconButton>
                     </Box>
-                    <Collapse
-                      in={expandedTraining === training.matchId}
-                      timeout="auto"
-                      unmountOnExit
-                    
-                    >
-                      <Card sx={{marginBottom:"1em"}}>
-                      <Typography
-                        sx={{ padding: "0.5em 0.5em", fontSize:"1rem"  }}
-                      >
-                        {training.description}
-                      </Typography>
-                      </Card>
-                    </Collapse>
                   </Box>
-                </Box>
+                  <Box
+                    sx={{
+                      paddingLeft: "1em",
+                      paddingRight: "1em",
+                      paddingTop: "0.5em",
+                    }}
+                  >
+                    <Grid container spacing={2}>
+                      <Grid item xs={1.5}>
+                        <Typography sx={{ fontWeight: "500" }}>
+                          Váš tým:
+                        </Typography>
+                      </Grid>
+                      <Grid item xs={6}>
+                        <Box>
+                          {training.subteamIdSelected && (
+                            <SubteamDetails
+                              subteamId={training.subteamIdSelected}
+                            />
+                          )}
+                        </Box>
+                      </Grid>
+                    </Grid>
 
-                <Box
-                  sx={{
-                    paddingLeft: "1em",
-                    paddingRight: "1em",
-                    backgroundColor: "rgba(0, 56, 255, 0.15)",
-                    borderRadius: "0px 0px 10px 10px",
-                    borderTop: "2px solid rgba(0, 34, 155, 1)",
-                    paddingBottom: "0.5em",
-                    paddingTop: "0.5em",
-                  }}
-                >
-                  {expandedMatchId === training.matchId ? (
+                    <Typography sx={{ fontWeight: "500", paddingTop: "0.5em" }}>
+                      Info haly
+                    </Typography>
+                    <Box>
+                      {training.selectedHallId && (
+                        <HallInfo
+                          teamId={teamId}
+                          treningHallId={training.selectedHallId}
+                        />
+                      )}
+                    </Box>
                     <Box>
                       <Box sx={{ display: "flex" }}>
                         <Typography sx={{ fontWeight: "500" }}>
-                          Účastníci:
+                          Popis treninku
                         </Typography>
-                        <Box>
-                          <ExpandLessIcon
-                            onClick={() => setExpandedMatchId(null)}
-                          />
-                        </Box>
+                        <IconButton
+                          sx={{ marginLeft: "1%", marginTop: "-10px" }}
+                          onClick={() =>
+                            setExpandedTraining(
+                              expandedTraining === training.matchId
+                                ? null
+                                : training.matchId
+                            )
+                          }
+                        >
+                          {expandedTraining === training.matchId ? (
+                            <ExpandLessIcon />
+                          ) : (
+                            <ExpandMoreIcon />
+                          )}
+                        </IconButton>
                       </Box>
-
-                      <Box
-                        sx={{
-                          backgroundColor: "white",
-                          borderRadius: "10px",
-                          marginTop: "0.5em",
-                          paddingBottom: "1em",
-                          marginBottom: "1em",
-                        }}
+                      <Collapse
+                        in={expandedTraining === training.matchId}
+                        timeout="auto"
+                        unmountOnExit
                       >
-                        <Box sx={{ paddingTop: "1em", display: "flex" }}>
+                        <Card sx={{ marginBottom: "1em" }}>
                           <Typography
-                            sx={{
-                              fontWeight: "500",
-                              marginLeft: "10%",
-                              marginRight: "auto",
-                              fontSize: "1.2em",
-                            }}
+                            sx={{ padding: "0.5em 0.5em", fontSize: "1rem" }}
                           >
-                            Management a trenéři:
+                            {training.description}
                           </Typography>
-                        </Box>
-                        {training.selectedManagement &&
-                        training.selectedManagement.length > 0 ? (
-                          <Table
-                            sx={{
-                              borderRadius: "10px",
-                              width: "80%",
-                              marginLeft: "auto",
-                              marginRight: "auto",
-                            }}
-                          >
-                            <TableHead>
-                              <TableRow>
-                                <TableCell></TableCell>
-                              </TableRow>
-                            </TableHead>
-                            <TableBody>
-                              {training.selectedManagement.map(
-                                (
-                                  member: string,
-                                  index: React.Key | null | undefined
-                                ) => (
-                                  <TableRow
-                                    sx={{ borderBottom: "2px solid gray" }}
-                                    key={index}
-                                  >
-                                    <UserDetails email={member} />
-                                  </TableRow>
-                                )
-                              )}
-                            </TableBody>
-                          </Table>
-                        ) : (
-                          <Box>
-                            <Typography sx={{ fontWeight: "500" }}>
-                              Účastníci:
-                            </Typography>
-                            <Typography>Žádní nominovaní hráči.</Typography>
-                          </Box>
-                        )}
-                      </Box>
+                        </Card>
+                      </Collapse>
+                    </Box>
+                  </Box>
 
-                      <Box
-                        sx={{
-                          backgroundColor: "white",
-                          borderRadius: "10px",
-                          marginTop: "0.5em",
-                          paddingBottom: "1em",
-                          marginBottom: "1em",
-                        }}
-                      >
-                        {isRole3 ? (
-                          <>
+                  <Box
+                    sx={{
+                      paddingLeft: "1em",
+                      paddingRight: "1em",
+                      backgroundColor: "rgba(0, 56, 255, 0.15)",
+                      borderRadius: "0px 0px 10px 10px",
+                      borderTop: "2px solid rgba(0, 34, 155, 1)",
+                      paddingBottom: "0.5em",
+                      paddingTop: "0.5em",
+                    }}
+                  >
+                    {expandedMatchId === training.matchId ? (
+                      <Box>
+                        <Box sx={{ display: "flex" }}>
+                          <Typography sx={{ fontWeight: "500" }}>
+                            Účastníci:
+                          </Typography>
+                          <Box>
+                            <ExpandLessIcon
+                              onClick={() => setExpandedMatchId(null)}
+                            />
+                          </Box>
+                        </Box>
+
+                        <Box
+                          sx={{
+                            backgroundColor: "white",
+                            borderRadius: "10px",
+                            marginTop: "0.5em",
+                            paddingBottom: "1em",
+                            marginBottom: "1em",
+                          }}
+                        >
+                          <Box sx={{ paddingTop: "1em", display: "flex" }}>
+                            <Typography
+                              sx={{
+                                fontWeight: "500",
+                                marginLeft: "10%",
+                                marginRight: "auto",
+                                fontSize: "1.2em",
+                              }}
+                            >
+                              Management a trenéři:
+                            </Typography>
+                          </Box>
+                          {training.selectedManagement &&
+                          training.selectedManagement.length > 0 ? (
                             <Table
                               sx={{
                                 borderRadius: "10px",
@@ -859,94 +863,45 @@ const Content: React.FC<Props> = ({ teamId }) => {
                               <TableHead>
                                 <TableRow>
                                   <TableCell></TableCell>
-                                  <TableCell>Docházka</TableCell>
                                 </TableRow>
                               </TableHead>
                               <TableBody>
-                                {training.selectedPlayers.map(
-                                  (member, index) => {
-                                    const attendanceRecord =
-                                      training.attendance?.find(
-                                        (record) => record.player === member
-                                      );
-
-                                    if (
-                                      user?.email === member ||
-                                      attendanceRecord?.hisAttendance !== 0
-                                    ) {
-                                      return (
-                                        <TableRow
-                                          sx={{
-                                            borderBottom: "2px solid gray",
-                                          }}
-                                          key={index}
-                                        >
-                                          <UserDetails email={member} />
-                                          {attendanceRecord && (
-                                            <>
-                                              {attendanceRecord.hisAttendance ===
-                                                1 && (
-                                                <CheckCircleIcon
-                                                  style={{
-                                                    color: "green",
-                                                    marginLeft: "0.5em",
-                                                    width: "1.5em",
-                                                    height: "1.5em",
-                                                    marginTop: "0.8em",
-                                                  }}
-                                                />
-                                              )}
-                                              {attendanceRecord.hisAttendance ===
-                                                2 && (
-                                                <CancelIcon
-                                                  style={{
-                                                    color: "red",
-                                                    marginLeft: "0.5em",
-                                                    width: "1.5em",
-                                                    height: "1.5em",
-                                                    marginTop: "0.8em",
-                                                  }}
-                                                />
-                                              )}
-                                              {attendanceRecord.hisAttendance ===
-                                                0 && (
-                                                <HelpIcon
-                                                  style={{
-                                                    color: "gray",
-                                                    marginLeft: "0.5em",
-                                                    width: "1.5em",
-                                                    height: "1.5em",
-                                                    marginTop: "0.8em",
-                                                  }}
-                                                />
-                                              )}
-                                            </>
-                                          )}
-                                        </TableRow>
-                                      );
-                                    }
-                                    return null;
-                                  }
+                                {training.selectedManagement.map(
+                                  (
+                                    member: string,
+                                    index: React.Key | null | undefined
+                                  ) => (
+                                    <TableRow
+                                      sx={{ borderBottom: "2px solid gray" }}
+                                      key={index}
+                                    >
+                                      <UserDetails email={member} />
+                                    </TableRow>
+                                  )
                                 )}
                               </TableBody>
                             </Table>
-                          </>
-                        ) : (
-                          <>
-                            <Box sx={{ paddingTop: "1em", display: "flex" }}>
-                              <Typography
-                                sx={{
-                                  fontWeight: "500",
-                                  marginLeft: "10%",
-                                  marginRight: "auto",
-                                  fontSize: "1.2em",
-                                }}
-                              >
-                                Hráči:
+                          ) : (
+                            <Box>
+                              <Typography sx={{ fontWeight: "500" }}>
+                                Účastníci:
                               </Typography>
+                              <Typography>Žádní nominovaní hráči.</Typography>
                             </Box>
-                            {training.selectedPlayers &&
-                            training.selectedPlayers.length > 0 ? (
+                          )}
+                        </Box>
+
+                        <Box
+                          sx={{
+                            backgroundColor: "white",
+                            borderRadius: "10px",
+                            marginTop: "0.5em",
+                            paddingBottom: "1em",
+                            marginBottom: "1em",
+                          }}
+                        >
+                          {isRole3 ? (
+                            <>
                               <Table
                                 sx={{
                                   borderRadius: "10px",
@@ -963,23 +918,29 @@ const Content: React.FC<Props> = ({ teamId }) => {
                                 </TableHead>
                                 <TableBody>
                                   {training.selectedPlayers.map(
-                                    (member, index) => (
-                                      <TableRow
-                                        sx={{ borderBottom: "2px solid gray" }}
-                                        key={index}
-                                      >
-                                        <UserDetails email={member} />
-                                        {training.attendance?.map(
-                                          (attendanceRecord) =>
-                                            attendanceRecord.player ===
-                                              member && (
+                                    (member, index) => {
+                                      const attendanceRecord =
+                                        training.attendance?.find(
+                                          (record) => record.player === member
+                                        );
+
+                                      if (
+                                        user?.email === member ||
+                                        attendanceRecord?.hisAttendance !== 0
+                                      ) {
+                                        return (
+                                          <TableRow
+                                            sx={{
+                                              borderBottom: "2px solid gray",
+                                            }}
+                                            key={index}
+                                          >
+                                            <UserDetails email={member} />
+                                            {attendanceRecord && (
                                               <>
                                                 {attendanceRecord.hisAttendance ===
                                                   1 && (
                                                   <CheckCircleIcon
-                                                    key={
-                                                      attendanceRecord.player
-                                                    }
                                                     style={{
                                                       color: "green",
                                                       marginLeft: "0.5em",
@@ -989,103 +950,21 @@ const Content: React.FC<Props> = ({ teamId }) => {
                                                     }}
                                                   />
                                                 )}
-                                                <Box
-                                                  sx={{
-                                                    display: "flex",
-                                                    alignItems: "center",
-                                                  }}
-                                                >
-                                                  {attendanceRecord.hisAttendance ===
-                                                    2 && (
-                                                    <CancelIcon
-                                                      key={
-                                                        attendanceRecord.player
-                                                      }
-                                                      onClick={() =>
-                                                        setShowReason(true)
-                                                      }
-                                                      style={{
-                                                        color: "red",
-                                                        marginLeft: "0.5em",
-                                                        width: "1.5em",
-                                                        height: "1.5em",
-                                                        marginTop: "0.8em",
-                                                      }}
-                                                    />
-                                                  )}
-
-                                                  {attendanceRecord.reason &&
-                                                    showReason == true && (
-                                                      <Modal
-                                                        open={showReason}
-                                                        onClose={
-                                                          handleCloseModalReason
-                                                        }
-                                                        aria-labelledby="modal-title"
-                                                        aria-describedby="modal-description"
-                                                      >
-                                                        <Box
-                                                          sx={{
-                                                            position:
-                                                              "absolute",
-                                                            top: "50%",
-                                                            left: "50%",
-                                                            width: "30%",
-                                                            height: "40%",
-                                                            transform:
-                                                              "translate(-50%, -50%)",
-                                                            backgroundColor:
-                                                              "white",
-                                                            borderRadius:
-                                                              "10px",
-                                                            padding: "1.5em",
-                                                          }}
-                                                        >
-                                                          <Typography>
-                                                            Důvod nepřítomnosti
-                                                            hráče{" "}
-                                                            <UserDetails
-                                                              email={member}
-                                                            />
-                                                            na zápas proti{" "}
-                                                            {
-                                                              training.opponentName
-                                                            }
-                                                            :
-                                                          </Typography>
-                                                          <Card
-                                                            sx={{
-                                                              marginTop: "1em",
-                                                              padding: "1em",
-                                                              boxShadow:
-                                                                "0 0 10px rgba(0, 0, 0, 0.3)",
-                                                            }}
-                                                          >
-                                                            <Typography
-                                                              variant="caption"
-                                                              sx={{
-                                                                color: "",
-                                                                marginLeft:
-                                                                  "0.5em",
-                                                                fontSize:
-                                                                  "0.8em",
-                                                              }}
-                                                            >
-                                                              {
-                                                                attendanceRecord.reason
-                                                              }
-                                                            </Typography>
-                                                          </Card>
-                                                        </Box>
-                                                      </Modal>
-                                                    )}
-                                                </Box>
+                                                {attendanceRecord.hisAttendance ===
+                                                  2 && (
+                                                  <CancelIcon
+                                                    style={{
+                                                      color: "red",
+                                                      marginLeft: "0.5em",
+                                                      width: "1.5em",
+                                                      height: "1.5em",
+                                                      marginTop: "0.8em",
+                                                    }}
+                                                  />
+                                                )}
                                                 {attendanceRecord.hisAttendance ===
                                                   0 && (
                                                   <HelpIcon
-                                                    key={
-                                                      attendanceRecord.player
-                                                    }
                                                     style={{
                                                       color: "gray",
                                                       marginLeft: "0.5em",
@@ -1096,42 +975,225 @@ const Content: React.FC<Props> = ({ teamId }) => {
                                                   />
                                                 )}
                                               </>
-                                            )
-                                        )}
-                                      </TableRow>
-                                    )
+                                            )}
+                                          </TableRow>
+                                        );
+                                      }
+                                      return null;
+                                    }
                                   )}
                                 </TableBody>
                               </Table>
-                            ) : (
-                              <Box>
-                                <Typography sx={{ fontWeight: "500" }}>
-                                  Účastníci:{" "}
+                            </>
+                          ) : (
+                            <>
+                              <Box sx={{ paddingTop: "1em", display: "flex" }}>
+                                <Typography
+                                  sx={{
+                                    fontWeight: "500",
+                                    marginLeft: "10%",
+                                    marginRight: "auto",
+                                    fontSize: "1.2em",
+                                  }}
+                                >
+                                  Hráči:
                                 </Typography>
-                                <Typography>Žádní nominovaní hráči.</Typography>
                               </Box>
-                            )}
-                          </>
-                        )}
-                      </Box>
-                    </Box>
-                  ) : (
-                    <Box>
-                      <Box sx={{ display: "flex" }}>
-                        <Typography sx={{ fontWeight: "500" }}>
-                          Účastníci:{" "}
-                        </Typography>
-                        <Box>
-                          <ExpandMoreIcon
-                            onClick={() => setExpandedMatchId(training.matchId)}
-                          />
+                              {training.selectedPlayers &&
+                              training.selectedPlayers.length > 0 ? (
+                                <Table
+                                  sx={{
+                                    borderRadius: "10px",
+                                    width: "80%",
+                                    marginLeft: "auto",
+                                    marginRight: "auto",
+                                  }}
+                                >
+                                  <TableHead>
+                                    <TableRow>
+                                      <TableCell></TableCell>
+                                      <TableCell>Docházka</TableCell>
+                                    </TableRow>
+                                  </TableHead>
+                                  <TableBody>
+                                    {training.selectedPlayers.map(
+                                      (member, index) => (
+                                        <TableRow
+                                          sx={{
+                                            borderBottom: "2px solid gray",
+                                          }}
+                                          key={index}
+                                        >
+                                          <UserDetails email={member} />
+                                          {training.attendance?.map(
+                                            (attendanceRecord) =>
+                                              attendanceRecord.player ===
+                                                member && (
+                                                <>
+                                                  {attendanceRecord.hisAttendance ===
+                                                    1 && (
+                                                    <CheckCircleIcon
+                                                      key={
+                                                        attendanceRecord.player
+                                                      }
+                                                      style={{
+                                                        color: "green",
+                                                        marginLeft: "0.5em",
+                                                        width: "1.5em",
+                                                        height: "1.5em",
+                                                        marginTop: "0.8em",
+                                                      }}
+                                                    />
+                                                  )}
+                                                  <Box
+                                                    sx={{
+                                                      display: "flex",
+                                                      alignItems: "center",
+                                                    }}
+                                                  >
+                                                    {attendanceRecord.hisAttendance ===
+                                                      2 && (
+                                                      <CancelIcon
+                                                        key={
+                                                          attendanceRecord.player
+                                                        }
+                                                        onClick={() =>
+                                                          setShowReason(true)
+                                                        }
+                                                        style={{
+                                                          color: "red",
+                                                          marginLeft: "0.5em",
+                                                          width: "1.5em",
+                                                          height: "1.5em",
+                                                          marginTop: "0.8em",
+                                                        }}
+                                                      />
+                                                    )}
+
+                                                    {attendanceRecord.reason &&
+                                                      showReason == true && (
+                                                        <Modal
+                                                          open={showReason}
+                                                          onClose={
+                                                            handleCloseModalReason
+                                                          }
+                                                          aria-labelledby="modal-title"
+                                                          aria-describedby="modal-description"
+                                                        >
+                                                          <Box
+                                                            sx={{
+                                                              position:
+                                                                "absolute",
+                                                              top: "50%",
+                                                              left: "50%",
+                                                              width: "30%",
+                                                              height: "40%",
+                                                              transform:
+                                                                "translate(-50%, -50%)",
+                                                              backgroundColor:
+                                                                "white",
+                                                              borderRadius:
+                                                                "10px",
+                                                              padding: "1.5em",
+                                                            }}
+                                                          >
+                                                            <Typography>
+                                                              Důvod
+                                                              nepřítomnosti
+                                                              hráče{" "}
+                                                              <UserDetails
+                                                                email={member}
+                                                              />
+                                                              na zápas proti{" "}
+                                                              {
+                                                                training.opponentName
+                                                              }
+                                                              :
+                                                            </Typography>
+                                                            <Card
+                                                              sx={{
+                                                                marginTop:
+                                                                  "1em",
+                                                                padding: "1em",
+                                                                boxShadow:
+                                                                  "0 0 10px rgba(0, 0, 0, 0.3)",
+                                                              }}
+                                                            >
+                                                              <Typography
+                                                                variant="caption"
+                                                                sx={{
+                                                                  color: "",
+                                                                  marginLeft:
+                                                                    "0.5em",
+                                                                  fontSize:
+                                                                    "0.8em",
+                                                                }}
+                                                              >
+                                                                {
+                                                                  attendanceRecord.reason
+                                                                }
+                                                              </Typography>
+                                                            </Card>
+                                                          </Box>
+                                                        </Modal>
+                                                      )}
+                                                  </Box>
+                                                  {attendanceRecord.hisAttendance ===
+                                                    0 && (
+                                                    <HelpIcon
+                                                      key={
+                                                        attendanceRecord.player
+                                                      }
+                                                      style={{
+                                                        color: "gray",
+                                                        marginLeft: "0.5em",
+                                                        width: "1.5em",
+                                                        height: "1.5em",
+                                                        marginTop: "0.8em",
+                                                      }}
+                                                    />
+                                                  )}
+                                                </>
+                                              )
+                                          )}
+                                        </TableRow>
+                                      )
+                                    )}
+                                  </TableBody>
+                                </Table>
+                              ) : (
+                                <Box>
+                                  <Typography sx={{ fontWeight: "500" }}>
+                                    Účastníci:{" "}
+                                  </Typography>
+                                  <Typography>
+                                    Žádní nominovaní hráči.
+                                  </Typography>
+                                </Box>
+                              )}
+                            </>
+                          )}
                         </Box>
                       </Box>
-                    </Box>
-                  )}
+                    ) : (
+                      <Box>
+                        <Box sx={{ display: "flex" }}>
+                          <Typography sx={{ fontWeight: "500" }}>
+                            Účastníci:{" "}
+                          </Typography>
+                          <Box>
+                            <ExpandMoreIcon
+                              onClick={() =>
+                                setExpandedMatchId(training.matchId)
+                              }
+                            />
+                          </Box>
+                        </Box>
+                      </Box>
+                    )}
+                  </Box>
                 </Box>
-              </Box>
-            ))}
+              ))}
           </Box>
         );
       })}

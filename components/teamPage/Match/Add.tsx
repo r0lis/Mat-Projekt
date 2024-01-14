@@ -275,7 +275,7 @@ const AddMatch: React.FC<Props> = ({ teamId, closeAddMatch }) => {
       ]);
     }
 
-    if (!selectedHallId) {
+    if (!selectedHallId && matchType !== "away") {
       setErrorMessages((prevMessages) => [...prevMessages, "Vyberte halu."]);
     }
 
@@ -325,7 +325,7 @@ const AddMatch: React.FC<Props> = ({ teamId, closeAddMatch }) => {
     const input = {
       subteamIdSelected,
       opponentName,
-      selectedHallId,
+      selectedHallId: matchType === "away" ? "away" : selectedHallId,
       date,
       time,
       players,

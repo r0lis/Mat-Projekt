@@ -171,8 +171,6 @@ const PlanMatch: React.FC<Props> = ({ teamId }) => {
     return <Typography>Nemáte naplánován žádný zápas.</Typography>;
   }
 
- 
-
   return (
     <Box>
       {subteamIds.map((subteamId) => {
@@ -185,18 +183,26 @@ const PlanMatch: React.FC<Props> = ({ teamId }) => {
               subteam.matches
           )
           .flat();
-
+  
+        const sortedMatches = subteamMatches.sort((a: Match, b: Match) => {
+          const dateA = new Date(`${a.date}T${a.time}`);
+          const dateB = new Date(`${b.date}T${b.time}`);
+          return dateA.getTime() - dateB.getTime(); 
+        });
+  
         return (
           <Box key={subteamId}>
-          {subteamMatches
-            .filter((match: Match) => {
-              const isUserInMatch = match.selectedMembers.includes(user?.email || "");
-
-              const isUserRoleNot3 = userRole !== 3;
-
-              return isUserInMatch && isUserRoleNot3;
-            })
-            .map((match: Match) => (
+            {sortedMatches
+              .filter((match: Match) => {
+                const isUserInMatch = match.selectedMembers.includes(
+                  user?.email || ""
+                );
+  
+                const isUserRoleNot3 = userRole !== 3;
+  
+                return isUserInMatch && isUserRoleNot3;
+              })
+              .map((match: Match) => (
               <Box
                 sx={{
                   marginLeft: "3%",

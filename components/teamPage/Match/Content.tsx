@@ -380,9 +380,15 @@ const Content: React.FC<Props> = ({ teamId }) => {
         )
         .flat();
 
+        const sortedMatches = subteamMatches.sort((a: Match, b: Match) => {
+          const dateA = new Date(`${a.date}T${a.time}`);
+          const dateB = new Date(`${b.date}T${b.time}`);
+          return dateA.getTime() - dateB.getTime();
+        });
+
         return (
           <Box key={subteamId}>
-          {subteamMatches
+           {sortedMatches
             .filter((match: Match) => {
               const isUserInMatch = match.selectedMembers.includes(user?.email || "");
 
@@ -412,15 +418,56 @@ const Content: React.FC<Props> = ({ teamId }) => {
                     paddingBottom: "0.5em",
                   }}
                 >
-                  <Typography variant="h6">
-                    Zápas Protivník: {match.opponentName}
-                  </Typography>
+                   <Typography variant="h6">
+                      Zápas protivník: {match.opponentName}
+                      {(() => {
+                        const matchDate = new Date(
+                          `${match.date}T${match.time}`
+                        );
+                        const currentDate = new Date();
+                        const isTrainingPassed = matchDate < currentDate;
+                        const isTrainingToday =
+                        matchDate.toDateString() ===
+                          currentDate.toDateString();
+                        const isTrainingTomorrow =
+                        matchDate.toDateString() ===
+                          new Date(
+                            currentDate.getTime() + 24 * 60 * 60 * 1000
+                          ).toDateString();
+
+                        if (isTrainingPassed) {
+                          return (
+                            <Typography variant="body2" sx={{ color: "green" }}>
+                              Proběhl
+                            </Typography>
+                          );
+                        } else if (isTrainingToday) {
+                          return (
+                            <Typography variant="body2" sx={{ color: "blue" }}>
+                              Dnes
+                            </Typography>
+                          );
+                        } else if (isTrainingTomorrow) {
+                          return (
+                            <Typography
+                              variant="body2"
+                              sx={{ color: "orange" }}
+                            >
+                              Zítra
+                            </Typography>
+                          );
+                        } else {
+                          return null;
+                        }
+                      })()}
+                    </Typography>
                   <Box sx={{ display: "flex" }}>
                     <Typography>
                       Datum:{" "}
                       {match.date &&
                         new Date(match.date).toLocaleDateString("cs-CZ", {
                           day: "2-digit",
+
                           month: "2-digit",
                           year: "numeric",
                         })}
@@ -687,7 +734,7 @@ const Content: React.FC<Props> = ({ teamId }) => {
                     Info haly
                   </Typography>
                   <Box>
-                    {match.selectedHallId && (
+                    {match.selectedHallId && match.matchType !== "away" && (
                       <HallInfo teamId={teamId} hallId={match.selectedHallId} />
                     )}
                   </Box>
