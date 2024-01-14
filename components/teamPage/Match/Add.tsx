@@ -121,6 +121,7 @@ const AddMatch: React.FC<Props> = ({ teamId, closeAddMatch }) => {
   );
   const [opponentName, setOpponentName] = useState<string>("");
   const [selectedHallId, setSelectedHallId] = useState<string | null>(null);
+  const [selectedHallLocation, setSelectedHallLocation] = useState<string>("");
   const [time, setTime] = useState<string>("");
   const [selectedMembers, setSelectedMembers] = useState<string[]>([]);
   const [matchType, setMatchType] = useState<string>("home");
@@ -184,11 +185,9 @@ const AddMatch: React.FC<Props> = ({ teamId, closeAddMatch }) => {
     const currentYear = new Date().getFullYear();
     const nextYear = currentYear + 1;
 
-    // Check if the selected date is in the current or next year
     if (selectedDate.getFullYear() === currentYear || selectedDate.getFullYear() === nextYear) {
       setDate(event.target.value);
     } else {
-      // Display an error message or handle it as needed
       setErrorMessages((prevMessages) => [
         ...prevMessages,
         "Zadejte platné datum v aktuálním nebo příštím roce.",
@@ -325,8 +324,9 @@ const AddMatch: React.FC<Props> = ({ teamId, closeAddMatch }) => {
     const input = {
       subteamIdSelected,
       opponentName,
-      selectedHallId: matchType === "away" ? "away" : selectedHallId,
+      selectedHallId:  selectedHallId,
       date,
+      selectedHallPosition: selectedHallLocation,
       time,
       players,
       management,
@@ -566,7 +566,34 @@ const AddMatch: React.FC<Props> = ({ teamId, closeAddMatch }) => {
                 </TableContainer>
               </Box>
             ) : (
+              <Box>
               <Typography variant="h6">Hala hostí</Typography>
+              {/* Přidání textových polí pro název a polohu haly */}
+              <Box>
+                <TextField
+                  label="Název haly"
+                  type="text"
+                  value={selectedHallId || ""}
+                  onChange={(e) => setSelectedHallId(e.target.value)}
+                  sx={{ width: "50%", marginTop: "1em" }}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
+              </Box>
+              <Box>
+                <TextField
+                  label="Poloha haly"
+                  type="text"
+                  value={selectedHallLocation || ""}
+                  onChange={(e) => setSelectedHallLocation(e.target.value)}
+                  sx={{ width: "50%", marginTop: "1em" }}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
+              </Box>
+            </Box>
             )}
           </Box>
           {errorMessages.length > 0 && (
