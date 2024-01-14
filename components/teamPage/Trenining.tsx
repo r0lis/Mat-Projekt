@@ -179,7 +179,7 @@ const TreniningComponent: React.FC<Props> = (id) => {
               display: isSmallView ? "" : "block",
             }}
           >
-            <Box sx={{position:"relative"}}>
+            <Box sx={{}}>
               <Typography
                 sx={{
                   fontSize: ["0.8rem", "1.1rem", "1.5rem"],
@@ -190,9 +190,7 @@ const TreniningComponent: React.FC<Props> = (id) => {
               >
                 Nadcházející tréninky
               </Typography>
-              </Box>
-            <Box sx={{ height:"82%",  overflowY:"auto", marginTop:"1em"}}>
-              <Box sx={{  marginTop:"1em" }}>
+              <Box sx={{maxHeight: "21.5em", overflowY: "auto", marginTop:"1em" }}>
               <PlanTraining teamId={id.teamId}/>
               </Box>
             </Box>
