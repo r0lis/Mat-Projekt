@@ -14,7 +14,7 @@ const AppContent: React.FC = () => {
             <div className='mainDiv'>
                 <div style={{ backgroundColor: '#F0F2F5' }} className='divAppContent2'>
                     <div className='appContentTextContent'>
-                        <Typography sx={{ fontSize: '2.2vw', fontWeight: 'bold' }}>
+                        <Typography sx={{ fontSize: '2vw', fontWeight: 'bold' }}>
                             Co aplikace <span style={{ color: '#B71DDE' }}>poskytuje</span> ?
                         </Typography>
                     </div>
@@ -23,17 +23,17 @@ const AppContent: React.FC = () => {
                         <div className='DivBlock'>
                             <div className='featuresDiv'>
                                 <img className='iconStyle' src={comunicationImg.src} />
-                                Skvělá komunikace v týmu
+                                Skvělá komunikace v klubu
                             </div>
                         </div>
                     </div>
                     <div className='leftBorderDiv'>
                         <div className='leftBorderPseudoElement'></div>
-                        <div className='featuresDiv'><img className='iconStyle' src={teamPayImg.src} /> Správa plateb a členských příspěvků</div>
+                        <div className='featuresDiv'><img className='iconStyle' src={teamPayImg.src} /> Správa více týmu v klubu</div>
                     </div>
                     <div className='leftBorderDiv'>
                         <div className='leftBorderPseudoElement'></div>
-                        <div className='featuresDiv'><img className='iconStyle' src={teamImg.src} /> Tvoření soupisek, přehled docházky</div>
+                        <div className='featuresDiv'><img className='iconStyle' src={teamImg.src} /> Tvoření soupisek, přehled docházky událostí</div>
                     </div>
                     <div className='leftBorderDiv'>
                         <div className='leftBorderPseudoElement'></div>
@@ -41,7 +41,7 @@ const AppContent: React.FC = () => {
                     </div>
                     <div className='leftBorderDiv'>
                         <div className='leftBorderPseudoElement'></div>
-                        <div className='lastfeaturesDiv'><img className='iconStyle' src={listHospitalImg.src} /> Zdravotní prohlídky a dokumentace</div>
+                        <div className='lastfeaturesDiv'><img className='iconStyle' src={listHospitalImg.src} /> Zdravotní prohlídky</div>
 
 
                     </div>

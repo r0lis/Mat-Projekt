@@ -10,7 +10,7 @@
 }
 
 .divAppContent {
-  border-left: 8px solid #B71DDE;
+  border-left: 5px solid #B71DDE;
   position: relative;
   z-index: -999;
   margin-left: 10%;
@@ -21,10 +21,10 @@
 
 
 .featuresDiv {
-  margin-top: 8%;
-  margin-bottom: 8%;
+  margin-top: 7%;
+  margin-bottom: 7%;
   width: 50%;
-  padding: 6% 10% 6% 10%;
+  padding: 5% 10% 5% 10%;
   margin-left: 1.5%;
   margin-right: auto;
   background-color: #FFE0FE;
@@ -32,7 +32,7 @@
   font-weight: bold;
   text-align: center;
   display: flex;
-  font-size: 1.8vw;
+  font-size: 1.6vw;
   align-items: center;
   border: 1px solid #ff96fc;
   
@@ -73,7 +73,7 @@
   top: 0;
   left: -5px;
   height: 100%;
-  width: 7px;
+  width: 6px;
   background-color: #B71DDE;
   border-radius: 10px;
 }

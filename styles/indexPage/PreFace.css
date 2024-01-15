@@ -35,7 +35,7 @@
   
   /* bigTextStyle */
   .bigTextStyle {
-    font-size: 4vw;
+    font-size: 3.8vw;
     font-weight: bold;
     color: white;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
@@ -44,7 +44,7 @@
   
   /* smallTextStyle */
   .smallTextStyle {
-    font-size: 1.3vw;
+    font-size: 1.2vw;
     color: white;
   }
   
@@ -57,7 +57,7 @@
   
   /* smallTextStyle2 */
   .smallTextStyle2 {
-    font-size: 1.4vw;
+    font-size: 1.2vw;
     color: black;
     display: flex;
     margin-top: 20%;
@@ -70,7 +70,7 @@
   
   /* seeFeaturesStyle */
   .seeFeaturesStyle {
-    font-size: 1.5vw;
+    font-size: 1.3vw;
     color: white;
     padding-left: 10%;
   }
