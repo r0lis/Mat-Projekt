@@ -30,7 +30,6 @@ import { SelectChangeEvent } from "@mui/material";
 import { authUtils } from "@/firebase/auth.utils";
 import { useRef } from "react";
 
-
 const GET_TEAM_MEMBERS_DETAILS = gql`
   query GetTeamMembersDetails($teamId: String!) {
     getTeamMembersDetails(teamId: $teamId) {
@@ -128,15 +127,14 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
     variables: { teamId: id, email: user?.email || "" },
     skip: !user,
   });
-  
 
   const members = data?.getTeamMembersDetails || [];
 
-
-
   useEffect(() => {
     if (tableBodyRef.current && selectedIndex !== null) {
-      const rowElement = tableBodyRef.current.children[selectedIndex] as HTMLDivElement;
+      const rowElement = tableBodyRef.current.children[
+        selectedIndex
+      ] as HTMLDivElement;
       if (rowElement) {
         rowElement.scrollIntoView({
           behavior: "smooth",
@@ -170,32 +168,29 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
     setSelectedIndex(calculateSelectedIndex());
   };
 
-
   const calculateSelectedIndex = () => {
     if (selectedMember) {
       return filteredMembers.findIndex(
         (member) =>
-          member.Email === selectedMember.Email && member.Role === selectedMember.Role
+          member.Email === selectedMember.Email &&
+          member.Role === selectedMember.Role
       );
     }
     return null;
   };
 
-  
-
   if (loading || roleLoading)
     return (
       <Box
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        height: "80vh",
-        
-      }}
-    >
-      <CircularProgress color="primary" size={50} />
-    </Box>
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "80vh",
+        }}
+      >
+        <CircularProgress color="primary" size={50} />
+      </Box>
     );
 
   if (error || roleError) return <Typography>Chyba</Typography>;
@@ -203,7 +198,6 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
   const role = roleData?.getUserRoleInTeam.role || "";
   const allMembers = data?.getTeamMembersDetails || [];
 
- 
   const handleCloseModal = () => {
     setSelectedMember(null);
     setModalOpen(false);
@@ -239,9 +233,6 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
     setSelectedRole(event.target.value);
   };
 
-
-
-
   const handleDeleteClick = async () => {
     if (selectedMember && selectedMember.Email !== currentUserEmail) {
       try {
@@ -272,10 +263,6 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
     return age;
   };
 
- 
-  
-
-
   return (
     <Box>
       <Box
@@ -287,49 +274,59 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
           marginRight: "5%",
         }}
       >
-        <Typography
-          sx={{ fontFamily: "Roboto", fontWeight: "500" }}
-          variant="h4"
-        >
-          Členové klubu
-        </Typography>
-      
+        {role == 1 ? (
+          <Typography
+            sx={{ fontFamily: "Roboto", fontWeight: "500", marginTop:"0.5em" }}
+            variant="h4"
+          >
+            Členové klubu
+          </Typography>
+        ) : (
+          <Typography
+            sx={{ fontFamily: "Roboto", fontWeight: "500", marginTop:"0.5em" }}
+            variant="h4"
+          >
+            Členská sekce klubu
+          </Typography>
+        )}
+
         {role === "1" && (
           <Link href={`/Team/AddMember/${id}/`}>
             <Button variant="contained">Přidat člena</Button>
           </Link>
         )}
       </Box>
-
-      <Box sx={{
-         marginLeft: "5%",
-         marginRight: "5%",
-         marginTop: "2em",
-      }}>
-        <Autocomplete
-        options={allMembers}
-        getOptionLabel={(option) => {
-          if (searchInput.length < 2) return '';
-          return `${option.Name} ${option.Surname}`;
-        }}
-        isOptionEqualToValue={(option, value) =>
-          option.Name.toLowerCase() === value.Name.toLowerCase() &&
-          option.Surname.toLowerCase() === value.Surname.toLowerCase()
-        }
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            label="Hledat podle jména a příjmení"
-            variant="outlined"
-            value={searchInput}
-            sx={{marginBottom: searchInput.length < 1 ? "0em" : "2em"}}
-            onChange={(e) => setSearchInput(e.target.value)}
+      {role == 1 && (
+        <Box
+          sx={{
+            marginLeft: "5%",
+            marginRight: "5%",
+            marginTop: "2em",
+          }}
+        >
+          <Autocomplete
+            options={allMembers}
+            getOptionLabel={(option) => {
+              if (searchInput.length < 2) return "";
+              return `${option.Name} ${option.Surname}`;
+            }}
+            isOptionEqualToValue={(option, value) =>
+              option.Name.toLowerCase() === value.Name.toLowerCase() &&
+              option.Surname.toLowerCase() === value.Surname.toLowerCase()
+            }
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Hledat podle jména a příjmení"
+                variant="outlined"
+                value={searchInput}
+                sx={{ marginBottom: searchInput.length < 1 ? "0em" : "2em" }}
+                onChange={(e) => setSearchInput(e.target.value)}
+              />
+            )}
           />
-        )}
-      />
-
-      </Box>
-
+        </Box>
+      )}
       <TableContainer
         sx={{
           width: "90%",
@@ -408,8 +405,10 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                       />
                     </TableCell>
                     <TableCell>
-                      <Typography sx={{ fontFamily: "Roboto", fontWeight:"450" }}>
-                      {member.Surname} {member.Name}
+                      <Typography
+                        sx={{ fontFamily: "Roboto", fontWeight: "450" }}
+                      >
+                        {member.Surname} {member.Name}
                       </Typography>
                     </TableCell>
                     <TableCell>
@@ -537,11 +536,15 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
             p: 4,
             borderRadius: "8px",
             width: 400,
-            backgroundImage: editMode ?  `
+            backgroundImage: editMode
+              ? `
             linear-gradient(to bottom, #808080 0, #909090 100px, #ffffff 100px, #ffffff calc(100% - 100px), #909090 calc(100% - 100px), #909090 100%)
-          `: selectedMember && selectedMember.Email == currentUserEmail ? `
+          `
+              : selectedMember && selectedMember.Email == currentUserEmail
+              ? `
             linear-gradient(to bottom, #808080 0, #909090 100px, #ffffff 100px, #ffffff calc(100% - 110px), #909090 calc(100% - 110px), #909090 100%)
-          `: `
+          `
+              : `
           linear-gradient(to bottom, #808080 0, #909090 100px, #ffffff 100px, #ffffff calc(100% - 140px), #909090 calc(100% - 140px), #909090 100%)
         `,
           }}
@@ -887,7 +890,11 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                       selectedMember?.Role === "No Role Assigned") && (
                       <Box sx={{ maxWidth: "15em", marginBottom: "1em" }}>
                         <Alert sx={{ maxHeight: "2.6em" }} severity="error">
-                          <Typography sx={{fontSize:"1em", fontWeight:"600"}}>Zvolte !</Typography>
+                          <Typography
+                            sx={{ fontSize: "1em", fontWeight: "600" }}
+                          >
+                            Zvolte !
+                          </Typography>
                         </Alert>
                       </Box>
                     )}
@@ -983,10 +990,11 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                     borderBottom: "2px solid gray", // Change the color as needed
                     position: "absolute",
                     top:
-                    (selectedMember?.Role === "0" ||
-                    selectedMember?.Role === "No Role Assigned")? "55%": 
-                      selectedMember &&
-                      selectedMember.Email === currentUserEmail
+                      selectedMember?.Role === "0" ||
+                      selectedMember?.Role === "No Role Assigned"
+                        ? "55%"
+                        : selectedMember &&
+                          selectedMember.Email === currentUserEmail
                         ? "56%"
                         : "53%",
                     transform: "translateY(-50%)",
@@ -1062,10 +1070,11 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                     borderBottom: "2px solid gray", // Change the color as needed
                     position: "absolute",
                     top:
-                    (selectedMember?.Role === "0" ||
-                    selectedMember?.Role === "No Role Assigned")? "81%": 
-                      selectedMember &&
-                      selectedMember.Email === currentUserEmail
+                      selectedMember?.Role === "0" ||
+                      selectedMember?.Role === "No Role Assigned"
+                        ? "81%"
+                        : selectedMember &&
+                          selectedMember.Email === currentUserEmail
                         ? "68%"
                         : "80%",
                     transform: "translateY(-50%)",

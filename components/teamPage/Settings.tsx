@@ -15,12 +15,12 @@ const SettingsComponent: React.FC = () => {
   return (
     <Box>
       <Box>
-        <Typography
-          sx={{ fontFamily: "Roboto", fontWeight: "600" }}
-          variant="h5"
-        >
-          Správa klubu
-        </Typography>
+      <Typography
+            sx={{ fontFamily: "Roboto", fontWeight: "500", marginTop:"0em", marginLeft:"2.5em" }}
+            variant="h4"
+          >
+            Správa klubu
+          </Typography>
       </Box>
 
       <Box sx={{ }}>

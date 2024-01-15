@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import {
   Box,
   Button,
@@ -15,6 +16,7 @@ import AddHall from "./AddHall";
 import AddTrainingHall from "./AddTreningHall";
 import AddGym from "./AddGym";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import { authUtils } from "@/firebase/auth.utils";
 
 const GET_TEAM_DETAILS = gql`
   query GetTeam($teamId: String!) {
@@ -101,6 +103,17 @@ const DELETE_GYM = gql`
   }
 `;
 
+const GET_USER_ROLE_IN_TEAM = gql`
+  query GetUserRoleInTeam($teamId: String!, $email: String!) {
+    getUserRoleInTeam(teamId: $teamId, email: $email) {
+      email
+      role
+    }
+  }
+`;
+
+
+
 type Hall = {
   name: string;
   location: string;
@@ -125,6 +138,7 @@ type Props = {
 
 const Halls: React.FC<Props> = ({ id }) => {
   const [addHall, setAddHall] = useState(false);
+  const user = authUtils.getCurrentUser();
   const [addTreningHall, setAddTreningHall] = useState(false);
   const [addGym, setAddGym] = useState(false);
   const [infoModalOpen, setInfoModalOpen] = useState(false);
@@ -153,6 +167,15 @@ const Halls: React.FC<Props> = ({ id }) => {
     data: dataDetails,
   } = useQuery(GET_TEAM_DETAILS, {
     variables: { teamId: id },
+  });
+
+  const {
+    loading: roleLoading,
+    error: roleError,
+    data: roleData,
+  } = useQuery(GET_USER_ROLE_IN_TEAM, {
+    variables: { teamId: id, email: user?.email || "" },
+    skip: !user,
   });
 
   const {
@@ -200,7 +223,7 @@ const Halls: React.FC<Props> = ({ id }) => {
     ],
   });
 
-  if (loadingDetails || loadingHalls || loadingTrainingHalls || loadingGyms)
+  if (loadingDetails || loadingHalls || loadingTrainingHalls || loadingGyms || roleLoading)
     return (
       <Box
         sx={{
@@ -213,7 +236,7 @@ const Halls: React.FC<Props> = ({ id }) => {
         <CircularProgress color="primary" size={50} />
       </Box>
     );
-  if (errorDetails || errorHalls || errorTrainingHalls || errorGyms)
+  if (errorDetails || errorHalls || errorTrainingHalls || errorGyms || roleError)
     return <Typography>Chyba</Typography>;
 
   const handleAddHall = () => {
@@ -312,6 +335,7 @@ const Halls: React.FC<Props> = ({ id }) => {
   const treningHalls: TreningHall[] | undefined =
     dataTreningHalls?.getTreningHallsByTeamId;
   const gyms: Gym[] | undefined = dataGyms?.getGymsByTeamId;
+  const role = roleData?.getUserRoleInTeam?.role || "";
 
   const isSmallWindow = window.innerWidth < 1200;
 
@@ -341,6 +365,7 @@ const Halls: React.FC<Props> = ({ id }) => {
                 Zápasové haly
               </Typography>
             </Box>
+            {role == 1 && (
             <Box sx={{ marginLeft: isSmallWindow ? "20%" : "10%", display: addHall ? "none":"" }}>
               <Button
                 sx={{ backgroundColor: "#027ef2" }}
@@ -351,6 +376,7 @@ const Halls: React.FC<Props> = ({ id }) => {
                 Přidat
               </Button>
             </Box>
+            )}
           </Box>
         </Box>
         {addHall ? (
@@ -445,6 +471,8 @@ const Halls: React.FC<Props> = ({ id }) => {
                 Posilovny
               </Typography>
             </Box>
+            {role == 1 && (
+
             <Box sx={{ marginLeft: isSmallWindow ? "20%" : "30%", display: addGym ? "none":"" }}>
               <Button
                 sx={{ backgroundColor: "#027ef2" }}
@@ -455,6 +483,7 @@ const Halls: React.FC<Props> = ({ id }) => {
                 Přidat
               </Button>
             </Box>
+            )}
           </Box>
         </Box>
         {addGym ? (
@@ -554,6 +583,7 @@ const Halls: React.FC<Props> = ({ id }) => {
                 Treninkové haly
               </Typography>
             </Box>
+            {role == 1 && (
             <Box sx={{ marginLeft: isSmallWindow ? "auto" : "10%",  display: addTreningHall ? "none":"" }}>
               <Button
                 sx={{ backgroundColor: "#027ef2" }}
@@ -564,6 +594,7 @@ const Halls: React.FC<Props> = ({ id }) => {
                 Přidat
               </Button>
             </Box>
+            )}
           </Box>
         </Box>
         {addTreningHall ? (

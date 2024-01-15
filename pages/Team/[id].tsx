@@ -39,7 +39,6 @@ const items = [
   { label: "Matchs", caption:"Zápasy", image: Nominations },
   { label: "Rouster", caption:"Soupisky", image: Rousters },
   { label: "Team", caption:"Tým", image: TeamIcon },
-  { label: "Members", caption:"Členové", image: Members },
 ];
 
 const GET_TEAM_DETAILS = gql`
@@ -170,14 +169,12 @@ const Team: React.FC = () => {
     );
   }
 
-  const filteredItems =
-    role == 1
-      ? [
-          ...items,
-          { label: "Settings", caption:"Správa",image: Settings },
-        ]
-      : items;
+  const filteredItems = [
+    ...items,
+    { label: "Members", caption: role == 1 ? "Členové": "Člen", image: Members },
 
+    { label: "Settings", caption: role == 1 ? "Správa" : "Klub", image: Settings },
+  ];
   const handleLinkClick = (label: string) => {
     setActiveLink(label);
     const newUrl = `${window.location.pathname!}#${label}`;

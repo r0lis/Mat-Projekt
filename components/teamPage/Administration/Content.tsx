@@ -13,6 +13,7 @@ import React, { useEffect, useState } from "react";
 import Edit from "./Edit";
 import Halls from "./Halls";
 import Info from "./Info";
+import { authUtils } from "@/firebase/auth.utils";
 import Contacts from "./Contacts";
 
 const GET_TEAM_DETAILS = gql`
@@ -66,6 +67,18 @@ const GET_TEAM_IMG = gql`
     getTeamImg(teamId: $teamId)
   }
 `;
+
+const GET_USER_ROLE_IN_TEAM = gql`
+  query GetUserRoleInTeam($teamId: String!, $email: String!) {
+    getUserRoleInTeam(teamId: $teamId, email: $email) {
+      email
+      role
+    }
+  }
+`;
+
+
+
 type Props = {
   id: string;
 };
@@ -92,7 +105,7 @@ const Content: React.FC<Props> = (teamId) => {
   const [selectedButton, setSelectedButton] = useState("info");
   const [showWarning, setShowWarning] = useState(false);
   const [warningMessage, setWarningMessage] = useState("");
-
+  const user = authUtils.getCurrentUser();
  
 
   const renderContent = () => {
@@ -109,6 +122,15 @@ const Content: React.FC<Props> = (teamId) => {
         return null;
     }
   };
+
+  const {
+    loading: roleLoading,
+    error: roleError,
+    data: roleData,
+  } = useQuery(GET_USER_ROLE_IN_TEAM, {
+    variables: { teamId: teamId.id, email: user?.email || "" },
+    skip: !user,
+  });
 
   const {
     loading: loadingDetails,
@@ -164,7 +186,7 @@ const Content: React.FC<Props> = (teamId) => {
     }
   }, [dataHalls, dataTreningHalls, dataGyms]);
 
-  if (loading || loadingDetails || loadingHalls || loadingTrainingHalls || loadingGyms)
+  if (loading || loadingDetails || loadingHalls || loadingTrainingHalls || loadingGyms || roleLoading)
     return (
       <Box
         sx={{
@@ -177,11 +199,12 @@ const Content: React.FC<Props> = (teamId) => {
         <CircularProgress color="primary" size={50} />
       </Box>
     );
-  if (error || errorDetails || errorGyms || errorHalls || errorTrainingHalls) return <Typography>Chyba</Typography>;
+  if (error || errorDetails || errorGyms || errorHalls || errorTrainingHalls|| roleError) return <Typography>Chyba</Typography>;
 
   const teamDetails = dataDetails.getTeam;
   const teamImage = dataImg.getTeamImg;
   const isMediumWindow = window.innerWidth < 800;
+  const role = roleData?.getUserRoleInTeam?.role || "";
 
   return (
     <Box
@@ -320,6 +343,7 @@ const Content: React.FC<Props> = (teamId) => {
                 </Typography>
               </Button>
             </Box>
+            {role == 1 && (
             <Box>
               <Button
                 style={{
@@ -344,6 +368,7 @@ const Content: React.FC<Props> = (teamId) => {
                 </Typography>
               </Button>
             </Box>
+            )}
             </Box>
           </Box>
         ) : (
@@ -436,6 +461,7 @@ const Content: React.FC<Props> = (teamId) => {
                 </Typography>
               </Button>
             </Box>
+            {role == 1 && (
             <Box>
               <Button
                 style={{
@@ -460,6 +486,7 @@ const Content: React.FC<Props> = (teamId) => {
                 </Typography>
               </Button>
             </Box>
+            )}
           </Box>
         )}
 
