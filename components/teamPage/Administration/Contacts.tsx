@@ -4,24 +4,28 @@ import {
   Box,
   CircularProgress,
   Typography,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
 } from "@mui/material";
-import React  from "react";
+import React from "react";
 import { gql, useQuery } from "@apollo/client";
 
-
-
-const GET_TEAM_DETAILS = gql`
-  query GetTeam($teamId: String!) {
-    getTeam(teamId: $teamId) {
-      AdminEmail
-      Email
-      Logo
+const GET_TEAM_MEMBERS_DETAILS = gql`
+  query GetTeamMembersDetails($teamId: String!) {
+    getTeamMembersDetails(teamId: $teamId) {
       Name
-      OwnerName
-      OwnerSurname
-      Place
-      TimeCreated
-      teamId
+      Surname
+      Role
+      Email
+      Picture
+      DateOfBirth
+      Subteams {
+        Name
+        subteamId
+      }
     }
   }
 `;
@@ -30,19 +34,12 @@ type Props = {
   id: string;
 };
 
-const Constacts: React.FC<Props> = (teamId ) => {
- 
+const Contacts: React.FC<Props> = ({ id }) => {
+  const { loading: loadingDetails, error: errorDetails, data: dataDetails } = useQuery(GET_TEAM_MEMBERS_DETAILS, {
+    variables: { teamId: id },
+});
 
-  const {
-    loading: loadingDetails,
-    error: errorDetails,
-    data: dataDetails,
-  } = useQuery(GET_TEAM_DETAILS, {
-    variables: { teamId: teamId.id },
-  });
-
-
-  if (  loadingDetails)
+  if (loadingDetails) {
     return (
       <Box
         sx={{
@@ -55,16 +52,69 @@ const Constacts: React.FC<Props> = (teamId ) => {
         <CircularProgress color="primary" size={50} />
       </Box>
     );
-  if (errorDetails) return <Typography>Chyba</Typography>;
+  }
 
-  const teamDetails = dataDetails.getTeam;
- console.log(teamDetails.Name)
+  if (errorDetails) {
+    return <Typography>Chyba</Typography>;
+  }
+
+  const teamMembers = dataDetails?.getTeamMembersDetails || [];
 
   return (
-    <Box>
-      Kontakty
+    <Box sx={{marginLeft:"2%", marginRight:"2%"}}>
+      {teamMembers.length > 0 ? (
+        <Box>
+          <Box sx={{marginTop:"1em"}}>
+          <Typography variant="h5">Management</Typography>
+          </Box>
+          <Box sx={{marginLeft:"2%", marginRight:"2%"}}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {teamMembers
+                .filter((member: any) => member.Role === "1")
+                .map((member: any, index: number) => (
+                  <TableRow key={index}>
+                    <TableCell>{member.Name} {member.Surname}</TableCell>
+                    <TableCell>{member.Email}</TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          </Table>
+          </Box>
+          <Box>
+          <Typography variant="h5">Trenéři</Typography>
+          </Box>
+          <Box sx={{marginLeft:"2%", marginRight:"2%"}}>
+          <Table>
+            <TableHead>
+              <TableRow>
+              
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {teamMembers
+                .filter((member: any) => member.Role === "2")
+                .map((member: any, index: number) => (
+                  <TableRow key={index}>
+                    <TableCell>{member.Name} {member.Surname}</TableCell>
+                    <TableCell>{member.Email}</TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          </Table>
+          </Box>
+        </Box>
+      ) : (
+        <Typography variant="body1">No team members found.</Typography>
+      )}
     </Box>
   );
+  
 };
 
-export default Constacts;
+export default Contacts;

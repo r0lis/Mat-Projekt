@@ -102,7 +102,7 @@ const Content: React.FC<Props> = (teamId) => {
       case "hall":
         return <Halls id={teamId.id} />;
       case "contacts":
-        return <Contacts id={teamId.id} />;
+        return <Contacts id={teamId.id } />;
       case "edit":
         return <Edit id={teamId.id} />;
       default:

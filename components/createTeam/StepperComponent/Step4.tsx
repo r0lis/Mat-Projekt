@@ -200,7 +200,6 @@ const Step4: React.FC<Step4Props> = ({ teamEmail, onCompleteStep }) => {
               </Button>
             )}
           </Box>
-         
         </Box>
       </Box>
     </div>
