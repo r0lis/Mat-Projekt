@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Box, Typography } from "@mui/material";
 import { gql, useQuery } from "@apollo/client";
 
@@ -124,8 +124,8 @@ const News: React.FC<OverviewProps> = (id) => {
 
   const combinedArray = [...matches, ...trainings];
 
-  const filteredArray = combinedArray.filter(item => {
-    const itemDate = new Date(item.date + ' ' + item.time);
+  const filteredArray = combinedArray.filter((item) => {
+    const itemDate = new Date(item.date + " " + item.time);
     const twentyFourHoursAgo = new Date();
     twentyFourHoursAgo.setDate(twentyFourHoursAgo.getDate() - 1);
     return itemDate >= twentyFourHoursAgo;
@@ -172,184 +172,192 @@ const News: React.FC<OverviewProps> = (id) => {
     );
   });
 
- 
-
-    return (
-        <Box
-          sx={{
-            marginLeft: "2%",
-            marginRight: "2%",
-            maxHeight: "100vh",
-            overflowY: "auto",
-          }}
-        >
-          <Box>
-            <Box>
-              <Box
-                sx={{ display: "flex", justifyContent: "space-around", marginBottom: "1em" }}
-              >
-                <Typography
-                  variant="h6"
-                  sx={{ cursor: "pointer" }}
-x                >
-                  Dnes
-                </Typography>
-              </Box>
-              { todayArray.length === 0 ? (
-            <Typography variant="body1">Dnes nemáte v plánu žádnou událost.</Typography>
+  return (
+    <Box
+      sx={{
+        marginLeft: "2%",
+        marginRight: "2%",
+        maxHeight: "100vh",
+        overflowY: "auto",
+      }}
+    >
+      <Box>
+        <Box>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-around",
+              marginBottom: "1em",
+            }}
+          >
+            <Typography variant="h6" sx={{ cursor: "pointer" }}>
+              Dnes
+            </Typography>
+          </Box>
+          {todayArray.length === 0 ? (
+            <Typography sx={{marginLeft: "3%",
+            marginRight: "3%",}} variant="body1">
+              Dnes nemáte v plánu žádnou událost.
+            </Typography>
           ) : (
             todayArray.map((item, index) => (
+              <Box
+                key={index}
+                sx={{
+                  marginLeft: "3%",
+                  marginRight: "3%",
+                  marginBottom: "1em",
+                  borderRadius: "10px",
+                  backgroundColor: "rgba(0, 56, 255, 0.24)",
+                  border: "2px solid rgba(0, 34, 155, 1)",
+                }}
+              >
                 <Box
-                  key={index}
                   sx={{
-                    marginLeft: "3%",
-                    marginRight: "3%",
-                    marginBottom: "1em",
-                    borderRadius: "10px",
+                    paddingLeft: "1em",
+                    paddingRight: "1em",
                     backgroundColor: "rgba(0, 56, 255, 0.24)",
-                    border: "2px solid rgba(0, 34, 155, 1)",
+                    borderRadius: "10px 10px 10px 10px",
+                    paddingTop: "1em",
+                    paddingBottom: "0.5em",
                   }}
                 >
-                  <Box
-                    sx={{
-                      paddingLeft: "1em",
-                      paddingRight: "1em",
-                      backgroundColor: "rgba(0, 56, 255, 0.24)",
-                      borderRadius: "10px 10px 10px 10px",
-                      paddingTop: "1em",
-                      paddingBottom: "0.5em",
-                    }}
-                  >
-                    <Typography variant="h6">
-                      {item.matchType == null ? "Zápas" : "Trénink"} -{" "}
-                      {item.opponentName}
-                    </Typography>
-                    <Typography>
-                      Date:{" "}
-                      {new Date(item.date).toLocaleDateString("cs-CZ", {
-                        day: "2-digit",
-                        month: "2-digit",
-                        year: "numeric",
-                      })}
-                    </Typography>
-                    <Typography>Time: {item.time}</Typography>
-                  </Box>
+                  <Typography variant="h6">
+                    {item.matchType == null ? "Zápas" : "Trénink"} -{" "}
+                    {item.opponentName}
+                  </Typography>
+                  <Typography>
+                    Date:{" "}
+                    {new Date(item.date).toLocaleDateString("cs-CZ", {
+                      day: "2-digit",
+                      month: "2-digit",
+                      year: "numeric",
+                    })}
+                  </Typography>
+                  <Typography>Time: {item.time}</Typography>
                 </Box>
-               ))
-               )}
-
-            </Box>
-            <Box>
-              <Box
-                sx={{ display: "flex", justifyContent: "space-around", marginBottom: "1em" }}
-              >
-                <Typography
-                  variant="h6"
-                  sx={{ cursor: "pointer" }}
-                >
-                  Zítra
-                </Typography>
               </Box>
-              { tomorrowArray.length === 0 ? (
-            <Typography variant="body1">Zítra nemáte v plánu žádnou událost.</Typography>
+            ))
+          )}
+        </Box>
+        <Box>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-around",
+              marginBottom: "1em",
+            }}
+          >
+            <Typography variant="h6" sx={{ cursor: "pointer" }}>
+              Zítra
+            </Typography>
+          </Box>
+          {tomorrowArray.length === 0 ? (
+            <Typography sx={{marginLeft: "3%",
+            marginRight: "3%",}} variant="body1">
+              Zítra nemáte v plánu žádnou událost.
+            </Typography>
           ) : (
             tomorrowArray.map((item, index) => (
+              <Box
+                key={index}
+                sx={{
+                  marginLeft: "3%",
+                  marginRight: "3%",
+                  marginBottom: "1em",
+                  borderRadius: "10px",
+                  backgroundColor: "rgba(0, 56, 255, 0.24)",
+                  border: "2px solid rgba(0, 34, 155, 1)",
+                }}
+              >
                 <Box
-                  key={index}
                   sx={{
-                    marginLeft: "3%",
-                    marginRight: "3%",
-                    marginBottom: "1em",
-                    borderRadius: "10px",
+                    paddingLeft: "1em",
+                    paddingRight: "1em",
                     backgroundColor: "rgba(0, 56, 255, 0.24)",
-                    border: "2px solid rgba(0, 34, 155, 1)",
+                    borderRadius: "10px 10px 10px 10px",
+                    paddingTop: "1em",
+                    paddingBottom: "0.5em",
                   }}
                 >
-                  <Box
-                    sx={{
-                      paddingLeft: "1em",
-                      paddingRight: "1em",
-                      backgroundColor: "rgba(0, 56, 255, 0.24)",
-                      borderRadius: "10px 10px 10px 10px",
-                      paddingTop: "1em",
-                      paddingBottom: "0.5em",
-                    }}
-                  >
-                    <Typography variant="h6">
-                      {item.matchType == null ? "Zápas" : "Trénink"} -{" "}
-                      {item.opponentName}
-                    </Typography>
-                    <Typography>
-                      Date:{" "}
-                      {new Date(item.date).toLocaleDateString("cs-CZ", {
-                        day: "2-digit",
-                        month: "2-digit",
-                        year: "numeric",
-                      })}
-                    </Typography>
-                    <Typography>Time: {item.time}</Typography>
-                  </Box>
+                  <Typography variant="h6">
+                    {item.matchType == null ? "Zápas" : "Trénink"} -{" "}
+                    {item.opponentName}
+                  </Typography>
+                  <Typography>
+                    Date:{" "}
+                    {new Date(item.date).toLocaleDateString("cs-CZ", {
+                      day: "2-digit",
+                      month: "2-digit",
+                      year: "numeric",
+                    })}
+                  </Typography>
+                  <Typography>Time: {item.time}</Typography>
                 </Box>
-              ))
-              )}
-            </Box>
-            <Box>
-              <Box
-                sx={{ display: "flex", justifyContent: "space-around", marginBottom: "1em" }}
-              >
-                <Typography
-                  variant="h6"
-                  sx={{ cursor: "pointer" }}
-                >
-                  Pozítří
-                </Typography>
               </Box>
+            ))
+          )}
+        </Box>
+        <Box>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-around",
+              marginBottom: "1em",
+            }}
+          >
+            <Typography variant="h6" sx={{ cursor: "pointer" }}>
+              Pozítří
+            </Typography>
+          </Box>
 
-              {  dayAfterTomorrowArray.length === 0 ? (
-            <Typography variant="body1">Pozítří nemáte v plánu žádnou událost.</Typography>
+          {dayAfterTomorrowArray.length === 0 ? (
+            <Typography sx={{marginLeft: "3%",
+            marginRight: "3%",}} variant="body1">
+              Pozítří nemáte v plánu žádnou událost.
+            </Typography>
           ) : (
             dayAfterTomorrowArray.map((item, index) => (
+              <Box
+                key={index}
+                sx={{
+                  marginLeft: "1%",
+                  marginRight: "3%",
+                  marginBottom: "1em",
+                  borderRadius: "10px",
+                  backgroundColor: "rgba(0, 56, 255, 0.24)",
+                  border: "2px solid rgba(0, 34, 155, 1)",
+                }}
+              >
                 <Box
-                  key={index}
                   sx={{
-                    marginLeft: "1%",
-                    marginRight: "3%",
-                    marginBottom: "1em",
-                    borderRadius: "10px",
                     backgroundColor: "rgba(0, 56, 255, 0.24)",
-                    border: "2px solid rgba(0, 34, 155, 1)",
+                    borderRadius: "10px 10px 10px 10px",
+                    paddingTop: "1em",
+                    paddingBottom: "0.5em",
                   }}
                 >
-                  <Box
-                    sx={{
-                    
-                      backgroundColor: "rgba(0, 56, 255, 0.24)",
-                      borderRadius: "10px 10px 10px 10px",
-                      paddingTop: "1em",
-                      paddingBottom: "0.5em",
-                    }}
-                  >
-                    <Typography variant="h6">
-                      {item.matchType == null ? "Zápas" : "Trénink"} -{" "}
-                      {item.opponentName}
-                    </Typography>
-                    <Typography>
-                      Date:{" "}
-                      {new Date(item.date).toLocaleDateString("cs-CZ", {
-                        day: "2-digit",
-                        month: "2-digit",
-                        year: "numeric",
-                      })}
-                    </Typography>
-                    <Typography>Time: {item.time}</Typography>
-                  </Box>
+                  <Typography variant="h6">
+                    {item.matchType == null ? "Zápas" : "Trénink"} -{" "}
+                    {item.opponentName}
+                  </Typography>
+                  <Typography>
+                    Date:{" "}
+                    {new Date(item.date).toLocaleDateString("cs-CZ", {
+                      day: "2-digit",
+                      month: "2-digit",
+                      year: "numeric",
+                    })}
+                  </Typography>
+                  <Typography>Time: {item.time}</Typography>
                 </Box>
-              ))
-              )}
-            </Box>
-          </Box>
+              </Box>
+            ))
+          )}
         </Box>
-      );
-    };
+      </Box>
+    </Box>
+  );
+};
 
 export default News;
