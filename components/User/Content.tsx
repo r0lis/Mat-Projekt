@@ -33,6 +33,7 @@ const GET_TEAM_NAMES = gql`
     getUserTeamsByEmail(email: $email) {
       teamId
       Name
+      Logo
     }
   }
 `;
@@ -52,6 +53,7 @@ const calculateAge = (dateOfBirth: string) => {
 type Team = {
   teamId: string;
   Name: string;
+  Logo: string;
 };
 
 const Content: React.FC = () => {
@@ -134,10 +136,11 @@ const Content: React.FC = () => {
         padding: isMobile ? "0.5em" : "3%",
         paddingTop: isMobile ? "1em" : "",
         borderRadius: "10px", 
+        marginBottom: "2em",
       }}
     >
-      <Box sx={{ display: "flex", marginBottom: "2em", marginLeft:"3em", marginRight:"3em" }}>
-        <Typography sx={{ fontSize: "3em", fontWeight: "500" }}>
+      <Box sx={{ display: "flex", marginBottom: "0em", marginLeft:"3em", marginRight:"3em" }}>
+        <Typography sx={{ fontSize: "2.8em", fontWeight: "500" }}>
           {name} {surname}
         </Typography>
         <Avatar
@@ -152,16 +155,16 @@ const Content: React.FC = () => {
         />
       </Box>
       {editMode === false ? (
-      <><Box sx={{ marginBottom: "2em", marginLeft: "3em", marginRight: "3em" }}>
-          <Typography sx={{ fontSize: "1.7em", fontWeight: "500" }}>
+      <><Box sx={{ marginBottom: "1.5em", marginLeft: "3em", marginRight: "3em" }}>
+          <Typography sx={{ fontSize: "1.5em", fontWeight: "500" }}>
             Email:
           </Typography>
-          <Typography sx={{ fontSize: "1.3em" }}>{user?.email}</Typography>
+          <Typography sx={{ fontSize: "1.2em" }}>{user?.email}</Typography>
         </Box><Box sx={{ marginBottom: "2em", marginLeft: "3em", marginRight: "3em" }}>
-            <Typography sx={{ fontSize: "1.7em", fontWeight: "500" }}>
+            <Typography sx={{ fontSize: "1.5em", fontWeight: "500" }}>
               Datum narození:
             </Typography>
-            <Typography sx={{ fontSize: "1.3em", }}>
+            <Typography sx={{ fontSize: "1.2em", }}>
               {userInfoData?.getUserByNameAndSurname.DateOfBirth &&
                 new Date(
                   userInfoData?.getUserByNameAndSurname.DateOfBirth
@@ -203,7 +206,7 @@ const Content: React.FC = () => {
                     }}
                   >
                     <img
-                      src={TeamLogoImg.src}
+                      src={team.Logo}
                       alt="Team Logo"
                       style={{
                         width: "50px",
@@ -228,10 +231,10 @@ const Content: React.FC = () => {
                 Nepatříte do žádného klubu
               </Box>
             )}
-          </Box><Box sx={{ marginTop: "2em", marginLeft: "3em", marginRight: "3em" }}>
+          </Box><Box sx={{ marginTop: "1em", marginLeft: "3em", marginRight: "3em" }}>
             <Button onClick={handleEditClick}>Upravit</Button>
           </Box></>) : (
-        <Box sx={{ marginTop: "2em",marginLeft:"3em", marginRight:"3em" }}>
+        <Box sx={{ marginTop: "1em",marginLeft:"3em", marginRight:"3em" }}>
           <Edit />
         <Button onClick={handleBackClick}>Zpět</Button>
         </Box>
