@@ -76,8 +76,8 @@
   /* StepDiv */
   .StepDiv {
     display: block;
-    padding-top: 0.4em;
-    padding-bottom: 0.3em;
+    padding-top: 0.5em;
+    padding-bottom: 0.2em;
     border-bottom: 2px solid black;
   }
   
