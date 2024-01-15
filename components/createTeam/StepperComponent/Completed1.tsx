@@ -18,11 +18,11 @@ const Completed1: React.FC = () => {
           }}
         >
           <Typography sx={{ textAlign: "center" }} variant="h4" gutterBottom>
-            Vytvoření týmu:
+            Vytvoření Klubu:
           </Typography>
 
           <Box sx={{ width: "50%", marginLeft: "auto", marginRight: "auto" }}>
-            <Alert severity="success">Tým byl úspěšně vytvořen!</Alert>
+            <Alert severity="success">Klub byl úspěšně vytvořen!</Alert>
           </Box>
         </Box>
       </Box>

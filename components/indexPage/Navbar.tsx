@@ -538,8 +538,9 @@ const Navbar: React.FC = () => {
                 className="CreateTeamButton"
                 sx={{
                   backgroundColor: "#b71dde",
-                  borderRadius: "15px",
+                  borderRadius: "7px",
                   boxShadow: "0 0 10px rgba(51, 0, 45, 0.8)",
+                  border: "1px solid #b71dde",
                 }}
                 variant="contained"
               >
@@ -553,7 +554,7 @@ const Navbar: React.FC = () => {
                     fontFamily: "Roboto",
                   }}
                 >
-                  VYTVOŘIT TÝM
+                  VYTVOŘIT KLUB
                 </Typography>
               </Button>
             </Link>

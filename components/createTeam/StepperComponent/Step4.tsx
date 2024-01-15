@@ -172,8 +172,7 @@ const Step4: React.FC<Step4Props> = ({ teamEmail, onCompleteStep }) => {
                 }}
               >
                 <Alert severity="info">
-                  Uživatelům které jste přidali do týmu byl odeslán e-mail pro
-                  přidání do týmu.
+                  Uživatelům které jste přidali do klubu byl odeslán e-mail s pozvánkou.
                 </Alert>
               </Box>
               <LinearProgress variant="determinate" value={progress} />

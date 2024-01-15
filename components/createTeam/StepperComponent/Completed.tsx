@@ -68,7 +68,7 @@ const Completed: React.FC<Step4Props> = ({teamEmail}) => {
           }}
         >
           <Typography sx={{ textAlign: 'center' }} variant="h4" gutterBottom>
-            Tým byl úspěšně vytvořen!
+            Klub byl úspěšně vytvořen!
           </Typography>
 
           <Box sx={{ width: '50%', marginLeft: 'auto', marginRight: 'auto' }}>

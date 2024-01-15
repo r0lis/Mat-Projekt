@@ -137,7 +137,7 @@ const Navbar: React.FC = () => {
                 textDecoration: "none",
               }}
             >
-              Vytvořte tým
+              Vytvořte klub
             </Typography>
           </Box>
 

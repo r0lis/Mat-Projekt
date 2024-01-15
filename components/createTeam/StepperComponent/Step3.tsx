@@ -25,7 +25,7 @@ const Step3: React.FC<Step3Props> = ({ teamEmail, onCompleteStep }) => {
       >
         <Box>
           <Typography sx={{ textAlign: "center" }} variant="h4" gutterBottom>
-            Zkontrolujte údaje týmu
+            Zkontrolujte údaje Klubu
           </Typography>
         </Box>
         <Box sx={{ width: "50%", marginLeft: "auto", marginRight: "auto" }}>

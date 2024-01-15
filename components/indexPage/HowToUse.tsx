@@ -19,11 +19,11 @@ const HowToUse: React.FC = () => {
                         <div style={{ display: 'flex', alignItems: 'center' }}>
                             <div className="howToUseDiv">
                                 <div className="StepDiv">
-                                    <Typography sx={{ top: '0%', color: 'white', fontSize: '1.5vw' }}>Step 1</Typography>
+                                    <Typography sx={{ top: '0%', color: 'white', fontSize: '1.5vw', fontFamily:"Roboto", fontWeight:"500" }}>Krok 1</Typography>
                                 </div>
                                 <div className="DecsDiv">
-                                    <Typography sx={{ fontSize: '1.2vw', textAlign: 'center', justifyContent: 'center' }}>
-                                        popis ffefefefefefefefefeeeeeeeeeeeeeeeeeeeeeeeeeeef fef efefe fe fe fe edwdwdwdwdwdwdwdwdwdw
+                                    <Typography sx={{ fontSize: '1.2vw', textAlign: 'center', justifyContent: 'center',fontFamily:"Roboto", fontWeight:"500"  }}>
+                                    Vytvořte si  účet
                                     </Typography>
                                 </div>
                             </div>
@@ -33,11 +33,11 @@ const HowToUse: React.FC = () => {
                             <img className="LeftDownArrStyle" src={LeftDownArr.src} alt="arrow" />
                             <div className="howToUseDiv2">
                                 <div className="StepDiv">
-                                    <Typography sx={{ top: '0%', color: 'white', fontSize: '1.5vw' }}>Step 2</Typography>
+                                    <Typography sx={{ top: '0%', color: 'white', fontSize: '1.5vw',fontFamily:"Roboto", fontWeight:"500"  }}>Krok 2</Typography>
                                 </div>
                                 <div className="DecsDiv">
-                                    <Typography sx={{ fontSize: '1.2vw', textAlign: 'center', justifyContent: 'center' }}>
-                                        popis ffefefefefefefefefeeeeeeeeeeeeeeeeeeeeeeeeeeef fef efefe fe fe fe edwdwdwdwdwdwdwdwdwdw
+                                    <Typography sx={{ fontSize: '1.2vw', textAlign: 'center', justifyContent: 'center',fontFamily:"Roboto", fontWeight:"500"  }}>
+                                        Vytvořte klub, pozvěte členy klubu do aklikace.
                                     </Typography>
                                 </div>
                             </div>
@@ -45,11 +45,11 @@ const HowToUse: React.FC = () => {
                         <div style={{ display: 'flex', alignItems: 'center' }}>
                             <div className="howToUseDiv">
                                 <div className="StepDiv">
-                                    <Typography sx={{ top: '0%', color: 'white', fontSize: '1.5vw' }}>Step 3</Typography>
+                                    <Typography sx={{ top: '0%', color: 'white', fontSize: '1.5vw',fontFamily:"Roboto", fontWeight:"500"  }}>Krok 3</Typography>
                                 </div>
                                 <div className="DecsDiv">
-                                    <Typography sx={{ fontSize: '1.2vw', textAlign: 'center', justifyContent: 'center' }}>
-                                        popis ffefefefefefefefefeeeeeeeeeeeeeeeeeeeeeeeeeeef fef efefe fe fe fe edwdwdwdwdwdwdwdwdwdw
+                                    <Typography sx={{ fontSize: '1.2vw', textAlign: 'center', justifyContent: 'center',fontFamily:"Roboto", fontWeight:"500"  }}>
+                                        Dokončete nastavení klubu, práv, veškeré potřebné kroky v klubu a začněte aplikaci používat.
                                     </Typography>
                                 </div>
                             </div>
@@ -58,11 +58,11 @@ const HowToUse: React.FC = () => {
                         <div style={{ display: 'flex', alignItems: 'center' }}>
                             <div className="howToUseDiv3">
                                 <div className="StepDiv">
-                                    <Typography sx={{ top: '0%', color: 'white', fontSize: '1.5vw' }}>Last Step </Typography>
+                                    <Typography sx={{ top: '0%', color: 'white', fontSize: '1.5vw',fontFamily:"Roboto", fontWeight:"500"  }}>Poslední krok </Typography>
                                 </div>
                                 <div className="DecsDiv">
-                                    <Typography sx={{ fontSize: '1.2vw', textAlign: 'center', justifyContent: 'center' }}>
-                                        popis ffefefefefefefefefeeeeeeeeeeeeeeeeeeeeeeeeeeef fef efefe fe fe fe edwdwdwdwdwdwdwdwdwdw
+                                    <Typography sx={{ fontSize: '1.2vw', textAlign: 'center', justifyContent: 'center',fontFamily:"Roboto", fontWeight:"500"  }}>
+                                        Začněte aplikace aplikaci používat a využívat všechny její funkce.
                                     </Typography>
                                 </div>
                             </div>

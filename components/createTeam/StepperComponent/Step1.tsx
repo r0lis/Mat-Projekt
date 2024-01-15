@@ -196,19 +196,28 @@ const Step1: React.FC<Step1Props> = ({ onCompleteTeamCreation }) => {
 
   const addEmail = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (emailValue.trim() !== "" && emailRegex.test(emailValue)) {
-      if (editIndex !== null) {
-        const updatedEmails = [...emails];
-        updatedEmails[editIndex] = emailValue;
-        setEmails(updatedEmails);
-        setEditIndex(null);
+    
+    if (
+      emailValue.trim() !== "" &&
+      emailRegex.test(emailValue) &&
+      emailValue !== currentUserEmail 
+    ) {
+      if (emails.includes(emailValue)) {
+        setError2("Tento e-mail již existuje v seznamu.");
       } else {
-        setEmails([...emails, emailValue]);
+        if (editIndex !== null) {
+          const updatedEmails = [...emails];
+          updatedEmails[editIndex] = emailValue;
+          setEmails(updatedEmails);
+          setEditIndex(null);
+        } else {
+          setEmails([...emails, emailValue]);
+        }
+        setEmailValue("");
+        setError2(null);
       }
-      setEmailValue("");
-      setError2(null);
     } else {
-      setError2("Please enter a valid email.");
+      setError2("Prosím, zadejte platný e-mail, nebo email který v klubu ještě není, Váš email nezadávejte.");
     }
   };
 
@@ -225,7 +234,7 @@ const Step1: React.FC<Step1Props> = ({ onCompleteTeamCreation }) => {
 
   const handleImageDelete = () => {
     setSelectedImage(null);
-    setImg(""); // Optional: Clear the image URL from the state
+    setImg(""); 
   };
 
   const handleEdit = (index: number) => {
@@ -259,18 +268,18 @@ const Step1: React.FC<Step1Props> = ({ onCompleteTeamCreation }) => {
           variant="h4"
           gutterBottom
         >
-          Vytvoření týmu:
+          Vytvoření klubu:
         </Typography>
 
-        <Box sx={{ width: "50%", marginLeft: "auto", marginRight: "auto" }}>
+        <Box sx={{ width: "60%", marginLeft: "auto", marginRight: "auto" }}>
           {isCreated ? (
-            <Alert severity="success">Tým byl úspěšně vytvořen!</Alert>
+            <Alert severity="success">Klub byl úspěšně vytvořen!</Alert>
           ) : (
             <form>
               <div>
                 <TextField
                   id="nameTeam"
-                  label="Název týmu"
+                  label="Název klubu"
                   variant="outlined"
                   value={nameTeam}
                   onChange={(e) => setName(e.target.value)}
@@ -294,7 +303,7 @@ const Step1: React.FC<Step1Props> = ({ onCompleteTeamCreation }) => {
               </div>
 
               <Box>
-              <h3>Týmové logo</h3>
+              <h3>Klubové logo</h3>
 
                 <InputLabel htmlFor="imageInput">
                   <Input
@@ -351,7 +360,7 @@ const Step1: React.FC<Step1Props> = ({ onCompleteTeamCreation }) => {
                 )}
               </Box>
 
-              <Box sx={{ marginBottom: "20px" }}>
+              <Box sx={{ marginBottom: "20px", width:"100%" }}>
                 <Typography
                   sx={{
                     textAlign: "center",
@@ -362,13 +371,14 @@ const Step1: React.FC<Step1Props> = ({ onCompleteTeamCreation }) => {
                   variant="h5"
                   gutterBottom
                 >
-                  Přidání členů týmu:
+                  Přidání členů klubu:
                 </Typography>
               </Box>
 
               <Box
                 style={{
                   display: "flex",
+                  width: "100%",
                   alignItems: "center",
                   marginBottom: "10px",
                 }}
@@ -405,7 +415,7 @@ const Step1: React.FC<Step1Props> = ({ onCompleteTeamCreation }) => {
 
                 {emails.length === 0 ? (
                   <Alert sx={{ marginBottom: "10px" }} severity="warning">
-                    Přidejte členy do týmu.
+                    Přidejte členy do klubu.
                   </Alert>
                 ) : (
                   <>
@@ -462,7 +472,7 @@ const Step1: React.FC<Step1Props> = ({ onCompleteTeamCreation }) => {
               <div>
                 <TextField
                   id="name"
-                  label="Jméno vlastníka týmu"
+                  label="Jméno vlastníka klubu"
                   variant="outlined"
                   value={nameOwner}
                   onChange={(e) => setNameOwner(e.target.value)}
@@ -474,7 +484,7 @@ const Step1: React.FC<Step1Props> = ({ onCompleteTeamCreation }) => {
               <div>
                 <TextField
                   id="surname"
-                  label="Příjmení vlastníka týmu"
+                  label="Příjmení vlastníka klubu"
                   variant="outlined"
                   value={surnameOwner}
                   onChange={(e) => setSurnameOwner(e.target.value)}
@@ -486,7 +496,7 @@ const Step1: React.FC<Step1Props> = ({ onCompleteTeamCreation }) => {
               <div>
                 <TextField
                   id="place"
-                  label="Město týmu"
+                  label="Město klubu"
                   variant="outlined"
                   value={place}
                   onChange={(e) => setPlace(e.target.value)}

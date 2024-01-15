@@ -246,19 +246,19 @@ const Step2: React.FC<Step2Props> = ({ teamEmail, onCompleteStep }) => {
                       <TableRow>
                         <TableCell>
                           <Typography sx={{ fontWeight: "bold" }}>
-                            Trainers
+                            Trenéři
                           </Typography>
                           <TableDivider />
                         </TableCell>
                         <TableCell>
                           <Typography sx={{ fontWeight: "bold" }}>
-                            Manegement
+                            Management
                           </Typography>
                           <TableDivider />
                         </TableCell>
                         <TableCell>
                           <Typography sx={{ fontWeight: "bold" }}>
-                            Players
+                            Hráči
                           </Typography>
                         </TableCell>
                       </TableRow>
@@ -369,7 +369,12 @@ const Step2: React.FC<Step2Props> = ({ teamEmail, onCompleteStep }) => {
                   // Correct the spelling of "lightgray"
                   backgroundColor: member === user?.email ? "lightgray" : "transparent",
                 }}
-              >
+              > 
+              {member === user?.email && (
+                <Typography sx={{border:"1px solid black", padding:"1em", borderRadius:"10px"}} >
+                Váš účet 
+                </Typography>
+                )}
                   <Typography sx={{ marginRight: "1em", marginLeft: "2em" }}>
                     {member}
                   </Typography>
@@ -434,19 +439,19 @@ const Step2: React.FC<Step2Props> = ({ teamEmail, onCompleteStep }) => {
                         <TableRow>
                           <TableCell>
                             <Typography sx={{ fontWeight: "bold" }}>
-                              Trainers
+                              Trenéři
                             </Typography>
                             <TableDivider />
                           </TableCell>
                           <TableCell>
                             <Typography sx={{ fontWeight: "bold" }}>
-                              Manegement
+                              Management
                             </Typography>
                             <TableDivider />
                           </TableCell>
                           <TableCell>
                             <Typography sx={{ fontWeight: "bold" }}>
-                              Players
+                              Hráči
                             </Typography>
                           </TableCell>
                         </TableRow>
