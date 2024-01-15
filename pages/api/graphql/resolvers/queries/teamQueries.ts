@@ -313,6 +313,41 @@ export const teamQueries = {
     return null;
   },
 
+  getTeamByEmail: async (_: any, { email }: { email: string }, context: Context) => {
+    if (context.user) {
+      try {
+        const teamQuery = context.db
+          .collection("Team")
+          .where("Email", "==", email);
+        const teamSnapshot = await teamQuery.get();
+
+        if (!teamSnapshot.empty) {
+          const teamData = teamSnapshot.docs[0].data() as Team;
+
+          const teamDetailsWithoutMembers = {
+            AdminEmail: teamData.AdminEmail,
+            Email: teamData.Email,
+            Logo: teamData.Logo,
+            Name: teamData.Name,
+            OwnerName: teamData.OwnerName,
+            OwnerSurname: teamData.OwnerSurname,
+            Place: teamData.Place,
+            TimeCreated: teamData.TimeCreated,
+            teamId: teamData.teamId,
+          };
+
+          return teamDetailsWithoutMembers;
+        }
+      } catch (error) {
+        console.error("Error getting team details without members:", error);
+        throw error;
+      }
+    }
+
+    return null;
+  },
+
+
   getHallsByTeamId: async (
     _: any,
     { teamId }: { teamId: string },

@@ -15,6 +15,7 @@ import {
   TableCell,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
+import { authUtils } from "@/firebase/auth.utils";
 import axios from "axios";
 
 type Step4Props = {
@@ -47,6 +48,7 @@ const Step4: React.FC<Step4Props> = ({ teamEmail, onCompleteStep }) => {
   const [progress, setProgress] = React.useState(0);
   const [showLinearProgress, setShowLinearProgress] = useState(false);
   const [buttonVisible, setButtonVisible] = useState(true); 
+  const currentUserEmail = authUtils.getCurrentUser()?.email || "";
 
   const { loading, error, data } = useQuery(GET_TEAM_MEMBERS, {
     variables: { teamEmail },
@@ -64,7 +66,8 @@ const Step4: React.FC<Step4Props> = ({ teamEmail, onCompleteStep }) => {
     useMutation(UPDATE_TEAM_FINISHED);
 
   const handleButtonClick = async () => {
-    const members = data?.getTeamMembersByEmail || [];
+    const membersData = data?.getTeamMembersByEmail || [];
+    const members = membersData.filter((member: string) => member !== currentUserEmail);
     const { teamId } = teamIdData?.getTeamIdByEmail || {};
 
     try {
@@ -73,10 +76,9 @@ const Step4: React.FC<Step4Props> = ({ teamEmail, onCompleteStep }) => {
       await axios.post("/api/sendEmail", { emails: members, teamId });
       console.log("E-maily úspěšně odeslány.");
 
-      // Zvyšování hodnoty progress každou sekundu až na 100
       let currentProgress = 0;
       const intervalId = setInterval(() => {
-        currentProgress += 20; // Zvyšte hodnotu podle potřeby
+        currentProgress += 20; 
         setProgress(Math.min(currentProgress, 100));
 
         if (currentProgress >= 100) {
@@ -96,11 +98,14 @@ const Step4: React.FC<Step4Props> = ({ teamEmail, onCompleteStep }) => {
   useEffect(() => {
     const timeoutId = setTimeout(() => {}, 4000);
 
-    return () => clearTimeout(timeoutId); // Cleanup the timeout on component unmount
-  }, []); // Empty dependency array to run the effect only once
+    return () => clearTimeout(timeoutId); 
+  }, []); 
 
-  const members = data?.getTeamMembersByEmail || [];
+  const membersData = data?.getTeamMembersByEmail || [];
   const { teamId } = teamIdData?.getTeamIdByEmail || {};
+
+  const members = membersData.filter((member: string) => member !== currentUserEmail);
+
 
   if (loading) {
     return(  <Box
@@ -142,15 +147,13 @@ const Step4: React.FC<Step4Props> = ({ teamEmail, onCompleteStep }) => {
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell>Účty</TableCell>
-                    {/* Add additional headers if needed */}
+                    <TableCell>Účty na které se zašle pozvánka do klubu</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {members.map((member: string, index: number) => (
                     <TableRow key={index}>
                       <TableCell>{member}</TableCell>
-                      {/* Add additional cells if needed */}
                     </TableRow>
                   ))}
                 </TableBody>
