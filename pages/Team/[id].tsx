@@ -10,7 +10,6 @@ import Trainings from "../../public/assets/training.png";
 import Calendar from "../../public/assets/Kalendar.png";
 import Rousters from "../../public/assets/network.png";
 import Nominations from "../../public/assets/Nomination.png";
-import Pay from "../../public/assets/pay.png";
 import Events from "../../public/assets/Event.png";
 import Members from "../../public/assets/Members.png";
 import Settings from "../../public/assets/Settings.png";
@@ -20,7 +19,6 @@ import TrainingsComponent from "@/components/teamPage/Trenining";
 import CalendarComponent from "@/components/teamPage/Calendar";
 import RoustersComponent from "@/components/teamPage/Rousters";
 import NominationsComponent from "@/components/teamPage/Matchs";
-import PayComponent from "@/components/teamPage/Paying";
 import EventsComponent from "@/components/teamPage/Events";
 import MembersComponent from "@/components/teamPage/Members";
 import SettingsComponent from "@/components/teamPage/Settings";
@@ -176,7 +174,6 @@ const Team: React.FC = () => {
     role == 1
       ? [
           ...items,
-          { label: "Payment", caption:"Platby", image: Pay },
           { label: "Settings", caption:"Správa",image: Settings },
         ]
       : items;
@@ -360,7 +357,6 @@ const Team: React.FC = () => {
             {activeLink === "Events" && <EventsComponent />}
             {activeLink === "Team" && <TeamComponent id={id as string} />}
             {activeLink === "Members" && <MembersComponent id={id as string} />}
-            {activeLink === "Payment" && <PayComponent />}
             {activeLink === "Settings" && <SettingsComponent />}
           </Box>
         </Box>

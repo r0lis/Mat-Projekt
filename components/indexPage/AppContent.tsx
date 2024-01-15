@@ -3,8 +3,9 @@ import React from 'react'
 import comunicationImg from '../../public/assets/message.png';
 import teamImg from '../../public/assets/network.png';
 import listHospitalImg from '../../public/assets/patient.png';
-import teamPayImg from '../../public/assets/pay.png';
 import trainingPlanImg from '../../public/assets/training.png';
+import Settings from "../../public/assets/Settings.png";
+
 
 const AppContent: React.FC = () => {
 
@@ -29,7 +30,7 @@ const AppContent: React.FC = () => {
                     </div>
                     <div className='leftBorderDiv'>
                         <div className='leftBorderPseudoElement'></div>
-                        <div className='featuresDiv'><img className='iconStyle' src={teamPayImg.src} /> Správa více týmu v klubu</div>
+                        <div className='featuresDiv'><img className='iconStyle' src={Settings.src} /> Správa více týmů v klubu</div>
                     </div>
                     <div className='leftBorderDiv'>
                         <div className='leftBorderPseudoElement'></div>

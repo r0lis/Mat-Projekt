@@ -22,8 +22,8 @@ const HowToUse: React.FC = () => {
                                     <Typography sx={{ top: '0%', color: 'white', fontSize: '1.5vw', fontFamily:"Roboto", fontWeight:"500" }}>Krok 1</Typography>
                                 </div>
                                 <div className="DecsDiv">
-                                    <Typography sx={{ fontSize: '1.2vw', textAlign: 'center', justifyContent: 'center',fontFamily:"Roboto", fontWeight:"500"  }}>
-                                    Vytvořte si  účet
+                                    <Typography sx={{ fontSize: '1.4vw', textAlign: 'center', justifyContent: 'center',fontFamily:"Roboto", fontWeight:"500"  }}>
+                                    Zaregistujte se do aplikace.
                                     </Typography>
                                 </div>
                             </div>
@@ -36,8 +36,8 @@ const HowToUse: React.FC = () => {
                                     <Typography sx={{ top: '0%', color: 'white', fontSize: '1.5vw',fontFamily:"Roboto", fontWeight:"500"  }}>Krok 2</Typography>
                                 </div>
                                 <div className="DecsDiv">
-                                    <Typography sx={{ fontSize: '1.2vw', textAlign: 'center', justifyContent: 'center',fontFamily:"Roboto", fontWeight:"500"  }}>
-                                        Vytvořte klub, pozvěte členy klubu do aklikace.
+                                    <Typography sx={{ fontSize: '1.4vw', textAlign: 'center', justifyContent: 'center',fontFamily:"Roboto", fontWeight:"500"  }}>
+                                        Vytvořte Vás klub, do apliace a pozvěte všechny členy klubu do akplikace.
                                     </Typography>
                                 </div>
                             </div>
@@ -48,8 +48,8 @@ const HowToUse: React.FC = () => {
                                     <Typography sx={{ top: '0%', color: 'white', fontSize: '1.5vw',fontFamily:"Roboto", fontWeight:"500"  }}>Krok 3</Typography>
                                 </div>
                                 <div className="DecsDiv">
-                                    <Typography sx={{ fontSize: '1.2vw', textAlign: 'center', justifyContent: 'center',fontFamily:"Roboto", fontWeight:"500"  }}>
-                                        Dokončete nastavení klubu, práv, veškeré potřebné kroky v klubu a začněte aplikaci používat.
+                                    <Typography sx={{ fontSize: '1.4vw', textAlign: 'center', justifyContent: 'center',fontFamily:"Roboto", fontWeight:"500"  }}>
+                                        Dokončete nastavení klubu, práv, veškeré potřebné kroky pro kompletaci vytvoření klubu a začněte aplikaci používat.
                                     </Typography>
                                 </div>
                             </div>
@@ -61,8 +61,8 @@ const HowToUse: React.FC = () => {
                                     <Typography sx={{ top: '0%', color: 'white', fontSize: '1.5vw',fontFamily:"Roboto", fontWeight:"500"  }}>Poslední krok </Typography>
                                 </div>
                                 <div className="DecsDiv">
-                                    <Typography sx={{ fontSize: '1.2vw', textAlign: 'center', justifyContent: 'center',fontFamily:"Roboto", fontWeight:"500"  }}>
-                                        Začněte aplikace aplikaci používat a využívat všechny její funkce.
+                                    <Typography sx={{ fontSize: '1.4vw', textAlign: 'center', justifyContent: 'center',fontFamily:"Roboto", fontWeight:"500"  }}>
+                                        Začněte aplikaci používat a využívat všechny její funkce, mějte lepší přehled o svém klubu.
                                     </Typography>
                                 </div>
                             </div>

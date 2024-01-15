@@ -15,11 +15,10 @@ const PreFace: React.FC = () => {
       </div>
       <div className="textBlockStyle">
         <div className="bigTextStyle">WEBOVÁ APLIKACE PRO FLORBALOVÉ KLUBY</div>
-        <div className="smallTextStyle">
-          Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean vel
-          massa quis mauris vehicula lacinia. Curabitur sagittis hendrerit ante.
-          Maecenas aliquet accumsan leegestas leo.
-        </div>
+        <div className="smallTextStyle">Aplikace pro efektivní správu
+        klubu, týmů, hráčů a další.. Mějte veškerý přehled o vašem klubu na
+        jednom místě. Aplikace je zdarma a má několik funkcí a výhod.
+        </div> 
         <div className="smallTextStyle2">
           <img
             src={arrowRight.src}
