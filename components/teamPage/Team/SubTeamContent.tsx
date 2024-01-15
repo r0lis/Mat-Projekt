@@ -14,6 +14,7 @@ import Attendance from "./Component/Attendance";
 import Members from "./Component/Members";
 import Overview from "./Component/Overview";
 import Wall from "./Component/Wall";
+import News from "./Component/News";
 
 const GET_SUBTEAM_DETAILS = gql`
   query GetSubteamDetails($subteamId: String!) {
@@ -70,7 +71,6 @@ interface ContentProps {
   idTeam: string;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface SubteamMember {
   email: string;
   role: string;
@@ -406,6 +406,9 @@ const Content: React.FC<ContentProps> = ({ subteamId, idTeam }) => {
               >
                 Aktuality
               </Typography>
+              <Box sx={{maxHeight:"22em", overflowY:"auto", marginTop:"1.2em" }}>
+              <News subteamId={subteamId} />
+              </Box>
             </Box>
           </Box>
           <Box
