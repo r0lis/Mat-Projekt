@@ -124,14 +124,14 @@ const Overview: React.FC<OverviewProps> = (id) => {
 
   const combinedArray = [...matches, ...trainings];
 
-  const filteredArray = combinedArray.filter(item => {
-    const itemDate = new Date(item.date + ' ' + item.time);
+  const filteredArray = combinedArray.filter((item) => {
+    const itemDate = new Date(item.date + " " + item.time);
     const twentyFourHoursAgo = new Date();
     twentyFourHoursAgo.setDate(twentyFourHoursAgo.getDate() - 1);
     return itemDate >= twentyFourHoursAgo;
   });
 
-  const sortedArray = filteredArray.sort((a, b) => {
+  const sortedArray = combinedArray.sort((a, b) => {
     const dateComparison = a.date.localeCompare(b.date);
     if (dateComparison === 0) {
       return a.time.localeCompare(b.time);
@@ -141,29 +141,37 @@ const Overview: React.FC<OverviewProps> = (id) => {
 
   const today = new Date();
   const startOfWeek = new Date(today);
-  startOfWeek.setDate(today.getDate() - today.getDay());
+  startOfWeek.setDate(today.getDate() - today.getDay() + 1); // Začátek týdne
+
+  const endOfWeek = new Date(startOfWeek);
+  endOfWeek.setDate(startOfWeek.getDate() + 6); // Konec týdne
 
   const matchCount = matches.filter(
-    (match) => new Date(match.date) >= startOfWeek
+    (match) =>
+      new Date(match.date) >= startOfWeek && new Date(match.date) <= endOfWeek
   ).length;
+
   const trainingCount = trainings.filter(
-    (training) => new Date(training.date) >= startOfWeek
+    (training) =>
+      new Date(training.date) >= startOfWeek &&
+      new Date(training.date) <= endOfWeek
   ).length;
 
   const nextWeek = new Date(today);
   nextWeek.setDate(today.getDate() + 7);
 
-  const nextWeekEndDate = new Date(nextWeek);
-  nextWeekEndDate.setDate(nextWeekEndDate.getDate() + 7);
+  const endOfNextWeek = new Date(nextWeek);
+  endOfNextWeek.setDate(endOfNextWeek.getDate() + 6);
 
   const nextWeekFilteredArray = combinedArray.filter((item) => {
     const itemDate = new Date(item.date);
-    return itemDate >= nextWeek && itemDate < nextWeekEndDate;
+    return itemDate >= nextWeek && itemDate <= endOfNextWeek;
   });
 
   const nextWeekMatchCount = nextWeekFilteredArray.filter(
     (item) => item.matchType !== null
   ).length;
+
   const nextWeekTrainingCount = nextWeekFilteredArray.filter(
     (item) => item.matchType === null
   ).length;
@@ -186,22 +194,33 @@ const Overview: React.FC<OverviewProps> = (id) => {
         }}
       >
         <Card>
+          <Typography>
+            {startOfWeek.toLocaleDateString("cs-CZ")} -{" "}
+            {endOfWeek.toLocaleDateString("cs-CZ")}
+          </Typography>
           <CardContent>
             <Typography variant="h6">Tréninky tento týden</Typography>
+            <Typography></Typography>
             <Typography>{trainingCount}</Typography>
           </CardContent>
-          <CardContent>
-            <Typography variant="h6">Tréninky nadcházející týden</Typography>
-            <Typography>{nextWeekTrainingCount}</Typography>
-          </CardContent>
-        </Card>
-        <Card>
           <CardContent>
             <Typography variant="h6">Zápasy tento týden</Typography>
             <Typography>{matchCount}</Typography>
           </CardContent>
+        </Card>
+        <Card>
+          <Typography>
+            {nextWeek.toLocaleDateString("cs-CZ")} -{" "}
+            {endOfNextWeek.toLocaleDateString("cs-CZ")}
+          </Typography>
+
+          <CardContent>
+            <Typography variant="h6">Tréninky nadcházející týden</Typography>
+            <Typography>{nextWeekTrainingCount}</Typography>
+          </CardContent>
           <CardContent>
             <Typography variant="h6">Zápasy nadcházející týden</Typography>
+
             <Typography>{nextWeekMatchCount}</Typography>
           </CardContent>
         </Card>

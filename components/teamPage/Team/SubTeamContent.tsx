@@ -497,6 +497,9 @@ const Content: React.FC<ContentProps> = ({ subteamId, idTeam }) => {
               >
                 Aktuality
               </Typography>
+              <Box sx={{ overflowY:"auto", marginTop:"1.2em" }}>
+              <News subteamId={subteamId} />
+              </Box>
             </Box>
           </Box>
 
