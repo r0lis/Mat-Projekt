@@ -124,13 +124,6 @@ const Overview: React.FC<OverviewProps> = (id) => {
 
   const combinedArray = [...matches, ...trainings];
 
-  const filteredArray = combinedArray.filter((item) => {
-    const itemDate = new Date(item.date + " " + item.time);
-    const twentyFourHoursAgo = new Date();
-    twentyFourHoursAgo.setDate(twentyFourHoursAgo.getDate() - 1);
-    return itemDate >= twentyFourHoursAgo;
-  });
-
   const sortedArray = combinedArray.sort((a, b) => {
     const dateComparison = a.date.localeCompare(b.date);
     if (dateComparison === 0) {
