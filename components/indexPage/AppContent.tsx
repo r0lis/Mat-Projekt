@@ -38,7 +38,7 @@ const AppContent: React.FC = () => {
                     </div>
                     <div className='leftBorderDiv'>
                         <div className='leftBorderPseudoElement'></div>
-                        <div className='featuresDiv'><img className='iconStyle' src={trainingPlanImg.src} /> Tvoření treninkových plánů</div>
+                        <div className='featuresDiv'><img className='iconStyle' src={trainingPlanImg.src} /> Tvoření tréninkových plánů</div>
                     </div>
                     <div className='leftBorderDiv'>
                         <div className='leftBorderPseudoElement'></div>

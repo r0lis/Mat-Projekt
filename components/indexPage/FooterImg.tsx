@@ -6,7 +6,7 @@ import FooterImage from './../../public/assets/teamphoto.jpg'
       <div className='containerStyle'>
         <div className='overlayStyle'></div>
         <img src={FooterImage.src} alt="Týmový obrázek" className='imageStyle' />
-        <div className='textStyle'>Enjoy and build your <span style={{ color: '#B71DDE' }}>team</span> </div>
+        <div className='textStyle'>Enjoy and build your <span style={{ color: '#B71DDE' }}>club</span> </div>
       </div>
     );
   }

@@ -291,7 +291,7 @@ const Step1: React.FC<Step1Props> = ({ onCompleteTeamCreation }) => {
               <div>
                 <TextField
                   id="email"
-                  label="Týmový e-mail"
+                  label="Klubový e-mail"
                   variant="outlined"
                   value={emailTeam}
                   onChange={(e) => setEmail(e.target.value)}

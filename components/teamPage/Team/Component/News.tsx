@@ -12,6 +12,7 @@ const GET_ALL_MATCHES_BY_SUBTEAM_ID = gql`
       selectedHallId
       date
       time
+      endTime
       selectedMembers
       selectedPlayers
       selectedManagement
@@ -33,6 +34,7 @@ const GET_ALL_TRAININGS_BY_SUBTEAM_ID = gql`
       subteamIdSelected
       opponentName
       selectedHallId
+      endTime
       date
       time
       selectedMembers
@@ -61,6 +63,7 @@ interface Match {
   selectedManagement: string[];
   date: string;
   time: string;
+  endTime: string;
   selectedMembers: string[];
   selectedHallPosition: string;
   matchType: string;
@@ -80,6 +83,7 @@ interface Training {
   selectedManagement: string[];
   date: string;
   time: string;
+  endTime: string;
   description: string;
   matchType: string;
   selectedMembers: string[];
@@ -219,22 +223,22 @@ const News: React.FC<OverviewProps> = (id) => {
                   marginRight: "3%",
                   marginBottom: "1em",
                   borderRadius: "10px",
-                  backgroundColor:  item.matchType == null ? "rgba(0, 56, 255, 0.24)":"rgba(255, 130, 0, 0.15)",
-                  border:  item.matchType == null ? "2px solid rgba(0, 34, 155, 1)":"2px solid rgba(255, 130, 0, 0.6)",
+                  backgroundColor:  item.matchType == null ?"rgba(255, 130, 0, 0.15)": "rgba(0, 56, 255, 0.24)" ,
+                  border:  item.matchType == null ? "2px solid rgba(255, 130, 0, 0.6)":"2px solid rgba(0, 34, 155, 1)",
                 }}
               >
                 <Box
                   sx={{
                     paddingLeft: "1em",
                     paddingRight: "1em",
-                    backgroundColor: item.matchType == null ? "rgba(0, 56, 255, 0.24)":"rgba(255, 130, 0, 0.15)",
+                    backgroundColor: item.matchType == null ? "rgba(255, 130, 0, 0.15)":"rgba(0, 56, 255, 0.24)",
                     borderRadius: "10px 10px 10px 10px",
                     paddingTop: "1em",
                     paddingBottom: "0.5em",
                   }}
                 >
                   <Typography variant="h6">
-                    {item.matchType == null ? "Zápas" : "Trénink"} -{" "}
+                  {item.matchType == null ? "Trénink" : "Zápas"} -{" "}
                     {item.opponentName}
                   </Typography>
                   <Typography>
@@ -245,7 +249,7 @@ const News: React.FC<OverviewProps> = (id) => {
                       year: "numeric",
                     })}
                   </Typography>
-                  <Typography>Time: {item.time}</Typography>
+                  <Typography>Time: {item.time}-{item.endTime}</Typography>
                 </Box>
               </Box>
             ))
@@ -277,15 +281,15 @@ const News: React.FC<OverviewProps> = (id) => {
                   marginRight: "3%",
                   marginBottom: "1em",
                   borderRadius: "10px",
-                  backgroundColor: "rgba(0, 56, 255, 0.24)",
-                  border: "2px solid rgba(0, 34, 155, 1)",
+                  backgroundColor:  item.matchType == null ?"rgba(255, 130, 0, 0.15)": "rgba(0, 56, 255, 0.24)" ,
+                  border:  item.matchType == null ? "2px solid rgba(255, 130, 0, 0.6)":"2px solid rgba(0, 34, 155, 1)",
                 }}
               >
                 <Box
                   sx={{
                     paddingLeft: "1em",
                     paddingRight: "1em",
-                    backgroundColor: "rgba(0, 56, 255, 0.24)",
+                    backgroundColor:  item.matchType == null ?"rgba(255, 130, 0, 0.15)": "rgba(0, 56, 255, 0.24)" ,
                     borderRadius: "10px 10px 10px 10px",
                     paddingTop: "1em",
                     paddingBottom: "0.5em",
@@ -303,7 +307,7 @@ const News: React.FC<OverviewProps> = (id) => {
                       year: "numeric",
                     })}
                   </Typography>
-                  <Typography>Time: {item.time}</Typography>
+                  <Typography>Time: {item.time}-{item.endTime}</Typography>
                 </Box>
               </Box>
             ))
@@ -332,24 +336,26 @@ const News: React.FC<OverviewProps> = (id) => {
               <Box
                 key={index}
                 sx={{
-                  marginLeft: "1%",
+                  marginLeft: "3%",
                   marginRight: "3%",
                   marginBottom: "1em",
                   borderRadius: "10px",
-                  backgroundColor: "rgba(0, 56, 255, 0.24)",
-                  border: "2px solid rgba(0, 34, 155, 1)",
+                  backgroundColor:  item.matchType == null ?"rgba(255, 130, 0, 0.15)": "rgba(0, 56, 255, 0.24)" ,
+                  border:  item.matchType == null ? "2px solid rgba(255, 130, 0, 0.6)":"2px solid rgba(0, 34, 155, 1)",
                 }}
               >
                 <Box
                   sx={{
-                    backgroundColor: "rgba(0, 56, 255, 0.24)",
+                    backgroundColor:  item.matchType == null ?"rgba(255, 130, 0, 0.15)": "rgba(0, 56, 255, 0.24)" ,
                     borderRadius: "10px 10px 10px 10px",
                     paddingTop: "1em",
                     paddingBottom: "0.5em",
+                    paddingLeft: "1em",
+                    paddingRight: "1em",
                   }}
                 >
                   <Typography variant="h6">
-                    {item.matchType == null ? "Zápas" : "Trénink"} -{" "}
+                  {item.matchType == null ? "Trénink" : "Zápas"} -{" "}
                     {item.opponentName}
                   </Typography>
                   <Typography>
@@ -360,7 +366,7 @@ const News: React.FC<OverviewProps> = (id) => {
                       year: "numeric",
                     })}
                   </Typography>
-                  <Typography>Time: {item.time}</Typography>
+                  <Typography>Time: {item.time}-{item.endTime}</Typography>
                 </Box>
               </Box>
             ))

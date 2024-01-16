@@ -37,7 +37,7 @@ const HowToUse: React.FC = () => {
                                 </div>
                                 <div className="DecsDiv">
                                     <Typography sx={{ fontSize: '1.4vw', textAlign: 'center', justifyContent: 'center',fontFamily:"Roboto", fontWeight:"500"  }}>
-                                        Vytvořte Vás klub, do apliace a pozvěte všechny členy klubu do akplikace.
+                                        Vytvořte váš klub, pozvěte všechny členy klubu do aplikace.
                                     </Typography>
                                 </div>
                             </div>
@@ -62,7 +62,7 @@ const HowToUse: React.FC = () => {
                                 </div>
                                 <div className="DecsDiv">
                                     <Typography sx={{ fontSize: '1.4vw', textAlign: 'center', justifyContent: 'center',fontFamily:"Roboto", fontWeight:"500"  }}>
-                                        Začněte aplikaci používat a využívat všechny její funkce, mějte lepší přehled o svém klubu.
+                                        Začněte aplikaci používat a využívat všechny její funkce, mějte lepší přehled o vašem klubu.
                                     </Typography>
                                 </div>
                             </div>

@@ -284,12 +284,12 @@ const Overview: React.FC<OverviewProps> = (id) => {
             borderRadius: "10px",
             backgroundColor:
               item.matchType == null
-                ? "rgba(0, 56, 255, 0.24)"
-                : "rgba(255, 130, 0, 0.15)",
+                ? "rgba(255, 130, 0, 0.15)"
+                :"rgba(0, 56, 255, 0.24)" ,
             border:
               item.matchType == null
-                ? "2px solid rgba(0, 34, 155, 1)"
-                : "2px solid rgba(255, 130, 0, 0.6)",
+                ? "2px solid rgba(255, 130, 0, 0.6)"
+                : "2px solid rgba(0, 34, 155, 1)",
           }}
         >
           <Box
@@ -298,15 +298,15 @@ const Overview: React.FC<OverviewProps> = (id) => {
               paddingRight: "1em",
               backgroundColor:
                 item.matchType == null
-                  ? "rgba(0, 56, 255, 0.24)"
-                  : "rgba(255, 130, 0, 0.15)",
+                  ? "rgba(255, 130, 0, 0.15)"
+                  : "rgba(0, 56, 255, 0.24)",
               borderRadius: "10px 10px 10px 10px",
               paddingTop: "1em",
               paddingBottom: "0.5em",
             }}
           >
             <Typography variant="h6">
-              {item.matchType == null ? "Zápas" : "Trénink"} -{" "}
+              {item.matchType == null ? "Trénink" : "Zápas"} -{" "}
               {item.opponentName}
             </Typography>
             <Typography>
