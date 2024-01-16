@@ -15,6 +15,7 @@ const Attendance: React.FC<AttendanceProps> = ({ subteamId }) => {
 
   return (
     <Box sx={{ marginLeft: "2%", marginRight: "2%" }}>
+      <Box sx={{marginLeft:"auto", marginRight:"auto", textAlign: "center"}}>
       <ButtonGroup>
         <Button
           variant={selectedAttendance === "training" ? "contained" : "outlined"}
@@ -31,6 +32,7 @@ const Attendance: React.FC<AttendanceProps> = ({ subteamId }) => {
           Zápasy
         </Button>
       </ButtonGroup>
+      </Box>
 
       {selectedAttendance === "training" ? (
         <TrainingAttendance subteamId={subteamId} />
