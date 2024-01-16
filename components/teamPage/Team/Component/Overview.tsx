@@ -182,12 +182,14 @@ const Overview: React.FC<OverviewProps> = (id) => {
     return itemDate >= nextWeek && itemDate <= endOfNextWeek;
   });
 
+  console.log(nextWeekFilteredArray);
+
   const nextWeekMatchCount = nextWeekFilteredArray.filter(
-    (item) => item.matchType !== null
+    (item) => item.matchType != null
   ).length;
 
   const nextWeekTrainingCount = nextWeekFilteredArray.filter(
-    (item) => item.matchType === null
+    (item) => item.matchType == null
   ).length;
 
   const filteredArray = sortedArray.filter((item) => {
