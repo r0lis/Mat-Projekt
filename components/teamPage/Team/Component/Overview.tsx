@@ -1,5 +1,11 @@
 import React from "react";
-import { Box, Card, CardContent, Typography } from "@mui/material";
+import {
+  Box,
+  Card,
+  CardContent,
+  CircularProgress,
+  Typography,
+} from "@mui/material";
 import { gql, useQuery } from "@apollo/client";
 
 const GET_ALL_MATCHES_BY_SUBTEAM_ID = gql`
@@ -115,7 +121,18 @@ const Overview: React.FC<OverviewProps> = (id) => {
   });
 
   if (matchLoading || trainingsLoading) {
-    return <p>Loading...</p>;
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "80vh",
+        }}
+      >
+        <CircularProgress color="primary" size={50} />
+      </Box>
+    );
   }
 
   if (matchError || trainingsError) {
@@ -155,7 +172,7 @@ const Overview: React.FC<OverviewProps> = (id) => {
   ).length;
 
   const nextWeek = new Date(today);
-  nextWeek.setDate(today.getDate() + 7);
+  nextWeek.setDate(today.getDate() + 6);
 
   const endOfNextWeek = new Date(nextWeek);
   endOfNextWeek.setDate(endOfNextWeek.getDate() + 6);
@@ -194,16 +211,29 @@ const Overview: React.FC<OverviewProps> = (id) => {
           display: "flex",
           justifyContent: "space-around",
           marginBottom: "1em",
-          marginTop:"1.5em",
+          marginTop: "1.5em",
         }}
       >
         <Card
-          sx={{ width: "35%", boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.2)" }}
+          sx={{
+            width: "35%",
+            boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.2)",
+            borderRadius: "10px",
+            border: "2px solid black",
+          }}
         >
-          <Typography sx={{ textAlign: "center", fontWeight: "500", paddingTop:"0.5em" }}>
-            {startOfWeek.toLocaleDateString("cs-CZ")} -{" "}
-            {endOfWeek.toLocaleDateString("cs-CZ")}
-          </Typography>
+          <Box sx={{ borderBottom: "2px solid black", paddingBottom: "0.5em" }}>
+            <Typography
+              sx={{
+                textAlign: "center",
+                fontWeight: "500",
+                paddingTop: "0.5em",
+              }}
+            >
+              {startOfWeek.toLocaleDateString("cs-CZ")} -{" "}
+              {endOfWeek.toLocaleDateString("cs-CZ")}
+            </Typography>
+          </Box>
           <CardContent sx={{ paddingLeft: "2em", paddingRight: "2em" }}>
             <Typography variant="h6">Tréninky tento týden</Typography>
             <Typography>{trainingCount}</Typography>
@@ -214,12 +244,25 @@ const Overview: React.FC<OverviewProps> = (id) => {
           </CardContent>
         </Card>
         <Card
-          sx={{ width: "35%", boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.2)" }}
+          sx={{
+            width: "35%",
+            boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.2)",
+            borderRadius: "10px",
+            border: "2px solid black",
+          }}
         >
-          <Typography sx={{ textAlign: "center", fontWeight: "500", paddingTop:"0.5em" }}>
-            {nextWeek.toLocaleDateString("cs-CZ")} -{" "}
-            {endOfNextWeek.toLocaleDateString("cs-CZ")}
-          </Typography>
+          <Box sx={{ borderBottom: "2px solid black", paddingBottom: "0.5em" }}>
+            <Typography
+              sx={{
+                textAlign: "center",
+                fontWeight: "500",
+                paddingTop: "0.5em",
+              }}
+            >
+              {nextWeek.toLocaleDateString("cs-CZ")} -{" "}
+              {endOfNextWeek.toLocaleDateString("cs-CZ")}
+            </Typography>
+          </Box>
 
           <CardContent sx={{ paddingLeft: "2em", paddingRight: "2em" }}>
             <Typography variant="h6">Tréninky nadcházející týden</Typography>
@@ -239,15 +282,24 @@ const Overview: React.FC<OverviewProps> = (id) => {
             marginRight: "3%",
             marginBottom: "1em",
             borderRadius: "10px",
-            backgroundColor: "rgba(0, 56, 255, 0.24)",
-            border: "2px solid rgba(0, 34, 155, 1)",
+            backgroundColor:
+              item.matchType == null
+                ? "rgba(0, 56, 255, 0.24)"
+                : "rgba(255, 130, 0, 0.15)",
+            border:
+              item.matchType == null
+                ? "2px solid rgba(0, 34, 155, 1)"
+                : "2px solid rgba(255, 130, 0, 0.6)",
           }}
         >
           <Box
             sx={{
               paddingLeft: "1em",
               paddingRight: "1em",
-              backgroundColor: "rgba(0, 56, 255, 0.24)",
+              backgroundColor:
+                item.matchType == null
+                  ? "rgba(0, 56, 255, 0.24)"
+                  : "rgba(255, 130, 0, 0.15)",
               borderRadius: "10px 10px 10px 10px",
               paddingTop: "1em",
               paddingBottom: "0.5em",
@@ -265,7 +317,9 @@ const Overview: React.FC<OverviewProps> = (id) => {
                 year: "numeric",
               })}
             </Typography>
-            <Typography>Čas: {item.time}-{item.endTime}</Typography>
+            <Typography>
+              Čas: {item.time}-{item.endTime}
+            </Typography>
           </Box>
         </Box>
       ))}

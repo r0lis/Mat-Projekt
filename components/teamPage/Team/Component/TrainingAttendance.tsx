@@ -168,7 +168,7 @@ const TrainingAttendance: React.FC<props> = (id) => {
       <Box sx={{ marginTop: "0.5em", marginBottom: "0.5em" }}>
         <Typography variant="h5">Docházka hráčů</Typography>
       </Box>
-      <Box sx={{ marginBottom: "1em", display: "flex", marginTop: "1em" }}>
+      <Box sx={{ marginBottom: "1em", display: "flex", marginTop: "1.5em" }}>
         <Typography
           sx={{ fontSize: "1.2em", fontWeight: "400", marginRight: "1.5em" }}
         >

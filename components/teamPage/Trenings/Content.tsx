@@ -437,8 +437,8 @@ const Content: React.FC<Props> = ({ teamId }) => {
                     marginRight: "3%",
                     marginBottom: "2em",
                     borderRadius: "10px",
-                    backgroundColor: "rgba(0, 56, 255, 0.24)",
-                    border: "2px solid rgba(0, 34, 155, 1)",
+                    backgroundColor: "rgba(255, 130, 0, 0.15)",
+                    border: "2px solid rgba(255, 130, 0, 1)",
                   }}
                   key={training.matchId}
                 >
@@ -446,9 +446,9 @@ const Content: React.FC<Props> = ({ teamId }) => {
                     sx={{
                       paddingLeft: "1em",
                       paddingRight: "1em",
-                      backgroundColor: "rgba(0, 56, 255, 0.24)",
+                      backgroundColor: "rgba(255, 130, 0, 0.15)",
                       borderRadius: "10px 10px 0 0",
-                      borderBottom: "2px solid rgba(0, 34, 155, 1)",
+                      borderBottom: "2px solid rgba(255, 130, 0, 1)",
                       paddingTop: "1em",
                       paddingBottom: "0.5em",
                     }}
@@ -472,13 +472,13 @@ const Content: React.FC<Props> = ({ teamId }) => {
 
                         if (isTrainingPassed) {
                           return (
-                            <Typography variant="body2" sx={{ color: "green" }}>
+                            <Typography variant="body2" sx={{ }}>
                               Proběhl
                             </Typography>
                           );
                         } else if (isTrainingToday) {
                           return (
-                            <Typography variant="body2" sx={{ color: "blue" }}>
+                            <Typography variant="body2" sx={{ color: "" }}>
                               Dnes
                             </Typography>
                           );
@@ -486,7 +486,7 @@ const Content: React.FC<Props> = ({ teamId }) => {
                           return (
                             <Typography
                               variant="body2"
-                              sx={{ color: "orange" }}
+                              sx={{ color: "" }}
                             >
                               Zítra
                             </Typography>
@@ -833,9 +833,9 @@ const Content: React.FC<Props> = ({ teamId }) => {
                     sx={{
                       paddingLeft: "1em",
                       paddingRight: "1em",
-                      backgroundColor: "rgba(0, 56, 255, 0.15)",
+                      backgroundColor: "rgba(255, 130, 0, 0.15)",
                       borderRadius: "0px 0px 10px 10px",
-                      borderTop: "2px solid rgba(0, 34, 155, 1)",
+                      borderTop: "2px solid rgba(255, 130, 0, 1)",
                       paddingBottom: "0.5em",
                       paddingTop: "0.5em",
                     }}

@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Typography } from "@mui/material";
+import { Box, CircularProgress, Typography } from "@mui/material";
 import { gql, useQuery } from "@apollo/client";
 
 const GET_ALL_MATCHES_BY_SUBTEAM_ID = gql`
@@ -111,7 +111,18 @@ const News: React.FC<OverviewProps> = (id) => {
   });
 
   if (matchLoading || trainingsLoading) {
-    return <p>Loading...</p>;
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "80vh",
+        }}
+      >
+        <CircularProgress color="primary" size={50} />
+      </Box>
+    );
   }
 
   if (matchError || trainingsError) {
@@ -208,15 +219,15 @@ const News: React.FC<OverviewProps> = (id) => {
                   marginRight: "3%",
                   marginBottom: "1em",
                   borderRadius: "10px",
-                  backgroundColor: "rgba(0, 56, 255, 0.24)",
-                  border: "2px solid rgba(0, 34, 155, 1)",
+                  backgroundColor:  item.matchType == null ? "rgba(0, 56, 255, 0.24)":"rgba(255, 130, 0, 0.15)",
+                  border:  item.matchType == null ? "2px solid rgba(0, 34, 155, 1)":"2px solid rgba(255, 130, 0, 0.6)",
                 }}
               >
                 <Box
                   sx={{
                     paddingLeft: "1em",
                     paddingRight: "1em",
-                    backgroundColor: "rgba(0, 56, 255, 0.24)",
+                    backgroundColor: item.matchType == null ? "rgba(0, 56, 255, 0.24)":"rgba(255, 130, 0, 0.15)",
                     borderRadius: "10px 10px 10px 10px",
                     paddingTop: "1em",
                     paddingBottom: "0.5em",

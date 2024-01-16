@@ -205,8 +205,8 @@ const PastTraining: React.FC<Props> = ({ teamId }) => {
                     marginRight: "3%",
                     marginBottom: "1em",
                     borderRadius: "10px",
-                    backgroundColor: "rgba(0, 56, 255, 0.24)",
-                    border: "2px solid rgba(0, 34, 155, 1)",
+                    backgroundColor: "rgba(255, 130, 0, 0.15)",
+                    border: "2px solid rgba(255, 130, 0, 0.6)",
                   }}
                   key={training.matchId}
                 >
@@ -214,7 +214,7 @@ const PastTraining: React.FC<Props> = ({ teamId }) => {
                     sx={{
                       paddingLeft: "0.5em",
                       paddingRight: "0.5em",
-                      backgroundColor: "rgba(0, 56, 255, 0.24)",
+                      backgroundColor: "rgba(255, 130, 0, 0.15)",
                       borderRadius: "10px 10px 10px 10px",
                       paddingTop: "1em",
                       paddingBottom: "0.5em",
