@@ -146,7 +146,6 @@ const Members: React.FC<MembersProps> = (subteamId) => {
   const userEmail = user?.email;
   const [updateSubteamMember] = useMutation(UPDATE_SUBTEAM_MEMBER);
 
-
   const handleCheckboxChange = (
     email: string,
     role: string,
@@ -159,14 +158,12 @@ const Members: React.FC<MembersProps> = (subteamId) => {
     if (role === "1") {
       // If Role is "1", do nothing, already handled in useEffect
     } else {
-      // If Role is not "1", toggle the member in addMembers array
       if (memberIndex !== -1) {
         setAddMembers((prevMembers) => [
           ...prevMembers.slice(0, memberIndex),
           ...prevMembers.slice(memberIndex + 1),
         ]);
       } else {
-        // Convert role to string before updating state
         setAddMembers((prevMembers) => [
           ...prevMembers,
           { email, role: String(role), position },
@@ -242,7 +239,6 @@ const Members: React.FC<MembersProps> = (subteamId) => {
         },
       });
 
-      // Optionally, you can reset the state or perform other actions after successful update
       setAddMembers([]);
       setAddMember(false);
       refetch();

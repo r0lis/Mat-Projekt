@@ -16,6 +16,7 @@ import { Select, MenuItem } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
 import HelpIcon from "@mui/icons-material/Help";
+import { authUtils } from "@/firebase/auth.utils";
 
 const GET_ALL_MATCHES_BY_SUBTEAM_ID = gql`
   query GetAllTrainingBySubteamId($subteamId: String!) {
@@ -98,6 +99,7 @@ const calculateAttendancePercentage = (attendance: number[]): number => {
 };
 
 const TrainingAttendance: React.FC<props> = (id) => {
+  const CurrentUserEmail = authUtils.getCurrentUser()?.email;
   const subteamId = id.subteamId;
 
   const {
@@ -127,10 +129,24 @@ const TrainingAttendance: React.FC<props> = (id) => {
 
   const matches: Training[] = matchData.getAllTrainingBySubteamId;
   const subteamDetail = subteamData.getCompleteSubteamDetail;
-  const filteredMembers =
-    subteamDetail?.subteamMembers.filter(
-      (member: { role: string }) => member.role === "3"
-    ) || [];
+  const currentUserMember = subteamDetail?.subteamMembers.find((member : SubteamMember) => member.email === CurrentUserEmail);
+
+  if (currentUserMember) {
+    console.log("Current User Role:", currentUserMember.role);
+  } else {
+    console.log("Current User not found in Subteam Members");
+  }
+  let filteredMembers: SubteamMember[] = [];
+  if (currentUserMember && currentUserMember.role === '3') {
+    // Pokud je aktuální uživatel s rolí 3, pak ukazuj pouze jeho
+    filteredMembers = [currentUserMember];
+  } else {
+    // Jinak filtrovat všechny členy s rolí 3
+    filteredMembers =
+      subteamDetail?.subteamMembers.filter(
+        (member: SubteamMember) => member.role === "3"
+      ) || [];
+  }
   const sortedMatches = [...matches].sort(
     (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
   );
