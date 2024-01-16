@@ -9,7 +9,7 @@ const Footer: React.FC = () => {
       <div className="footerContainerStyle">
         <div className="todoStyle">
           <div className="columnStyle">
-            <p>LOGO NAZEV</p>
+            <p>LOGO ProFlorbal</p>
             <span style={{ fontSize: "1.2vw" }}>
               <p>Aplikace pro florbalové kluby</p>
               <p>Efektivní komunikace</p>
@@ -20,7 +20,7 @@ const Footer: React.FC = () => {
           </div>
 
           <div className="columnStyle">
-            <p>Pro více informací nás kontaktujte</p>
+            <p>Kontakty: </p>
             <span style={{ fontSize: "1.2vw" }}>
               <p>appteammanager@gmail.com</p>
               <p>Lukáš Rolenec</p>

@@ -14,9 +14,8 @@ import {
   Menu,
   Toolbar,
 } from "@mui/material"; // Importujte CircularProgress z MUI
-import ChatIcon from "@mui/icons-material/Chat";
+import HomeIcon from "@mui/icons-material/Home";
 import CircleNotificationsIcon from "@mui/icons-material/CircleNotifications";
-import demoUser from "@/public/assets/demoUser.png";
 import { authUtils } from "../../../firebase/auth.utils";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
@@ -26,6 +25,8 @@ const GET_USER_INFO = gql`
       Name
       Surname
       Id
+      DateOfBirth
+      Picture
     }
   }
 `;
@@ -53,6 +54,8 @@ const Navbar: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
   const surname = userInfoData?.getUserByNameAndSurname.Surname || "";
   const id = userInfoData?.getUserByNameAndSurname.Id || "";
+  const userPicture = userInfoData?.getUserByNameAndSurname.Picture || "";
+  const initials = name[0] + surname[0];
 
   const handleOpenMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl2(event.currentTarget);
@@ -168,7 +171,7 @@ const Navbar: React.FC = () => {
           >
             <Box sx={{ display: "flex", marginTop: "14px" }}>
               <Link href={`/`}>
-                <ChatIcon sx={{ color: "white" }} />
+                <HomeIcon sx={{ color: "white" }} />
               </Link>
             </Box>
           </IconButton>
@@ -227,16 +230,15 @@ const Navbar: React.FC = () => {
                               }}
                             >
                               {userInfoLoading ? (
-                              <Box
-                              sx={{
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                
-                              }}
-                            >
-                              <CircularProgress color="primary" size={30} />
-                            </Box>
+                                <Box
+                                  sx={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                  }}
+                                >
+                                  <CircularProgress color="primary" size={30} />
+                                </Box>
                               ) : userInfoError ? (
                                 "Chyba"
                               ) : (
@@ -413,7 +415,16 @@ const Navbar: React.FC = () => {
                 marginTop: "8px",
               }}
             >
-              <Avatar alt="Remy Sharp" src={demoUser.src} />
+              <Avatar
+                sx={{
+                  height: "2.5em",
+                  width: "2.5em",
+                  marginLeft: "auto",
+                  marginRight: "1em",
+                }}
+                alt={initials}
+                src={userPicture}
+              />
             </Box>
             <Menu
               id="menu-appbar2"
