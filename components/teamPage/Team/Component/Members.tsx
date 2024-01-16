@@ -285,7 +285,7 @@ const Members: React.FC<MembersProps> = (subteamId) => {
   }
 
   return (
-    <Box>
+    <Box sx={{paddingTop:"1.5em"}}>
       {addMember ? (
         <Box>
           <Box sx={{ marginLeft: "10%" }}>

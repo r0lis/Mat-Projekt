@@ -189,38 +189,40 @@ const Overview: React.FC<OverviewProps> = (id) => {
         sx={{
           display: "flex",
           justifyContent: "space-around",
-          marginTop: "1em",
           marginBottom: "1em",
+          marginTop:"1.5em",
         }}
       >
-        <Card>
-          <Typography sx={{textAlign:"center"}}>
+        <Card
+          sx={{ width: "35%", boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.2)" }}
+        >
+          <Typography sx={{ textAlign: "center", fontWeight: "500", paddingTop:"0.5em" }}>
             {startOfWeek.toLocaleDateString("cs-CZ")} -{" "}
             {endOfWeek.toLocaleDateString("cs-CZ")}
           </Typography>
-          <CardContent>
+          <CardContent sx={{ paddingLeft: "2em", paddingRight: "2em" }}>
             <Typography variant="h6">Tréninky tento týden</Typography>
-            <Typography></Typography>
             <Typography>{trainingCount}</Typography>
           </CardContent>
-          <CardContent>
+          <CardContent sx={{ paddingLeft: "2em", paddingRight: "2em" }}>
             <Typography variant="h6">Zápasy tento týden</Typography>
             <Typography>{matchCount}</Typography>
           </CardContent>
         </Card>
-        <Card>
-        <Typography sx={{textAlign:"center"}}>
+        <Card
+          sx={{ width: "35%", boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.2)" }}
+        >
+          <Typography sx={{ textAlign: "center", fontWeight: "500", paddingTop:"0.5em" }}>
             {nextWeek.toLocaleDateString("cs-CZ")} -{" "}
             {endOfNextWeek.toLocaleDateString("cs-CZ")}
           </Typography>
 
-          <CardContent>
+          <CardContent sx={{ paddingLeft: "2em", paddingRight: "2em" }}>
             <Typography variant="h6">Tréninky nadcházející týden</Typography>
             <Typography>{nextWeekTrainingCount}</Typography>
           </CardContent>
-          <CardContent>
+          <CardContent sx={{ paddingLeft: "2em", paddingRight: "2em" }}>
             <Typography variant="h6">Zápasy nadcházející týden</Typography>
-
             <Typography>{nextWeekMatchCount}</Typography>
           </CardContent>
         </Card>

@@ -14,7 +14,7 @@ const Attendance: React.FC<AttendanceProps> = ({ subteamId }) => {
   >("training");
 
   return (
-    <Box sx={{ marginLeft: "2%", marginRight: "2%" }}>
+    <Box sx={{ marginLeft: "2%", marginRight: "2%", marginTop:"1.5em", paddingTop:"1.5em" }}>
       <Box sx={{marginLeft:"auto", marginRight:"auto", textAlign: "center"}}>
       <ButtonGroup>
         <Button

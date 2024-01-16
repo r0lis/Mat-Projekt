@@ -366,7 +366,7 @@ const Content: React.FC<ContentProps> = ({ subteamId, idTeam }) => {
           sx={{
             boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.3)",
             width: "100%",
-            padding: "26px 0px 26px 0px",
+            padding: "0px 0px 26px 0px",
             borderRadius: "15px",
             marginTop: "1em",
             minHeight: "100vh",
