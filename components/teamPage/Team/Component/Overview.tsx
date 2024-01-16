@@ -194,7 +194,7 @@ const Overview: React.FC<OverviewProps> = (id) => {
         }}
       >
         <Card>
-          <Typography>
+          <Typography sx={{textAlign:"center"}}>
             {startOfWeek.toLocaleDateString("cs-CZ")} -{" "}
             {endOfWeek.toLocaleDateString("cs-CZ")}
           </Typography>
@@ -209,7 +209,7 @@ const Overview: React.FC<OverviewProps> = (id) => {
           </CardContent>
         </Card>
         <Card>
-          <Typography>
+        <Typography sx={{textAlign:"center"}}>
             {nextWeek.toLocaleDateString("cs-CZ")} -{" "}
             {endOfNextWeek.toLocaleDateString("cs-CZ")}
           </Typography>
