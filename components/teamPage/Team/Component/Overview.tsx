@@ -169,6 +169,13 @@ const Overview: React.FC<OverviewProps> = (id) => {
     (item) => item.matchType === null
   ).length;
 
+  const filteredArray = sortedArray.filter((item) => {
+    const itemDate = new Date(item.date + " " + item.time);
+    const startOfWeekMinusOne = new Date(startOfWeek);
+    startOfWeekMinusOne.setDate(startOfWeekMinusOne.getDate() - 1);
+    return itemDate >= startOfWeekMinusOne;
+  });
+
   return (
     <Box
       sx={{
@@ -218,7 +225,7 @@ const Overview: React.FC<OverviewProps> = (id) => {
           </CardContent>
         </Card>
       </Box>
-      {sortedArray.map((item, index) => (
+      {filteredArray.map((item, index) => (
         <Box
           key={index}
           sx={{
