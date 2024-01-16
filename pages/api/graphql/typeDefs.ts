@@ -44,6 +44,7 @@ export const typeDefs = gql`
     subteamIdSelected: String! 
     opponentName: String!
     selectedHallId: String!
+    endTime: String!
     date: String!
     time: String!
     selectedHallPosition: String
@@ -57,6 +58,7 @@ export const typeDefs = gql`
     opponentName: String!
     selectedTrainingHallId: String!
     date: String!
+    endTime: String!
     time: String!
     description: String!
     players: [String!]!
@@ -71,6 +73,7 @@ export const typeDefs = gql`
     selectedHallId: String!
     selectedHallPosition: String
     date: String!
+    endTime: String!
     time: String!
     selectedMembers: [String!]
     selectedPlayers: [String!]
@@ -85,6 +88,7 @@ export const typeDefs = gql`
     subteamIdSelected: String!
     opponentName: String!
     selectedHallId: String!
+    endTime: String!
     date: String!
     time: String!
     description: String!

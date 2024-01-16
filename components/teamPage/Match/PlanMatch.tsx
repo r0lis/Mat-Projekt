@@ -42,6 +42,7 @@ const GET_MATCHES_BY_SUBTEAM = gql`
         selectedHallId
         subteamIdSelected
         date
+        endTime
         time
         selectedMembers
         selectedPlayers
@@ -79,6 +80,7 @@ interface Match {
   selectedPlayers: string[];
   selectedManagement: string[];
   date: string;
+  endTime: string;
   time: string;
   selectedMembers: string[];
   matchType: string;
@@ -215,8 +217,8 @@ const PlanMatch: React.FC<Props> = ({ teamId }) => {
                 key={match.matchId}>
                 <Box
                   sx={{
-                    paddingLeft: "1em",
-                    paddingRight: "1em",
+                    paddingLeft: "0.5em",
+                    paddingRight: "0.5em",
                     backgroundColor: "rgba(0, 56, 255, 0.24)",
                     borderRadius: "10px 10px 10px 10px",
                     paddingTop: "1em",
@@ -226,7 +228,7 @@ const PlanMatch: React.FC<Props> = ({ teamId }) => {
                   <Typography variant="h6">
                     Zápas Protivník: {match.opponentName}
                   </Typography>
-                  <Box sx={{ display: "flex" }}>
+                  <Box sx={{ display: "flex", }}>
                     <Typography>
                       Datum:{" "}
                       {match.date &&
@@ -236,8 +238,8 @@ const PlanMatch: React.FC<Props> = ({ teamId }) => {
                           year: "numeric",
                         })}
                     </Typography>
-                    <Typography sx={{ marginLeft: "1em" }}>
-                      Čas: {match.time}
+                    <Typography sx={{ marginLeft: "0.5em" }}>
+                      Čas: {match.time}-{match.endTime}
                     </Typography>
                     <Box sx={{ marginLeft: "auto" }}>
                       {isRole3 && (

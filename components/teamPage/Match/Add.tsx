@@ -123,6 +123,7 @@ const AddMatch: React.FC<Props> = ({ teamId, closeAddMatch }) => {
   const [selectedHallId, setSelectedHallId] = useState<string | null>(null);
   const [selectedHallLocation, setSelectedHallLocation] = useState<string>("");
   const [time, setTime] = useState<string>("");
+  const [endTime, setEndTime] = useState<string>("");
   const [selectedMembers, setSelectedMembers] = useState<string[]>([]);
   const [matchType, setMatchType] = useState<string>("home");
   const [completeData, setCompleteData] = useState<any>(null);
@@ -278,7 +279,7 @@ const AddMatch: React.FC<Props> = ({ teamId, closeAddMatch }) => {
       setErrorMessages((prevMessages) => [...prevMessages, "Vyberte halu."]);
     }
 
-    if (!date || !time) {
+    if (!date || !time || !endTime) {
       setErrorMessages((prevMessages) => [
         ...prevMessages,
         "Zadejte platné datum a čas.",
@@ -328,6 +329,7 @@ const AddMatch: React.FC<Props> = ({ teamId, closeAddMatch }) => {
       date,
       selectedHallPosition: selectedHallLocation,
       time,
+      endTime,
       players,
       management,
       matchType,
@@ -418,10 +420,29 @@ const AddMatch: React.FC<Props> = ({ teamId, closeAddMatch }) => {
           </Box>
           <Box>
             <TextField
-              label="Čas"
+              label="Začátek"
               type="time"
               value={time}
               onChange={handleTimeChange}
+              sx={{ width: "50%", marginTop: "1em" }}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Typography variant="body2">Hodina</Typography>
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Box>
+          <Box>
+            <TextField
+              label="Konec"
+              type="time"
+              value={endTime}
+              onChange={(e) => setEndTime(e.target.value)}
               sx={{ width: "50%", marginTop: "1em" }}
               InputLabelProps={{
                 shrink: true,

@@ -11,6 +11,7 @@ const GET_ALL_MATCHES_BY_SUBTEAM_ID = gql`
       opponentName
       selectedHallId
       date
+      endTime
       time
       selectedMembers
       selectedPlayers
@@ -34,11 +35,12 @@ const GET_ALL_TRAININGS_BY_SUBTEAM_ID = gql`
       opponentName
       selectedHallId
       date
+      endTime
       time
+      endTime
       selectedMembers
       selectedPlayers
       selectedManagement
-
       attendance {
         player
         hisAttendance
@@ -61,6 +63,7 @@ interface Match {
   selectedManagement: string[];
   date: string;
   time: string;
+  endTime: string;
   selectedMembers: string[];
   selectedHallPosition: string;
   matchType: string;
@@ -79,6 +82,7 @@ interface Training {
   selectedPlayers: string[];
   selectedManagement: string[];
   date: string;
+  endTime: string;
   time: string;
   description: string;
   matchType: string;
@@ -261,7 +265,7 @@ const Overview: React.FC<OverviewProps> = (id) => {
                 year: "numeric",
               })}
             </Typography>
-            <Typography>Čas: {item.time}</Typography>
+            <Typography>Čas: {item.time}-{item.endTime}</Typography>
           </Box>
         </Box>
       ))}

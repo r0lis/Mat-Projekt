@@ -56,6 +56,7 @@ const GET_TRAININGS_BY_SUBTEAM = gql`
         opponentName
         selectedHallId
         subteamIdSelected
+        endTime
         description
         date
         time
@@ -141,6 +142,7 @@ interface Training {
   opponentName: string;
   selectedHallId: string;
   subteamIdSelected: string;
+  endTime: string;
   selectedPlayers: string[];
   selectedManagement: string[];
   date: string;
@@ -505,7 +507,7 @@ const Content: React.FC<Props> = ({ teamId }) => {
                           })}
                       </Typography>
                       <Typography sx={{ marginLeft: "1em" }}>
-                        Čas: {training.time}
+                        Čas: {training.time}-{training.endTime}
                       </Typography>
                       <Box sx={{ marginLeft: "auto" }}>
                         {isRole3 && (

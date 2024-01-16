@@ -56,6 +56,7 @@ const GET_MATCHES_BY_SUBTEAM = gql`
         subteamIdSelected
         selectedHallPosition
         date
+        endTime
         time
         selectedMembers
         selectedPlayers
@@ -139,6 +140,7 @@ interface Match {
   date: string;
   time: string;
   selectedMembers: string[];
+  endTime: string;
   selectedHallPosition: string;
   matchType: string;
   attendance?: {
@@ -506,7 +508,7 @@ const Content: React.FC<Props> = ({ teamId }) => {
                           })}
                       </Typography>
                       <Typography sx={{ marginLeft: "1em" }}>
-                        Čas: {match.time}
+                        Čas: {match.time} - {match.endTime}
                       </Typography>
                       <Box sx={{ marginLeft: "auto" }}>
                         {isRole3 && (

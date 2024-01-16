@@ -131,22 +131,16 @@ const TrainingAttendance: React.FC<props> = (id) => {
   const subteamDetail = subteamData.getCompleteSubteamDetail;
   const currentUserMember = subteamDetail?.subteamMembers.find((member : SubteamMember) => member.email === CurrentUserEmail);
 
-  if (currentUserMember) {
-    console.log("Current User Role:", currentUserMember.role);
-  } else {
-    console.log("Current User not found in Subteam Members");
-  }
   let filteredMembers: SubteamMember[] = [];
   if (currentUserMember && currentUserMember.role === '3') {
-    // Pokud je aktuální uživatel s rolí 3, pak ukazuj pouze jeho
     filteredMembers = [currentUserMember];
   } else {
-    // Jinak filtrovat všechny členy s rolí 3
     filteredMembers =
       subteamDetail?.subteamMembers.filter(
         (member: SubteamMember) => member.role === "3"
       ) || [];
   }
+  
   const sortedMatches = [...matches].sort(
     (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
   );

@@ -42,6 +42,7 @@ const GET_MATCHES_BY_SUBTEAM = gql`
         subteamIdSelected
         date
         time
+        endTime
         selectedMembers
         selectedPlayers
         selectedManagement
@@ -76,6 +77,7 @@ interface Training {
   subteamIdSelected: string;
   selectedPlayers: string[];
   selectedManagement: string[];
+  endTime: string;
   date: string;
   time: string;
   description: string;
@@ -218,8 +220,8 @@ const PlanTraining: React.FC<Props> = ({ teamId }) => {
               >
                 <Box
                   sx={{
-                    paddingLeft: "1em",
-                    paddingRight: "1em",
+                    paddingLeft: "0.5em",
+                    paddingRight: "0.5em",
                     backgroundColor: "rgba(0, 56, 255, 0.24)",
                     borderRadius: "10px 10px 10px 10px",
                     paddingTop: "1em",
@@ -239,8 +241,8 @@ const PlanTraining: React.FC<Props> = ({ teamId }) => {
                           year: "numeric",
                         })}
                     </Typography>
-                    <Typography sx={{ marginLeft: "1em" }}>
-                      Čas: {training.time}
+                    <Typography sx={{ marginLeft: "0.5em" }}>
+                      Čas: {training.time}-{training.endTime}
                     </Typography>
                     <Box sx={{ marginLeft: "auto" }}>
                       {isRole3 && (

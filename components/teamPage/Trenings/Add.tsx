@@ -124,6 +124,7 @@ const AddMatch: React.FC<Props> = ({ teamId, closeAddTraining }) => {
     string | null
   >(null);
   const [time, setTime] = useState<string>("");
+  const [endTime, setEndTime] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [selectedMembers, setSelectedMembers] = useState<string[]>([]);
   const [completeData, setCompleteData] = useState<any>(null);
@@ -292,7 +293,7 @@ const AddMatch: React.FC<Props> = ({ teamId, closeAddTraining }) => {
       ]);
     }
 
-    if (!date || !time) {
+    if (!date || !time || !endTime) {
       setErrorMessages((prevMessages) => [
         ...prevMessages,
         "Zadejte platné datum a čas.",
@@ -333,6 +334,7 @@ const AddMatch: React.FC<Props> = ({ teamId, closeAddTraining }) => {
       opponentName,
       selectedTrainingHallId,
       date,
+      endTime,
       description,
       time,
       players,
@@ -424,10 +426,29 @@ const AddMatch: React.FC<Props> = ({ teamId, closeAddTraining }) => {
           </Box>
           <Box>
             <TextField
-              label="Čas"
+              label="Začátek"
               type="time"
               value={time}
               onChange={handleTimeChange}
+              sx={{ width: "50%", marginTop: "1em" }}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Typography variant="body2">Hodina</Typography>
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Box>
+          <Box>
+            <TextField
+              label="Konec"
+              type="time"
+              value={endTime}
+              onChange={(e) => setEndTime(e.target.value)}
               sx={{ width: "50%", marginTop: "1em" }}
               InputLabelProps={{
                 shrink: true,

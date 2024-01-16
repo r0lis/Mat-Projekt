@@ -40,6 +40,7 @@ type AddMatchInput = {
   selectedHallId: String
   date: String
   selectedHallPosition: String
+  endTime: String
   time: String
   matchType: String
   players: [String]
@@ -50,6 +51,7 @@ type AddTrainingInput = {
   subteamIdSelected: String
   opponentName: String
   description: String
+  endTime: String
   selectedTrainingHallId: String
   date: String
   time: String
@@ -183,7 +185,7 @@ export const subteamMutations = {
       context: Context
     ) => {
       try {
-        const { subteamIdSelected, opponentName, selectedHallId, selectedHallPosition, date, time, players, management, matchType } = input;
+        const { subteamIdSelected, opponentName, selectedHallId, selectedHallPosition, date, time, endTime, players, management, matchType } = input;
   
   
         const matchId = generateRandomString(30);
@@ -197,6 +199,7 @@ export const subteamMutations = {
           selectedHallId: selectedHallId,
           selectedHallPosition: selectedHallPosition,
           date: date,
+          endTime: endTime,
           time: time,
           selectedPlayers: players,
           selectedManagement: management,
@@ -223,7 +226,7 @@ export const subteamMutations = {
       context: Context
     ) => {
       try {
-        const { subteamIdSelected, opponentName, selectedTrainingHallId, date, description, time, players, management,  } = input;
+        const { subteamIdSelected, opponentName, selectedTrainingHallId, date, endTime, description, time, players, management,  } = input;
   
   
         const matchId = generateRandomString(30);
@@ -237,6 +240,7 @@ export const subteamMutations = {
           selectedHallId: selectedTrainingHallId,
           date: date,
           time: time,
+          endTime: endTime,
           description: description,
           selectedPlayers: players,
           selectedManagement: management,
