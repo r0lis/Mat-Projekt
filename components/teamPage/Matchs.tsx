@@ -190,7 +190,7 @@ const Matchs: React.FC<Props> = (id) => {
                 Nadcházející zápasy
               </Typography>
               </Box>
-              <Box sx={{ maxHeight: "21.5em", overflowY: "auto", marginTop:"1em" }}>
+              <Box sx={{ maxHeight: "21.5em", overflowY: "auto", marginTop:"1.5em" }}>
               <PlanMatch teamId={id.teamId}/>
               </Box>
               
@@ -259,7 +259,7 @@ const Matchs: React.FC<Props> = (id) => {
               >
                 Nadcházející zápasy
               </Typography>
-              <Box sx={{maxHeight:"80vh",  overflowY:"auto",  marginTop:"1em" }}>
+              <Box sx={{maxHeight:"80vh",  overflowY:"auto",  marginTop:"1.5em" }}>
               <PlanMatch teamId={id.teamId}/>
               </Box>
             </Box>
@@ -289,7 +289,7 @@ const Matchs: React.FC<Props> = (id) => {
               >
                 Poslední zápasy
               </Typography>
-              <Box sx={{ maxHeight:"80vh", overflowY: "auto", marginTop:"1em" }}>
+              <Box sx={{ maxHeight:"80vh", overflowY: "auto", marginTop:"1.5em" }}>
               <PastMatch teamId={id.teamId}/>
               </Box>
             </Box>

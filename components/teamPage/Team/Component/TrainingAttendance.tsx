@@ -89,6 +89,14 @@ interface SubteamMember {
   position: string;
 }
 
+const calculateAttendancePercentage = (attendance: number[]): number => {
+  const totalMatches = attendance.length;
+  if (totalMatches === 0) return 0;
+
+  const totalPresence = attendance.filter((a) => a === 1).length;
+  return (totalPresence / totalMatches) * 100;
+};
+
 const TrainingAttendance: React.FC<props> = (id) => {
   const subteamId = id.subteamId;
 
@@ -182,6 +190,7 @@ const TrainingAttendance: React.FC<props> = (id) => {
                       })}
                   </TableCell>
                 ))}
+                <TableCell>Průměr (%)</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -213,8 +222,17 @@ const TrainingAttendance: React.FC<props> = (id) => {
                       </TableCell>
                     );
                   })}
+                  <TableCell>
+                    {`${Math.round(calculateAttendancePercentage(
+                      filteredMatches.map((match) => {
+                        const attendance = match.attendance?.find((a) => a.player === member.email);
+                        return attendance ? attendance.hisAttendance : 0;
+                      })
+                    ))} / 100`}
+                  </TableCell>
                 </TableRow>
               ))}
+              
             </TableBody>
           </Table>
         </TableContainer>

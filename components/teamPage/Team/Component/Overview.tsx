@@ -180,7 +180,7 @@ const Overview: React.FC<OverviewProps> = (id) => {
     <Box
       sx={{
         marginLeft: "2%",
-        marginRight: "2%",
+        paddingRight: "2%",
         maxHeight: "100vh",
         overflowY: "auto",
       }}

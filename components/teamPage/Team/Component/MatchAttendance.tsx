@@ -80,6 +80,14 @@ interface SubteamMember {
   position: string;
 }
 
+const calculateAttendancePercentage = (attendance: number[]): number => {
+  const totalMatches = attendance.length;
+  if (totalMatches === 0) return 0;
+
+  const totalPresence = attendance.filter((a) => a === 1).length;
+  return (totalPresence / totalMatches) * 100;
+};
+
 
 const MatchAttendance: React.FC<props> = (id) => {
 
@@ -122,6 +130,8 @@ const MatchAttendance: React.FC<props> = (id) => {
     return true;
   });
 
+ 
+
   return (
     <Box sx={{ marginLeft: "2%", marginRight: "2%" }}>
       <Box sx={{marginTop:"0.5em", marginBottom:"0.5em"}}>
@@ -139,7 +149,7 @@ const MatchAttendance: React.FC<props> = (id) => {
         <MenuItem value="month">Měsíc</MenuItem>
       </Select>
     </Box>
-      {filteredMembers.length > 0 ? (
+    {filteredMembers.length > 0 ? (
         <TableContainer component={Paper}>
           <Table>
             <TableHead>
@@ -149,36 +159,44 @@ const MatchAttendance: React.FC<props> = (id) => {
                   <TableCell key={match.matchId}>{match.date &&
                     new Date(match.date).toLocaleDateString("cs-CZ", {
                       day: "2-digit",
-
                       month: "2-digit",
                     })}</TableCell>
                 ))}
+                <TableCell>Průměr (%)</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {filteredMembers.map((member: SubteamMember) => (
                 <TableRow key={member.email}>
-                <TableCell>{member.name} {member.surname}</TableCell>
-                {filteredMatches.map((match) => {
-                  const attendance = match.attendance?.find((a) => a.player === member.email);
+                  <TableCell>{member.name} {member.surname}</TableCell>
+                  {filteredMatches.map((match) => {
+                    const attendance = match.attendance?.find((a) => a.player === member.email);
 
-                  return (
-                    <TableCell key={match.matchId}>
-                      {attendance ? (
-                        attendance.hisAttendance === 1 ? (
-                          <CheckCircleIcon sx={{ color: "green" }} />
-                        ) : attendance.hisAttendance === 2 ? (
-                          <CancelIcon sx={{ color: "red" }} />
+                    return (
+                      <TableCell key={match.matchId}>
+                        {attendance ? (
+                          attendance.hisAttendance === 1 ? (
+                            <CheckCircleIcon sx={{ color: "green" }} />
+                          ) : attendance.hisAttendance === 2 ? (
+                            <CancelIcon sx={{ color: "red" }} />
+                          ) : (
+                            <HelpIcon sx={{ color: "rgba(200, 198, 199, 0.8)" }} />
+                          )
                         ) : (
-                          <HelpIcon sx={{ color: "rgba(200, 198, 199, 0.8)"}} />
-                        )
-                      ) : (
-                        '-'
-                      )}
-                    </TableCell>
-                  );
-                })}
-              </TableRow>
+                          '-'
+                        )}
+                      </TableCell>
+                    );
+                  })}
+                 <TableCell>
+                    {`${Math.round(calculateAttendancePercentage(
+                      filteredMatches.map((match) => {
+                        const attendance = match.attendance?.find((a) => a.player === member.email);
+                        return attendance ? attendance.hisAttendance : 0;
+                      })
+                    ))} / 100`}
+                  </TableCell>
+                </TableRow>
               ))}
             </TableBody>
           </Table>

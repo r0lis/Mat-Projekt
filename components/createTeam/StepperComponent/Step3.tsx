@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import React from "react";
 import {
   Box,
@@ -47,6 +48,9 @@ const Step3: React.FC<Step3Props> = ({ teamEmail, onCompleteStep }) => {
 
   const teamDetails = data.getTeamByEmail;
 
+  if (!teamDetails) {
+    return <p>Team details not found.</p>;
+  }
 
   return (
     <Box sx={{ margin: "0 auto", marginTop: 10, paddingBottom: "4em" }}>
