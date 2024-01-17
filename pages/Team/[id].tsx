@@ -89,7 +89,7 @@ const Team: React.FC = () => {
 
     const handleHashChange = () => {
       const hash = window.location.hash.substring(1);
-      setActiveLink(hash || "Overview"); // Default to "Přehled" if no hash is present
+      setActiveLink(hash || "Members"); // Default to "Přehled" if no hash is present
     };
 
     window.addEventListener("resize", handleResize);

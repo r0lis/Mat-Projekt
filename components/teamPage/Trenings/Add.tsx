@@ -608,7 +608,7 @@ const AddMatch: React.FC<Props> = ({ teamId, closeAddTraining }) => {
           <Box sx={{ marginTop: "1em" }}>
             <Box sx={{ marginBottom: "0.5em" }}>
               <Button variant="contained" onClick={handleAddMatch}>
-                Přidat zápas
+                Přidat trenink
               </Button>
             </Box>
             <Box sx={{ marginBottom: "1em" }}>

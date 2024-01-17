@@ -8,10 +8,10 @@ import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import SwipeableViews from "react-swipeable-views";
 import { autoPlay } from "react-swipeable-views-utils";
-import pictureForCarousel from "../../public/assets/AppPreview.jpg";
-import pictureForCarousel2 from "../../public/assets/AppPreview2.png";
-import pictureForCarousel3 from "../../public/assets/AppPreview3.jpg";
-import pictureForCarousel4 from "../../public/assets/AppPreview4.jpg";
+import pictureForCarousel from "../../public/assets/ukazka1.png";
+import pictureForCarousel2 from "../../public/assets/ukazka2.png";
+import pictureForCarousel3 from "../../public/assets/ukazka3.png";
+import pictureForCarousel4 from "../../public/assets/ukazka4.png";
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
