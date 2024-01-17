@@ -157,6 +157,7 @@ const Overview: React.FC<OverviewProps> = (id) => {
   const startOfWeek = new Date(today);
   startOfWeek.setDate(today.getDate() - today.getDay() + 1); // Začátek týdne
 
+
   const endOfWeek = new Date(startOfWeek);
   endOfWeek.setDate(startOfWeek.getDate() + 6); // Konec týdne
 
@@ -172,7 +173,7 @@ const Overview: React.FC<OverviewProps> = (id) => {
   ).length;
 
   const nextWeek = new Date(today);
-  nextWeek.setDate(today.getDate() + 6);
+  nextWeek.setDate(today.getDate() + 5);
 
   const endOfNextWeek = new Date(nextWeek);
   endOfNextWeek.setDate(endOfNextWeek.getDate() + 6);
