@@ -296,7 +296,7 @@ const News: React.FC<OverviewProps> = (id) => {
                   }}
                 >
                   <Typography variant="h6">
-                    {item.matchType == null ? "Zápas" : "Trénink"} -{" "}
+                    {item.matchType == null ? "Trénink" : "Zápas"} -{" "}
                     {item.opponentName}
                   </Typography>
                   <Typography>
