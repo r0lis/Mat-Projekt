@@ -43,7 +43,7 @@ const Completed: React.FC<Step4Props> = ({teamEmail}) => {
     // Redirect after 10 seconds
     setTimeout(() => {
       clearInterval(interval);
-      router.push(`/Team/${teamId}`);
+      router.push(`/Team/${teamId}#Settings`);
     }, 1000);
 
     // Cleanup interval on component unmount

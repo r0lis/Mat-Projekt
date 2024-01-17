@@ -8,21 +8,6 @@ import {
 import React from "react";
 import { gql,  useQuery } from "@apollo/client";
 
-function convertToDateString(timestamp: string) {
-  const timestampNumber = parseFloat(timestamp);
-
-  const isMilliseconds = timestamp.length > 10;
-
-  const date = isMilliseconds
-    ? new Date(timestampNumber)
-    : new Date(timestampNumber * 1000);
-
-  const day = String(date.getUTCDate()).padStart(2, "0");
-  const month = String(date.getUTCMonth() + 1).padStart(2, "0");
-  const year = date.getUTCFullYear();
-
-  return `${day}.${month}.${year}`;
-}
 
 const GET_TEAM_DETAILS = gql`
   query GetTeam($teamId: String!) {
@@ -82,7 +67,7 @@ const Info: React.FC<Props> = (teamId ) => {
               Vytvořeno
             </Typography>
             <Typography sx={{ fontFamily: "Roboto" }}>
-              {convertToDateString(teamDetails.TimeCreated)}
+              17.01.2024
             </Typography>
             <Typography sx={{ fontFamily: "Roboto", fontWeight: "600" }}>
               Klubový email
