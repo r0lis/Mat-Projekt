@@ -6,6 +6,7 @@ import { Select, MenuItem } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
 import HelpIcon from "@mui/icons-material/Help";
+import { authUtils } from "@/firebase/auth.utils";
 
 const GET_ALL_MATCHES_BY_SUBTEAM_ID = gql`
   query GetAllMatchesBySubteamId($subteamId: String!) {
@@ -90,6 +91,7 @@ const calculateAttendancePercentage = (attendance: number[]): number => {
 
 
 const MatchAttendance: React.FC<props> = (id) => {
+  const CurrentUserEmail = authUtils.getCurrentUser()?.email;
 
   const subteamId = id.subteamId;
 
@@ -106,14 +108,24 @@ const MatchAttendance: React.FC<props> = (id) => {
     return <p>Loading...</p>;
   }
 
+
   if (matchError || subteamError) {
     return <p>Error: {subteamError?.message || matchError?.message}</p>;
   }
 
   const matches: Match[] = matchData.getAllMatchBySubteamId;
   const subteamDetail = subteamData.getCompleteSubteamDetail;
-  const filteredMembers = subteamDetail?.subteamMembers.filter((member: { role: string; }) => member.role === '3') || [];
-  const sortedMatches = [...matches].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+  const currentUserMember = subteamDetail?.subteamMembers.find((member : SubteamMember) => member.email === CurrentUserEmail);
+  let filteredMembers: SubteamMember[] = [];
+  if (currentUserMember && currentUserMember.role === '3') {
+    filteredMembers = [currentUserMember];
+  } else {
+    filteredMembers =
+      subteamDetail?.subteamMembers.filter(
+        (member: SubteamMember) => member.role === "3"
+      ) || [];
+  }
+    const sortedMatches = [...matches].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
   const filteredMatches = sortedMatches.filter((match) => {
     if (filterType === 'all') return true;
 
