@@ -342,7 +342,7 @@ const Content: React.FC<Props> = ({ teamId }) => {
           </Typography>
         </Box>
         <Box sx={{ padding: "1em", display: "flex" }}>
-          <Typography>Nemáte naplánovaný žádný zápas.</Typography>
+          <Typography>Nemáte naplánovaný žádný trenink.</Typography>
         </Box>
       </Box>
     );

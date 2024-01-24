@@ -126,7 +126,7 @@ const Content: React.FC<ContentProps> = ({ subteamId, idTeam }) => {
       case "overview":
         return <Overview subteamId={subteamId as string} />;
       case "wall":
-        return <Wall subteamId={subteamId} />;
+        return <Wall subteamId={subteamId as string} />;
       case "attendance":
         return <Attendance subteamId={subteamId as string} />;
       case "members":
@@ -450,6 +450,8 @@ const Content: React.FC<ContentProps> = ({ subteamId, idTeam }) => {
                
                 boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.3)",
                 height: "42.5%",
+                overflowY: "auto",
+
               }}
             >
               <Box sx={{ maxHeight: "22em", overflowY: "auto", paddingTop:"0.5em" }}>

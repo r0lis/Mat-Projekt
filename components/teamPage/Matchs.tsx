@@ -246,6 +246,7 @@ const Matchs: React.FC<Props> = (id) => {
               borderRadius: "0px 0px 15px 15px",
               boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.3)",
               maxHeight: "42.5%",
+              height: "49%",
               overflowY: "auto",
             }}
           >
