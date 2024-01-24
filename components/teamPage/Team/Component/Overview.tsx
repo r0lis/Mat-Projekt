@@ -173,7 +173,7 @@ const Overview: React.FC<OverviewProps> = (id) => {
   ).length;
 
   const nextWeek = new Date(today);
-  nextWeek.setDate(today.getDate() + 4);
+  nextWeek.setDate(today.getDate() + 5);
 
   const endOfNextWeek = new Date(nextWeek);
   endOfNextWeek.setDate(endOfNextWeek.getDate() + 6);

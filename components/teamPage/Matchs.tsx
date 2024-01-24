@@ -20,8 +20,8 @@ const GET_USER_ROLE_IN_TEAM = gql`
 `;
 
 const GET_HALL_BY_TEAM_AND_HALL_ID = gql`
-  query GetHallsByTeamId($teamId: String! ) {
-    getHallsByTeamId(teamId: $teamId,) {
+  query GetHallsByTeamId($teamId: String!) {
+    getHallsByTeamId(teamId: $teamId) {
       hallId
       name
       location
@@ -46,8 +46,12 @@ const Matchs: React.FC<Props> = (id) => {
     skip: !user,
   });
 
-  const { loading, error, data: dataHalls } = useQuery(GET_HALL_BY_TEAM_AND_HALL_ID, {
-    variables: { teamId: id.teamId,},
+  const {
+    loading,
+    error,
+    data: dataHalls,
+  } = useQuery(GET_HALL_BY_TEAM_AND_HALL_ID, {
+    variables: { teamId: id.teamId },
   });
 
   if (roleLoading || loading)
@@ -73,8 +77,6 @@ const Matchs: React.FC<Props> = (id) => {
   const closeAddMatch = () => {
     setAddMatch(false);
   };
-
-  
 
   return (
     <Box
@@ -105,25 +107,32 @@ const Matchs: React.FC<Props> = (id) => {
           >
             Zápasy
           </Typography>
-          {(role === "1" || role === "2") && dataHalls && dataHalls.getHallsByTeamId && dataHalls.getHallsByTeamId.length > 0 && (
-            <><Button
-              variant="contained"
-              onClick={() => setAddMatch(!addMatch)}
-              sx={{
-                marginLeft: "auto",
-                display: addMatch ? "none" : "block",
-              }}
-            >
-              Přidat
-            </Button><MenuIcon
-                sx={{
-                  marginLeft: addMatch ? "auto" : "1em",
-                  width: "1.5em",
-                  height: "1.5em",
-                  marginRight: "5%",
-                  color: "#404040",
-                }} /></>
-          )}
+          {(role === "1" || role === "2") &&
+            dataHalls &&
+            dataHalls.getHallsByTeamId &&
+            dataHalls.getHallsByTeamId.length > 0 && (
+              <>
+                <Button
+                  variant="contained"
+                  onClick={() => setAddMatch(!addMatch)}
+                  sx={{
+                    marginLeft: "auto",
+                    display: addMatch ? "none" : "block",
+                  }}
+                >
+                  Přidat
+                </Button>
+                <MenuIcon
+                  sx={{
+                    marginLeft: addMatch ? "auto" : "1em",
+                    width: "1.5em",
+                    height: "1.5em",
+                    marginRight: "5%",
+                    color: "#404040",
+                  }}
+                />
+              </>
+            )}
         </Box>
         <Box
           sx={{
@@ -152,7 +161,7 @@ const Matchs: React.FC<Props> = (id) => {
             </Box>
           ) : (
             <Box>
-              <Content teamId={id.teamId}/>
+              <Content teamId={id.teamId} />
             </Box>
           )}
         </Box>
@@ -168,66 +177,90 @@ const Matchs: React.FC<Props> = (id) => {
         >
           <Box
             sx={{
-              borderRadius: "15px",
               backgroundImage: `
-             linear-gradient(to bottom, #c2c3c4 60px, #ffffff 60px)
-             `,
+            linear-gradient(to bottom, #c2c3c4 60px, #ffffff 60px)
+            `,
+              boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.3)",
+              borderRadius: "15px 15px 0px 0px",
+              paddingBottom: "0.5em",
+            }}
+          >
+            <Typography
+              sx={{
+                fontSize: ["0.8rem", "1.1rem", "1.5rem"],
+                marginLeft: ["0.6rem", "1rem", "1rem"],
+                fontWeight: "600",
+                paddingTop: ["1.4rem", "1rem", "0.5em"],
+              }}
+            >
+              Nadcházející zápasy
+            </Typography>
+          </Box>
+          <Box
+            sx={{
+              borderRadius: "0px 0px 15px 15px",
+              maxHeight: "42.5%",
+              overflowY: "auto",
               boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.3)",
               height: "49%",
               display: isSmallView ? "" : "block",
             }}
           >
             <Box sx={{}}>
-              <Box>
-              <Typography
+              <Box
                 sx={{
-                  fontSize: ["0.8rem", "1.1rem", "1.5rem"],
-                  marginLeft: ["0.6rem", "1rem", "1rem"],
-                  fontWeight: "600",
-                  paddingTop: ["1.4rem", "1rem", "0.5em"],
+                  maxHeight: "21.5em",
+                  overflowY: "auto",
+                  marginTop: "0.5em",
                 }}
               >
-                Nadcházející zápasy
-              </Typography>
+                <PlanMatch teamId={id.teamId} />
               </Box>
-              <Box sx={{ maxHeight: "21.5em", overflowY: "auto", marginTop:"1.5em" }}>
-              <PlanMatch teamId={id.teamId}/>
-              </Box>
-              
             </Box>
           </Box>
           <Box
             sx={{
-              borderRadius: "15px",
               backgroundImage: `
-             linear-gradient(to bottom, #c2c3c4 60px, #ffffff 60px)
-             `,
+            linear-gradient(to bottom, #c2c3c4 60px, #ffffff 60px)
+            `,
               boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.3)",
-              height: "48%",
-              marginTop: isSmallView ? "10%" : "0%",
+              borderRadius: "15px 15px 0px 0px",
+              paddingBottom: "0.5em",
+              marginTop: isSmallView ? "8%" : "0%",
+
             }}
           >
             <Typography
               sx={{
-                paddingTop: ["0.8rem", "1rem", "0.5em"],
                 fontSize: ["0.8rem", "1.1rem", "1.5rem"],
-                marginLeft: ["0.3rem", "0.6rem", "1rem"],
+                marginLeft: ["0.6rem", "1rem", "1rem"],
                 fontWeight: "600",
-                marginBottom: "1em",
-                whiteSpace: "nowrap",
+                paddingTop: ["1.4rem", "1rem", "0.5em"],
               }}
             >
               Poslední zápasy
             </Typography>
-            <Box sx={{ maxHeight: "20.5em", overflowY: "auto", marginTop:"1em",  }}>
-              <PastMatch teamId={id.teamId}/>
-              </Box>
+          </Box>
+          <Box
+            sx={{
+              borderRadius: "0px 0px 15px 15px",
+              boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.3)",
+              maxHeight: "42.5%",
+              overflowY: "auto",
+            }}
+          >
+           
+            <Box
+              sx={{  overflowY: "auto", marginTop:"0.5em" }}
+            >
+              <PastMatch teamId={id.teamId} />
+            </Box>
           </Box>
         </Box>
       ) : (
         <Box
           sx={{
-            display: "flex", 
+            display: "flex",
             justifyContent: "space-between",
             width: "100%",
             marginTop: "1em",
@@ -238,7 +271,7 @@ const Matchs: React.FC<Props> = (id) => {
         >
           <Box
             sx={{
-              flex: 1, 
+              flex: 1,
               borderRadius: "15px",
               backgroundImage: `
         linear-gradient(to bottom, #c2c3c4 60px, #ffffff 60px)
@@ -248,7 +281,7 @@ const Matchs: React.FC<Props> = (id) => {
               display: isSmallView ? "" : "block",
             }}
           >
-            <Box sx={{maxHeight:"50vh"}}>
+            <Box sx={{ maxHeight: "50vh" }}>
               <Typography
                 sx={{
                   fontSize: ["0.8rem", "1.1rem", "1.5rem"],
@@ -259,15 +292,21 @@ const Matchs: React.FC<Props> = (id) => {
               >
                 Nadcházející zápasy
               </Typography>
-              <Box sx={{maxHeight:"80vh",  overflowY:"auto",  marginTop:"1.5em" }}>
-              <PlanMatch teamId={id.teamId}/>
+              <Box
+                sx={{
+                  maxHeight: "80vh",
+                  overflowY: "auto",
+                  marginTop: "1.5em",
+                }}
+              >
+                <PlanMatch teamId={id.teamId} />
               </Box>
             </Box>
           </Box>
 
           <Box
             sx={{
-              flex: 1, 
+              flex: 1,
               borderRadius: "15px",
               backgroundImage: `
         linear-gradient(to bottom, #c2c3c4 60px, #ffffff 60px)
@@ -278,7 +317,7 @@ const Matchs: React.FC<Props> = (id) => {
               marginLeft: isMobile ? "0.5em" : "2em",
             }}
           >
-            <Box sx={{maxHeight:"50vh"}}>
+            <Box sx={{ maxHeight: "50vh" }}>
               <Typography
                 sx={{
                   fontSize: ["0.8rem", "1.1rem", "1.5rem"],
@@ -289,8 +328,14 @@ const Matchs: React.FC<Props> = (id) => {
               >
                 Poslední zápasy
               </Typography>
-              <Box sx={{ maxHeight:"80vh", overflowY: "auto", marginTop:"1.5em" }}>
-              <PastMatch teamId={id.teamId}/>
+              <Box
+                sx={{
+                  maxHeight: "80vh",
+                  overflowY: "auto",
+                  marginTop: "1.5em",
+                }}
+              >
+                <PastMatch teamId={id.teamId} />
               </Box>
             </Box>
           </Box>

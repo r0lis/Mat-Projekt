@@ -168,57 +168,76 @@ const TreniningComponent: React.FC<Props> = (id) => {
             display: isSmallView ? "block" : "flex",
           }}
         >
+           <Box
+            sx={{
+              backgroundImage: `
+            linear-gradient(to bottom, #c2c3c4 60px, #ffffff 60px)
+            `,
+              boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.3)",
+              borderRadius: "15px 15px 0px 0px",
+              paddingBottom: "0.5em",
+            }}
+          >
+            <Typography
+              sx={{
+                fontSize: ["0.8rem", "1.1rem", "1.5rem"],
+                marginLeft: ["0.6rem", "1rem", "1rem"],
+                fontWeight: "600",
+                paddingTop: ["1.4rem", "1rem", "0.5em"],
+              }}
+            >
+                Nadcházející tréninky
+            </Typography>
+          </Box>
           <Box
             sx={{
-              borderRadius: "15px",
-              backgroundImage: `
-             linear-gradient(to bottom, #c2c3c4 60px, #ffffff 60px)
-             `,
+              borderRadius: "0px 0px 15px 15px",
               boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.3)",
-              height: "49%",
+              maxHeight: "42.5%",
+              height: "48%",
+              overflowY: "auto",
               display: isSmallView ? "" : "block",
             }}
           >
             <Box sx={{}}>
-              <Typography
-                sx={{
-                  fontSize: ["0.8rem", "1.1rem", "1.5rem"],
-                  marginLeft: ["0.6rem", "1rem", "1rem"],
-                  fontWeight: "600",
-                  paddingTop: ["1.4rem", "1rem", "0.5em"],
-                }}
-              >
-                Nadcházející tréninky
-              </Typography>
-              <Box sx={{maxHeight: "21.5em", overflowY: "auto", marginTop:"1em" }}>
+              <Box sx={{ overflowY: "auto", paddingTop:"0.5em"}}>
               <PlanTraining teamId={id.teamId}/>
               </Box>
             </Box>
           </Box>
           <Box
             sx={{
-              borderRadius: "15px",
               backgroundImage: `
-             linear-gradient(to bottom, #c2c3c4 60px, #ffffff 60px)
-             `,
+            linear-gradient(to bottom, #c2c3c4 60px, #ffffff 60px)
+            `,
               boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.3)",
-              height: "48%",
-              marginTop: isSmallView ? "10%" : "0%",
+              borderRadius: "15px 15px 0px 0px",
+              paddingBottom: "0.5em",
+              marginTop: isSmallView ? "8%" : "0%",
             }}
           >
             <Typography
               sx={{
-                paddingTop: ["0.8rem", "1rem", "0.5em"],
                 fontSize: ["0.8rem", "1.1rem", "1.5rem"],
-                marginLeft: ["0.3rem", "0.6rem", "1rem"],
+                marginLeft: ["0.6rem", "1rem", "1rem"],
                 fontWeight: "600",
-                marginBottom: "1em",
-                whiteSpace: "nowrap",
+                paddingTop: ["1.4rem", "1rem", "0.5em"],
               }}
             >
               Poslední tréninky
             </Typography>
-            <Box sx={{maxHeight: "20.5em", overflowY: "auto", marginTop:"1em" }}>
+          </Box>
+          <Box
+            sx={{
+              borderRadius: "0px 0px 15px 15px",
+              boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.3)",
+              height: "48%",
+              maxHeight: "42.5%",
+              overflowY: "auto",
+
+            }}
+          >
+            <Box sx={{ overflowY: "auto", paddingTop:"0.5em" }}>
               <PastTraining teamId={id.teamId}/>
               </Box>
           </Box>

@@ -116,8 +116,6 @@ const Content: React.FC<ContentProps> = ({ subteamId, idTeam }) => {
   const subteam = data.getSubteamDetails;
   const subteamComplete = dataComplete.getCompleteSubteamDetail;
 
- 
-
   const filteredMembers = subteamComplete.subteamMembers.filter(
     (member: SubteamMember) =>
       member.position == "1" || member.position == "2" || member.position == "3"
@@ -376,26 +374,25 @@ const Content: React.FC<ContentProps> = ({ subteamId, idTeam }) => {
         </Box>
       </Box>
       {isSmallView ? (
-        <Box
-          sx={{
-            width: isSmallView ? "23%" : "100%",
-            marginLeft: "2em",
-            marginTop: "1em",
-            display: isSmallView ? "block" : "flex",
-          }}
-        >
+        <>
           <Box
             sx={{
-              borderRadius: "15px",
-              backgroundImage: `
-             linear-gradient(to bottom, #c2c3c4 60px, #ffffff 60px)
-             `,
-              boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.3)",
-              height: "48.5%",
-              display: isSmallView ? "" : "block",
+              width: isSmallView ? "23%" : "100%",
+              marginLeft: "2em",
+              marginTop: "1em",
+              display: isSmallView ? "block" : "flex",
             }}
           >
-            <Box sx={{}}>
+            <Box
+              sx={{
+                backgroundImage: `
+            linear-gradient(to bottom, #c2c3c4 60px, #ffffff 60px)
+            `,
+                boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.3)",
+                borderRadius: "15px 15px 0px 0px",
+                paddingBottom: "0.5em",
+              }}
+            >
               <Typography
                 sx={{
                   fontSize: ["0.8rem", "1.1rem", "1.5rem"],
@@ -406,64 +403,85 @@ const Content: React.FC<ContentProps> = ({ subteamId, idTeam }) => {
               >
                 Aktuality
               </Typography>
-              <Box sx={{maxHeight:"22em", overflowY:"auto", marginTop:"1.2em" }}>
-              <News subteamId={subteamId} />
-              </Box>
             </Box>
-          </Box>
-          <Box
-            sx={{
-              borderRadius: "15px",
-              backgroundImage: `
-             linear-gradient(to bottom, #c2c3c4 60px, #ffffff 60px)
-             `,
-              boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.3)",
-              height: "48%",
-              marginTop: isSmallView ? "10%" : "0%",
-              
-            }}
-          >
-            <Typography
+            <Box
               sx={{
-                paddingTop: ["0.8rem", "1rem", "0.5em"],
-                fontSize: ["0.8rem", "1.1rem", "1.5rem"],
-                marginLeft: ["0.3rem", "0.6rem", "1rem"],
-                fontWeight: "600",
-                marginBottom: "1em",
-                whiteSpace: "nowrap",
+                borderRadius: "0px 0px 15px 15px",
+
+                boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.3)",
+                maxHeight: "42.5%",
+                overflowY: "auto",
+                display: isSmallView ? "" : "block",
               }}
             >
-              Realizační tým
-            </Typography>
-            <Box sx={{maxHeight:"22em", overflowY:"auto" }}>
-            {filteredMembers.map((member: SubteamMember) => (
-              <Box
-                key={member.email}
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  marginBottom: "1em",
-                  marginLeft: "1em",
-                 
-                }}
-              >
-                <Avatar
-                  sx={{ width: 50, height: 50, marginRight: "1em" }}
-                  alt={member.name[0] + member.surname[0]}
-                  src={member.picture}
-                />
-                <Box>
-                  <Typography sx={{fontWeight:"600"}}>
-                    {member.name} {member.surname}
-                  </Typography>
-                  <Typography sx={{color:"#454545"}}>{getPositionText(member.position)}</Typography>
+              <Box sx={{}}>
+                <Box sx={{ marginBottom: "1.2em" }}></Box>
+                <Box sx={{ overflowY: "auto" }}>
+                  <News subteamId={subteamId} />
                 </Box>
               </Box>
-            ))}
             </Box>
-             
+            <Box
+              sx={{
+                backgroundImage: `
+            linear-gradient(to bottom, #c2c3c4 60px, #ffffff 60px)
+            `,
+                boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.3)",
+                borderRadius: "15px 15px 0px 0px",
+                paddingBottom: "0.5em",
+                marginTop: isSmallView ? "10%" : "0%",
+
+              }}
+            >
+              <Typography
+                sx={{
+                  fontSize: ["0.8rem", "1.1rem", "1.5rem"],
+                  marginLeft: ["0.6rem", "1rem", "1rem"],
+                  fontWeight: "600",
+                  paddingTop: ["1.4rem", "1rem", "0.5em"],
+                }}
+              >
+                Realizační tým
+              </Typography>
+            </Box>
+            <Box
+              sx={{
+                borderRadius: "0px 0px 15px 15px",
+               
+                boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.3)",
+                height: "42.5%",
+              }}
+            >
+              <Box sx={{ maxHeight: "22em", overflowY: "auto", paddingTop:"0.5em" }}>
+                {filteredMembers.map((member: SubteamMember) => (
+                  <Box
+                    key={member.email}
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      marginBottom: "1em",
+                      marginLeft: "1em",
+                    }}
+                  >
+                    <Avatar
+                      sx={{ width: 50, height: 50, marginRight: "1em" }}
+                      alt={member.name[0] + member.surname[0]}
+                      src={member.picture}
+                    />
+                    <Box>
+                      <Typography sx={{ fontWeight: "600" }}>
+                        {member.name} {member.surname}
+                      </Typography>
+                      <Typography sx={{ color: "#454545" }}>
+                        {getPositionText(member.position)}
+                      </Typography>
+                    </Box>
+                  </Box>
+                ))}
+              </Box>
+            </Box>
           </Box>
-        </Box>
+        </>
       ) : (
         <Box
           sx={{
@@ -497,8 +515,8 @@ const Content: React.FC<ContentProps> = ({ subteamId, idTeam }) => {
               >
                 Aktuality
               </Typography>
-              <Box sx={{ overflowY:"auto", marginTop:"1.2em" }}>
-              <News subteamId={subteamId} />
+              <Box sx={{ overflowY: "auto", marginTop: "1.2em" }}>
+                <News subteamId={subteamId} />
               </Box>
             </Box>
           </Box>
@@ -512,7 +530,7 @@ const Content: React.FC<ContentProps> = ({ subteamId, idTeam }) => {
       `,
               boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.3)",
               height: "auto",
-              
+
               display: isSmallView ? "" : "block",
               marginLeft: isMobile ? "0.5em" : "2em",
             }}
@@ -529,32 +547,33 @@ const Content: React.FC<ContentProps> = ({ subteamId, idTeam }) => {
               >
                 Realizační tým
               </Typography>
-              <Box sx={{maxHeight:"22em", overflowY:"auto" }}>
-            {filteredMembers.map((member: SubteamMember) => (
-              <Box
-                key={member.email}
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  marginBottom: "1em",
-                  marginLeft: "1em",
-                 
-                }}
-              >
-                <Avatar
-                  sx={{ width: 50, height: 50, marginRight: "1em" }}
-                  alt={member.name[0] + member.surname[0]}
-                  src={member.picture}
-                />
-                <Box>
-                  <Typography sx={{fontWeight:"600"}}>
-                    {member.name} {member.surname}
-                  </Typography>
-                  <Typography sx={{color:"#454545"}}>{getPositionText(member.position)}</Typography>
-                </Box>
+              <Box sx={{ maxHeight: "22em", overflowY: "auto" }}>
+                {filteredMembers.map((member: SubteamMember) => (
+                  <Box
+                    key={member.email}
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      marginBottom: "1em",
+                      marginLeft: "1em",
+                    }}
+                  >
+                    <Avatar
+                      sx={{ width: 50, height: 50, marginRight: "1em" }}
+                      alt={member.name[0] + member.surname[0]}
+                      src={member.picture}
+                    />
+                    <Box>
+                      <Typography sx={{ fontWeight: "600" }}>
+                        {member.name} {member.surname}
+                      </Typography>
+                      <Typography sx={{ color: "#454545" }}>
+                        {getPositionText(member.position)}
+                      </Typography>
+                    </Box>
+                  </Box>
+                ))}
               </Box>
-            ))}
-            </Box>
             </Box>
           </Box>
         </Box>
