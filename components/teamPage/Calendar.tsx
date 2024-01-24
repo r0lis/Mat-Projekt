@@ -22,7 +22,6 @@ const CalendarComponent: React.FC = () => {
         setCalendarEvents([...calendarEvents, eventAddInfo.event.toPlainObject()]);
       };
     
-      // Vykreslení kalendáře FullCalendar
       return (
         <Box sx={{marginBottom:'5em'}}>
         <Box sx={{marginLeft:'1em'}}>
