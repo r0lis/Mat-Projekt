@@ -34,7 +34,7 @@ const Wall: React.FC<WallProps> = (id) => {
         {showContent ? (
           <Content subteamId={id.subteamId} />
         ) : (
-          <Add subteamId={id.subteamId} />
+          <Add subteamId={id.subteamId as string}  />
         )}
       </Box>
     </Box>

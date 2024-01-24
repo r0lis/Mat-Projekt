@@ -192,7 +192,6 @@ const News: React.FC<OverviewProps> = (id) => {
       sx={{
         marginLeft: "2%",
         marginRight: "2%",
-        maxHeight: "100vh",
         overflowY: "auto",
       }}
     >

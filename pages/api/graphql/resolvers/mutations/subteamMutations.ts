@@ -338,5 +338,32 @@ export const subteamMutations = {
       }
     },
 
+    addDiscussion: async (
+      _: any,
+      { subteamId, postText, userEmail, date }: any,
+      context: { db: { collection: (arg0: string) => { (): any; new(): any; doc: { (arg0: string): any; new(): any; }; }; }; }
+    ) => {
+      try {
+        const discussionId = generateRandomString(30);
+    
+        const newDiscussionDoc = context.db.collection("Discussion").doc(discussionId);
+    
+        const newDiscussionData = {
+          discussionId: discussionId,
+          subteamId: subteamId,
+          postText: postText,
+          userEmail: userEmail,
+          date: date,
+        };
+    
+        await newDiscussionDoc.set(newDiscussionData);
+    
+        return newDiscussionData;
+      } catch (error) {
+        console.error("Error adding discussion:", error);
+        throw error;
+      }
+    },
+
     
   };
