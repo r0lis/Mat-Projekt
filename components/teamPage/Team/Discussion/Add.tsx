@@ -47,11 +47,9 @@ const Add: React.FC<AddProps> = ({ subteamId }) => {
       },
     })
       .then((response) => {
-        // Handle success if needed
         console.log("Discussion added successfully:", response);
       })
       .catch((error) => {
-        // Handle error if needed
         console.error("Error adding discussion:", error);
       });
   };
