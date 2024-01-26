@@ -7,9 +7,9 @@ import { gql, useMutation } from "@apollo/client";
 type AddProps = {
   subteamId: string;
 };
-const ADD_WALL_MUTATION = gql`
-  mutation AddWall($input: AddWallInput!) {
-    addWall(input: $input) {
+const ADD_DISCUSSION_MUTATION = gql`
+  mutation addDiscussion($input: AddDiscussionInput!) {
+    addDiscussion(input: $input) {
       subteamId
       postText
       userEmail
@@ -24,7 +24,7 @@ const Add: React.FC<AddProps> = ({ subteamId }) => {
   const [postText, setPostText] = useState<string>("");
   const userEmail = user?.email || "";
   
-  const [addWallMutation] = useMutation(ADD_WALL_MUTATION);
+  const [addDiscussionMutation] = useMutation(ADD_DISCUSSION_MUTATION);
 
   const handlePostTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPostText(event.target.value);
@@ -34,7 +34,7 @@ const Add: React.FC<AddProps> = ({ subteamId }) => {
     const date = new Date().toISOString();
 
     try {
-      await addWallMutation({
+      await addDiscussionMutation({
         variables: { input: { subteamId, postText, userEmail, date } },
       });
 

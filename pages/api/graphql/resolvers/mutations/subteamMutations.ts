@@ -345,19 +345,23 @@ export const subteamMutations = {
       }
     },
 
-    addWall: async (
+    addDiscussion: async (
       _: any,
       { input }: { input: AddWallInput },
       context: Context
     ) => {
       try {
         const { subteamId, postText, userEmail, date } = input;
+
+        const discussionId = generateRandomString(30);
+
   
         // Create a new document in the Wall collection
-        const newWallDoc = context.db.collection("Wall").doc(generateRandomString(30));
+        const newDiscussionDoc = context.db.collection("Discussion").doc(discussionId);
   
         // Define the data for the new wall post
-        const newWallData = {
+        const newDiscussionData = {
+          discussionId: discussionId,
           subteamId: subteamId,
           postText: postText,
           userEmail: userEmail,
@@ -365,9 +369,9 @@ export const subteamMutations = {
         };
   
         // Set the data for the new wall post
-        await newWallDoc.set(newWallData);
+        await newDiscussionDoc.set(newDiscussionData);
   
-        return newWallData;
+        return newDiscussionData;
       } catch (error) {
         console.error("Error adding wall post:", error);
         throw error;
