@@ -34,6 +34,13 @@ type UpdatedSubteamMemberInput = {
   position: string;
 };
 
+type AddWallInput = {
+  subteamId: String
+  postText: String
+  userEmail: String
+  date: String
+}
+
 type AddMatchInput = {
   subteamIdSelected: String
   opponentName: String
@@ -338,32 +345,35 @@ export const subteamMutations = {
       }
     },
 
-    addDiscussion: async (
+    addWall: async (
       _: any,
-      { subteamId, postText, userEmail, date }: any,
-      context: { db: { collection: (arg0: string) => { (): any; new(): any; doc: { (arg0: string): any; new(): any; }; }; }; }
+      { input }: { input: AddWallInput },
+      context: Context
     ) => {
       try {
-        const discussionId = generateRandomString(30);
-    
-        const newDiscussionDoc = context.db.collection("Discussion").doc(discussionId);
-    
-        const newDiscussionData = {
-          discussionId: discussionId,
+        const { subteamId, postText, userEmail, date } = input;
+  
+        // Create a new document in the Wall collection
+        const newWallDoc = context.db.collection("Wall").doc(generateRandomString(30));
+  
+        // Define the data for the new wall post
+        const newWallData = {
           subteamId: subteamId,
           postText: postText,
           userEmail: userEmail,
           date: date,
         };
-    
-        await newDiscussionDoc.set(newDiscussionData);
-    
-        return newDiscussionData;
+  
+        // Set the data for the new wall post
+        await newWallDoc.set(newWallData);
+  
+        return newWallData;
       } catch (error) {
-        console.error("Error adding discussion:", error);
+        console.error("Error adding wall post:", error);
         throw error;
       }
     },
+
 
     
   };

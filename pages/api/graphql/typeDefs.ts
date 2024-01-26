@@ -263,20 +263,20 @@ export const typeDefs = gql`
     trainings: [Training]
   }
 
-  type Discussion {
-    discussionId: String!
+  input AddWallInput {
     subteamId: String!
     postText: String!
     userEmail: String!
     date: String!
   }
 
-  input AddDiscussionInput {
+  type Wall {
     subteamId: String!
     postText: String!
     userEmail: String!
     date: String!
   }
+
   
   type Query {
     user(id: String): User
@@ -363,7 +363,7 @@ export const typeDefs = gql`
     addTraining(teamId: String!, input: AddTrainingInput!): Training
     updateAttendance(matchId: String!, player: String!, hisAttendance: Int!, reason: String!): Boolean
     updateTrainingAttendance(matchId: String!, player: String!, hisAttendance: Int!, reason: String!): Boolean
-    addDiscussion(input: AddDiscussionInput): Discussion
+    addWall(input: AddWallInput): Wall
 
 
   }

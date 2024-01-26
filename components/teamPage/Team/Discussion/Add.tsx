@@ -2,11 +2,14 @@
 import React, { useState } from "react";
 import { Box, Button, TextField } from "@mui/material";
 import { authUtils } from "@/firebase/auth.utils";
-import { useMutation, gql } from "@apollo/client";
+import { gql, useMutation } from "@apollo/client";
 
-const ADD_DISCUSSION = gql`
-mutation AddDiscussion($input: AddDiscussionInput!) {
-    addDiscussion(input: $input) {
+type AddProps = {
+  subteamId: string;
+};
+const ADD_WALL_MUTATION = gql`
+  mutation AddWall($input: AddWallInput!) {
+    addWall(input: $input) {
       subteamId
       postText
       userEmail
@@ -15,43 +18,31 @@ mutation AddDiscussion($input: AddDiscussionInput!) {
   }
 `;
 
-type AddProps = {
-  subteamId: string;
-};
-
 const Add: React.FC<AddProps> = ({ subteamId }) => {
 
   const user = authUtils.getCurrentUser();
   const [postText, setPostText] = useState<string>("");
-  const [addDiscussion] = useMutation(ADD_DISCUSSION);
   const userEmail = user?.email || "";
-  console.log("subteamId:", subteamId);
-    console.log("userEmail:", userEmail);
-    console.log("postText:", postText);
-    console.log("time:", new Date().toISOString());
+  
+  const [addWallMutation] = useMutation(ADD_WALL_MUTATION);
 
   const handlePostTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPostText(event.target.value);
   };
 
-  const handleAddPost = () => {
+  const handleAddPost = async () => {
     const date = new Date().toISOString();
-    addDiscussion({
-      variables: {
-        input: {
-          subteamId: subteamId,
-          postText: postText,
-          userEmail: userEmail,
-          date: date,
-        },
-      },
-    })
-      .then((response) => {
-        console.log("Discussion added successfully:", response);
-      })
-      .catch((error) => {
-        console.error("Error adding discussion:", error);
+
+    try {
+      await addWallMutation({
+        variables: { input: { subteamId, postText, userEmail, date } },
       });
+
+      // Optionally, you can handle success or update UI here
+    } catch (error) {
+      console.error("Error adding post:", error);
+      // Optionally, you can handle errors or update UI here
+    }
   };
 
   return (
