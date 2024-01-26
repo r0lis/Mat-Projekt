@@ -172,8 +172,8 @@ const Overview: React.FC<OverviewProps> = (id) => {
       new Date(training.date) <= endOfWeek
   ).length;
 
-  const nextWeek = new Date(today);
-  nextWeek.setDate(today.getDate() + 5);
+  const nextWeek = new Date(startOfWeek);
+  nextWeek.setDate(startOfWeek.getDate() + 7);
 
   const endOfNextWeek = new Date(nextWeek);
   endOfNextWeek.setDate(endOfNextWeek.getDate() + 6);

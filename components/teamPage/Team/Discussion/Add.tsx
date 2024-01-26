@@ -28,7 +28,7 @@ const Add: React.FC<AddProps> = ({ subteamId }) => {
   console.log("subteamId:", subteamId);
     console.log("userEmail:", userEmail);
     console.log("postText:", postText);
-    console.log("id:", new Date().toISOString());
+    console.log("time:", new Date().toISOString());
 
   const handlePostTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPostText(event.target.value);
@@ -39,9 +39,9 @@ const Add: React.FC<AddProps> = ({ subteamId }) => {
     addDiscussion({
       variables: {
         input: {
-          subteamId,
-          postText,
-          userEmail,
+          subteamId: subteamId,
+          postText: postText,
+          userEmail: userEmail,
           date: date,
         },
       },
