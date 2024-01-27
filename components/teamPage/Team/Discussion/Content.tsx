@@ -81,11 +81,62 @@ const Content: React.FC<ContentProps> = (id) => {
   return (
     <Box>
       {discussions.map((discussion) => (
-        <Box key={discussion.discussionId}>
-          <UserDetails userEmail={discussion.userEmail} />
-          <Typography>{formatDateTime(discussion.date)}</Typography>
-          <Typography>{discussion.postText}</Typography>
-
+        <Box sx={{ marginBottom: "1em" }} key={discussion.discussionId}>
+          <Box>
+            <UserDetails
+              userEmail={discussion.userEmail}
+              date={formatDateTime(discussion.date)}
+            />
+          </Box>
+          <Box
+            sx={{
+              borderTop: "2px solid gray",
+              borderBottom: "2px solid gray",
+              paddingTop: "1em",
+              paddingBottom: "1em",
+              marginTop: "0.6em",
+            }}
+          >
+            <Typography>{discussion.postText}</Typography>
+          </Box>
+          <Box
+            sx={{
+              backgroundColor: "#F0F2F5",
+              borderBottom: "2px solid #027ef2",
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                paddingTop: "0.5em",
+                paddingBottom: "0.5em",
+              }}
+            >
+              <Typography
+                sx={{
+                  fontSize: "0.8em",
+                  color: "gray",
+                  marginLeft: "auto",
+                  paddingRight: "0.5%",
+                  borderRight: "2px solid gray",
+                  cursor: "pointer",
+                }}
+              >
+                Označit jako přectené
+              </Typography>
+              <Typography
+                sx={{
+                  fontSize: "0.8em",
+                  color: "gray",
+                  marginRight: "5%",
+                  paddingLeft: "0.5%",
+                  cursor: "pointer",
+                }}
+              >
+                Odpovědět
+              </Typography>
+            </Box>
+          </Box>
         </Box>
       ))}
     </Box>
@@ -94,9 +145,10 @@ const Content: React.FC<ContentProps> = (id) => {
 
 type UserDetailsProps = {
   userEmail: string;
+  date: string;
 };
 
-const UserDetails: React.FC<UserDetailsProps> = ({ userEmail }) => {
+const UserDetails: React.FC<UserDetailsProps> = ({ userEmail, date }) => {
   const { loading, error, data } = useQuery(GET_USER_DETAILS, {
     variables: { email: userEmail },
   });
@@ -118,10 +170,19 @@ const UserDetails: React.FC<UserDetailsProps> = ({ userEmail }) => {
 
   return (
     <Box>
-      <Avatar src={user.Picture} alt="User" />
-      <Typography>
-        {user.Name} {user.Surname}
-      </Typography>
+      <Box sx={{ display: "flex" }}>
+        <Avatar
+          sx={{ height: "45px", width: "45px" }}
+          src={user.Picture}
+          alt="User"
+        />
+        <Box sx={{ display: "block", marginLeft: "1em" }}>
+          <Typography>
+            {user.Name} {user.Surname}
+          </Typography>
+          <Typography>{date}</Typography>
+        </Box>
+      </Box>
     </Box>
   );
 };
