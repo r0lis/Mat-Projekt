@@ -316,6 +316,8 @@ export const typeDefs = gql`
     getAllMatchBySubteamId(subteamId: String!): [Match]
     getAllTrainingBySubteamId(subteamId: String!): [Training]
     getTeamByEmail(email: String!): Team
+    getDiscussionsBySubteam(subteamId: String!): [Discussion]
+
   }
 
   type Mutation {

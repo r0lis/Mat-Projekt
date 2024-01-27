@@ -19,6 +19,14 @@ import {
 import "firebase/storage";
 import * as admin from "firebase-admin";
 
+type Discussion = {
+  discussionId: String
+  subteamId: String
+  postText: String
+  userEmail: String
+  date: String
+}
+
 const getSubteamDetails = async (
   subteamId: string,
   context: Context
@@ -485,6 +493,30 @@ export const subteamQueries = {
       return [{ subteamId: input.subteamIds[0], trainings: validMatches }];
     } catch (error) {
       console.error("Error fetching future matches by subteams:", error);
+      throw error;
+    }
+  },
+  getDiscussionsBySubteam: async (
+    _: any,
+    { subteamId }: { subteamId: string },
+    context: Context
+  ): Promise<Discussion[] | null> => {
+    try {
+      const discussionsSnapshot = await context.db
+        .collection("Discussion")
+        .where("subteamId", "==", subteamId)
+        .get();
+
+      if (!discussionsSnapshot.empty) {
+        const discussionsData = discussionsSnapshot.docs.map(
+          (doc) => doc.data() as Discussion
+        );
+        return discussionsData;
+      }
+
+      return null;
+    } catch (error) {
+      console.error("Error fetching discussions by subteam:", error);
       throw error;
     }
   },

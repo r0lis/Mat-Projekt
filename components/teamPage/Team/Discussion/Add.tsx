@@ -6,6 +6,7 @@ import { gql, useMutation } from "@apollo/client";
 
 type AddProps = {
   subteamId: string;
+  onAddPostSuccess: () => void;
 };
 const ADD_DISCUSSION_MUTATION = gql`
   mutation addDiscussion($input: AddDiscussionInput!) {
@@ -18,25 +19,34 @@ const ADD_DISCUSSION_MUTATION = gql`
   }
 `;
 
-const Add: React.FC<AddProps> = ({ subteamId }) => {
+const Add: React.FC<AddProps> = ({ subteamId, onAddPostSuccess}) => {
 
   const user = authUtils.getCurrentUser();
   const [postText, setPostText] = useState<string>("");
   const userEmail = user?.email || "";
+  const [validationError, setValidationError] = useState<string | null>(null);
   
   const [addDiscussionMutation] = useMutation(ADD_DISCUSSION_MUTATION);
 
   const handlePostTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPostText(event.target.value);
+    setValidationError(null);
   };
 
   const handleAddPost = async () => {
+    if (postText.length < 10) {
+      setValidationError("Post must be at least 10 characters long.");
+      return;
+    }
+
     const date = new Date().toISOString();
 
     try {
       await addDiscussionMutation({
         variables: { input: { subteamId, postText, userEmail, date } },
       });
+      onAddPostSuccess();
+      setPostText("");
 
       // Optionally, you can handle success or update UI here
     } catch (error) {
@@ -56,6 +66,8 @@ const Add: React.FC<AddProps> = ({ subteamId }) => {
         value={postText}
         onChange={handlePostTextChange}
         sx={{ marginBottom: 2 }}
+        error={!!validationError}
+        helperText={validationError}
       />
       <Button variant="contained" color="primary" onClick={handleAddPost}>
         Přidat příspěvek

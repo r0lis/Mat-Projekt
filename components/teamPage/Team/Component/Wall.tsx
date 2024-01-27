@@ -15,6 +15,11 @@ const Wall: React.FC<WallProps> = (id) => {
     setShowContent(!showContent);
   };
 
+  const handleAddPostSuccess = () => {
+    // Callback function to set showContent to true after adding a post
+    setShowContent(true);
+  };
+
   return (
     <Box sx={{ marginLeft: "2%", marginRight: "2%" }}>
       <Box sx={{ display: "flex", paddingTop: "1em" }}>
@@ -34,7 +39,9 @@ const Wall: React.FC<WallProps> = (id) => {
         {showContent ? (
           <Content subteamId={id.subteamId} />
         ) : (
-          <Add subteamId={id.subteamId as string}  />
+          <Add subteamId={id.subteamId as string}  
+          onAddPostSuccess={handleAddPostSuccess}
+          />
         )}
       </Box>
     </Box>
