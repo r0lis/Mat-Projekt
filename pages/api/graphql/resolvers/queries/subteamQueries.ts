@@ -25,6 +25,8 @@ type Discussion = {
   postText: String
   userEmail: String
   date: String
+  title: String
+  onComment: Boolean
 }
 
 const getSubteamDetails = async (

@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-import { Box, CircularProgress, Avatar, Typography } from "@mui/material";
-import React from "react";
+import { Box, CircularProgress, Avatar, Typography, Button, TextField } from "@mui/material";
+import React, { useState } from "react";
 import { useQuery, gql } from "@apollo/client";
 
 type ContentProps = {
@@ -15,6 +16,8 @@ const GET_DISCUSSIONS_BY_SUBTEAM = gql`
       postText
       userEmail
       date
+      title
+      onComment
     }
   }
 `;
@@ -47,6 +50,8 @@ type Discussion = {
   postText: string;
   userEmail: string;
   date: string;
+  title: string;
+  onComment: boolean;
 };
 
 const Content: React.FC<ContentProps> = (id) => {
@@ -55,6 +60,10 @@ const Content: React.FC<ContentProps> = (id) => {
   const { loading, error, data } = useQuery(GET_DISCUSSIONS_BY_SUBTEAM, {
     variables: { subteamId },
   });
+
+  const [replyingTo, setReplyingTo] = useState<string | null>(null);
+  const [openTo, setOpenTo] = useState<string | null>(null);
+  const [replyText, setReplyText] = useState<string>("");
 
   if (loading) {
     return (
@@ -78,6 +87,23 @@ const Content: React.FC<ContentProps> = (id) => {
 
   const discussions: Discussion[] = data?.getDiscussionsBySubteam || [];
 
+  if (discussions.length === 0) {
+    return <Box>Žádné příspěvky</Box>;
+  }
+
+  const handleReplyClick = (discussionId: string) => {
+    setReplyingTo(discussionId);
+  };
+  
+  const handleOpenClick = (discussionId: string) => {
+    setOpenTo(openTo === discussionId ? null : discussionId);
+  };
+
+  const handleCancelReply = () => {
+    setReplyingTo(null);
+    setReplyText("");
+  };
+
   return (
     <Box>
       {discussions.map((discussion) => (
@@ -97,6 +123,9 @@ const Content: React.FC<ContentProps> = (id) => {
               marginTop: "0.6em",
             }}
           >
+            <Typography sx={{ fontWeight: "bold" }}>
+              {discussion.title}
+            </Typography>
             <Typography>{discussion.postText}</Typography>
           </Box>
           <Box
@@ -124,18 +153,91 @@ const Content: React.FC<ContentProps> = (id) => {
               >
                 Označit jako přectené
               </Typography>
-              <Typography
-                sx={{
-                  fontSize: "0.8em",
-                  color: "gray",
-                  marginRight: "5%",
-                  paddingLeft: "0.5%",
-                  cursor: "pointer",
-                }}
-              >
-                Odpovědět
-              </Typography>
+              {discussion.onComment == true ? (
+                 <Typography
+                 sx={{
+                   fontSize: "0.8em",
+                   color: "gray",
+                   marginRight: "3%",
+                   paddingLeft: "0.5%",
+                   cursor: "pointer",
+                 }}
+                 onClick={() => handleOpenClick(discussion.discussionId)}
+               >
+                 {openTo === discussion.discussionId ? "Zavřít komentáře" : "Otevřít komentáře"}
+               </Typography>
+              ) : (
+                <Typography
+                  sx={{
+                    fontSize: "0.8em",
+                    color: "gray",
+                    marginRight: "3%",
+                    paddingLeft: "0.5%",
+                    cursor: "pointer",
+                  }}
+                >
+                  Komentáře vypnuty
+                </Typography>
+              )}
+              
             </Box>
+            {replyingTo === discussion.discussionId && (
+              <Box sx={{  display:"block", borderTop:"2px solid gray", paddingTop:"0.6em", paddingBottom:"0.6em" }}>
+                
+                <TextField
+                  label="Odpověď"
+                  multiline
+                  rows={2}
+                  variant="outlined"
+                  
+                  value={replyText}
+                  onChange={(e: { target: { value: any; }; }) => setReplyText(e.target.value)}
+                  sx={{ marginBottom: 1, width: "90%", marginLeft:"5%", marginRight:"auto"}}
+                />
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => {
+                    // Tady můžete implementovat logiku pro odeslání odpovědi
+                    console.log("Odeslat odpověď:", replyText);
+                    handleCancelReply();
+                  }}
+                  sx={{ marginRight: 1,marginLeft:"5%", }}
+                >
+                  Potvrdit
+                </Button>
+                <Button variant="outlined" onClick={handleCancelReply}>
+                  Zrušit
+                </Button>
+              </Box>
+            )}
+
+            {openTo === discussion.discussionId && (
+              <Box sx={{ marginTop: "1em", display:"block", borderTop:"2px solid gray", paddingTop:"0.6em", paddingBottom:"0.6em" }}>
+                <Typography sx={{ fontWeight: "bold", marginLeft:"5%", marginRight:"auto"}}>
+                  Komentáře
+                </Typography>
+                <Box
+                  sx={{
+                    display: "flex",
+                    paddingTop: "0.5em",
+                    paddingBottom: "0.5em",
+                  }}
+                >
+                  {replyingTo === discussion.discussionId ? (<Box></Box>):(
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => handleReplyClick(discussion.discussionId)}
+                    sx={{ marginRight: 1,marginLeft:"5%", }}
+                  >
+                    Přidat komentář
+                  </Button>
+                  )}
+                  </Box>
+                  </Box>
+            )}
+
           </Box>
         </Box>
       ))}

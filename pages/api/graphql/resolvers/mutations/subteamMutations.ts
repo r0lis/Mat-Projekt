@@ -39,6 +39,8 @@ type AddWallInput = {
   postText: String
   userEmail: String
   date: String
+  title: String
+  onComment: Boolean
 }
 
 type AddMatchInput = {
@@ -351,7 +353,7 @@ export const subteamMutations = {
       context: Context
     ) => {
       try {
-        const { subteamId, postText, userEmail, date } = input;
+        const { subteamId, postText, userEmail, date, title, onComment } = input;
 
         const discussionId = generateRandomString(30);
 
@@ -363,9 +365,11 @@ export const subteamMutations = {
         const newDiscussionData = {
           discussionId: discussionId,
           subteamId: subteamId,
+          title: title,
           postText: postText,
           userEmail: userEmail,
           date: date,
+          onComment: onComment,
         };
   
         // Set the data for the new wall post

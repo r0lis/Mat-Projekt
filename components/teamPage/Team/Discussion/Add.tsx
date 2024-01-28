@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import React, { useState } from "react";
-import { Box, Button, TextField } from "@mui/material";
+import { Box, Button, FormControlLabel, Switch, TextField } from "@mui/material";
 import { authUtils } from "@/firebase/auth.utils";
 import { gql, useMutation } from "@apollo/client";
 
@@ -15,6 +15,8 @@ const ADD_DISCUSSION_MUTATION = gql`
       postText
       userEmail
       date
+      title
+      onComment
     }
   }
 `;
@@ -23,6 +25,8 @@ const Add: React.FC<AddProps> = ({ subteamId, onAddPostSuccess}) => {
 
   const user = authUtils.getCurrentUser();
   const [postText, setPostText] = useState<string>("");
+  const [title, setTitle] = useState<string>("");
+  const [onComment, setOnComment] = useState<boolean>(true);
   const userEmail = user?.email || "";
   const [validationError, setValidationError] = useState<string | null>(null);
   
@@ -33,9 +37,22 @@ const Add: React.FC<AddProps> = ({ subteamId, onAddPostSuccess}) => {
     setValidationError(null);
   };
 
+  const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(event.target.value);
+    setValidationError(null);
+  };
+
+  const handleOnCommentChange = () => {
+    setOnComment(!onComment);
+  };
+
   const handleAddPost = async () => {
     if (postText.length < 10) {
       setValidationError("Post must be at least 10 characters long.");
+      return;
+    }
+    if (title.length < 3) {
+      setValidationError("Title must be at least 3 characters long.");
       return;
     }
 
@@ -43,10 +60,13 @@ const Add: React.FC<AddProps> = ({ subteamId, onAddPostSuccess}) => {
 
     try {
       await addDiscussionMutation({
-        variables: { input: { subteamId, postText, userEmail, date } },
+        variables: { input: { subteamId, postText, userEmail, date, title, onComment } },
       });
       onAddPostSuccess();
       setPostText("");
+      setTitle("");
+      setOnComment(true);
+
 
       // Optionally, you can handle success or update UI here
     } catch (error) {
@@ -57,6 +77,16 @@ const Add: React.FC<AddProps> = ({ subteamId, onAddPostSuccess}) => {
 
   return (
     <Box>
+       <TextField
+        label="Název"
+        fullWidth
+        value={title}
+        onChange={handleTitleChange}
+        sx={{ marginBottom: 2 }}
+        error={!!validationError}
+        helperText={validationError}
+      />
+
       <TextField
         label="Napište svůj příspěvek"
         multiline
@@ -68,6 +98,10 @@ const Add: React.FC<AddProps> = ({ subteamId, onAddPostSuccess}) => {
         sx={{ marginBottom: 2 }}
         error={!!validationError}
         helperText={validationError}
+      />
+      <FormControlLabel
+        control={<Switch checked={onComment} onChange={handleOnCommentChange} />}
+        label={onComment ? "Komentáře povoleny" : "Komentáře zakázány"}
       />
       <Button variant="contained" color="primary" onClick={handleAddPost}>
         Přidat příspěvek

@@ -268,6 +268,8 @@ export const typeDefs = gql`
     postText: String!
     userEmail: String!
     date: String!
+    title: String!
+    onComment: Boolean!
   }
 
   type Discussion
@@ -277,6 +279,8 @@ export const typeDefs = gql`
     postText: String!
     userEmail: String!
     date: String!
+    title: String!
+    onComment: Boolean!
   }
 
   
