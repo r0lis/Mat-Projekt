@@ -43,6 +43,14 @@ type AddWallInput = {
   onComment: Boolean
 }
 
+type AddCommentInput = {
+  discussionId: string;
+  commentText: string;
+  userEmail: string;
+  date: string;
+  commentId: string;
+};
+
 type AddMatchInput = {
   subteamIdSelected: String
   opponentName: String
@@ -378,6 +386,49 @@ export const subteamMutations = {
         return newDiscussionData;
       } catch (error) {
         console.error("Error adding wall post:", error);
+        throw error;
+      }
+    },
+
+    addComment: async (
+      _: any,
+      { input }: { input: AddCommentInput },
+      context: Context
+    ) => {
+      try {
+        const { discussionId, commentText, userEmail, date, commentId } = input;
+
+        const discussionRef = context.db.collection("Discussion").doc(discussionId);
+
+        // Získat aktuální data diskuse
+        const discussionData = (await discussionRef.get()).data();
+
+        if (!discussionData) {
+          throw new Error("Discussion not found");
+        }
+
+        // Pokud Comments neexistuje, vytvořit prázdné pole
+        const commentsArray = discussionData.Comments || [];
+
+        // Nový komentář
+        const newComment = {
+          commentId,
+          commentText,
+          userEmail,
+          date,
+        };
+
+        // Přidat nový komentář do pole Comments
+        commentsArray.push(newComment);
+
+        // Aktualizovat diskusi s novými daty
+        await discussionRef.update({
+          Comments: commentsArray,
+        });
+
+        return newComment;
+      } catch (error) {
+        console.error("Error adding comment:", error);
         throw error;
       }
     },

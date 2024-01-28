@@ -201,7 +201,6 @@ const News: React.FC<OverviewProps> = (id) => {
             sx={{
               display: "flex",
               justifyContent: "space-around",
-              marginBottom: "1em",
             }}
           >
             <Typography variant="h6" sx={{ cursor: "pointer" }}>
@@ -209,8 +208,15 @@ const News: React.FC<OverviewProps> = (id) => {
             </Typography>
           </Box>
           {todayArray.length === 0 ? (
-            <Typography sx={{marginLeft: "3%",
-            marginRight: "3%",}} variant="body1">
+            <Typography
+              sx={{
+                marginLeft: "3%",
+                marginBottom: "1em",
+
+                marginRight: "3%",
+              }}
+              variant="body1"
+            >
               Dnes nemáte v plánu žádnou událost.
             </Typography>
           ) : (
@@ -220,75 +226,27 @@ const News: React.FC<OverviewProps> = (id) => {
                 sx={{
                   marginLeft: "3%",
                   marginRight: "3%",
-                  marginBottom: "1em",
+                  marginBottom: "0.6em",
                   borderRadius: "10px",
-                  backgroundColor:  item.matchType == null ?"rgba(255, 130, 0, 0.15)": "rgba(0, 56, 255, 0.24)" ,
-                  border:  item.matchType == null ? "2px solid rgba(255, 130, 0, 0.6)":"2px solid rgba(0, 34, 155, 1)",
+
+                  backgroundColor:
+                    item.matchType == null
+                      ? "rgba(255, 130, 0, 0.15)"
+                      : "rgba(0, 56, 255, 0.24)",
+                  border:
+                    item.matchType == null
+                      ? "2px solid rgba(255, 130, 0, 0.6)"
+                      : "2px solid rgba(0, 34, 155, 1)",
                 }}
               >
                 <Box
                   sx={{
                     paddingLeft: "1em",
                     paddingRight: "1em",
-                    backgroundColor: item.matchType == null ? "rgba(255, 130, 0, 0.15)":"rgba(0, 56, 255, 0.24)",
-                    borderRadius: "10px 10px 10px 10px",
-                    paddingTop: "1em",
-                    paddingBottom: "0.5em",
-                  }}
-                >
-                  <Typography variant="h6">
-                  {item.matchType == null ? "Trénink" : "Zápas"} -{" "}
-                    {item.opponentName}
-                  </Typography>
-                  <Typography>
-                    Date:{" "}
-                    {new Date(item.date).toLocaleDateString("cs-CZ", {
-                      day: "2-digit",
-                      month: "2-digit",
-                      year: "numeric",
-                    })}
-                  </Typography>
-                  <Typography>Time: {item.time}-{item.endTime}</Typography>
-                </Box>
-              </Box>
-            ))
-          )}
-        </Box>
-        <Box>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-around",
-              marginBottom: "1em",
-            }}
-          >
-            <Typography variant="h6" sx={{ cursor: "pointer" }}>
-              Zítra
-            </Typography>
-          </Box>
-          {tomorrowArray.length === 0 ? (
-            <Typography sx={{marginLeft: "3%",
-            marginRight: "3%",}} variant="body1">
-              Zítra nemáte v plánu žádnou událost.
-            </Typography>
-          ) : (
-            tomorrowArray.map((item, index) => (
-              <Box
-                key={index}
-                sx={{
-                  marginLeft: "3%",
-                  marginRight: "3%",
-                  marginBottom: "1em",
-                  borderRadius: "10px",
-                  backgroundColor:  item.matchType == null ?"rgba(255, 130, 0, 0.15)": "rgba(0, 56, 255, 0.24)" ,
-                  border:  item.matchType == null ? "2px solid rgba(255, 130, 0, 0.6)":"2px solid rgba(0, 34, 155, 1)",
-                }}
-              >
-                <Box
-                  sx={{
-                    paddingLeft: "1em",
-                    paddingRight: "1em",
-                    backgroundColor:  item.matchType == null ?"rgba(255, 130, 0, 0.15)": "rgba(0, 56, 255, 0.24)" ,
+                    backgroundColor:
+                      item.matchType == null
+                        ? "rgba(255, 130, 0, 0.15)"
+                        : "rgba(0, 56, 255, 0.24)",
                     borderRadius: "10px 10px 10px 10px",
                     paddingTop: "1em",
                     paddingBottom: "0.5em",
@@ -306,7 +264,9 @@ const News: React.FC<OverviewProps> = (id) => {
                       year: "numeric",
                     })}
                   </Typography>
-                  <Typography>Time: {item.time}-{item.endTime}</Typography>
+                  <Typography>
+                    Time: {item.time}-{item.endTime}
+                  </Typography>
                 </Box>
               </Box>
             ))
@@ -317,44 +277,58 @@ const News: React.FC<OverviewProps> = (id) => {
             sx={{
               display: "flex",
               justifyContent: "space-around",
-              marginBottom: "1em",
             }}
           >
             <Typography variant="h6" sx={{ cursor: "pointer" }}>
-              Pozítří
+              Zítra
             </Typography>
           </Box>
+          {tomorrowArray.length === 0 ? (
+            <Typography
+              sx={{
+                marginLeft: "3%",
+                marginBottom: "1em",
 
-          {dayAfterTomorrowArray.length === 0 ? (
-            <Typography sx={{marginLeft: "3%",
-            marginRight: "3%",}} variant="body1">
-              Pozítří nemáte v plánu žádnou událost.
+                marginRight: "3%",
+              }}
+              variant="body1"
+            >
+              Zítra nemáte v plánu žádnou událost.
             </Typography>
           ) : (
-            dayAfterTomorrowArray.map((item, index) => (
+            tomorrowArray.map((item, index) => (
               <Box
                 key={index}
                 sx={{
                   marginLeft: "3%",
                   marginRight: "3%",
-                  marginBottom: "1em",
+                  marginBottom: "0.6em",
                   borderRadius: "10px",
-                  backgroundColor:  item.matchType == null ?"rgba(255, 130, 0, 0.15)": "rgba(0, 56, 255, 0.24)" ,
-                  border:  item.matchType == null ? "2px solid rgba(255, 130, 0, 0.6)":"2px solid rgba(0, 34, 155, 1)",
+                  backgroundColor:
+                    item.matchType == null
+                      ? "rgba(255, 130, 0, 0.15)"
+                      : "rgba(0, 56, 255, 0.24)",
+                  border:
+                    item.matchType == null
+                      ? "2px solid rgba(255, 130, 0, 0.6)"
+                      : "2px solid rgba(0, 34, 155, 1)",
                 }}
               >
                 <Box
                   sx={{
-                    backgroundColor:  item.matchType == null ?"rgba(255, 130, 0, 0.15)": "rgba(0, 56, 255, 0.24)" ,
+                    paddingLeft: "1em",
+                    paddingRight: "1em",
+                    backgroundColor:
+                      item.matchType == null
+                        ? "rgba(255, 130, 0, 0.15)"
+                        : "rgba(0, 56, 255, 0.24)",
                     borderRadius: "10px 10px 10px 10px",
                     paddingTop: "1em",
                     paddingBottom: "0.5em",
-                    paddingLeft: "1em",
-                    paddingRight: "1em",
                   }}
                 >
                   <Typography variant="h6">
-                  {item.matchType == null ? "Trénink" : "Zápas"} -{" "}
+                    {item.matchType == null ? "Trénink" : "Zápas"} -{" "}
                     {item.opponentName}
                   </Typography>
                   <Typography>
@@ -365,7 +339,85 @@ const News: React.FC<OverviewProps> = (id) => {
                       year: "numeric",
                     })}
                   </Typography>
-                  <Typography>Time: {item.time}-{item.endTime}</Typography>
+                  <Typography>
+                    Time: {item.time}-{item.endTime}
+                  </Typography>
+                </Box>
+              </Box>
+            ))
+          )}
+        </Box>
+        <Box>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-around",
+            }}
+          >
+            <Typography variant="h6" sx={{ cursor: "pointer" }}>
+              Pozítří
+            </Typography>
+          </Box>
+
+          {dayAfterTomorrowArray.length === 0 ? (
+            <Typography
+              sx={{
+                marginLeft: "3%",
+                marginBottom: "1em",
+
+                marginRight: "3%",
+              }}
+              variant="body1"
+            >
+              Pozítří nemáte v plánu žádnou událost.
+            </Typography>
+          ) : (
+            dayAfterTomorrowArray.map((item, index) => (
+              <Box
+                key={index}
+                sx={{
+                  marginLeft: "3%",
+                  marginRight: "3%",
+                  marginBottom: "0.6em",
+                  borderRadius: "10px",
+                  backgroundColor:
+                    item.matchType == null
+                      ? "rgba(255, 130, 0, 0.15)"
+                      : "rgba(0, 56, 255, 0.24)",
+                  border:
+                    item.matchType == null
+                      ? "2px solid rgba(255, 130, 0, 0.6)"
+                      : "2px solid rgba(0, 34, 155, 1)",
+                }}
+              >
+                <Box
+                  sx={{
+                    backgroundColor:
+                      item.matchType == null
+                        ? "rgba(255, 130, 0, 0.15)"
+                        : "rgba(0, 56, 255, 0.24)",
+                    borderRadius: "10px 10px 10px 10px",
+                    paddingTop: "1em",
+                    paddingBottom: "0.5em",
+                    paddingLeft: "1em",
+                    paddingRight: "1em",
+                  }}
+                >
+                  <Typography variant="h6">
+                    {item.matchType == null ? "Trénink" : "Zápas"} -{" "}
+                    {item.opponentName}
+                  </Typography>
+                  <Typography>
+                    Date:{" "}
+                    {new Date(item.date).toLocaleDateString("cs-CZ", {
+                      day: "2-digit",
+                      month: "2-digit",
+                      year: "numeric",
+                    })}
+                  </Typography>
+                  <Typography>
+                    Time: {item.time}-{item.endTime}
+                  </Typography>
                 </Box>
               </Box>
             ))

@@ -21,7 +21,7 @@ const Wall: React.FC<WallProps> = (id) => {
   };
 
   return (
-    <Box sx={{ marginLeft: "2%", marginRight: "2%" }}>
+    <Box sx={{ marginLeft: "4%", marginRight: "4%" }}>
       <Box sx={{ display: "flex", paddingTop: "1em" }}>
         <Typography>Týmová zeď</Typography>
         <Box sx={{ marginLeft: "auto" }}>

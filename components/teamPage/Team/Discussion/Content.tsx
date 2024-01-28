@@ -2,7 +2,8 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { Box, CircularProgress, Avatar, Typography, Button, TextField } from "@mui/material";
 import React, { useState } from "react";
-import { useQuery, gql } from "@apollo/client";
+import { useQuery, gql, useMutation } from "@apollo/client";
+import { authUtils } from "@/firebase/auth.utils";
 
 type ContentProps = {
   subteamId: string;
@@ -28,6 +29,18 @@ const GET_USER_DETAILS = gql`
       Name
       Surname
       Picture
+    }
+  }
+`;
+
+const ADD_COMMENT = gql`
+  mutation AddComment($discussionId: String!, $commentText: String!, $userEmail: String!, $date: String!, $commentId: String!) {
+    addComment(input: { discussionId: $discussionId, commentText: $commentText, userEmail: $userEmail, date: $date, commentId: $commentId }) {
+      discussionId
+      commentText
+      userEmail
+      date
+      commentId
     }
   }
 `;
@@ -60,10 +73,13 @@ const Content: React.FC<ContentProps> = (id) => {
   const { loading, error, data } = useQuery(GET_DISCUSSIONS_BY_SUBTEAM, {
     variables: { subteamId },
   });
-
+  const userEmail = authUtils.getCurrentUser()?.email || "";
   const [replyingTo, setReplyingTo] = useState<string | null>(null);
   const [openTo, setOpenTo] = useState<string | null>(null);
   const [replyText, setReplyText] = useState<string>("");
+  const [newCommentText, setNewCommentText] = useState<string>("");
+  const [addComment] = useMutation(ADD_COMMENT);
+
 
   if (loading) {
     return (
@@ -104,11 +120,32 @@ const Content: React.FC<ContentProps> = (id) => {
     setReplyText("");
   };
 
+  const handleAddComment = async (discussionId: string) => {
+    try {
+      const commentId = "frgrgergerugbrgbrgbergkregb"; 
+
+      await addComment({
+        variables: {
+          discussionId,
+          commentText: newCommentText,
+          userEmail,
+          date: new Date().toISOString(),
+          commentId,
+        },
+      });
+
+      setNewCommentText("");
+    } catch (error) {
+      console.error("Error adding comment:", error);
+    }
+  };
+
+
   return (
     <Box>
       {discussions.map((discussion) => (
-        <Box sx={{ marginBottom: "1em" }} key={discussion.discussionId}>
-          <Box>
+        <Box sx={{ marginBottom: "1em", borderLeft:"2px solid gray", borderRight:"2px solid gray", borderTop:"2px solid gray", borderRadius:"10px"}} key={discussion.discussionId}>
+          <Box sx={{paddingLeft:"1%", paddingTop:"1%"}}>
             <UserDetails
               userEmail={discussion.userEmail}
               date={formatDateTime(discussion.date)}
@@ -121,6 +158,8 @@ const Content: React.FC<ContentProps> = (id) => {
               paddingTop: "1em",
               paddingBottom: "1em",
               marginTop: "0.6em",
+              paddingLeft:"1%",
+              paddingRight:"1%",
             }}
           >
             <Typography sx={{ fontWeight: "bold" }}>
@@ -131,7 +170,8 @@ const Content: React.FC<ContentProps> = (id) => {
           <Box
             sx={{
               backgroundColor: "#F0F2F5",
-              borderBottom: "2px solid #027ef2",
+              borderRadius: "0px 0px 10px 10px",
+              borderBottom: "2px solid gray",
             }}
           >
             <Box
@@ -197,11 +237,8 @@ const Content: React.FC<ContentProps> = (id) => {
                 <Button
                   variant="contained"
                   color="primary"
-                  onClick={() => {
-                    // Tady můžete implementovat logiku pro odeslání odpovědi
-                    console.log("Odeslat odpověď:", replyText);
-                    handleCancelReply();
-                  }}
+                  onClick={() => handleAddComment(discussion.discussionId)}
+
                   sx={{ marginRight: 1,marginLeft:"5%", }}
                 >
                   Potvrdit
