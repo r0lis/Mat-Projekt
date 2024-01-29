@@ -109,7 +109,7 @@ type Comment = {
 const Content: React.FC<ContentProps> = (id) => {
   const subteamId = id.subteamId;
 
-  const { loading, error, data } = useQuery(GET_DISCUSSIONS_BY_SUBTEAM, {
+  const { loading, error, data, refetch } = useQuery(GET_DISCUSSIONS_BY_SUBTEAM, {
     variables: { subteamId },
   });
   const userEmail = authUtils.getCurrentUser()?.email || "";
@@ -174,6 +174,7 @@ const Content: React.FC<ContentProps> = (id) => {
 
       setReplyText("");
       handleCancelReply();
+      refetch();
     } catch (error) {
       console.error("Error adding comment:", error);
     }
@@ -190,6 +191,8 @@ const Content: React.FC<ContentProps> = (id) => {
         },
       });
 
+      refetch();
+  
       // You may want to refetch the discussions or update the UI accordingly
     } catch (error) {
       console.error("Error updating discussion:", error);
@@ -260,10 +263,12 @@ const Content: React.FC<ContentProps> = (id) => {
             }}
             onClick={() =>  handleMarkAsRead(discussion.discussionId)}
           >
-            {discussion.Seen && discussion.Seen.some(seenItem => seenItem.userEmail == userEmail)
-              ? "Přečteno"
-              : "Označit jako přečtené"}
-          </Typography>
+            {discussion.userEmail === userEmail
+    ? "Váš příspěvek"
+    : discussion.Seen && discussion.Seen.some(seenItem => seenItem.userEmail === userEmail)
+    ? "Přečteno"
+    : "Označit jako přečtené"}
+</Typography>
               {discussion.onComment == true ? (
                 <Typography
                   sx={{
