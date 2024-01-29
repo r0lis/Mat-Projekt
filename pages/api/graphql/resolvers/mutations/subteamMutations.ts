@@ -396,12 +396,14 @@ export const subteamMutations = {
       context: Context
     ) => {
       try {
-        const { discussionId, commentText, userEmail, date, commentId } = input;
+        const { discussionId, commentText, userEmail, date, } = input;
 
         const discussionRef = context.db.collection("Discussion").doc(discussionId);
 
         // Získat aktuální data diskuse
         const discussionData = (await discussionRef.get()).data();
+
+        const commentId = generateRandomString(30);
 
         if (!discussionData) {
           throw new Error("Discussion not found");
@@ -409,11 +411,12 @@ export const subteamMutations = {
 
         // Pokud Comments neexistuje, vytvořit prázdné pole
         const commentsArray = discussionData.Comments || [];
-
+        
         // Nový komentář
         const newComment = {
           commentId,
           commentText,
+          discussionId,
           userEmail,
           date,
         };
@@ -426,7 +429,7 @@ export const subteamMutations = {
           Comments: commentsArray,
         });
 
-        return newComment;
+        return true;
       } catch (error) {
         console.error("Error adding comment:", error);
         throw error;

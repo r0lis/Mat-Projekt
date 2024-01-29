@@ -34,16 +34,17 @@ const GET_USER_DETAILS = gql`
 `;
 
 const ADD_COMMENT = gql`
-  mutation AddComment($discussionId: String!, $commentText: String!, $userEmail: String!, $date: String!, $commentId: String!) {
-    addComment(input: { discussionId: $discussionId, commentText: $commentText, userEmail: $userEmail, date: $date, commentId: $commentId }) {
+  mutation AddComment($input: AddCommentInput!) {
+    addComment(input: $input) {
       discussionId
       commentText
       userEmail
       date
-      commentId
+      
     }
   }
 `;
+
 
 const formatDateTime = (rawDateTime: string) => {
   const dateTime = new Date(rawDateTime);
@@ -77,7 +78,6 @@ const Content: React.FC<ContentProps> = (id) => {
   const [replyingTo, setReplyingTo] = useState<string | null>(null);
   const [openTo, setOpenTo] = useState<string | null>(null);
   const [replyText, setReplyText] = useState<string>("");
-  const [newCommentText, setNewCommentText] = useState<string>("");
   const [addComment] = useMutation(ADD_COMMENT);
 
 
@@ -122,19 +122,20 @@ const Content: React.FC<ContentProps> = (id) => {
 
   const handleAddComment = async (discussionId: string) => {
     try {
-      const commentId = "frgrgergerugbrgbrgbergkregb"; 
 
       await addComment({
         variables: {
+          input: {
           discussionId,
-          commentText: newCommentText,
+          commentText: replyText,
           userEmail,
           date: new Date().toISOString(),
-          commentId,
+          },
         },
       });
 
-      setNewCommentText("");
+      setReplyText("");
+      handleCancelReply();
     } catch (error) {
       console.error("Error adding comment:", error);
     }

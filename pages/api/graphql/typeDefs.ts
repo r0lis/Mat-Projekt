@@ -284,19 +284,18 @@ export const typeDefs = gql`
   }
 
   input AddCommentInput {
-    discussionId: String!
-    commentText: String!
-    userEmail: String!
-    date: String!
-    commentId: String!
+    discussionId: String
+    commentText: String
+    userEmail: String
+    date: String
   }
   
   type Comment {
-    discussionId: String!
-    commentText: String!
-    userEmail: String!
-    date: String!
-    commentId: String!
+    discussionId: String
+    commentText: String
+    userEmail: String
+    date: String
+    commentId: String
   }
 
   
@@ -388,7 +387,7 @@ export const typeDefs = gql`
     updateAttendance(matchId: String!, player: String!, hisAttendance: Int!, reason: String!): Boolean
     updateTrainingAttendance(matchId: String!, player: String!, hisAttendance: Int!, reason: String!): Boolean
     addDiscussion(input: AddDiscussionInput): Discussion
-      addComment(input: AddCommentInput): Comment
+    addComment(input: AddCommentInput): Comment
 
 
 
