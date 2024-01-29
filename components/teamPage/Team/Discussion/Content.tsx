@@ -171,7 +171,7 @@ const Content: React.FC<ContentProps> = (id) => {
           }}
           key={discussion.discussionId}
         >
-          <Box sx={{ paddingLeft: "1%", paddingTop: "1%" }}>
+          <Box sx={{ paddingLeft: "3%", paddingTop: "1.5%" }}>
             <UserDetails
               userEmail={discussion.userEmail}
               date={formatDateTime(discussion.date)}
@@ -184,7 +184,7 @@ const Content: React.FC<ContentProps> = (id) => {
               paddingTop: "1em",
               paddingBottom: "1em",
               marginTop: "0.6em",
-              paddingLeft: "1%",
+              paddingLeft: "5%",
               paddingRight: "1%",
             }}
           >
@@ -254,7 +254,6 @@ const Content: React.FC<ContentProps> = (id) => {
                   display: "block",
                   borderTop: "2px solid gray",
                   paddingTop: "0.6em",
-                  paddingBottom: "0.6em",
                 }}
               >
                 <TextField
@@ -293,31 +292,24 @@ const Content: React.FC<ContentProps> = (id) => {
                   marginTop: "1em",
                   display: "block",
                   borderTop: "2px solid gray",
-                  paddingTop: "0.6em",
+                  paddingTop: "0.9em",
                   paddingBottom: "0.6em",
+                  backgroundColor: "white",
+                  borderRadius: "0px 0px 10px 10px",
                 }}
               >
-                <Typography
-                  sx={{
-                    fontWeight: "bold",
-                    marginLeft: "5%",
-                    marginRight: "auto",
-                  }}
-                >
-                  Komentáře
-                </Typography>
                 {discussion.Comments && discussion.Comments.length > 0 && (
-                  <Box>
-                    <Typography variant="subtitle1">Comments:</Typography>
+                  <Box sx={{ marginLeft: "5%", marginRight:"5%" }}>
                     {discussion.Comments.map((Comment) => (
-                      <Box key={Comment.commentId}>
-                        <Typography>{Comment.commentText}</Typography>
-                        <Typography variant="caption">
-                          {Comment.userEmail}
-                        </Typography>
-                        <Typography variant="caption">
-                          {formatDateTime(Comment.date)}
-                        </Typography>
+                      <Box
+                        sx={{ paddingBottom: "0.4em", borderBottom:"1px solid gray", marginBottom:"0.8em" }}
+                        key={Comment.commentId}
+                      >
+                        <UserDetails
+                          userEmail={Comment.userEmail}
+                          date={formatDateTime(Comment.date)}
+                        />
+                        <Typography sx={{paddingTop:"0.5em"}}>{Comment.commentText}</Typography>
                       </Box>
                     ))}
                   </Box>
