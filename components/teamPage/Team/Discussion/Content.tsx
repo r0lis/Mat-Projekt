@@ -67,7 +67,6 @@ const UPDATE_DISCUSSION = gql`
   }
 `;
 
-
 const formatDateTime = (rawDateTime: string) => {
   const dateTime = new Date(rawDateTime);
   const options: Intl.DateTimeFormatOptions = {
@@ -104,21 +103,22 @@ type Comment = {
   date: string;
 };
 
-
-
 const Content: React.FC<ContentProps> = (id) => {
   const subteamId = id.subteamId;
 
-  const { loading, error, data, refetch } = useQuery(GET_DISCUSSIONS_BY_SUBTEAM, {
-    variables: { subteamId },
-  });
+  const { loading, error, data, refetch } = useQuery(
+    GET_DISCUSSIONS_BY_SUBTEAM,
+    {
+      variables: { subteamId },
+    }
+  );
   const userEmail = authUtils.getCurrentUser()?.email || "";
   const [replyingTo, setReplyingTo] = useState<string | null>(null);
   const [openTo, setOpenTo] = useState<string | null>(null);
   const [replyText, setReplyText] = useState<string>("");
+  const [visibleSeen, setVisibleSeen] = useState<string | null>(null);
   const [addComment] = useMutation(ADD_COMMENT);
   const [updateDiscussion] = useMutation(UPDATE_DISCUSSION);
-
 
   if (loading) {
     return (
@@ -174,6 +174,7 @@ const Content: React.FC<ContentProps> = (id) => {
 
       setReplyText("");
       handleCancelReply();
+      setVisibleSeen(discussionId);
       refetch();
     } catch (error) {
       console.error("Error adding comment:", error);
@@ -192,13 +193,11 @@ const Content: React.FC<ContentProps> = (id) => {
       });
 
       refetch();
-  
       // You may want to refetch the discussions or update the UI accordingly
     } catch (error) {
       console.error("Error updating discussion:", error);
     }
   };
-
 
   return (
     <Box>
@@ -250,25 +249,49 @@ const Content: React.FC<ContentProps> = (id) => {
               }}
             >
               <Typography
-            sx={{
-              fontSize: "0.8em",
-              color:
-                discussion.Seen && discussion.Seen.some(seenItem => seenItem.userEmail === userEmail)
-                  ? "green"
-                  : "gray",
-              marginLeft: "auto",
-              paddingRight: "0.5%",
-              borderRight: "2px solid gray",
-              cursor: discussion.Seen ? "pointer" : "default",
-            }}
-            onClick={() =>  handleMarkAsRead(discussion.discussionId)}
-          >
-            {discussion.userEmail === userEmail
-    ? "Váš příspěvek"
-    : discussion.Seen && discussion.Seen.some(seenItem => seenItem.userEmail === userEmail)
-    ? "Přečteno"
-    : "Označit jako přečtené"}
-</Typography>
+                sx={{
+                  fontSize: "0.8em",
+                  color:
+                    discussion.Seen &&
+                    discussion.Seen.some(
+                      (seenItem) => seenItem.userEmail === userEmail
+                    )
+                      ? "green"
+                      : "gray",
+                  marginLeft: "auto",
+                  paddingRight: "0.5%",
+                  borderRight: "2px solid gray",
+                  cursor: discussion.Seen ? "pointer" : "default",
+                }}
+                onClick={() => handleMarkAsRead(discussion.discussionId)}
+              >
+                {discussion.userEmail === userEmail
+                  ? "Váš příspěvek"
+                  : discussion.Seen &&
+                    discussion.Seen.some(
+                      (seenItem) => seenItem.userEmail === userEmail
+                    )
+                  ? "Přečteno"
+                  : "Označit jako přečtené"}
+              </Typography>
+              <Box sx={{ }}>
+              {discussion.userEmail === userEmail && (
+                  <Typography
+                    sx={{
+                      fontSize: "0.8em",
+                      color: "gray",
+                      paddingLeft: "0.5em",
+                      borderRight: "2px solid gray",
+                      paddingRight: "0.5em",
+                      cursor: "pointer",
+                      whiteSpace: "nowrap",
+                    }}
+                    onClick={() => setVisibleSeen(visibleSeen === discussion.discussionId ? null : discussion.discussionId)}
+                  >
+                    {visibleSeen === discussion.discussionId ? "Skrýt přečteno" : "Zobrazit přečteno"}
+                  </Typography>
+                )}
+              </Box>
               {discussion.onComment == true ? (
                 <Typography
                   sx={{
@@ -298,6 +321,45 @@ const Content: React.FC<ContentProps> = (id) => {
                 </Typography>
               )}
             </Box>
+            {visibleSeen === discussion.discussionId && discussion.userEmail === userEmail && (
+              <Box
+                sx={{
+                  display: "block",
+                  borderTop: "2px solid gray",
+                  paddingTop: "0.6em",
+                }}
+              >
+                <Box sx={{ marginLeft: "5%", marginRight: "5%" }}>
+                  {discussion.Seen && discussion.Seen.length > 0 && (
+                    <Box
+                      sx={{
+                        paddingBottom: "0.4em",
+                        borderBottom: "1px solid gray",
+                        marginBottom: "0.8em",
+                      }}
+                    >
+                      <Typography sx={{ fontWeight: "bold", paddingBottom:"0.5em" }}>
+                        Přečteno
+                      </Typography>
+                      {discussion.Seen.map((Seen) => (
+                        <Box
+                          sx={{
+                            paddingBottom: "0.4em",
+                            marginBottom: "0.8em",
+                          }}
+                          key={Seen.userEmail}
+                        >
+                          <UserDetails
+                            userEmail={Seen.userEmail}
+                            date={formatDateTime(Seen.date)}
+                          />
+                        </Box>
+                      ))}
+                    </Box>
+                  )}
+                </Box>
+              </Box>
+            )}
             {replyingTo === discussion.discussionId && (
               <Box
                 sx={{
@@ -349,17 +411,23 @@ const Content: React.FC<ContentProps> = (id) => {
                 }}
               >
                 {discussion.Comments && discussion.Comments.length > 0 && (
-                  <Box sx={{ marginLeft: "5%", marginRight:"5%" }}>
+                  <Box sx={{ marginLeft: "5%", marginRight: "5%" }}>
                     {discussion.Comments.map((Comment) => (
                       <Box
-                        sx={{ paddingBottom: "0.4em", borderBottom:"1px solid gray", marginBottom:"0.8em" }}
+                        sx={{
+                          paddingBottom: "0.4em",
+                          borderBottom: "1px solid gray",
+                          marginBottom: "0.8em",
+                        }}
                         key={Comment.commentId}
                       >
                         <UserDetails
                           userEmail={Comment.userEmail}
                           date={formatDateTime(Comment.date)}
                         />
-                        <Typography sx={{paddingTop:"0.5em"}}>{Comment.commentText}</Typography>
+                        <Typography sx={{ paddingTop: "0.5em" }}>
+                          {Comment.commentText}
+                        </Typography>
                       </Box>
                     ))}
                   </Box>

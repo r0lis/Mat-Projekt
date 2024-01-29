@@ -311,6 +311,10 @@ export const typeDefs = gql`
     date: String!
   }
 
+  type SeenUser {
+    userEmail: String!
+  }
+
   
   type Query {
     user(id: String): User
@@ -349,6 +353,7 @@ export const typeDefs = gql`
     getAllTrainingBySubteamId(subteamId: String!): [Training]
     getTeamByEmail(email: String!): Team
     getDiscussionsBySubteam(subteamId: String!): [Discussion]
+    getDiscussionSeenUsers(discussionId: String!): [SeenUser]!
 
   }
 
