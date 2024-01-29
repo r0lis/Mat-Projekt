@@ -281,6 +281,7 @@ export const typeDefs = gql`
     date: String!
     title: String!
     onComment: Boolean!
+    Comments: [Comment]
   }
 
   input AddCommentInput {

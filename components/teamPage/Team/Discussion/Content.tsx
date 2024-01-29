@@ -1,6 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-import { Box, CircularProgress, Avatar, Typography, Button, TextField } from "@mui/material";
+import {
+  Box,
+  CircularProgress,
+  Avatar,
+  Typography,
+  Button,
+  TextField,
+} from "@mui/material";
 import React, { useState } from "react";
 import { useQuery, gql, useMutation } from "@apollo/client";
 import { authUtils } from "@/firebase/auth.utils";
@@ -19,6 +26,12 @@ const GET_DISCUSSIONS_BY_SUBTEAM = gql`
       date
       title
       onComment
+      Comments {
+        commentId
+        commentText
+        userEmail
+        date
+      }
     }
   }
 `;
@@ -40,11 +53,9 @@ const ADD_COMMENT = gql`
       commentText
       userEmail
       date
-      
     }
   }
 `;
-
 
 const formatDateTime = (rawDateTime: string) => {
   const dateTime = new Date(rawDateTime);
@@ -66,6 +77,14 @@ type Discussion = {
   date: string;
   title: string;
   onComment: boolean;
+  Comments: [Comment];
+};
+
+type Comment = {
+  commentId: string;
+  commentText: string;
+  userEmail: string;
+  date: string;
 };
 
 const Content: React.FC<ContentProps> = (id) => {
@@ -79,7 +98,6 @@ const Content: React.FC<ContentProps> = (id) => {
   const [openTo, setOpenTo] = useState<string | null>(null);
   const [replyText, setReplyText] = useState<string>("");
   const [addComment] = useMutation(ADD_COMMENT);
-
 
   if (loading) {
     return (
@@ -110,7 +128,7 @@ const Content: React.FC<ContentProps> = (id) => {
   const handleReplyClick = (discussionId: string) => {
     setReplyingTo(discussionId);
   };
-  
+
   const handleOpenClick = (discussionId: string) => {
     setOpenTo(openTo === discussionId ? null : discussionId);
   };
@@ -122,14 +140,13 @@ const Content: React.FC<ContentProps> = (id) => {
 
   const handleAddComment = async (discussionId: string) => {
     try {
-
       await addComment({
         variables: {
           input: {
-          discussionId,
-          commentText: replyText,
-          userEmail,
-          date: new Date().toISOString(),
+            discussionId,
+            commentText: replyText,
+            userEmail,
+            date: new Date().toISOString(),
           },
         },
       });
@@ -141,12 +158,20 @@ const Content: React.FC<ContentProps> = (id) => {
     }
   };
 
-
   return (
     <Box>
       {discussions.map((discussion) => (
-        <Box sx={{ marginBottom: "1em", borderLeft:"2px solid gray", borderRight:"2px solid gray", borderTop:"2px solid gray", borderRadius:"10px"}} key={discussion.discussionId}>
-          <Box sx={{paddingLeft:"1%", paddingTop:"1%"}}>
+        <Box
+          sx={{
+            marginBottom: "1em",
+            borderLeft: "2px solid gray",
+            borderRight: "2px solid gray",
+            borderTop: "2px solid gray",
+            borderRadius: "10px",
+          }}
+          key={discussion.discussionId}
+        >
+          <Box sx={{ paddingLeft: "1%", paddingTop: "1%" }}>
             <UserDetails
               userEmail={discussion.userEmail}
               date={formatDateTime(discussion.date)}
@@ -159,8 +184,8 @@ const Content: React.FC<ContentProps> = (id) => {
               paddingTop: "1em",
               paddingBottom: "1em",
               marginTop: "0.6em",
-              paddingLeft:"1%",
-              paddingRight:"1%",
+              paddingLeft: "1%",
+              paddingRight: "1%",
             }}
           >
             <Typography sx={{ fontWeight: "bold" }}>
@@ -195,18 +220,20 @@ const Content: React.FC<ContentProps> = (id) => {
                 Označit jako přectené
               </Typography>
               {discussion.onComment == true ? (
-                 <Typography
-                 sx={{
-                   fontSize: "0.8em",
-                   color: "gray",
-                   marginRight: "3%",
-                   paddingLeft: "0.5%",
-                   cursor: "pointer",
-                 }}
-                 onClick={() => handleOpenClick(discussion.discussionId)}
-               >
-                 {openTo === discussion.discussionId ? "Zavřít komentáře" : "Otevřít komentáře"}
-               </Typography>
+                <Typography
+                  sx={{
+                    fontSize: "0.8em",
+                    color: "gray",
+                    marginRight: "3%",
+                    paddingLeft: "0.5%",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => handleOpenClick(discussion.discussionId)}
+                >
+                  {openTo === discussion.discussionId
+                    ? "Zavřít komentáře"
+                    : "Otevřít komentáře"}
+                </Typography>
               ) : (
                 <Typography
                   sx={{
@@ -220,27 +247,37 @@ const Content: React.FC<ContentProps> = (id) => {
                   Komentáře vypnuty
                 </Typography>
               )}
-              
             </Box>
             {replyingTo === discussion.discussionId && (
-              <Box sx={{  display:"block", borderTop:"2px solid gray", paddingTop:"0.6em", paddingBottom:"0.6em" }}>
-                
+              <Box
+                sx={{
+                  display: "block",
+                  borderTop: "2px solid gray",
+                  paddingTop: "0.6em",
+                  paddingBottom: "0.6em",
+                }}
+              >
                 <TextField
                   label="Odpověď"
                   multiline
                   rows={2}
                   variant="outlined"
-                  
                   value={replyText}
-                  onChange={(e: { target: { value: any; }; }) => setReplyText(e.target.value)}
-                  sx={{ marginBottom: 1, width: "90%", marginLeft:"5%", marginRight:"auto"}}
+                  onChange={(e: { target: { value: any } }) =>
+                    setReplyText(e.target.value)
+                  }
+                  sx={{
+                    marginBottom: 1,
+                    width: "90%",
+                    marginLeft: "5%",
+                    marginRight: "auto",
+                  }}
                 />
                 <Button
                   variant="contained"
                   color="primary"
                   onClick={() => handleAddComment(discussion.discussionId)}
-
-                  sx={{ marginRight: 1,marginLeft:"5%", }}
+                  sx={{ marginRight: 1, marginLeft: "5%" }}
                 >
                   Potvrdit
                 </Button>
@@ -251,10 +288,40 @@ const Content: React.FC<ContentProps> = (id) => {
             )}
 
             {openTo === discussion.discussionId && (
-              <Box sx={{ marginTop: "1em", display:"block", borderTop:"2px solid gray", paddingTop:"0.6em", paddingBottom:"0.6em" }}>
-                <Typography sx={{ fontWeight: "bold", marginLeft:"5%", marginRight:"auto"}}>
+              <Box
+                sx={{
+                  marginTop: "1em",
+                  display: "block",
+                  borderTop: "2px solid gray",
+                  paddingTop: "0.6em",
+                  paddingBottom: "0.6em",
+                }}
+              >
+                <Typography
+                  sx={{
+                    fontWeight: "bold",
+                    marginLeft: "5%",
+                    marginRight: "auto",
+                  }}
+                >
                   Komentáře
                 </Typography>
+                {discussion.Comments && discussion.Comments.length > 0 && (
+                  <Box>
+                    <Typography variant="subtitle1">Comments:</Typography>
+                    {discussion.Comments.map((Comment) => (
+                      <Box key={Comment.commentId}>
+                        <Typography>{Comment.commentText}</Typography>
+                        <Typography variant="caption">
+                          {Comment.userEmail}
+                        </Typography>
+                        <Typography variant="caption">
+                          {formatDateTime(Comment.date)}
+                        </Typography>
+                      </Box>
+                    ))}
+                  </Box>
+                )}
                 <Box
                   sx={{
                     display: "flex",
@@ -262,20 +329,21 @@ const Content: React.FC<ContentProps> = (id) => {
                     paddingBottom: "0.5em",
                   }}
                 >
-                  {replyingTo === discussion.discussionId ? (<Box></Box>):(
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => handleReplyClick(discussion.discussionId)}
-                    sx={{ marginRight: 1,marginLeft:"5%", }}
-                  >
-                    Přidat komentář
-                  </Button>
+                  {replyingTo === discussion.discussionId ? (
+                    <Box></Box>
+                  ) : (
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={() => handleReplyClick(discussion.discussionId)}
+                      sx={{ marginRight: 1, marginLeft: "5%" }}
+                    >
+                      Přidat komentář
+                    </Button>
                   )}
-                  </Box>
-                  </Box>
+                </Box>
+              </Box>
             )}
-
           </Box>
         </Box>
       ))}
