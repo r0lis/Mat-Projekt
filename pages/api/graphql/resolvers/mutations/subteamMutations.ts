@@ -77,6 +77,11 @@ type AddTrainingInput = {
   
 }
 
+type UpdateDiscussionInput = {
+  discussionId: string;
+  userEmail: string;
+};
+
 
 const generateRandomString = (length: number) => {
     let result = "";
@@ -432,6 +437,48 @@ export const subteamMutations = {
         return true;
       } catch (error) {
         console.error("Error adding comment:", error);
+        throw error;
+      }
+    },
+    updateDiscussion: async (
+      _: any,
+      { input }: { input: UpdateDiscussionInput },
+      context: Context
+    ) => {
+      try {
+        const { discussionId, userEmail } = input;
+    
+        const discussionRef = context.db.collection("Discussion").doc(discussionId);
+    
+        // Get current discussion data
+        const discussionData = (await discussionRef.get()).data();
+    
+        if (!discussionData) {
+          throw new Error("Discussion not found");
+        }
+    
+        // If Seen array doesn't exist, create an empty array
+        const seenArray = discussionData.Seen || [];
+    
+        // Check if userEmail is already in the Seen array
+        const userEmailExists = seenArray.some((seenItem: any) => seenItem.userEmail === userEmail);
+    
+        if (!userEmailExists) {
+          // If userEmail is not in the array, add a new Seen item
+          seenArray.push({
+            userEmail,
+            date: new Date().toISOString(), // You can use the current date or modify it as needed
+          });
+    
+          // Update the discussion with the new Seen array
+          await discussionRef.update({
+            Seen: seenArray,
+          });
+        }
+    
+        return true;
+      } catch (error) {
+        console.error("Error updating discussion:", error);
         throw error;
       }
     },

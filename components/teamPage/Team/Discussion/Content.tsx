@@ -32,6 +32,10 @@ const GET_DISCUSSIONS_BY_SUBTEAM = gql`
         userEmail
         date
       }
+      Seen {
+        userEmail
+        date
+      }
     }
   }
 `;
@@ -57,6 +61,13 @@ const ADD_COMMENT = gql`
   }
 `;
 
+const UPDATE_DISCUSSION = gql`
+  mutation UpdateDiscussion($input: UpdateDiscussionInput!) {
+    updateDiscussion(input: $input)
+  }
+`;
+
+
 const formatDateTime = (rawDateTime: string) => {
   const dateTime = new Date(rawDateTime);
   const options: Intl.DateTimeFormatOptions = {
@@ -78,6 +89,12 @@ type Discussion = {
   title: string;
   onComment: boolean;
   Comments: [Comment];
+  Seen: [Seen];
+};
+
+type Seen = {
+  userEmail: string;
+  date: string;
 };
 
 type Comment = {
@@ -86,6 +103,8 @@ type Comment = {
   userEmail: string;
   date: string;
 };
+
+
 
 const Content: React.FC<ContentProps> = (id) => {
   const subteamId = id.subteamId;
@@ -98,6 +117,8 @@ const Content: React.FC<ContentProps> = (id) => {
   const [openTo, setOpenTo] = useState<string | null>(null);
   const [replyText, setReplyText] = useState<string>("");
   const [addComment] = useMutation(ADD_COMMENT);
+  const [updateDiscussion] = useMutation(UPDATE_DISCUSSION);
+
 
   if (loading) {
     return (
@@ -158,6 +179,24 @@ const Content: React.FC<ContentProps> = (id) => {
     }
   };
 
+  const handleMarkAsRead = async (discussionId: string) => {
+    try {
+      await updateDiscussion({
+        variables: {
+          input: {
+            discussionId,
+            userEmail,
+          },
+        },
+      });
+
+      // You may want to refetch the discussions or update the UI accordingly
+    } catch (error) {
+      console.error("Error updating discussion:", error);
+    }
+  };
+
+
   return (
     <Box>
       {discussions.map((discussion) => (
@@ -208,17 +247,23 @@ const Content: React.FC<ContentProps> = (id) => {
               }}
             >
               <Typography
-                sx={{
-                  fontSize: "0.8em",
-                  color: "gray",
-                  marginLeft: "auto",
-                  paddingRight: "0.5%",
-                  borderRight: "2px solid gray",
-                  cursor: "pointer",
-                }}
-              >
-                Označit jako přectené
-              </Typography>
+            sx={{
+              fontSize: "0.8em",
+              color:
+                discussion.Seen && discussion.Seen.some(seenItem => seenItem.userEmail === userEmail)
+                  ? "green"
+                  : "gray",
+              marginLeft: "auto",
+              paddingRight: "0.5%",
+              borderRight: "2px solid gray",
+              cursor: discussion.Seen ? "pointer" : "default",
+            }}
+            onClick={() =>  handleMarkAsRead(discussion.discussionId)}
+          >
+            {discussion.Seen && discussion.Seen.some(seenItem => seenItem.userEmail == userEmail)
+              ? "Přečteno"
+              : "Označit jako přečtené"}
+          </Typography>
               {discussion.onComment == true ? (
                 <Typography
                   sx={{
