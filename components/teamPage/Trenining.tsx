@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-import { Box, Button, CircularProgress, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, Dialog, DialogTitle, DialogContent, DialogActions, Typography } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import React, { useState } from "react";
 import AddTrening from "./Trenings/Add";
@@ -9,6 +9,7 @@ import { gql } from "@apollo/client";
 import Content from "./Trenings/Content";
 import PlanTraining from "./Trenings/PlanTraining";
 import PastTraining from "./Trenings/PastTraining";
+import AllTrainings from "./Trenings/AllTrainings";
 
 const GET_USER_ROLE_IN_TEAM = gql`
   query GetUserRoleInTeam($teamId: String!, $email: String!) {
@@ -36,6 +37,7 @@ type Props = {
 const TreniningComponent: React.FC<Props> = (id) => {
   const user = authUtils.getCurrentUser();
   const [addTrenining, setAddTrenining] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
 
   const {
     loading: roleLoading,
@@ -74,7 +76,13 @@ const TreniningComponent: React.FC<Props> = (id) => {
   const closeAddTraining = () => {
     setAddTrenining(false);
   };
+  const handleMenuClick = () => {
+    setOpenModal(true);
+  };
 
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
   
   return (
     <Box
@@ -123,7 +131,9 @@ const TreniningComponent: React.FC<Props> = (id) => {
                   height: "1.5em",
                   marginRight: "5%",
                   color: "#404040",
-                }} /></>
+                }} 
+                onClick={handleMenuClick}
+                /></>
           )}
         </Box>
         <Box
@@ -314,6 +324,19 @@ const TreniningComponent: React.FC<Props> = (id) => {
           </Box>
         </Box>
       )}
+      <Dialog open={openModal} onClose={handleCloseModal} fullWidth maxWidth="md">
+        <DialogTitle>
+          <Typography variant="h6">All Matches</Typography>
+        </DialogTitle>
+        <DialogContent>
+          <AllTrainings />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseModal} color="primary">
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

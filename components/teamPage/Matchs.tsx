@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-import { Box, Button, CircularProgress, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, Dialog, DialogTitle, DialogContent, DialogActions, Typography } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import React, { useState } from "react";
 import AddMatch from "./Match/Add";
@@ -9,6 +9,7 @@ import { gql } from "@apollo/client";
 import Content from "./Match/Content";
 import PlanMatch from "./Match/PlanMatch";
 import PastMatch from "./Match/PastMatch";
+import AllMatches from "./Match/AllMatches";
 
 const GET_USER_ROLE_IN_TEAM = gql`
   query GetUserRoleInTeam($teamId: String!, $email: String!) {
@@ -36,6 +37,7 @@ type Props = {
 const Matchs: React.FC<Props> = (id) => {
   const user = authUtils.getCurrentUser();
   const [addMatch, setAddMatch] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
 
   const {
     loading: roleLoading,
@@ -76,6 +78,14 @@ const Matchs: React.FC<Props> = (id) => {
 
   const closeAddMatch = () => {
     setAddMatch(false);
+  };
+
+  const handleMenuClick = () => {
+    setOpenModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
   };
 
   return (
@@ -130,6 +140,7 @@ const Matchs: React.FC<Props> = (id) => {
                     marginRight: "5%",
                     color: "#404040",
                   }}
+                  onClick={handleMenuClick}
                 />
               </>
             )}
@@ -226,7 +237,7 @@ const Matchs: React.FC<Props> = (id) => {
               boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.3)",
               borderRadius: "15px 15px 0px 0px",
               paddingBottom: "0.5em",
-              marginTop: isSmallView ? "8%" : "0%",
+              marginTop: isSmallView ? "4%" : "0%",
 
             }}
           >
@@ -342,6 +353,19 @@ const Matchs: React.FC<Props> = (id) => {
           </Box>
         </Box>
       )}
+      <Dialog open={openModal} onClose={handleCloseModal} fullWidth maxWidth="md">
+        <DialogTitle>
+          <Typography variant="h6">All Matches</Typography>
+        </DialogTitle>
+        <DialogContent>
+          <AllMatches />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseModal} color="primary">
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };
