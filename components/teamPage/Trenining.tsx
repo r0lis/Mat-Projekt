@@ -353,7 +353,7 @@ const TreniningComponent: React.FC<Props> = (id) => {
         maxWidth="md"
       >
         <DialogTitle>
-          <Typography variant="h6">All Matches</Typography>
+          <Typography variant="h6">Všechny zápasy</Typography>
         </DialogTitle>
         <DialogContent>
           <AllTrainings teamId={id.teamId}/>

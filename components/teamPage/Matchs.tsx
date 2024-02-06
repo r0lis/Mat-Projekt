@@ -365,7 +365,7 @@ const Matchs: React.FC<Props> = (id) => {
         maxWidth="md"
       >
         <DialogTitle>
-          <Typography variant="h6">All Matches</Typography>
+          <Typography variant="h6">Všechny zápasy</Typography>
         </DialogTitle>
         <DialogContent>
           <AllMatches teamId={id.teamId} />

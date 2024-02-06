@@ -348,7 +348,7 @@ const Team: React.FC = () => {
           >
             {activeLink === "Overview" && <OverviewComponent />}
             {activeLink === "Trainings" && <TrainingsComponent teamId={id as string} />}
-            {activeLink === "Kalendar" && <CalendarComponent />}
+            {activeLink === "Kalendar" && <CalendarComponent teamId={id as string} />}
             {activeLink === "Rouster" && <RoustersComponent />}
             {activeLink === "Matchs" && <NominationsComponent teamId={id as string}/>}
             {activeLink === "Events" && <EventsComponent />}
