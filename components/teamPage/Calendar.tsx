@@ -1,10 +1,10 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
-import { Box, Typography, Modal, Button } from "@mui/material";
+import { Box, Typography, Modal, Button, Grid } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import { gql, useQuery } from "@apollo/client";
 import { authUtils } from "@/firebase/auth.utils";
@@ -15,6 +15,16 @@ const GET_SUBTEAMS = gql`
       Name
       subteamId
       teamId
+    }
+  }
+`;
+
+const GET_HALL_BY_TEAM_AND_HALL_ID1 = gql`
+  query GetHallByTeamAndHallId($teamId: String!, $hallId: String!) {
+    getHallByTeamAndHallId(teamId: $teamId, hallId: $hallId) {
+      hallId
+      name
+      location
     }
   }
 `;
@@ -73,6 +83,30 @@ const GET_TRAININGS_BY_SUBTEAM = gql`
   }
 `;
 
+const GET_HALL_BY_TEAM_AND_HALL_ID2 = gql`
+  query GetTrainingHallByTeamAndHallId(
+    $teamId: String!
+    $treningHallId: String!
+  ) {
+    getTrainingHallByTeamAndHallId(
+      teamId: $teamId
+      treningHallId: $treningHallId
+    ) {
+      treningHallId
+      name
+      location
+    }
+  }
+`;
+
+const GET_SUBTEAM_DETAILS = gql`
+  query GetSubteamDetails($subteamId: String!) {
+    getCompleteSubteamDetail(subteamId: $subteamId) {
+      Name
+    }
+  }
+`;
+
 type Props = {
   teamId: string;
 };
@@ -82,8 +116,8 @@ const CalendarComponent: React.FC<Props> = ({ teamId }) => {
   const [subteamIds, setSubteamIds] = useState<string[]>([]);
   const [calendarEvents, setCalendarEvents] = useState<any[]>([]);
   const [selectedEvent, setSelectedEvent] = useState<any>(null);
+  const [eventDetails, setEventDetails] = useState<any>(null);
 
-  console.log(teamId);
   const {
     loading: subteamLoading,
     error: subteamError,
@@ -125,10 +159,14 @@ const CalendarComponent: React.FC<Props> = ({ teamId }) => {
       const matchEvents = matchesData.getAllMatchesBySubteam.flatMap(
         (subteam: any) =>
           subteam.matches.map((match: any) => ({
+            id: match.matchId,
             title: match.opponentName,
             start: `${match.date}T${match.time}`,
             end: `${match.date}T${match.endTime}`,
             type: "Zápas", // Přidání typu události
+            hall: match.selectedHallId,
+            subteamId: match.subteamIdSelected,
+            matchType: match.matchType,
           }))
       );
       setCalendarEvents((prevEvents: any[]) => [...prevEvents, ...matchEvents]);
@@ -140,10 +178,14 @@ const CalendarComponent: React.FC<Props> = ({ teamId }) => {
       const trainingEvents = trainingsData.getAllTrainingsBySubteam.flatMap(
         (subteam: any) =>
           subteam.trainings.map((training: any) => ({
+            id: training.matchId,
             title: training.description,
             start: `${training.date}T${training.time}`,
             end: `${training.date}T${training.endTime}`,
             type: "Trénink", // Přidání typu události
+            hall: training.selectedHallId,
+            subteamId: training.subteamIdSelected,
+            description: training.description,
           }))
       );
       setCalendarEvents((prevEvents: any[]) => [
@@ -154,11 +196,15 @@ const CalendarComponent: React.FC<Props> = ({ teamId }) => {
   }, [trainingsData]);
 
   const handleEventClick = (clickInfo: any) => {
+    const eventId = clickInfo.event.id;
+    const eventData = calendarEvents.find((event) => event.id === eventId);
+    setEventDetails(eventData);
     setSelectedEvent(clickInfo.event.extendedProps);
   };
 
   const handleCloseModal = () => {
     setSelectedEvent(null);
+    setEventDetails(null);
   };
 
   if (subteamLoading || matchesLoading || trainingsLoading)
@@ -228,11 +274,34 @@ const CalendarComponent: React.FC<Props> = ({ teamId }) => {
             {selectedEvent?.title}
           </Typography>
           <Typography variant="body1" gutterBottom>
+            Popis:{" "}
+            {selectedEvent?.type === "Trénink"
+              ? selectedEvent?.description
+              : eventDetails?.title}
+          </Typography>
+          <Typography variant="body1" gutterBottom>
             Typ: {selectedEvent?.type}
           </Typography>
           <Typography variant="body1" gutterBottom>
-            Datum: {selectedEvent?.time}
+            {selectedEvent?.type === "Zápas"
+              ? "Typ zápasu: " + selectedEvent?.matchType
+              : ""}
           </Typography>
+          <Typography variant="body1" gutterBottom>
+            Začátek:{" "}
+            {eventDetails ? formatDate(new Date(eventDetails.start)) : ""}
+          </Typography>
+          <Typography variant="body1" gutterBottom>
+            Konec: {eventDetails ? formatDate(new Date(eventDetails.end)) : ""}
+          </Typography>
+          {selectedEvent?.type === "Zápas" ? (
+            <HallInfo teamId={teamId} hallId={selectedEvent?.hall} />
+          ) : (
+            <HallInfo2 teamId={teamId} treningHallId={selectedEvent?.hall} />
+          )}
+          
+            <SubteamDetails subteamId={selectedEvent?.subteamId} />
+
           <Button onClick={handleCloseModal}>Zavřít</Button>
         </Box>
       </Modal>
@@ -241,15 +310,129 @@ const CalendarComponent: React.FC<Props> = ({ teamId }) => {
 };
 
 const renderEventContent = (eventInfo: any) => {
+  const eventBackgroundColor =
+    eventInfo.event.extendedProps.type === "Zápas"
+      ? "rgba(0, 56, 255, 0.24)"
+      : "rgba(255, 130, 0, 0.15)";
+  const eventBorderColor =
+    eventInfo.event.extendedProps.type === "Zápas"
+      ? "rgba(0, 34, 155, 1)"
+      : "rgba(255, 130, 0, 0.6)";
   return (
-    <div>
+    <Box
+      sx={{
+        backgroundColor: eventBackgroundColor,
+        border: `2px solid ${eventBorderColor}`,
+        borderRadius: "5px",
+        padding: "5px",
+        width: "100%",
+      }}
+    >
       <b>{eventInfo.event.extendedProps.type}</b>{" "}
       {eventInfo.event.extendedProps.type !== "Trénink" && (
         <b>{eventInfo.event.title}</b>
       )}
-      <p>Čas: {eventInfo.event.start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p> {/* Zobrazení času */}
-    </div>
+      
+      <p style={{marginTop:"2px", marginBottom:"2px"}}>
+        Čas:{" "}
+        {eventInfo.event.start.toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        })}
+      </p>{" "}
+      {/* Zobrazení času */}
+    </Box>
   );
+};
+
+const formatDate = (date: Date) => {
+  const options: Intl.DateTimeFormatOptions = {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  };
+  return date.toLocaleString("cs-CZ", options);
+};
+
+interface HallInfoProps {
+  teamId: string;
+  hallId: string;
+}
+
+const HallInfo: React.FC<HallInfoProps> = ({ teamId, hallId }) => {
+  const { loading, error, data } = useQuery(GET_HALL_BY_TEAM_AND_HALL_ID1, {
+    variables: { teamId, hallId },
+  });
+
+  if (loading) return <CircularProgress color="primary" size={20} />;
+  if (error) return <Typography>Error loading hall information</Typography>;
+
+  const hall = data.getHallByTeamAndHallId;
+  return (
+    <Box sx={{ paddingBottom: "0.5em" }}>
+      <Typography sx={{ fontWeight: "500", paddingBottom: "0em" }}>
+        Hala:{" "}
+      </Typography>
+      <Grid container spacing={10}>
+        <Grid item xs={2}>
+          <Typography sx={{ fontWeight: "500" }}>Název: </Typography>
+          <Typography sx={{ fontWeight: "500" }}>Umístení: </Typography>
+        </Grid>
+        <Grid item xs={6}>
+          <Typography>{hall?.name}</Typography>
+          <Typography>{hall?.location}</Typography>
+        </Grid>
+      </Grid>
+    </Box>
+  );
+};
+
+interface HallInfoProps2 {
+  teamId: string;
+  treningHallId: string;
+}
+
+const HallInfo2: React.FC<HallInfoProps2> = ({ teamId, treningHallId }) => {
+  const { loading, error, data } = useQuery(GET_HALL_BY_TEAM_AND_HALL_ID2, {
+    variables: { teamId, treningHallId },
+  });
+
+  if (loading) return <CircularProgress color="primary" size={20} />;
+  if (error) return <Typography>Error loading hall information</Typography>;
+
+  const hall = data.getTrainingHallByTeamAndHallId;
+  console.log(hall);
+  return (
+    <Box sx={{ paddingBottom: "0.5em" }}>
+       <Typography sx={{ fontWeight: "500", paddingBottom: "0em" }}>
+        Hala:{" "}
+      </Typography>
+      <Grid container spacing={10}>
+        <Grid item xs={2}>
+          <Typography sx={{ fontWeight: "500" }}>Název: </Typography>
+          <Typography sx={{ fontWeight: "500" }}>Umístení: </Typography>
+        </Grid>
+        <Grid item xs={6}>
+          <Typography>{hall.name}</Typography>
+          <Typography>{hall.location}</Typography>
+        </Grid>
+      </Grid>
+    </Box>
+  );
+};
+
+const SubteamDetails: React.FC<{ subteamId: string }> = ({ subteamId }) => {
+  const { loading, error, data } = useQuery(GET_SUBTEAM_DETAILS, {
+    variables: { subteamId },
+  });
+
+  if (loading) return <CircularProgress color="primary" size={20} />;
+  if (error) return <Typography>Error loading subteam information</Typography>;
+
+  const subteamDetails = data.getCompleteSubteamDetail;
+  return <Typography> Tým: {subteamDetails.Name}</Typography>;
 };
 
 export default CalendarComponent;
