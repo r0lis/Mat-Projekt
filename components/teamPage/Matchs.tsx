@@ -1,5 +1,14 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-import { Box, Button, CircularProgress, Dialog, DialogTitle, DialogContent, DialogActions, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Typography,
+} from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import React, { useState } from "react";
 import AddMatch from "./Match/Add";
@@ -238,7 +247,6 @@ const Matchs: React.FC<Props> = (id) => {
               borderRadius: "15px 15px 0px 0px",
               paddingBottom: "0.5em",
               marginTop: isSmallView ? "4%" : "0%",
-
             }}
           >
             <Typography
@@ -261,10 +269,7 @@ const Matchs: React.FC<Props> = (id) => {
               overflowY: "auto",
             }}
           >
-           
-            <Box
-              sx={{  overflowY: "auto", marginTop:"0.5em" }}
-            >
+            <Box sx={{ overflowY: "auto", marginTop: "0.5em" }}>
               <PastMatch teamId={id.teamId} />
             </Box>
           </Box>
@@ -353,12 +358,17 @@ const Matchs: React.FC<Props> = (id) => {
           </Box>
         </Box>
       )}
-      <Dialog open={openModal} onClose={handleCloseModal} fullWidth maxWidth="md">
+      <Dialog
+        open={openModal}
+        onClose={handleCloseModal}
+        fullWidth
+        maxWidth="md"
+      >
         <DialogTitle>
           <Typography variant="h6">All Matches</Typography>
         </DialogTitle>
         <DialogContent>
-          <AllMatches />
+          <AllMatches teamId={id.teamId} />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseModal} color="primary">

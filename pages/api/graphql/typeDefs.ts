@@ -342,7 +342,9 @@ export const typeDefs = gql`
     getTreningHallsByTeamId(teamId: String!): [TreningHall]
     getGymsByTeamId(teamId: String!): [Gym]
     getMatchesBySubteam(input: MatchesBySubteamInput): [SubteamMatches]
+    getAllMatchesBySubteam(input: MatchesBySubteamInput): [SubteamMatches]
     getTrainingsBySubteam(input: MatchesBySubteamInput): [SubteamTrainings]
+    getAllTrainingsBySubteam(input: MatchesBySubteamInput): [SubteamTrainings]
     getHallByTeamAndHallId(teamId: String!, hallId: String!): Hall 
     getPastMatchesBySubteam(input: MatchesBySubteamInput): [SubteamMatches]
     getFutureMatchesBySubteam(input: MatchesBySubteamInput): [SubteamMatches]

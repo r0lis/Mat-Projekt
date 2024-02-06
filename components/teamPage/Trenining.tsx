@@ -1,5 +1,14 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-import { Box, Button, CircularProgress, Dialog, DialogTitle, DialogContent, DialogActions, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Typography,
+} from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import React, { useState } from "react";
 import AddTrening from "./Trenings/Add";
@@ -21,8 +30,8 @@ const GET_USER_ROLE_IN_TEAM = gql`
 `;
 
 const GET_HALL_BY_TEAM_AND_HALL_ID = gql`
-  query getTreningHallsByTeamId($teamId: String! ) {
-    getTreningHallsByTeamId(teamId: $teamId,) {
+  query getTreningHallsByTeamId($teamId: String!) {
+    getTreningHallsByTeamId(teamId: $teamId) {
       treningHallId
       name
       location
@@ -48,8 +57,12 @@ const TreniningComponent: React.FC<Props> = (id) => {
     skip: !user,
   });
 
-  const { loading, error, data: dataHalls } = useQuery(GET_HALL_BY_TEAM_AND_HALL_ID, {
-    variables: { teamId: id.teamId,},
+  const {
+    loading,
+    error,
+    data: dataHalls,
+  } = useQuery(GET_HALL_BY_TEAM_AND_HALL_ID, {
+    variables: { teamId: id.teamId },
   });
 
   if (roleLoading || loading)
@@ -69,7 +82,6 @@ const TreniningComponent: React.FC<Props> = (id) => {
 
   const role = roleData?.getUserRoleInTeam.role || "";
 
-
   const isSmallView = window.innerWidth >= 1200;
   const isMobile = window.innerWidth <= 600;
 
@@ -83,7 +95,7 @@ const TreniningComponent: React.FC<Props> = (id) => {
   const handleCloseModal = () => {
     setOpenModal(false);
   };
-  
+
   return (
     <Box
       sx={{
@@ -113,28 +125,33 @@ const TreniningComponent: React.FC<Props> = (id) => {
           >
             Tréninky
           </Typography>
-          {(role === "1" || role === "2") && dataHalls && dataHalls.getTreningHallsByTeamId && dataHalls.getTreningHallsByTeamId.length > 0 && (
-
-          <><Button
-              variant="contained"
-              onClick={() => setAddTrenining(!addTrenining)}
-              sx={{
-                marginLeft: "auto",
-                display: addTrenining ? "none" : "block",
-              }}
-            >
-              Přidat
-            </Button><MenuIcon
-                sx={{
-                  marginLeft: addTrenining ? "auto" : "1em",
-                  width: "1.5em",
-                  height: "1.5em",
-                  marginRight: "5%",
-                  color: "#404040",
-                }} 
-                onClick={handleMenuClick}
-                /></>
-          )}
+          {(role === "1" || role === "2") &&
+            dataHalls &&
+            dataHalls.getTreningHallsByTeamId &&
+            dataHalls.getTreningHallsByTeamId.length > 0 && (
+              <>
+                <Button
+                  variant="contained"
+                  onClick={() => setAddTrenining(!addTrenining)}
+                  sx={{
+                    marginLeft: "auto",
+                    display: addTrenining ? "none" : "block",
+                  }}
+                >
+                  Přidat
+                </Button>
+                <MenuIcon
+                  sx={{
+                    marginLeft: addTrenining ? "auto" : "1em",
+                    width: "1.5em",
+                    height: "1.5em",
+                    marginRight: "5%",
+                    color: "#404040",
+                  }}
+                  onClick={handleMenuClick}
+                />
+              </>
+            )}
         </Box>
         <Box
           sx={{
@@ -155,12 +172,14 @@ const TreniningComponent: React.FC<Props> = (id) => {
             minHeight: "100vh",
             overflowY: "auto",
             maxHeight: "100vh",
-
           }}
         >
           {addTrenining ? (
             <Box>
-              <AddTrening teamId={id.teamId} closeAddTraining={closeAddTraining}  />
+              <AddTrening
+                teamId={id.teamId}
+                closeAddTraining={closeAddTraining}
+              />
             </Box>
           ) : (
             <Box>
@@ -178,7 +197,7 @@ const TreniningComponent: React.FC<Props> = (id) => {
             display: isSmallView ? "block" : "flex",
           }}
         >
-           <Box
+          <Box
             sx={{
               backgroundImage: `
             linear-gradient(to bottom, #c2c3c4 60px, #ffffff 60px)
@@ -196,7 +215,7 @@ const TreniningComponent: React.FC<Props> = (id) => {
                 paddingTop: ["1.4rem", "1rem", "0.5em"],
               }}
             >
-                Nadcházející tréninky
+              Nadcházející tréninky
             </Typography>
           </Box>
           <Box
@@ -210,8 +229,8 @@ const TreniningComponent: React.FC<Props> = (id) => {
             }}
           >
             <Box sx={{}}>
-              <Box sx={{ overflowY: "auto", paddingTop:"0.5em"}}>
-              <PlanTraining teamId={id.teamId}/>
+              <Box sx={{ overflowY: "auto", paddingTop: "0.5em" }}>
+                <PlanTraining teamId={id.teamId} />
               </Box>
             </Box>
           </Box>
@@ -244,19 +263,18 @@ const TreniningComponent: React.FC<Props> = (id) => {
               height: "48%",
               maxHeight: "42.5%",
               overflowY: "auto",
-
             }}
           >
-            <Box sx={{ overflowY: "auto", paddingTop:"0.5em" }}>
-              <PastTraining teamId={id.teamId}/>
-              </Box>
+            <Box sx={{ overflowY: "auto", paddingTop: "0.5em" }}>
+              <PastTraining teamId={id.teamId} />
+            </Box>
           </Box>
         </Box>
       ) : (
         <Box
           sx={{
-            display: "flex", 
-            justifyContent: "space-between", 
+            display: "flex",
+            justifyContent: "space-between",
             width: "100%",
             marginTop: "1em",
             minHeight: "100vh",
@@ -264,7 +282,7 @@ const TreniningComponent: React.FC<Props> = (id) => {
         >
           <Box
             sx={{
-              flex: 1, 
+              flex: 1,
               borderRadius: "15px",
               backgroundImage: `
         linear-gradient(to bottom, #c2c3c4 60px, #ffffff 60px)
@@ -274,7 +292,7 @@ const TreniningComponent: React.FC<Props> = (id) => {
               display: isSmallView ? "" : "block",
             }}
           >
-            <Box sx={{maxHeight:"50vh"}}>
+            <Box sx={{ maxHeight: "50vh" }}>
               <Typography
                 sx={{
                   fontSize: ["0.8rem", "1.1rem", "1.5rem"],
@@ -286,8 +304,10 @@ const TreniningComponent: React.FC<Props> = (id) => {
               >
                 Nadcházející zápasy
               </Typography>
-              <Box sx={{maxHeight:"80vh",  overflowY:"auto",  marginTop:"1em" }}>
-              <PlanTraining teamId={id.teamId}/>
+              <Box
+                sx={{ maxHeight: "80vh", overflowY: "auto", marginTop: "1em" }}
+              >
+                <PlanTraining teamId={id.teamId} />
               </Box>
             </Box>
           </Box>
@@ -305,7 +325,7 @@ const TreniningComponent: React.FC<Props> = (id) => {
               marginLeft: isMobile ? "0.5em" : "2em",
             }}
           >
-            <Box sx={{maxHeight:"50vh"}}>
+            <Box sx={{ maxHeight: "50vh" }}>
               <Typography
                 sx={{
                   fontSize: ["0.8rem", "1.1rem", "1.5rem"],
@@ -317,14 +337,21 @@ const TreniningComponent: React.FC<Props> = (id) => {
               >
                 Poslední zápasy
               </Typography>
-              <Box sx={{ maxHeight:"80vh", overflowY: "auto", marginTop:"1em" }}>
-              <PastTraining teamId={id.teamId}/>
+              <Box
+                sx={{ maxHeight: "80vh", overflowY: "auto", marginTop: "1em" }}
+              >
+                <PastTraining teamId={id.teamId} />
               </Box>
             </Box>
           </Box>
         </Box>
       )}
-      <Dialog open={openModal} onClose={handleCloseModal} fullWidth maxWidth="md">
+      <Dialog
+        open={openModal}
+        onClose={handleCloseModal}
+        fullWidth
+        maxWidth="md"
+      >
         <DialogTitle>
           <Typography variant="h6">All Matches</Typography>
         </DialogTitle>

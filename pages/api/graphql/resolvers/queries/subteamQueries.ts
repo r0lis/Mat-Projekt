@@ -319,6 +319,28 @@ export const subteamQueries = {
   }
   },
 
+  getAllMatchesBySubteam: async (
+    _: any,
+    { input }: { input: { subteamIds: string[] } },
+    context: { db: { collection: (arg0: string) => any } }
+  ) => {
+    const { subteamIds } = input;
+    
+    try {
+      const matchesSnapshot = await context.db
+        .collection("Match")
+        .where("subteamIdSelected", "in", subteamIds)
+        .get();
+  
+      const matches = matchesSnapshot.docs.map((doc: any) => doc.data() as any);
+  
+      return [{ subteamId: subteamIds[0], matches }];
+    } catch (error) {
+      console.error("Error fetching matches by subteams:", error);
+      throw error;
+    }
+  },
+
   getAllMatchBySubteamId: async (
     _: any,
     { subteamId }: { subteamId: string },
@@ -395,6 +417,28 @@ export const subteamQueries = {
     }
   },
 
+  getAllTrainingsBySubteam: async (
+    _: any,
+    { input }: { input: { subteamIds: string[] } },
+    context: { db: { collection: (arg0: string) => any } }
+  ) => {
+    const { subteamIds } = input;
+  
+    try {
+      const trainingsSnapshot = await context.db
+        .collection("Training")
+        .where("subteamIdSelected", "in", input.subteamIds)
+        .get();
+  
+      const trainings = trainingsSnapshot.docs.map((doc: any) => doc.data() as any);
+  
+      return [{ subteamId: input.subteamIds[0], trainings }];
+    } catch (error) {
+      console.error("Error fetching trainings by subteams:", error);
+      throw error;
+    }
+  },
+
   getPastMatchesBySubteam: async (
     _: any,
     { input }: { input: { subteamIds: string[] } },
@@ -402,6 +446,8 @@ export const subteamQueries = {
   ) => {
     try {
       const currentDate = new Date(); // Get the current date and time
+      const eightDaysAgo = new Date(currentDate.getTime() - 8 * 24 * 60 * 60 * 1000); // Calculate the date 8 days ago
+  
       const matchesSnapshot = await context.db
         .collection("Match")
         .where("subteamIdSelected", "in", input.subteamIds)
@@ -411,8 +457,9 @@ export const subteamQueries = {
   
       const validMatches = matches.filter((match: any) => {
         const matchDateTime = new Date(`${match.date} ${match.time}`);
-       
-        return matchDateTime < currentDate;
+  
+        // Check if the match date is within the last 8 days
+        return matchDateTime >= eightDaysAgo && matchDateTime < currentDate;
       });
   
       return [{ subteamId: input.subteamIds[0], matches: validMatches }];
@@ -421,6 +468,7 @@ export const subteamQueries = {
       throw error;
     }
   },
+  
 
   getPastTrainingsBySubteam: async (
     _: any,
