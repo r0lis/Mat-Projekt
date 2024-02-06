@@ -356,7 +356,7 @@ const TreniningComponent: React.FC<Props> = (id) => {
           <Typography variant="h6">All Matches</Typography>
         </DialogTitle>
         <DialogContent>
-          <AllTrainings />
+          <AllTrainings teamId={id.teamId}/>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseModal} color="primary">
