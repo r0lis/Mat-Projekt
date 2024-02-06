@@ -260,49 +260,97 @@ const CalendarComponent: React.FC<Props> = ({ teamId }) => {
         <Box
           sx={{
             position: "absolute",
-            width: 400,
+            width: 550,
             bgcolor: "background.paper",
-            border: "2px solid #000",
+            borderRadius: "10px",
             boxShadow: 24,
-            p: 4,
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
           }}
         >
-          <Typography variant="h6" component="h2" gutterBottom>
-            {selectedEvent?.title}
-          </Typography>
-          <Typography variant="body1" gutterBottom>
-            Popis:{" "}
-            {selectedEvent?.type === "Trénink"
-              ? selectedEvent?.description
-              : eventDetails?.title}
-          </Typography>
-          <Typography variant="body1" gutterBottom>
-            Typ: {selectedEvent?.type}
-          </Typography>
-          <Typography variant="body1" gutterBottom>
-            {selectedEvent?.type === "Zápas"
-              ? "Typ zápasu: " + selectedEvent?.matchType
-              : ""}
-          </Typography>
-          <Typography variant="body1" gutterBottom>
-            Začátek:{" "}
-            {eventDetails ? formatDate(new Date(eventDetails.start)) : ""}
-          </Typography>
-          <Typography variant="body1" gutterBottom>
-            Konec: {eventDetails ? formatDate(new Date(eventDetails.end)) : ""}
-          </Typography>
-          {selectedEvent?.type === "Zápas" ? (
-            <HallInfo teamId={teamId} hallId={selectedEvent?.hall} />
-          ) : (
-            <HallInfo2 teamId={teamId} treningHallId={selectedEvent?.hall} />
-          )}
-          
+          <Box
+            sx={{
+              backgroundColor: "#027ef2",
+              paddingLeft: "5%",
+              borderRadius: "10px 10px 0px 0px",
+              paddingRight: "5%",
+              paddingTop: "1%",
+              paddingBottom: "1%",
+              textAlign: "center",
+            }}
+          >
+            <Typography
+              sx={{ color: "white", fontWeight: "500" }}
+              variant="h5"
+              component="h2"
+            >
+              Detail události
+            </Typography>
+          </Box>
+          <Box sx={{ paddingLeft: "5%", paddingRight: "5%", paddingTop: "1%" }}>
+            <Box
+              sx={{
+                display: selectedEvent?.type === "Zápas" ? "flex" : "block",
+              }}
+            >
+              <Typography
+                sx={{
+                  marginRight: "auto",
+                  fontWeight: "500",
+                  fontSize: "1.1em",
+                }}
+                variant="body1"
+                gutterBottom
+              >
+                {selectedEvent?.type}
+              </Typography>
+              <Typography variant="h6" component="h2" gutterBottom>
+                {selectedEvent?.title}
+              </Typography>
+              <Typography
+                sx={{ display: "flex", fontWeight: "500" }}
+                variant="body1"
+                gutterBottom
+              >
+                {selectedEvent?.type === "Zápas" ? "" : "Popis "}
+
+                {selectedEvent?.type === "Trénink"
+                  ? selectedEvent?.description
+                  : eventDetails?.title}
+              </Typography>
+            </Box>
             <SubteamDetails subteamId={selectedEvent?.subteamId} />
 
-          <Button onClick={handleCloseModal}>Zavřít</Button>
+            <Typography variant="body1" gutterBottom>
+              {selectedEvent?.type === "Zápas"
+                ? "Typ zápasu: " +
+                  (selectedEvent?.matchType === "home" ? "Domácí" : "Hosté")
+                : ""}
+            </Typography>
+            <Typography variant="body1" gutterBottom>
+              <span style={{ fontWeight: 500 }}>Začátek:</span>{" "}
+              {eventDetails ? formatDate(new Date(eventDetails.start)) : ""}
+            </Typography>
+            <Typography variant="body1" gutterBottom>
+              <span style={{ fontWeight: 500 }}>Konec:</span>{" "}
+              {eventDetails ? formatDate(new Date(eventDetails.end)) : ""}
+            </Typography>
+
+            {selectedEvent?.type === "Zápas" ? (
+              <HallInfo teamId={teamId} hallId={selectedEvent?.hall} />
+            ) : (
+              <HallInfo2 teamId={teamId} treningHallId={selectedEvent?.hall} />
+            )}
+          </Box>
+          <Box sx={{paddingLeft:"1%"}}>
+            <Button
+              sx={{ paddingLeft: "5%", paddingRight: "5%" }}
+              onClick={handleCloseModal}
+            >
+              Zavřít
+            </Button>
+          </Box>
         </Box>
       </Modal>
     </Box>
@@ -332,8 +380,7 @@ const renderEventContent = (eventInfo: any) => {
       {eventInfo.event.extendedProps.type !== "Trénink" && (
         <b>{eventInfo.event.title}</b>
       )}
-      
-      <p style={{marginTop:"2px", marginBottom:"2px"}}>
+      <p style={{ marginTop: "2px", marginBottom: "2px" }}>
         Čas:{" "}
         {eventInfo.event.start.toLocaleTimeString([], {
           hour: "2-digit",
@@ -406,8 +453,8 @@ const HallInfo2: React.FC<HallInfoProps2> = ({ teamId, treningHallId }) => {
   console.log(hall);
   return (
     <Box sx={{ paddingBottom: "0.5em" }}>
-       <Typography sx={{ fontWeight: "500", paddingBottom: "0em" }}>
-        Hala:{" "}
+      <Typography sx={{ fontWeight: "500", paddingBottom: "0em" }}>
+        Hala{" "}
       </Typography>
       <Grid container spacing={10}>
         <Grid item xs={2}>
@@ -432,7 +479,12 @@ const SubteamDetails: React.FC<{ subteamId: string }> = ({ subteamId }) => {
   if (error) return <Typography>Error loading subteam information</Typography>;
 
   const subteamDetails = data.getCompleteSubteamDetail;
-  return <Typography> Tým: {subteamDetails.Name}</Typography>;
+  return (
+    <Typography>
+      {" "}
+      <span style={{ fontWeight: 500 }}>Tým:</span> {subteamDetails.Name}
+    </Typography>
+  );
 };
 
 export default CalendarComponent;
