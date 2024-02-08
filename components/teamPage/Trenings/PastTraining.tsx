@@ -160,7 +160,10 @@ const PastTraining: React.FC<Props> = ({ teamId }) => {
   const userRole = roleData?.getUserRoleInTeam?.role;
   const isRole3 = userRole == 3;
 
-  if (!matchesData?.getPastTrainingsBySubteam || !matchesData?.getPastTrainingsBySubteam?.length) {
+  const lenght = matchesData?.getPastTrainingsBySubteam.map((subteam: { subteamId: string; trainings: Training[] }) => subteam.trainings).flat().length;
+   
+  
+  if (!matchesData?.getPastTrainingsBySubteam || lenght === 0) {
     return <Typography sx={{paddingLeft:"3%", paddingRight:"3%"}}>Nemáte žádný trénink který proběhl za poslední týden.</Typography>;
   }
 
