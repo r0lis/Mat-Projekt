@@ -162,7 +162,7 @@ const PlanMatch: React.FC<Props> = ({ teamId }) => {
   const userRole = roleData?.getUserRoleInTeam?.role;
   const isRole3 = userRole == 3;
 
-  if (!matchesData?.getPastMatchesBySubteam?.matches || !matchesData?.getPastMatchesBySubteam?.matches.length) {
+  if (!matchesData?.getPastMatchesBySubteam || !matchesData?.getPastMatchesBySubteam?.length) {
     return <Typography sx={{paddingLeft:"3%", paddingRight:"3%"}}>Nemáte žádný zápas který proběhl za poslední týden.</Typography>;
   }
 

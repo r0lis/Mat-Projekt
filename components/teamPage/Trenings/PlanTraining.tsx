@@ -171,7 +171,7 @@ const PlanTraining: React.FC<Props> = ({ teamId }) => {
     return <Typography>Nemáte žádný zápas který už proběhl.</Typography>;
   }
 
-  if (!matchesData?.getFutureTrainingsBySubteam?.trainings || !matchesData?.getFutureTrainingsBySubteam?.trainings.length) {
+  if (!matchesData?.getFutureTrainingsBySubteam || !matchesData?.getFutureTrainingsBySubteam?.length) {
     return <Typography sx={{paddingLeft:"3%", paddingRight:"3%"}}>Nemáte naplánovaný žádný zápas.</Typography>;
   }
 

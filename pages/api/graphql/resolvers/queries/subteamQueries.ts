@@ -511,11 +511,13 @@ export const subteamQueries = {
         .get();
   
       const matches = matchesSnapshot.docs.map((doc: any) => doc.data() as any);
-  
+      
       const validMatches = matches.filter((match: any) => {
         const matchDateTime = new Date(`${match.date} ${match.time}`);
         return matchDateTime >= currentDate;
       });
+
+      console.log("validMatches", validMatches);
 
       return [{ subteamId: input.subteamIds[0], matches: validMatches }];
     } catch (error) {
