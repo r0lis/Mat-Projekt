@@ -21,7 +21,7 @@ import {
   InputAdornment,
   Alert,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const GET_TRAINING_BY_MATCH_ID = gql`
   query GetTrainingByMatchId($matchId: String!) {
@@ -147,6 +147,14 @@ const [time, setTime] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [opponentName, setOpponentName] = useState<string>("");
   const [errorMessages, setErrorMessages] = useState<string[]>([]);
+  const [date, setDate] = useState<string>(() => {
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    const currentMonth = String(currentDate.getMonth() + 1).padStart(2, "0");
+    const currentDay = String(currentDate.getDate()).padStart(2, "0");
+    return `${currentYear}-${currentMonth}-${currentDay}`;
+  });
+
 
   const { loading, error, data } = useQuery(GET_TRAINING_BY_MATCH_ID, {
     variables: { matchId },
@@ -160,7 +168,19 @@ const [time, setTime] = useState<string>("");
     variables: { teamId: data?.getTrainingByMatchId?.teamId || "" },
   });
 
-  const [formData, setFormData] = useState<Partial<Training>>({});
+  useEffect(() => {
+    if (!loading && !error && data) {
+      const training = data.getTrainingByMatchId;
+      setDescription(training.description || ""); // Naplnění popisu
+      setTime(training.time || ""); // Naplnění času
+      setEndTime(training.endTime || ""); // Naplnění konce
+      setOpponentName(training.opponentName || ""); // Naplnění jména soupeře
+      setDate(training.date || ""); // Naplnění data
+      setSelectedMembers(training.selectedMembers || []); // Naplnění vybraných členů týmu
+      setSelectedTrainingHallId(training.selectedHallId || null); // Naplnění vybrané haly
+    }
+  }, [loading, error, data]);
+
 
   if (loading || subteamLoading || hallLoading)
   return (
@@ -178,15 +198,7 @@ const [time, setTime] = useState<string>("");
 if (subteamError || subteamError || hallError)
   return <Typography>Chyba</Typography>;
 
-
   const trainingData: Training = data.getTrainingByMatchId;
-
-  const handleFormChange = (field: keyof Training, value: any) => {
-    setFormData((prevData) => ({
-      ...prevData,
-      [field]: value.toString(), // Převést hodnotu na řetězec
-    }));
-  };
 
   const handleSelectAllPlayers = () => {
     const playersPosition4 =
@@ -216,8 +228,110 @@ if (subteamError || subteamError || hallError)
     setSelectedTrainingHallId(treningHallId);
   };
 
+  const handleDescriptionChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setDescription(event.target.value);
+  };
 
-  const handleSave = async () => {};
+  const handleTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTime(event.target.value);
+  };
+
+  const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedDate = new Date(event.target.value);
+    const currentYear = new Date().getFullYear();
+    const nextYear = currentYear + 1;
+
+    // Check if the selected date is in the current or next year
+    if (
+      selectedDate.getFullYear() === currentYear ||
+      selectedDate.getFullYear() === nextYear
+    ) {
+      setDate(event.target.value);
+    } else {
+      // Display an error message or handle it as needed
+      setErrorMessages((prevMessages) => [
+        ...prevMessages,
+        "Zadejte platné datum v aktuálním nebo příštím roce.",
+      ]);
+    }
+  };
+
+  const handleOpponentNameChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setOpponentName(event.target.value);
+  };
+
+  const hasPosition4Member = selectedMembers.some((email) =>
+  subteamData?.getCompleteSubteamDetail?.subteamMembers.some(
+    (member: SubteamMember) =>
+      member.email === email && member.position === "4"
+  )
+);
+
+  const handleSave = async () => {
+    setErrorMessages([]);
+
+    if (!trainingData.subteamIdSelected) {
+      setErrorMessages((prevMessages) => [...prevMessages, "Vyberte tým."]);
+    }
+
+    if (opponentName.length < 2 || !/^[A-Z]/.test(opponentName)) {
+      setErrorMessages((prevMessages) => [
+        ...prevMessages,
+        "Zadejte platné jméno soupeře (alespoň 2 znaky, začínající velkým písmenem).",
+      ]);
+    }
+
+    if (!selectedTrainingHallId) {
+      setErrorMessages((prevMessages) => [...prevMessages, "Vyberte halu."]);
+    }
+
+    if (description.length < 20 || description.length > 250) {
+      setErrorMessages((prevMessages) => [
+        ...prevMessages,
+        "Zadejte popis o délce minimálně 20 znaků a maximálně 250 znaků.",
+      ]);
+    }
+
+    if (!date || !time || !endTime) {
+      setErrorMessages((prevMessages) => [
+        ...prevMessages,
+        "Zadejte platné datum a čas.",
+      ]);
+    }
+
+    if (selectedMembers.length === 0) {
+      setErrorMessages((prevMessages) => [
+        ...prevMessages,
+        "Vyberte alespoň jednoho člena týmu.",
+      ]);
+    }
+
+    if (!hasPosition4Member) {
+      setErrorMessages((prevMessages) => [
+        ...prevMessages,
+        "Vyberte alespoň jednoho člena týmu s pozicí hráč.",
+      ]);
+      return;
+    }
+
+    if (errorMessages.length > 0) {
+      return;
+    }
+
+    const players = selectedMembers.filter((email) =>
+      subteamData?.getCompleteSubteamDetail?.subteamMembers.some(
+        (member: SubteamMember) =>
+          member.email === email && member.position === "4"
+      )
+    );
+    const management = selectedMembers.filter(
+      (email) => !players.includes(email)
+    );
+  };
 
   return (
     <Box sx={{ maxHeight: "100vh", overflowY: "auto" }}>
@@ -247,19 +361,19 @@ if (subteamError || subteamError || hallError)
         </Box>
         <Box>
           <TextField
-            label="Opponent Name"
+            label="Napis"
             sx={{ width: "50%", marginTop: "1em" }}
-            value={formData.opponentName || trainingData.opponentName}
-            onChange={(e) => handleFormChange("opponentName", e.target.value)}
-          />
+            value={opponentName}
+            onChange={handleOpponentNameChange}
+            />
         </Box>
         <Box>
           <TextField
-            label="Date"
+            label="Datum"
             type="date"
             sx={{ width: "50%", marginTop: "1em" }}
-            value={formData.date || trainingData.date}
-            onChange={(e) => handleFormChange("date", e.target.value)}
+            value={date}
+              onChange={handleDateChange}
             InputLabelProps={{
               shrink: true,
             }}
@@ -267,11 +381,11 @@ if (subteamError || subteamError || hallError)
         </Box>
         <Box>
           <TextField
-            label="Time"
+            label="Začátek"
             type="time"
             sx={{ width: "50%", marginTop: "1em" }}
-            value={formData.time || trainingData.time}
-            onChange={(e) => handleFormChange("time", e.target.value)}
+            value={time}
+            onChange={handleTimeChange}
             InputLabelProps={{
               shrink: true,
             }}
@@ -286,11 +400,11 @@ if (subteamError || subteamError || hallError)
         </Box>
         <Box>
           <TextField
-            label="End Time"
-            type="time"
-            value={formData.endTime || trainingData.endTime}
+              label="Konec"
+              type="time"
+              value={endTime}
+              onChange={(e) => setEndTime(e.target.value)}
             sx={{ width: "50%", marginTop: "1em" }}
-            onChange={(e) => handleFormChange("endTime", e.target.value)}
             InputLabelProps={{
               shrink: true,
             }}
@@ -305,18 +419,18 @@ if (subteamError || subteamError || hallError)
         </Box>
         <Box>
           <TextField
-            label="Description"
+            label="Popis"
             sx={{ width: "50%", marginTop: "1em" }}
 
-            value={formData.description || trainingData.description}
-            onChange={(e) => handleFormChange("description", e.target.value)}
+            value={description}
+            onChange={handleDescriptionChange}
             InputLabelProps={{
               shrink: true,
             }}
             multiline
             rows={4}
-            helperText={`Minimálně 20 znaků, maximálně 250 znaků (${trainingData.description.length}/250)`}
-          />
+            helperText={`Minimálně 20 znaků, maximálně 250 znaků (${description.length}/250)`}
+            />
         </Box>
         
         <Box sx={{ marginTop: "0.5em" }}>
@@ -434,6 +548,19 @@ if (subteamError || subteamError || hallError)
               </TableContainer>
             </Box>
           </Box>
+          {errorMessages.length > 0 && (
+            <Box sx={{ marginBottom: "1em" }}>
+              {errorMessages.map((message, index) => (
+                <Alert
+                  sx={{ marginBottom: "0.5em" }}
+                  key={index}
+                  severity="error"
+                >
+                  {message}
+                </Alert>
+              ))}
+            </Box>
+          )}
 
         {/* Other fields to be filled similarly */}
         <Button onClick={handleSave}>Save</Button>
