@@ -356,6 +356,8 @@ export const typeDefs = gql`
     getTeamByEmail(email: String!): Team
     getDiscussionsBySubteam(subteamId: String!): [Discussion]
     getDiscussionSeenUsers(discussionId: String!): [SeenUser]!
+    getMatchByMatchId(matchId: String!): Match
+  getTrainingByMatchId(matchId: String!): Training
 
   }
 

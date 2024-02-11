@@ -319,6 +319,47 @@ export const subteamQueries = {
   }
   },
 
+  getMatchByMatchId: async (
+    _: any,
+    { matchId }: { matchId: string },
+    context: { db: { collection: (arg0: string) => any } }
+  ) => {
+    try {
+      const matchDoc = await context.db.collection("Match").doc(matchId).get();
+
+      if (matchDoc.exists) {
+        return matchDoc.data();
+      }
+
+      return null;
+    } catch (error) {
+      console.error("Error fetching match by ID:", error);
+      throw error;
+    }
+  },
+
+  getTrainingByMatchId: async (
+    _: any,
+    { matchId }: { matchId: string },
+    context: { db: { collection: (arg0: string) => any } }
+  ) => {
+    try {
+      const trainingDoc = await context.db
+        .collection("Training")
+        .doc(matchId)
+        .get();
+
+      if (trainingDoc.exists) {
+        return trainingDoc.data();
+      }
+
+      return null;
+    } catch (error) {
+      console.error("Error fetching training by ID:", error);
+      throw error;
+    }
+  },
+
   getAllMatchesBySubteam: async (
     _: any,
     { input }: { input: { subteamIds: string[] } },

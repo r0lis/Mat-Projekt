@@ -25,6 +25,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
 import { useRouter } from "next/router";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import Edit from "./Edit";
 
 const GET_SUBTEAMS = gql`
   query GetYourSubteamData($teamId: String!, $email: String!) {
@@ -162,6 +163,7 @@ const Content: React.FC<Props> = ({ teamId }) => {
   const [subteamIds, setSubteamIds] = useState<string[]>([]);
   const [expandedMatchId, setExpandedMatchId] = useState<string | null>(null);
   const [expandedMatchId2, setExpandedMatchId2] = useState<string | null>(null);
+  const [editingMatchId, setEditingMatchId] = useState<string | null>(null);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [, setUserDetails] = useState<any>(null);
   const [updatingMatchId, setUpdatingMatchId] = useState<string | null>(null);
@@ -172,6 +174,10 @@ const Content: React.FC<Props> = ({ teamId }) => {
   const [showReason, setShowReason] = useState(false);
   const router = useRouter();
   const [deleteMatchMutation] = useMutation(DELETE_MATCH);
+
+  
+
+
 
   const {
     loading: roleLoading,
@@ -389,6 +395,10 @@ const Content: React.FC<Props> = ({ teamId }) => {
     setReason("");
   };
 
+  const handleOpenEdit = (matchId: string) => {
+    setEditingMatchId(matchId);
+  };
+
   const handleCloseModal = () => {
     setOpenModal(false);
     setUserSelection(null);
@@ -413,13 +423,19 @@ const Content: React.FC<Props> = ({ teamId }) => {
               variables: { input: { subteamIds } },
             },
           ],
-        });
+        }
+        
+        );
+        window.location.reload();
       } catch (error) {
         console.error("Chyba při mazání zápasu:", error);
       }
     }
   };
-  
+
+  if (editingMatchId) {
+    return <Edit matchId={editingMatchId} onClose={() => setEditingMatchId(null)} />;
+}
 
   const isMatchEditable = (matchDate: string, matchTime: string): boolean => {
     const currentDateTime = new Date();
@@ -554,7 +570,7 @@ const Content: React.FC<Props> = ({ teamId }) => {
                           <Box sx={{backgroundColor:"white", borderRadius:"10px",display:"block", }}>
                             <Box sx={{marginLeft:"auto", marginRight:"auto"}}>
                             <Button
-                            onClick={() => {setExpandedMatchId2(null)}}>Upravit</Button>
+                            onClick={() => {handleOpenEdit(match.matchId)}}>Upravit</Button>
                             </Box>
                             <Box sx={{marginLeft:"auto", marginRight:"auto"}}>
                             <Button

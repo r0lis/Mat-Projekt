@@ -27,6 +27,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
 import IconButton from "@mui/material/IconButton";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import Edit from "./Edit";
 
 const GET_SUBTEAMS = gql`
   query GetYourSubteamData($teamId: String!, $email: String!) {
@@ -168,6 +169,7 @@ const Content: React.FC<Props> = ({ teamId }) => {
   const [subteamIds, setSubteamIds] = useState<string[]>([]);
   const [expandedMatchId, setExpandedMatchId] = useState<string | null>(null);
   const [expandedMatchId2, setExpandedMatchId2] = useState<string | null>(null);
+  const [editingMatchId, setEditingMatchId] = useState<string | null>(null);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [, setUserDetails] = useState<any>(null);
   const [updatingMatchId, setUpdatingMatchId] = useState<string | null>(null);
@@ -402,6 +404,10 @@ const Content: React.FC<Props> = ({ teamId }) => {
     setExpandedMatchId2(matchId);
   };
 
+  const handleOpenEdit = (matchId: string) => {
+    setEditingMatchId(matchId);
+  };
+
   const handleDeleteMatch = (matchId: string) => {
     if (window.confirm("Opravdu chcete smazat tento trénink?")) {
       try {
@@ -414,11 +420,18 @@ const Content: React.FC<Props> = ({ teamId }) => {
             },
           ],
         });
+        window.location.reload()
+
       } catch (error) {
         console.error("Chyba při mazání treninku:", error);
       }
     }
   };
+
+  if (editingMatchId) {
+    return <Edit matchId={editingMatchId} onClose={() => setEditingMatchId(null)} />;
+}
+
 
   const isMatchEditable = (matchDate: string, matchTime: string): boolean => {
     const currentDateTime = new Date();
@@ -554,7 +567,7 @@ const Content: React.FC<Props> = ({ teamId }) => {
                           <Box sx={{backgroundColor:"white", borderRadius:"10px",display:"block", }}>
                             <Box sx={{marginLeft:"auto", marginRight:"auto"}}>
                             <Button
-                            onClick={() => {setExpandedMatchId2(null)}}>Upravit</Button>
+                            onClick={() => {handleOpenEdit(training.matchId)}}>Upravit</Button>
                             </Box>
                             <Box sx={{marginLeft:"auto", marginRight:"auto"}}>
                             <Button
