@@ -166,12 +166,9 @@ const PlanTraining: React.FC<Props> = ({ teamId }) => {
 
   const userRole = roleData?.getUserRoleInTeam?.role;
   const isRole3 = userRole == 3;
+  const lenght = matchesData?.getFutureTrainingsBySubteam.map((subteam: { trainings: Training[] }) => subteam.trainings).flat().length;
 
-  if (!matchesData || !matchesData.getFutureTrainingsBySubteam) {
-    return <Typography>Nemáte žádný zápas který už proběhl.</Typography>;
-  }
-
-  if (!matchesData?.getFutureTrainingsBySubteam || !matchesData?.getFutureTrainingsBySubteam?.length) {
+  if (!matchesData?.getFutureTrainingsBySubteam || lenght === 0) {
     return <Typography sx={{paddingLeft:"3%", paddingRight:"3%"}}>Nemáte naplánovaný žádný zápas.</Typography>;
   }
 

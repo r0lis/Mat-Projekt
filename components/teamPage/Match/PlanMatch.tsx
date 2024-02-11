@@ -167,9 +167,11 @@ const PlanMatch: React.FC<Props> = ({ teamId }) => {
 
   const userRole = roleData?.getUserRoleInTeam?.role;
   const isRole3 = userRole == 3;
-  console.log(matchesData?.getFutureMatchesBySubteam?.matches);
 
-  if (!matchesData?.getFutureMatchesBySubteam || matchesData?.getFutureMatchesBySubteam?.length < 1) {
+  const length = matchesData?.getFutureMatchesBySubteam.map((subteamData: { matches: Match[] }) => subteamData.matches.flat().length);
+  console.log(length);
+
+  if (!matchesData?.getFutureMatchesBySubteam || length == 0) {
     return <Typography sx={{paddingLeft:"3%", paddingRight:"3%"}}>Nemáte naplánovaný žádný zápas.</Typography>;
   }
 

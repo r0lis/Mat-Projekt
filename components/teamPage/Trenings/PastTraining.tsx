@@ -192,7 +192,6 @@ const PastTraining: React.FC<Props> = ({ teamId }) => {
           <Box key={subteamId}>
             {sortedTrainings
               .filter((training: Training) => {
-                console.log(training.selectedMembers);
                 const isUserInTraining = training.selectedMembers.includes(
                   user?.email || ""
                 );

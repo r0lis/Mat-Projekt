@@ -517,7 +517,6 @@ export const subteamQueries = {
         return matchDateTime >= currentDate;
       });
 
-      console.log("validMatches", validMatches);
 
       return [{ subteamId: input.subteamIds[0], matches: validMatches }];
     } catch (error) {
