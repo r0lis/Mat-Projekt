@@ -360,6 +360,50 @@ export const subteamMutations = {
       }
     },
 
+    deleteMatch: async (
+      _: any,
+      { matchId }: { matchId: string },
+      context: Context
+    ) => {
+      try {
+        const matchDoc = context.db.collection("Match").doc(matchId);
+        const matchSnapshot = await matchDoc.get();
+    
+        if (!matchSnapshot.exists) {
+          throw new Error(`Match with ID ${matchId} not found`);
+        }
+    
+        await matchDoc.delete();
+    
+        return true;
+      } catch (error) {
+        console.error("Error deleting match:", error);
+        throw error;
+      }
+    },
+    
+    deleteTraining: async (
+      _: any,
+      { matchId }: { matchId: string },
+      context: Context
+    ) => {
+      try {
+        const trainingDoc = context.db.collection("Training").doc(matchId);
+        const trainingSnapshot = await trainingDoc.get();
+    
+        if (!trainingSnapshot.exists) {
+          throw new Error(`Training with ID ${matchId} not found`);
+        }
+    
+        await trainingDoc.delete();
+    
+        return true;
+      } catch (error) {
+        console.error("Error deleting training:", error);
+        throw error;
+      }
+    },
+
     addDiscussion: async (
       _: any,
       { input }: { input: AddWallInput },

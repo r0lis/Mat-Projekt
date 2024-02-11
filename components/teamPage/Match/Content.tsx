@@ -24,6 +24,7 @@ import { authUtils } from "@/firebase/auth.utils";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
 import { useRouter } from "next/router";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 
 const GET_SUBTEAMS = gql`
   query GetYourSubteamData($teamId: String!, $email: String!) {
@@ -126,6 +127,12 @@ const GET_USER_DETAILS = gql`
   }
 `;
 
+const DELETE_MATCH = gql`
+  mutation DeleteMatch($matchId: String!) {
+    deleteMatch(matchId: $matchId)
+  }
+`;
+
 type Props = {
   teamId: string;
 };
@@ -154,6 +161,7 @@ const Content: React.FC<Props> = ({ teamId }) => {
   const user = authUtils.getCurrentUser();
   const [subteamIds, setSubteamIds] = useState<string[]>([]);
   const [expandedMatchId, setExpandedMatchId] = useState<string | null>(null);
+  const [expandedMatchId2, setExpandedMatchId2] = useState<string | null>(null);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [, setUserDetails] = useState<any>(null);
   const [updatingMatchId, setUpdatingMatchId] = useState<string | null>(null);
@@ -163,6 +171,7 @@ const Content: React.FC<Props> = ({ teamId }) => {
   const [userSelection, setUserSelection] = useState<number | null>(null);
   const [showReason, setShowReason] = useState(false);
   const router = useRouter();
+  const [deleteMatchMutation] = useMutation(DELETE_MATCH);
 
   const {
     loading: roleLoading,
@@ -247,6 +256,7 @@ const Content: React.FC<Props> = ({ teamId }) => {
 
   const userRole = roleData?.getUserRoleInTeam?.role;
   const isRole3 = userRole == 3;
+  const IsRole2or1 = userRole == 2 || userRole == 1;
 
   const getMatchTypeLabel = (matchType: string) => {
     return matchType === "home"
@@ -388,10 +398,33 @@ const Content: React.FC<Props> = ({ teamId }) => {
     setShowReason(false);
   };
 
+  const handleMenuOpen = (matchId: string) => {
+    setExpandedMatchId2(matchId);
+  };
+
+  const handleDeleteMatch = (matchId: string) => {
+    if (window.confirm("Opravdu chcete smazat tento zápas?")) {
+      try {
+        deleteMatchMutation({
+          variables: { matchId },
+          refetchQueries: [
+            {
+              query: GET_MATCHES_BY_SUBTEAM,
+              variables: { input: { subteamIds } },
+            },
+          ],
+        });
+      } catch (error) {
+        console.error("Chyba při mazání zápasu:", error);
+      }
+    }
+  };
+  
+
   const isMatchEditable = (matchDate: string, matchTime: string): boolean => {
     const currentDateTime = new Date();
     const matchDateTime = new Date(`${matchDate}T${matchTime}`);
-  
+
     if (matchDateTime > currentDateTime) {
       return true;
     } else {
@@ -511,6 +544,31 @@ const Content: React.FC<Props> = ({ teamId }) => {
                         Čas: {match.time} - {match.endTime}
                       </Typography>
                       <Box sx={{ marginLeft: "auto" }}>
+                        {IsRole2or1 && (
+                          <MoreVertIcon
+                            sx={{ cursor: "pointer", display: expandedMatchId2 === match.matchId ? "none" : "block"}}
+                            onClick={() => handleMenuOpen(match.matchId)}
+                          />
+                        )}
+                        {expandedMatchId2 === match.matchId && (
+                          <Box sx={{backgroundColor:"white", borderRadius:"10px",display:"block", }}>
+                            <Box sx={{marginLeft:"auto", marginRight:"auto"}}>
+                            <Button
+                            onClick={() => {setExpandedMatchId2(null)}}>Upravit</Button>
+                            </Box>
+                            <Box sx={{marginLeft:"auto", marginRight:"auto"}}>
+                            <Button
+                              onClick={() => handleDeleteMatch(match.matchId)}
+                            >
+                              Smazat zápas
+                            </Button>
+                            </Box>
+                            <Box sx={{marginLeft:"auto", marginRight:"auto"}}>
+                            <Button
+                            onClick={() => {setExpandedMatchId2(null)}}>Zavřít</Button>
+                            </Box>
+                          </Box>
+                        )}
                         {isRole3 && (
                           <Box sx={{ display: "flex", alignItems: "center" }}>
                             <Box
@@ -529,7 +587,11 @@ const Content: React.FC<Props> = ({ teamId }) => {
                                   >
                                     Změnit účast
                                   </Typography>
-                                ) : (<Typography sx={{ fontWeight: "500" }}>Účast</Typography>)}
+                                ) : (
+                                  <Typography sx={{ fontWeight: "500" }}>
+                                    Účast
+                                  </Typography>
+                                )}
 
                                 {match.attendance?.map(
                                   (attendanceRecord) =>

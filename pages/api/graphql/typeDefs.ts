@@ -409,6 +409,8 @@ export const typeDefs = gql`
     addDiscussion(input: AddDiscussionInput): Discussion
     addComment(input: AddCommentInput): Comment
     updateDiscussion(input: UpdateDiscussionInput): Boolean
+    deleteMatch(matchId: String!): Boolean
+    deleteTraining(matchId: String!): Boolean
 
   }
 
