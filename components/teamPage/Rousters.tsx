@@ -1,13 +1,66 @@
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
+import { Box, CircularProgress, Typography } from "@mui/material";
+import React from "react";
+import { authUtils } from "@/firebase/auth.utils";
+import { useQuery } from "@apollo/client";
+import { gql } from "@apollo/client";
+import ContentManagement from "./Rousters/ContentManagement";
+import Content from "./Rousters/Content";
 
+type TeamsProps = {
+  id: string;
+};
 
-import React from 'react';
+const GET_USER_ROLE_IN_TEAM = gql`
+  query GetUserRoleInTeam($teamId: String!, $email: String!) {
+    getUserRoleInTeam(teamId: $teamId, email: $email) {
+      email
+      role
+    }
+  }
+`;
 
-const RoutersComponent: React.FC = () => {
+const RoutersComponent: React.FC<TeamsProps> = ({id}) => {
+  const user = authUtils.getCurrentUser();
+
+  const {
+    loading: roleLoading,
+    error: roleError,
+    data: roleData,
+  } = useQuery(GET_USER_ROLE_IN_TEAM, {
+    variables: { teamId: id, email: user?.email || "" },
+    skip: !user,
+  });
+
+  if (roleLoading)
+    return ( 
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "80vh",
+        }}
+      >
+        <CircularProgress color="primary" size={50} />
+      </Box>
+    );
+  if (roleError) return <Typography>Chyba</Typography>;
+
+  const role = roleData?.getUserRoleInTeam.role || "";
+
   return (
-    <div>
-      <h2>RoutersComponent</h2>
-    </div>
+    <>
+      <Box sx={{}}>
+        {role == "1" ? (
+          <ContentManagement teamId={id as string} />
+        ) : (
+          <Content teamId={id as string} />
+        )}
+      </Box>
+    </>
   );
 };
+
 
 export default RoutersComponent

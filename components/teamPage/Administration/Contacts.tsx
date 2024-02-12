@@ -64,7 +64,7 @@ const Contacts: React.FC<Props> = ({ id }) => {
     <Box sx={{marginLeft:"2%", marginRight:"2%"}}>
       {teamMembers.length > 0 ? (
         <Box>
-          <Box sx={{marginTop:"1em"}}>
+          <Box sx={{marginLeft:"2%", paddingTop:"0.5em"}}>
           <Typography variant="h5">Management</Typography>
           </Box>
           <Box sx={{marginLeft:"2%", marginRight:"2%"}}>
@@ -86,7 +86,7 @@ const Contacts: React.FC<Props> = ({ id }) => {
             </TableBody>
           </Table>
           </Box>
-          <Box>
+          <Box sx={{marginLeft:"2%", paddingTop:"0.5em"}}>
           <Typography variant="h5">Trenéři</Typography>
           </Box>
           <Box sx={{marginLeft:"2%", marginRight:"2%"}}>
