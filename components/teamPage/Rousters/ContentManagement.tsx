@@ -13,7 +13,7 @@ import {
   import { gql, useQuery } from "@apollo/client";
   import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
   import ExpandLessIcon from "@mui/icons-material/ExpandLess";
-  
+    import ContentRouster from "./ContentRouster";  
  
   const GET_TEAM_MEMBERS_DETAILS = gql`
     query GetTeamMembersDetails($teamId: String!) {
@@ -173,6 +173,7 @@ import {
                             // Content to show when this subteam is selected
                             <Typography variant="body1">
                               {/* Assuming Content component accepts subteamId */}
+                              <ContentRouster subteamId={subteam.subteamId} idTeam={teamId}/>
                             </Typography>
                           )}
                         </div>
