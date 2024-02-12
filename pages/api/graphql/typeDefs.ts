@@ -315,6 +315,22 @@ export const typeDefs = gql`
     userEmail: String!
   }
 
+  input UpdateTrainingInput {
+    matchId: String!
+    opponentName: String
+    selectedHallId: String
+    subteamIdSelected: String
+    endTime: String
+    teamId: String
+    description: String
+    date: String
+    time: String
+    selectedMembers: [String]
+    selectedPlayers: [String]
+    selectedManagement: [String]
+  }
+
+ 
   
   type Query {
     user(id: String): User
@@ -413,6 +429,7 @@ export const typeDefs = gql`
     updateDiscussion(input: UpdateDiscussionInput): Boolean
     deleteMatch(matchId: String!): Boolean
     deleteTraining(matchId: String!): Boolean
+    updateTraining(input: UpdateTrainingInput): Boolean
 
   }
 

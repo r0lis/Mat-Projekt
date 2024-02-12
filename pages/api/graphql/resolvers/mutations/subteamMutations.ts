@@ -77,6 +77,21 @@ type AddTrainingInput = {
   
 }
 
+type UpdateTrainingInput = {
+  matchId: string;
+  opponentName: string;
+  selectedHallId: string;
+  subteamIdSelected: string;
+  endTime: string;
+  description: string;
+  date: string;
+  teamId: string;
+  time: string;
+  selectedMembers: [string];
+  selectedPlayers: [string];
+  selectedManagement: [string];
+};
+
 type UpdateDiscussionInput = {
   discussionId: string;
   userEmail: string;
@@ -527,6 +542,64 @@ export const subteamMutations = {
       }
     },
 
-
+    updateTraining: async (_: any, { input }: { input: UpdateTrainingInput }, context: Context) => {
+      try {
+        const {
+          matchId,
+          opponentName,
+          selectedHallId,
+          subteamIdSelected,
+          endTime,
+          description,
+          date,
+          time,
+          teamId,
+          selectedMembers,
+          selectedPlayers,
+          selectedManagement,
+        } = input;
+    
+        // Ověření, zda záznam s daným matchId existuje v kolekci Training
+        const trainingRef = context.db.collection('Training').doc(matchId);
+        const trainingSnapshot = await trainingRef.get();
+    
+        if (!trainingSnapshot.exists) {
+          throw new Error(`Trenink s ID ${matchId} nebyl nalezen.`);
+        }
+    
+        // Získání dat z databáze pro pole attendance
+        const attendanceData = trainingSnapshot.data()?.attendance || [];
+    
+        // Provedení aktualizace záznamu treninku
+        await trainingRef.update({
+          opponentName,
+          selectedHallId,
+          subteamIdSelected,
+          endTime,
+          description,
+          teamId,
+          date,
+          time,
+          selectedMembers,
+          selectedPlayers,
+          selectedManagement,
+          attendance: attendanceData, // Předání dat z databáze do pole attendance
+        });
+    
+        // Vrácení aktualizovaného záznamu treninku
+        const updatedTrainingSnapshot = await trainingRef.get();
+        const updatedTrainingData = updatedTrainingSnapshot.data();
+    
+        return true
+      } catch (error) {
+        console.error("Chyba při aktualizaci treninku:", error);
+        throw new Error("Chyba při aktualizaci treninku");
+      }
+    },
     
   };
+
+
+
+    
+  

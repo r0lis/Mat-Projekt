@@ -1,7 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-import { gql, useQuery } from "@apollo/client";
+import { gql, useMutation, useQuery } from "@apollo/client";
 import {
   Box,
   Button,
@@ -75,6 +74,14 @@ const GET_COMPLETESUBTEAM_DETAILS = gql`
   }
 `;
 
+const UPDATE_TRAINING = gql`
+  mutation UpdateTraining($input: UpdateTrainingInput!) {
+    updateTraining(input: $input) 
+    
+  }
+`;
+
+
 const getPositionText = (position: string): string => {
   switch (position) {
     case "0":
@@ -92,11 +99,6 @@ const getPositionText = (position: string): string => {
   }
 };
 
-interface Subteam {
-  subteamId: string;
-  Name: string;
-}
-
 interface SubteamMember {
   name: string;
   surname: string;
@@ -109,6 +111,7 @@ interface SubteamMember {
 
 interface Training {
   matchId: string;
+  teamId:string;
   opponentName: string;
   selectedHallId: string;
   subteamIdSelected: string;
@@ -154,6 +157,7 @@ const [time, setTime] = useState<string>("");
     const currentDay = String(currentDate.getDate()).padStart(2, "0");
     return `${currentYear}-${currentMonth}-${currentDay}`;
   });
+  const [updateTraining] = useMutation(UPDATE_TRAINING);
 
 
   const { loading, error, data } = useQuery(GET_TRAINING_BY_MATCH_ID, {
@@ -164,6 +168,8 @@ const [time, setTime] = useState<string>("");
     useQuery(GET_COMPLETESUBTEAM_DETAILS, {
       variables: { subteamId: data?.getTrainingByMatchId?.subteamIdSelected || "" },
     });
+
+  
   const {loading: hallLoading, error: hallError, data: hallsData } = useQuery(GET_TEAM_HALLS, {
     variables: { teamId: data?.getTrainingByMatchId?.teamId || "" },
   });
@@ -171,10 +177,10 @@ const [time, setTime] = useState<string>("");
   useEffect(() => {
     if (!loading && !error && data) {
       const training = data.getTrainingByMatchId;
+      setOpponentName(training.opponentName); // Naplnění jména soupeře
       setDescription(training.description || ""); // Naplnění popisu
-      setTime(training.time || ""); // Naplnění času
+      setTime(training.time || ""); // Naplněnsí času
       setEndTime(training.endTime || ""); // Naplnění konce
-      setOpponentName(training.opponentName || ""); // Naplnění jména soupeře
       setDate(training.date || ""); // Naplnění data
       setSelectedMembers(training.selectedMembers || []); // Naplnění vybraných členů týmu
       setSelectedTrainingHallId(training.selectedHallId || null); // Naplnění vybrané haly
@@ -199,6 +205,9 @@ if (subteamError || subteamError || hallError)
   return <Typography>Chyba</Typography>;
 
   const trainingData: Training = data.getTrainingByMatchId;
+  const subteamIdSelected = trainingData.subteamIdSelected;
+  const teamId = trainingData.teamId;
+
 
   const handleSelectAllPlayers = () => {
     const playersPosition4 =
@@ -322,17 +331,42 @@ if (subteamError || subteamError || hallError)
       return;
     }
 
-    const players = selectedMembers.filter((email) =>
+    const selectedPlayers = selectedMembers.filter((email) =>
       subteamData?.getCompleteSubteamDetail?.subteamMembers.some(
         (member: SubteamMember) =>
           member.email === email && member.position === "4"
       )
     );
-    const management = selectedMembers.filter(
-      (email) => !players.includes(email)
+    const selectedManagement = selectedMembers.filter(
+      (email) => !selectedPlayers.includes(email)
     );
-  };
 
+    try {
+      await updateTraining({
+        variables: {
+          input: {
+            matchId,
+            opponentName,
+            selectedHallId: selectedTrainingHallId,
+            subteamIdSelected,
+            endTime,
+            description,
+            date,
+            time,
+            teamId,
+            selectedMembers,
+            selectedPlayers,
+            selectedManagement,
+          },
+        },
+      });
+      
+      onClose()
+      window.location.reload()
+    } catch (error) {
+      console.error("Error while updating training:", error);
+    }
+  };
   return (
     <Box sx={{ maxHeight: "100vh", overflowY: "auto" }}>
       <Box sx={{ textAlign: "center" }}>
