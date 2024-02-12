@@ -51,18 +51,7 @@ type AddCommentInput = {
   commentId: string;
 };
 
-type AddMatchInput = {
-  subteamIdSelected: String
-  opponentName: String
-  selectedHallId: String
-  date: String
-  selectedHallPosition: String
-  endTime: String
-  time: String
-  matchType: String
-  players: [String]
-  management: [String]
-}
+
 
 type AddTrainingInput = {
   subteamIdSelected: String
@@ -90,6 +79,35 @@ type UpdateTrainingInput = {
   selectedMembers: [string];
   selectedPlayers: [string];
   selectedManagement: [string];
+};
+
+type AddMatchInput = {
+  subteamIdSelected: String
+  opponentName: String
+  selectedHallId: String
+  date: String
+  selectedHallPosition: String
+  endTime: String
+  time: String
+  matchType: String
+  players: [String]
+  management: [String]
+}
+
+type UpdateMatchInput = {
+  matchId: string;
+  teamId: string;
+  subteamIdSelected: string;
+  opponentName: string;
+  selectedHallId: string;
+  selectedHallPosition: string;
+  date: string;
+  time: string;
+  endTime: string;
+  selectedPlayers: [string];
+  selectedManagement: [string];
+  selectedMembers: [string];
+  matchType: string;
 };
 
 type UpdateDiscussionInput = {
@@ -591,6 +609,63 @@ export const subteamMutations = {
         const updatedTrainingData = updatedTrainingSnapshot.data();
     
         return true
+        
+      } catch (error) {
+        console.error("Chyba při aktualizaci treninku:", error);
+        throw new Error("Chyba při aktualizaci treninku");
+      }
+    },
+
+    updateMatch: async (_: any, { input }: { input: UpdateMatchInput }, context: Context) => {
+      try {
+        const {
+          matchId,
+          opponentName,
+          selectedHallId,
+          subteamIdSelected,
+          endTime,
+          matchType,
+          date,
+          time,
+          teamId,
+          selectedMembers,
+          selectedPlayers,
+          selectedManagement,
+        } = input;
+    
+        // Ověření, zda záznam s daným matchId existuje v kolekci Training
+        const trainingRef = context.db.collection('Match').doc(matchId);
+        const trainingSnapshot = await trainingRef.get();
+    
+        if (!trainingSnapshot.exists) {
+          throw new Error(`Trenink s ID ${matchId} nebyl nalezen.`);
+        }
+    
+        // Získání dat z databáze pro pole attendance
+        const attendanceData = trainingSnapshot.data()?.attendance || [];
+    
+        // Provedení aktualizace záznamu treninku
+        await trainingRef.update({
+          opponentName,
+          selectedHallId,
+          subteamIdSelected,
+          endTime,
+          matchType,
+          teamId,
+          date,
+          time,
+          selectedMembers,
+          selectedPlayers,
+          selectedManagement,
+          attendance: attendanceData, // Předání dat z databáze do pole attendance
+        });
+    
+        // Vrácení aktualizovaného záznamu treninku
+        const updatedTrainingSnapshot = await trainingRef.get();
+        const updatedTrainingData = updatedTrainingSnapshot.data();
+    
+        return true
+        
       } catch (error) {
         console.error("Chyba při aktualizaci treninku:", error);
         throw new Error("Chyba při aktualizaci treninku");

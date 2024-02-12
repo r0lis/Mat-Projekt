@@ -330,6 +330,22 @@ export const typeDefs = gql`
     selectedManagement: [String]
   }
 
+  input UpdateMatchInput {
+    matchId: String!
+    teamId: String
+    subteamIdSelected: String
+    opponentName: String
+    selectedHallId: String
+    selectedHallPosition: String
+    date: String
+    time: String
+    endTime: String
+    selectedPlayers: [String]
+    selectedManagement: [String]
+    selectedMembers: [String]
+    matchType: String
+  }
+
  
   
   type Query {
@@ -430,6 +446,7 @@ export const typeDefs = gql`
     deleteMatch(matchId: String!): Boolean
     deleteTraining(matchId: String!): Boolean
     updateTraining(input: UpdateTrainingInput): Boolean
+    updateMatch(input: UpdateMatchInput): Boolean
 
   }
 
