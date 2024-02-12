@@ -564,7 +564,7 @@ const Content: React.FC<Props> = ({ teamId }) => {
                           />
                         )}
                         {expandedMatchId2 === training.matchId && (
-                          <Box sx={{backgroundColor:"white", borderRadius:"10px",display:"block", }}>
+                          <Box sx={{backgroundColor:"white", borderRadius:"10px",display:"block", paddingLeft:"1em", paddingRight:"1em"}}>
                             <Box sx={{marginLeft:"auto", marginRight:"auto"}}>
                             <Button
                             onClick={() => {handleOpenEdit(training.matchId)}}>Upravit</Button>
@@ -573,7 +573,7 @@ const Content: React.FC<Props> = ({ teamId }) => {
                             <Button
                               onClick={() => handleDeleteMatch(training.matchId)}
                             >
-                              Smazat trénink
+                              Smazat 
                             </Button>
                             </Box>
                             <Box sx={{marginLeft:"auto", marginRight:"auto"}}>
