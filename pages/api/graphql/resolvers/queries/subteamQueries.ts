@@ -165,6 +165,7 @@ export const subteamQueries = {
                   name: userData.Name,
                   surname: userData.Surname,
                   email: userData.Email,
+                  dateOfBirth: userData.DateOfBirth,
                   picture: userData.Picture,
                   role: member.role,
                   position: member.position,

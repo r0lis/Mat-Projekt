@@ -13,19 +13,7 @@ import {
   import { gql, useQuery } from "@apollo/client";
   import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
   import ExpandLessIcon from "@mui/icons-material/ExpandLess";
-    import ContentRouster from "./ContentRouster";  
- 
-  const GET_TEAM_MEMBERS_DETAILS = gql`
-    query GetTeamMembersDetails($teamId: String!) {
-      getTeamMembersDetails(teamId: $teamId) {
-        Name
-        Surname
-        Role
-        Email
-        DateOfBirth
-      }
-    }
-  `;
+  import ContentRouster from "./ContentRouster";  
   
   const GET_SUBTEAMS = gql`
     query GetSubteamData($teamId: String!) {
@@ -40,16 +28,7 @@ import {
   type TeamsProps = {
     teamId: string;
   };
-  
-  interface Member {
-    Name: string;
-    Surname: string;
-    Role: string;
-    Email: string;
-    Position: string;
-    DateOfBirth: string;
-  }
-  
+
   interface Subteam {
     subteamId: string;
     Name: string;
@@ -77,21 +56,9 @@ import {
       }
     }, [data]);
   
-    const {
-      loading: loadingMembers,
-      error: errorMembers,
-      data: dataMembers,
-    } = useQuery<{
-      getTeamMembersDetails: Member[];
-    }>(GET_TEAM_MEMBERS_DETAILS, {
-      variables: { teamId: teamId },
-    });
+
   
-    const members = dataMembers?.getTeamMembersDetails || [];
-  
-    
-  
-    if (loading || loadingMembers)
+    if (loading )
       return (
         <Box
         sx={{
@@ -105,7 +72,7 @@ import {
         <CircularProgress color="primary" size={50} />
       </Box>
       );
-    if (subteamError || errorMembers) return <Typography>Chyba</Typography>;
+    if (subteamError ) return <Typography>Chyba</Typography>;
     
   
     const handleSubteamChange = (event: { target: { value: any } }) => {

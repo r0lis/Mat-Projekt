@@ -198,6 +198,7 @@ export const typeDefs = gql`
     name: String
     surname: String
     email: String
+    dateOfBirth: String
     picture: String
     role: String
     position: String
@@ -389,7 +390,7 @@ export const typeDefs = gql`
     getDiscussionsBySubteam(subteamId: String!): [Discussion]
     getDiscussionSeenUsers(discussionId: String!): [SeenUser]!
     getMatchByMatchId(matchId: String!): Match
-  getTrainingByMatchId(matchId: String!): Training
+    getTrainingByMatchId(matchId: String!): Training
 
   }
 

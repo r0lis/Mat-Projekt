@@ -164,6 +164,7 @@ export type CompleteSubteamMember = {
   surname: string;
   email: string;
   picture: string;
+  dateOfBirth: string;
   role: string;
   position: string;
 };

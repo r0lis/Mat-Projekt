@@ -1,35 +1,30 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-import { authUtils } from "@/firebase/auth.utils";
+import React, { useEffect, useRef, useState } from "react";
 import { gql, useQuery } from "@apollo/client";
-import { Box, CircularProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
-import React from "react";
-
+import {
+  Avatar,
+  Box,
+  CircularProgress,
+  Table,
+  TableBody,
+  Paper,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+  TextField,
+  Autocomplete,
+} from "@mui/material";
 
 const GET_COMPLETESUBTEAM_DETAILS = gql`
   query GetCompleteSubteamDetail($subteamId: String!) {
     getCompleteSubteamDetail(subteamId: $subteamId) {
-      Name
-      subteamId
-      teamId
       subteamMembers {
         name
         surname
+        dateOfBirth
         picture
-        email
-        role
-        position
-      }
-    }
-  }
-`;
-
-const GET_SUBTEAM_DETAILS = gql`
-  query GetSubteamDetails($subteamId: String!) {
-    getSubteamDetails(subteamId: $subteamId) {
-      Name
-      subteamId
-      teamId
-      subteamMembers {
         email
         role
         position
@@ -44,9 +39,9 @@ interface SubteamMember {
   name: string;
   surname: string;
   picture: string;
+  dateOfBirth: string;
   position: string;
 }
-
 
 const getPositionText = (position: string): string => {
   switch (position) {
@@ -74,64 +69,110 @@ const ContentRouster: React.FC<ContentRousterProps> = ({
   subteamId,
   idTeam,
 }) => {
-  const user = authUtils.getCurrentUser();
+  const [searchInput, setSearchInput] = useState("");
+  const [filteredMembers, setFilteredMembers] = useState<SubteamMember[]>([]);
+  const tableBodyRef = useRef<HTMLTableSectionElement>(null);
 
-  const { loading, error, data } = useQuery(GET_SUBTEAM_DETAILS, {
+  const { loading, error, data } = useQuery(GET_COMPLETESUBTEAM_DETAILS, {
     variables: { subteamId },
-    skip: !user,
   });
 
-  const {
-    loading: loadingComplete,
-    error: errorComplete,
-    data: dataComplete,
-  } = useQuery(GET_COMPLETESUBTEAM_DETAILS, {
-    variables: { subteamId },
-    skip: !user,
-  });
+  useEffect(() => {
+    if (data) {
+      const subteamMembers: SubteamMember[] =
+        data.getCompleteSubteamDetail.subteamMembers.filter(
+          (member: SubteamMember) => member.position === "4"
+        );
+      setFilteredMembers(subteamMembers);
+    }
+  }, [data]);
 
-  if (loading || loadingComplete)
-    return (
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          height: "80vh",
-        }}
-      >
-        <CircularProgress color="primary" size={50} />
-      </Box>
-    );
-  if (error || errorComplete) return <Typography>Chyba</Typography>;
+  const handleSearchInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setSearchInput(event.target.value);
+  };
 
-  const subteamMembers: SubteamMember[] = dataComplete.getCompleteSubteamDetail.subteamMembers.filter((member: SubteamMember) => member.position === "4");
-
-
+  const filteredMembersToShow = searchInput
+    ? filteredMembers.filter(
+        (member) =>
+          member.name.toLowerCase().includes(searchInput.toLowerCase()) ||
+          member.surname.toLowerCase().includes(searchInput.toLowerCase())
+      )
+    : filteredMembers;
 
   return (
-    <TableContainer>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Jméno</TableCell>
-            <TableCell>Příjmení</TableCell>
-            <TableCell>Email</TableCell>
-            <TableCell>Pozice</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {subteamMembers.map((member: SubteamMember, index: number) => (
-            <TableRow key={index}>
-              <TableCell>{member.name}</TableCell>
-              <TableCell>{member.surname}</TableCell>
-              <TableCell>{member.email}</TableCell>
-              <TableCell>{getPositionText(member.position)}</TableCell>
+    <Box>
+      <Box
+        sx={{
+          marginLeft: "5%",
+          marginRight: "5%",
+          marginTop: "2em",
+        }}
+      >
+        <Autocomplete
+          options={filteredMembers}
+          getOptionLabel={(option) => `${option.name} ${option.surname}`}
+          filterOptions={(options, { inputValue }) =>
+            options.filter(
+              (option) =>
+                option.name.toLowerCase().includes(inputValue.toLowerCase()) ||
+                option.surname.toLowerCase().includes(inputValue.toLowerCase())
+            )
+          }
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label="Hledat podle jména a příjmení"
+              variant="outlined"
+              value={searchInput}
+              sx={{ marginBottom: searchInput.length < 1 ? "0em" : "2em" }}
+              onChange={handleSearchInputChange}
+            />
+          )}
+        />
+      </Box>
+
+      <TableContainer
+        sx={{
+          width: "90%",
+          marginLeft: "auto",
+          marginRight: "auto",
+          marginTop: "2em",
+          marginBottom: "3em",
+        }}
+        component={Paper}
+      >
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Jméno</TableCell>
+              <TableCell>Příjmení</TableCell>
+              <TableCell>Email</TableCell>
+              <TableCell>Pozice</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+          </TableHead>
+          <TableBody ref={tableBodyRef}>
+            {filteredMembersToShow.map((member: SubteamMember, index: number) => (
+              <TableRow key={index}>
+                <TableCell>
+                  <Avatar
+                    sx={{ width: 50, height: 50 }}
+                    alt={member.name[0] + member.surname[0]}
+                    src={member.picture}
+                  />
+                </TableCell>
+                <TableCell>
+                  {member.name} {member.surname}
+                </TableCell>
+                <TableCell>{member.email}</TableCell>
+                <TableCell>{getPositionText(member.position)}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Box>
   );
 };
 
