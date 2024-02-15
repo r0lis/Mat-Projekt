@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import React, { useEffect, useRef, useState } from "react";
 import { gql, useQuery } from "@apollo/client";
+import { authUtils } from "@/firebase/auth.utils";
+import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import {
   Avatar,
   Box,
@@ -29,6 +31,15 @@ const GET_COMPLETESUBTEAM_DETAILS = gql`
         role
         position
       }
+    }
+  }
+`;
+
+const GET_USER_ROLE_IN_TEAM = gql`
+  query GetUserRoleInTeam($teamId: String!, $email: String!) {
+    getUserRoleInTeam(teamId: $teamId, email: $email) {
+      email
+      role
     }
   }
 `;
@@ -72,9 +83,33 @@ const ContentRouster: React.FC<ContentRousterProps> = ({
   const [searchInput, setSearchInput] = useState("");
   const [filteredMembers, setFilteredMembers] = useState<SubteamMember[]>([]);
   const tableBodyRef = useRef<HTMLTableSectionElement>(null);
+  const user = authUtils.getCurrentUser();
+  const [selectedMember, setSelectedMember] = useState<{
+    name: string;
+    surname: string;
+    role: string;
+    email: string;
+    dateOfBirth: string;
+    picture: string;
+    position: string;
+
+  } | null>(null);
+  const [selectedRole, setSelectedRole] = useState("");
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const [modalOpen, setModalOpen] = useState(false);
+
 
   const { loading, error, data } = useQuery(GET_COMPLETESUBTEAM_DETAILS, {
     variables: { subteamId },
+  });
+
+  const {
+    loading: roleLoading,
+    error: roleError,
+    data: roleData,
+  } = useQuery(GET_USER_ROLE_IN_TEAM, {
+    variables: { teamId: idTeam, email: user?.email || "" },
+    skip: !user,
   });
 
   useEffect(() => {
@@ -93,6 +128,24 @@ const ContentRouster: React.FC<ContentRousterProps> = ({
     setSearchInput(event.target.value);
   };
 
+  if (loading || roleLoading)
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "80vh",
+        }}
+      >
+        <CircularProgress color="primary" size={50} />
+      </Box>
+    );
+
+  if (error || roleError) return <Typography>Chyba</Typography>;
+
+  const role = roleData?.getUserRoleInTeam.role || "";
+
   const filteredMembersToShow = searchInput
     ? filteredMembers.filter(
         (member) =>
@@ -100,6 +153,26 @@ const ContentRouster: React.FC<ContentRousterProps> = ({
           member.surname.toLowerCase().includes(searchInput.toLowerCase())
       )
     : filteredMembers;
+
+  const handleRowClick = (member: SubteamMember) => {
+    setSelectedMember(member);
+    setSelectedRole(member.role);
+    setModalOpen(true);
+
+    // Update the selected index based on the filtered list
+    setSelectedIndex(calculateSelectedIndex());
+  };
+
+  const calculateSelectedIndex = () => {
+    if (selectedMember) {
+      return filteredMembers.findIndex(
+        (member) =>
+          member.email === selectedMember.email &&
+          member.role === selectedMember.role
+      );
+    }
+    return null;
+  };
 
   return (
     <Box>
@@ -146,29 +219,54 @@ const ContentRouster: React.FC<ContentRousterProps> = ({
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Jméno</TableCell>
-              <TableCell>Příjmení</TableCell>
-              <TableCell>Email</TableCell>
-              <TableCell>Pozice</TableCell>
+              <TableCell>
+                <Typography></Typography>
+              </TableCell>
+              <TableCell>
+                <Typography></Typography>
+              </TableCell>
+              <TableCell>
+                <Typography></Typography>
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody ref={tableBodyRef}>
-            {filteredMembersToShow.map((member: SubteamMember, index: number) => (
-              <TableRow key={index}>
-                <TableCell>
-                  <Avatar
-                    sx={{ width: 50, height: 50 }}
-                    alt={member.name[0] + member.surname[0]}
-                    src={member.picture}
-                  />
-                </TableCell>
-                <TableCell>
-                  {member.name} {member.surname}
-                </TableCell>
-                <TableCell>{member.email}</TableCell>
-                <TableCell>{getPositionText(member.position)}</TableCell>
-              </TableRow>
-            ))}
+            {filteredMembersToShow.map(
+              (member: SubteamMember, index: number) => (
+                <TableRow key={index}>
+                  <TableCell>
+                    {role === "1" && (
+                      <Box
+                        sx={{ height: "20px", width: "20px" }}
+                        onClick={() => handleRowClick(member)}
+                      >
+                        <ModeEditIcon />
+                      </Box>
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    <Avatar
+                      sx={{ width: 50, height: 50 }}
+                      alt={member.name[0] + member.surname[0]}
+                      src={member.picture}
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <Typography
+                      sx={{ fontFamily: "Roboto", fontWeight: "450" }}
+                    >
+                      {member.surname} {member.name}
+                    </Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography>{member.dateOfBirth}</Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography>{getPositionText(member.position)}</Typography>
+                  </TableCell>
+                </TableRow>
+              )
+            )}
           </TableBody>
         </Table>
       </TableContainer>

@@ -96,7 +96,7 @@ import {
                 <Box sx={{display: isMobile ? "block":"flex", alignItems: "center" }}>
                   <Box>
                     <Typography sx={{ fontWeight: "600" }} variant="h5">
-                      Týmy v klubu:
+                      Přehled soupisek
                     </Typography>
                   </Box>
                   <Box sx={{ marginLeft: "auto", marginRight: "", }}>
