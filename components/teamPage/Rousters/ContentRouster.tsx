@@ -94,14 +94,12 @@ const ContentRouster: React.FC<ContentRousterProps> = ({
     dateOfBirth: string;
     picture: string;
     position: string;
-
   } | null>(null);
   const [, setSelectedRole] = useState("");
   const [, setSelectedIndex] = useState<number | null>(null);
   const [editMode, setEditMode] = useState(false);
   const currentUserEmail = user?.email || "";
   const [modalOpen, setModalOpen] = useState(false);
-
 
   const { loading, error, data } = useQuery(GET_COMPLETESUBTEAM_DETAILS, {
     variables: { subteamId },
@@ -199,7 +197,6 @@ const ContentRouster: React.FC<ContentRousterProps> = ({
     return age;
   };
 
-
   return (
     <Box>
       <Box
@@ -243,19 +240,7 @@ const ContentRouster: React.FC<ContentRousterProps> = ({
         component={Paper}
       >
         <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>
-                <Typography></Typography>
-              </TableCell>
-              <TableCell>
-                <Typography></Typography>
-              </TableCell>
-              <TableCell>
-                <Typography></Typography>
-              </TableCell>
-            </TableRow>
-          </TableHead>
+          <TableHead></TableHead>
           <TableBody ref={tableBodyRef}>
             {filteredMembersToShow.map(
               (member: SubteamMember, index: number) => (
@@ -285,7 +270,18 @@ const ContentRouster: React.FC<ContentRousterProps> = ({
                     </Typography>
                   </TableCell>
                   <TableCell>
-                    <Typography>{member.dateOfBirth}</Typography>
+                    <Typography sx={{ fontFamily: "Roboto" }}>
+                      {member.dateOfBirth &&
+                        new Date(member.dateOfBirth).toLocaleDateString(
+                          "cs-CZ",
+                          {
+                            day: "2-digit",
+                            month: "2-digit",
+                            year: "numeric",
+                          }
+                        )}{" "}
+                      / {calculateAge(member?.dateOfBirth || "")} let
+                    </Typography>
                   </TableCell>
                   <TableCell>
                     <Typography>{getPositionText(member.position)}</Typography>
@@ -315,14 +311,14 @@ const ContentRouster: React.FC<ContentRousterProps> = ({
             width: 400,
             backgroundImage: editMode
               ? `
-            linear-gradient(to bottom, #808080 0, #909090 100px, #ffffff 100px, #ffffff calc(100% - 100px), #909090 calc(100% - 100px), #909090 100%)
+            linear-gradient(to bottom, #808080 0, #909090 100px, #ffffff 100px, #ffffff calc(100% - 140px), #909090 calc(100% - 140px), #909090 100%)
           `
               : selectedMember && selectedMember.email == currentUserEmail
               ? `
             linear-gradient(to bottom, #808080 0, #909090 100px, #ffffff 100px, #ffffff calc(100% - 110px), #909090 calc(100% - 110px), #909090 100%)
           `
               : `
-          linear-gradient(to bottom, #808080 0, #909090 100px, #ffffff 100px, #ffffff calc(100% - 140px), #909090 calc(100% - 140px), #909090 100%)
+          linear-gradient(to bottom, #808080 0, #909090 100px, #ffffff 100px, #ffffff calc(100% - 100px), #909090 calc(100% - 100px), #909090 100%)
         `,
           }}
         >
@@ -406,7 +402,7 @@ const ContentRouster: React.FC<ContentRousterProps> = ({
               >
                 Datum narození:
               </Typography>
-              
+
               <Typography
                 id="modal-description"
                 sx={{
@@ -494,74 +490,12 @@ const ContentRouster: React.FC<ContentRousterProps> = ({
                 do 2. 3. 2023
               </Typography>
 
-              {editMode ? (
-                <Box sx={{}}>
-                  Edit
-                </Box>
-              ) : (
-               <Box sx={{}}>
-                </Box>
-              )}
+              {editMode ? <Box sx={{}}></Box> : <Box sx={{}}></Box>}
             </Box>
           </Box>
 
           {editMode ? (
             <Box sx={{ paddingLeft: "1em" }}>
-              <Box
-                sx={{
-                  fontFamily: "Roboto",
-                  fontWeight: "500",
-                  opacity: "0.6",
-
-                  top: "-10px",
-                  position: "relative",
-                  marginTop: "1em",
-                }}
-              >
-                štítky
-              </Box>
-
-              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                <Box
-                  sx={{
-                    border: "1px solid black",
-                    textAlign: "center",
-                    padding: "3px",
-                    borderRadius: "8px",
-                    width: "6em",
-                  }}
-                >
-                  <Typography sx={{ fontFamily: "Roboto", fontWeight: "500" }}>
-                    útočník
-                  </Typography>
-                </Box>
-                <Box
-                  sx={{
-                    border: "1px solid black",
-                    textAlign: "center",
-                    padding: "3px",
-                    borderRadius: "8px",
-                    width: "6em",
-                  }}
-                >
-                  <Typography sx={{ fontFamily: "Roboto", fontWeight: "500" }}>
-                    A-Tým
-                  </Typography>
-                </Box>
-                <Box
-                  sx={{
-                    border: "1px solid black",
-                    textAlign: "center",
-                    padding: "3px",
-                    borderRadius: "8px",
-                    width: "6em",
-                  }}
-                >
-                  <Typography sx={{ fontFamily: "Roboto", fontWeight: "500" }}>
-                    Levá strana
-                  </Typography>
-                </Box>
-              </Box>
               <Button
                 sx={{
                   backgroundColor: "lightgray",
@@ -575,6 +509,20 @@ const ContentRouster: React.FC<ContentRousterProps> = ({
               >
                 Uložit
               </Button>
+              <Button
+                sx={{
+                  backgroundColor: "lightgray",
+                  color: "black",
+                  marginTop: "0.5em",
+                  padding: "1em",
+                  height: "2.5em",
+                  marginLeft: "-0.5em",
+                  width: "100%",
+                }}
+                onClick={() => setEditMode(false)}
+              >
+                Zavřít
+              </Button>
             </Box>
           ) : (
             <Box sx={{ paddingLeft: "1em" }}>
@@ -583,80 +531,10 @@ const ContentRouster: React.FC<ContentRousterProps> = ({
                   display: "flex",
                   alignItems: "center",
                 }}
-              >
-                <Box
-                  sx={{
-                    width: "100%",
-                    borderBottom: "2px solid gray", // Change the color as needed
-                    position: "absolute",
-                    top:
-                      selectedMember?.role === "0" ||
-                      selectedMember?.role === "No Role Assigned"
-                        ? "55%"
-                        : selectedMember &&
-                          selectedMember.email === currentUserEmail
-                        ? "59%"
-                        : "55%",
-                    transform: "translateY(-50%)",
-                    marginLeft: "-3em",
-                    zIndex: -1,
-                  }}
-                />
-                <Box
-                  sx={{
-                    fontFamily: "Roboto",
-                    fontWeight: "500",
-                    opacity: "0.6",
-                    marginLeft: "-0.5em",
-                    top: "-10px",
-                    position: "relative",
-                    marginTop: "1em",
-                  }}
-                >
-                  štítky
-                </Box>
-              </Box>
-              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                <Box
-                  sx={{
-                    border: "1px solid black",
-                    textAlign: "center",
-                    padding: "3px",
-                    borderRadius: "8px",
-                    width: "6em",
-                  }}
-                >
-                  <Typography sx={{ fontFamily: "Roboto", fontWeight: "500" }}>
-                    útočník
-                  </Typography>
-                </Box>
-                <Box
-                  sx={{
-                    border: "1px solid black",
-                    textAlign: "center",
-                    padding: "3px",
-                    borderRadius: "8px",
-                    width: "6em",
-                  }}
-                >
-                  <Typography sx={{ fontFamily: "Roboto", fontWeight: "500" }}>
-                    A-Tým
-                  </Typography>
-                </Box>
-                <Box
-                  sx={{
-                    border: "1px solid black",
-                    textAlign: "center",
-                    padding: "3px",
-                    borderRadius: "8px",
-                    width: "6em",
-                  }}
-                >
-                  <Typography sx={{ fontFamily: "Roboto", fontWeight: "500" }}>
-                    Levá strana
-                  </Typography>
-                </Box>
-              </Box>
+              ></Box>
+              <Box
+                sx={{ display: "flex", justifyContent: "space-between" }}
+              ></Box>
 
               <Box
                 sx={{
@@ -676,13 +554,12 @@ const ContentRouster: React.FC<ContentRousterProps> = ({
                         : selectedMember &&
                           selectedMember.email === currentUserEmail
                         ? "68%"
-                        : "72.2%",
+                        : "76%",
                     transform: "translateY(-50%)",
                     marginLeft: "-3em",
                     zIndex: -1,
                   }}
                 />
-                
               </Box>
               <Box
                 sx={{
@@ -719,21 +596,6 @@ const ContentRouster: React.FC<ContentRousterProps> = ({
               >
                 Upravit
               </Button>
-              {selectedMember && selectedMember.email !== currentUserEmail && (
-                <Button
-                  sx={{
-                    backgroundColor: "lightgray",
-                    color: "black",
-                    padding: "1em",
-                    height: "2em",
-                    marginLeft: "-0.5em",
-                    marginTop: "0.5em",
-                    width: "100%",
-                  }}
-                >
-                  Smazat
-                </Button>
-              )}
             </Box>
           )}
         </Box>
