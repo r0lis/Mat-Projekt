@@ -172,6 +172,7 @@ export const typeDefs = gql`
     email: String!
     role: String!
     position: String!
+    
   }
 
   type Subteam {
@@ -185,7 +186,9 @@ export const typeDefs = gql`
     email: String!
     role: String!
     position: String!
+    playPosition: String!
   }
+
 
   type CompleteSubteam {
     Name: String
@@ -202,6 +205,7 @@ export const typeDefs = gql`
     picture: String
     role: String
     position: String
+    playPosition: String
   }
   
   type SubteamMember2 {
@@ -430,6 +434,11 @@ export const typeDefs = gql`
       subteamId: String!
       email: String!
       position: String!
+    ): Boolean
+    updatePositionSubteamMember(
+      subteamId: String!
+      email: String!
+      playPosition: String!
     ): Boolean
     addHallToTeam(teamId: String!, hall: HallInput!): Team
     deleteHallFromTeam(teamId: String!, hallId: String!): Team

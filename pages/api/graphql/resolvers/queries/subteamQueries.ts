@@ -152,6 +152,7 @@ export const subteamQueries = {
             async (member: {
               email: string;
               position: string;
+              playPosition: string;
               role: string;
             }) => {
               const userDoc = await context.db
@@ -169,6 +170,8 @@ export const subteamQueries = {
                   picture: userData.Picture,
                   role: member.role,
                   position: member.position,
+                  playPosition: member.playPosition,
+
                 };
 
                 return completeMember;

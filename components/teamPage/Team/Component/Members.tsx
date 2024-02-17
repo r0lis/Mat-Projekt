@@ -214,7 +214,7 @@ const Members: React.FC<MembersProps> = (subteamId) => {
     </Box>
     );
   if (error || missingMembersError || roleError)
-    return <Typography>kurva</Typography>;
+    return <Typography>Chyba</Typography>;
   const subteam = data.getCompleteSubteamDetail;
   const missingMembers = missingMembersData.getMissingSubteamMembers;
 

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import React, { useEffect, useRef, useState } from "react";
-import { gql, useQuery } from "@apollo/client";
+import { gql, useMutation, useQuery } from "@apollo/client";
 import { authUtils } from "@/firebase/auth.utils";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import {
@@ -19,6 +19,10 @@ import {
   Autocomplete,
   Button,
   Modal,
+  FormControl,
+  MenuItem,
+  Select,
+  Alert,
 } from "@mui/material";
 
 const GET_COMPLETESUBTEAM_DETAILS = gql`
@@ -32,6 +36,7 @@ const GET_COMPLETESUBTEAM_DETAILS = gql`
         email
         role
         position
+        playPosition
       }
     }
   }
@@ -46,6 +51,20 @@ const GET_USER_ROLE_IN_TEAM = gql`
   }
 `;
 
+const UPDATE_SUBTEAM_MEMBER = gql`
+  mutation UpdatePositionSubteamMember(
+    $subteamId: String!
+    $email: String!
+    $playPosition: String!
+  ) {
+    updatePositionSubteamMember(
+      subteamId: $subteamId
+      email: $email
+      playPosition: $playPosition
+    )
+  }
+`;
+
 interface SubteamMember {
   email: string;
   role: string;
@@ -54,6 +73,7 @@ interface SubteamMember {
   picture: string;
   dateOfBirth: string;
   position: string;
+  playPosition: string;
 }
 
 const getPositionText = (position: string): string => {
@@ -94,16 +114,21 @@ const ContentRouster: React.FC<ContentRousterProps> = ({
     dateOfBirth: string;
     picture: string;
     position: string;
+    playPosition: string;
   } | null>(null);
   const [, setSelectedRole] = useState("");
   const [, setSelectedIndex] = useState<number | null>(null);
   const [editMode, setEditMode] = useState(false);
   const currentUserEmail = user?.email || "";
   const [modalOpen, setModalOpen] = useState(false);
+  const [updateSubteamMember] = useMutation(UPDATE_SUBTEAM_MEMBER);
 
-  const { loading, error, data } = useQuery(GET_COMPLETESUBTEAM_DETAILS, {
-    variables: { subteamId },
-  });
+  const { loading, error, data, refetch } = useQuery(
+    GET_COMPLETESUBTEAM_DETAILS,
+    {
+      variables: { subteamId },
+    }
+  );
 
   const {
     loading: roleLoading,
@@ -196,6 +221,36 @@ const ContentRouster: React.FC<ContentRousterProps> = ({
     }
     return age;
   };
+
+  async function handleUpdateMember(): Promise<void> {
+    try {
+      console.log("selectedMember", selectedMember);
+      // Ensure selectedMember exists and has a valid email and position
+      if (
+        selectedMember &&
+        selectedMember.email &&
+        selectedMember.playPosition
+      ) {
+        // Call the updateSubteamMember mutation
+        await updateSubteamMember({
+          variables: {
+            subteamId: subteamId,
+            email: selectedMember.email,
+            playPosition: selectedMember.playPosition,
+          },
+        });
+
+        // Optionally, you can reset the state or perform other actions after a successful update
+        setEditMode(false);
+        refetch();
+        // ... any other actions you need
+      } else {
+        console.error("Invalid selected member data");
+      }
+    } catch (error) {
+      console.error("Error updating subteam member:", error);
+    }
+  }
 
   return (
     <Box>
@@ -430,6 +485,20 @@ const ContentRouster: React.FC<ContentRousterProps> = ({
               >
                 Zdravotní prohlídka:
               </Typography>
+              <Typography
+                id="modal-description"
+                sx={{
+                  marginTop: selectedMember?.playPosition == null ?  "1.8em": "1em",
+                  fontFamily: "Roboto",
+                  fontSize: "1em",
+                  marginBottom: "1em",
+                  whiteSpace: "nowrap",
+                  color: "black",
+                  fontWeight: "500",
+                }}
+              >
+                Herní pozice:
+              </Typography>
             </Box>
 
             <Box
@@ -490,7 +559,48 @@ const ContentRouster: React.FC<ContentRousterProps> = ({
                 do 2. 3. 2023
               </Typography>
 
-              {editMode ? <Box sx={{}}></Box> : <Box sx={{}}></Box>}
+              {editMode && selectedMember ? (
+                <Box sx={{}}>
+                  <FormControl fullWidth>
+                    <Select
+                      value={selectedMember.playPosition}
+                      onChange={(e) => {
+                        setSelectedMember((prevMember) => ({
+                          ...(prevMember as SubteamMember), // Assert that prevMember is of type Member
+                          playPosition: e.target.value as string,
+                        }));
+                        console.log("selectedMember", selectedMember);
+                      }}
+                    >
+                      <MenuItem value="1">Správce</MenuItem>
+                      <MenuItem value="2">Hlavní trenér</MenuItem>
+                      <MenuItem value="3">Asistent trenéra</MenuItem>
+                      <MenuItem value="4">Hráč</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Box>
+              ) : (
+                <Box sx={{}}>
+                  <Typography
+                    id="modal-description"
+                    sx={{
+                      marginBottom: "1em",
+                      whiteSpace: "nowrap",
+                      color: "black",
+                      fontWeight: "500",
+                    }}
+                  >
+                    {selectedMember?.playPosition ? (
+                      getPositionText(selectedMember.playPosition)
+                    ) : (
+                      <Alert severity="warning">
+                        Není zvoleno
+                      </Alert>
+                    )}
+                  </Typography>
+                  
+                </Box>
+              )}
             </Box>
           </Box>
 
@@ -506,7 +616,9 @@ const ContentRouster: React.FC<ContentRousterProps> = ({
                   marginLeft: "-0.5em",
                   width: "100%",
                 }}
+                onClick={handleUpdateMember}
               >
+                
                 Uložit
               </Button>
               <Button
@@ -554,7 +666,7 @@ const ContentRouster: React.FC<ContentRousterProps> = ({
                         : selectedMember &&
                           selectedMember.email === currentUserEmail
                         ? "68%"
-                        : "76%",
+                        : "79%",
                     transform: "translateY(-50%)",
                     marginLeft: "-3em",
                     zIndex: -1,

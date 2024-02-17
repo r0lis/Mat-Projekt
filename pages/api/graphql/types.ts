@@ -149,6 +149,7 @@ export type SubteamMember = {
   email: string;
   role: string;
   position: string;
+  playPosition: string;
 };
 
 
@@ -165,6 +166,7 @@ export type CompleteSubteamMember = {
   email: string;
   picture: string;
   dateOfBirth: string;
+  playPosition: string;
   role: string;
   position: string;
 };
