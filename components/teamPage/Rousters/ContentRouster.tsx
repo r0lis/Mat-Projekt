@@ -93,6 +93,27 @@ const getPositionText = (position: string): string => {
   }
 };
 
+const getPlayPositionText = (position: string): string => {
+  switch (position) {
+    case null:
+      return "Není zvolena pozice";
+    case "1":
+      return "Centr";
+    case "2":
+      return "Levý křídlo";
+    case "3":
+      return "Pravý křídlo";
+    case "4":
+      return "Levý obránce";
+    case "5":
+      return "Pravý obránce";
+    case "6":
+      return "Brankář";
+    default:
+      return "";
+  }
+};
+
 type ContentRousterProps = {
   idTeam: string;
   subteamId: string;
@@ -339,6 +360,9 @@ const ContentRouster: React.FC<ContentRousterProps> = ({
                     </Typography>
                   </TableCell>
                   <TableCell>
+                    <Typography>{getPlayPositionText(member.playPosition)}</Typography>
+                  </TableCell>
+                  <TableCell>
                     <Typography>{getPositionText(member.position)}</Typography>
                   </TableCell>
                 </TableRow>
@@ -488,7 +512,7 @@ const ContentRouster: React.FC<ContentRousterProps> = ({
               <Typography
                 id="modal-description"
                 sx={{
-                  marginTop: selectedMember?.playPosition == null ?  "1.8em": "1em",
+                  marginTop: selectedMember?.playPosition == null || editMode ?  "1.8em": "1em",
                   fontFamily: "Roboto",
                   fontSize: "1em",
                   marginBottom: "1em",
@@ -572,10 +596,12 @@ const ContentRouster: React.FC<ContentRousterProps> = ({
                         console.log("selectedMember", selectedMember);
                       }}
                     >
-                      <MenuItem value="1">Správce</MenuItem>
-                      <MenuItem value="2">Hlavní trenér</MenuItem>
-                      <MenuItem value="3">Asistent trenéra</MenuItem>
-                      <MenuItem value="4">Hráč</MenuItem>
+                      <MenuItem value="1">Centr</MenuItem>
+                      <MenuItem value="2">Levý křídlo</MenuItem>
+                      <MenuItem value="3">Pravé křídlo</MenuItem>
+                      <MenuItem value="4">Levý obránce</MenuItem>
+                      <MenuItem value="5">Pravý obránce</MenuItem>
+                      <MenuItem value="6">Brankář</MenuItem>
                     </Select>
                   </FormControl>
                 </Box>
@@ -666,7 +692,7 @@ const ContentRouster: React.FC<ContentRousterProps> = ({
                         : selectedMember &&
                           selectedMember.email === currentUserEmail
                         ? "68%"
-                        : "79%",
+                        : "78%",
                     transform: "translateY(-50%)",
                     marginLeft: "-3em",
                     zIndex: -1,
