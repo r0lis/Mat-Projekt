@@ -76,23 +76,6 @@ interface SubteamMember {
   playPosition: string;
 }
 
-const getPositionText = (position: string): string => {
-  switch (position) {
-    case "0":
-      return "Není zvolena pozice";
-    case "1":
-      return "Správce";
-    case "2":
-      return "Hlavní trenér";
-    case "3":
-      return "Asistent trenéra";
-    case "4":
-      return "Hráč";
-    default:
-      return "";
-  }
-};
-
 const getPlayPositionText = (position: string): string => {
   switch (position) {
     case null:
@@ -316,13 +299,30 @@ const ContentRouster: React.FC<ContentRousterProps> = ({
         component={Paper}
       >
         <Table>
-          <TableHead></TableHead>
+          <TableHead>
+            <TableRow>
+              <TableCell></TableCell>
+              <TableCell></TableCell>
+              <TableCell>
+                <Typography variant="h6">Jméno</Typography>
+              </TableCell>
+              <TableCell>
+                <Typography variant="h6">Datum narození</Typography>
+              </TableCell>
+              <TableCell>
+                <Typography variant="h6">Herní pozice</Typography>
+              </TableCell>
+              <TableCell>
+                <Typography variant="h6">Zdravotní prohlídka</Typography>
+              </TableCell>
+            </TableRow>
+          </TableHead>
           <TableBody ref={tableBodyRef}>
             {filteredMembersToShow.map(
               (member: SubteamMember, index: number) => (
                 <TableRow key={index}>
                   <TableCell>
-                    {role === "1" && (
+                    {role === "1" || member?.email == currentUserEmail && (
                       <Box
                         sx={{ height: "20px", width: "20px" }}
                         onClick={() => handleRowClick(member)}
@@ -360,10 +360,12 @@ const ContentRouster: React.FC<ContentRousterProps> = ({
                     </Typography>
                   </TableCell>
                   <TableCell>
-                    <Typography>{getPlayPositionText(member.playPosition)}</Typography>
+                    <Typography>
+                      {getPlayPositionText(member.playPosition)}
+                    </Typography>
                   </TableCell>
                   <TableCell>
-                    <Typography>{getPositionText(member.position)}</Typography>
+                    <Typography> do 2. 3. 2023</Typography>
                   </TableCell>
                 </TableRow>
               )
@@ -512,7 +514,10 @@ const ContentRouster: React.FC<ContentRousterProps> = ({
               <Typography
                 id="modal-description"
                 sx={{
-                  marginTop: selectedMember?.playPosition == null || editMode ?  "1.8em": "1em",
+                  marginTop:
+                    selectedMember?.playPosition == null || editMode
+                      ? "1.8em"
+                      : "1em",
                   fontFamily: "Roboto",
                   fontSize: "1em",
                   marginBottom: "1em",
@@ -617,14 +622,11 @@ const ContentRouster: React.FC<ContentRousterProps> = ({
                     }}
                   >
                     {selectedMember?.playPosition ? (
-                      getPositionText(selectedMember.playPosition)
+                      getPlayPositionText(selectedMember.playPosition)
                     ) : (
-                      <Alert severity="warning">
-                        Není zvoleno
-                      </Alert>
+                      <Alert severity="warning">Není zvoleno</Alert>
                     )}
                   </Typography>
-                  
                 </Box>
               )}
             </Box>
@@ -644,7 +646,6 @@ const ContentRouster: React.FC<ContentRousterProps> = ({
                 }}
                 onClick={handleUpdateMember}
               >
-                
                 Uložit
               </Button>
               <Button
@@ -691,7 +692,7 @@ const ContentRouster: React.FC<ContentRousterProps> = ({
                         ? "81%"
                         : selectedMember &&
                           selectedMember.email === currentUserEmail
-                        ? "68%"
+                        ? "75.5%"
                         : "78%",
                     transform: "translateY(-50%)",
                     marginLeft: "-3em",
