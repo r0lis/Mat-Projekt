@@ -9,7 +9,7 @@ import { gql, useQuery } from "@apollo/client";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ContentRouster from "./ContentRouster";
-import Formations from "./formations";
+import Formations from "./Formations";
 
 const GET_SUBTEAMS = gql`
   query GetSubteamData($teamId: String!) {
