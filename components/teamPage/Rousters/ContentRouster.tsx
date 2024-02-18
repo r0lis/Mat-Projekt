@@ -322,7 +322,7 @@ const ContentRouster: React.FC<ContentRousterProps> = ({
               (member: SubteamMember, index: number) => (
                 <TableRow key={index}>
                   <TableCell>
-                    {role === "1" || member?.email == currentUserEmail && (
+                    {role === "1" && (
                       <Box
                         sx={{ height: "20px", width: "20px" }}
                         onClick={() => handleRowClick(member)}
@@ -598,7 +598,8 @@ const ContentRouster: React.FC<ContentRousterProps> = ({
                           ...(prevMember as SubteamMember), // Assert that prevMember is of type Member
                           playPosition: e.target.value as string,
                         }));
-                        console.log("selectedMember", selectedMember);
+                        
+                        
                       }}
                     >
                       <MenuItem value="1">Centr</MenuItem>
@@ -681,24 +682,6 @@ const ContentRouster: React.FC<ContentRousterProps> = ({
                   alignItems: "center",
                 }}
               >
-                <Box
-                  sx={{
-                    width: "100%",
-                    borderBottom: "2px solid gray", // Change the color as needed
-                    position: "absolute",
-                    top:
-                      selectedMember?.role === "0" ||
-                      selectedMember?.role === "No Role Assigned"
-                        ? "81%"
-                        : selectedMember &&
-                          selectedMember.email === currentUserEmail
-                        ? "75.5%"
-                        : "78%",
-                    transform: "translateY(-50%)",
-                    marginLeft: "-3em",
-                    zIndex: -1,
-                  }}
-                />
               </Box>
               <Box
                 sx={{

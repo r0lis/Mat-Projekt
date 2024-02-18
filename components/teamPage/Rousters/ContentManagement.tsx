@@ -150,7 +150,6 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
                         <Typography variant="body1">
                           {showFormations ? (
                             <Formations
-                              isTeam={teamId}
                               subteamId={subteam.subteamId}
                             />
                           ) : (
