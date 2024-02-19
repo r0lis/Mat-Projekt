@@ -87,45 +87,36 @@ const Formations: React.FC<{ subteamId: string }> = ({ subteamId }) => {
 
   if (error) return <Typography>Error</Typography>;
 
-  const subteamMembers: SubteamMember[] =
-    data.getCompleteSubteamDetail.subteamMembers;
+  const subteamMembers: SubteamMember[] = data.getCompleteSubteamDetail.subteamMembers.filter(
+    (member : SubteamMember) => member.position === "4"
+  );
 
   const filteredMembers = subteamMembers.filter(
-    (member) => member.position === "4"
+    (member) => !Object.values(cards).includes(member)
   );
 
   const handleCardClick = (position: string) => {
-    if (selectedPlayer && !cards[position]) {
+    if (selectedPlayer && !Object.values(cards).includes(selectedPlayer)) {
       setCards((prevCards) => ({
         ...prevCards,
         [position]: selectedPlayer,
       }));
       setSelectedPlayer(null);
-      // Remove selected player from filteredMembers
-      const updatedMembers = filteredMembers.filter(
-        (member) => member.email !== selectedPlayer.email
-      );
-      filteredMembers.splice(0, filteredMembers.length, ...updatedMembers);
     }
   };
 
   const handleRemovePlayer = (position: string) => {
-    const removedPlayer = cards[position];
     setCards((prevCards) => ({
       ...prevCards,
       [position]: null,
     }));
-    if (removedPlayer) {
-      // Add removed player back to filteredMembers
-      filteredMembers.push(removedPlayer);
-    }
   };
 
   return (
     <Box sx={{ display: "flex" }}>
       {/* Subteam Members */}
       <Box sx={{ width: "50%" }}>
-        <Typography variant="h5">Členové týmu</Typography>
+        <Typography sx={{ marginBottom: "0.5em", marginTop: "0.5em" }} variant="h5">Členové týmu</Typography>
 
         <Box
           sx={{
@@ -159,13 +150,17 @@ const Formations: React.FC<{ subteamId: string }> = ({ subteamId }) => {
       </Box>
 
       {/* Cards */}
-      <Box>
-        <Typography variant="h5">Karty</Typography>
+      <Box sx={{
+        marginLeft: "auto",
+        marginRight: "auto",
+      }}>
+        <Typography sx={{ marginBottom: "0.5em", marginTop: "0.5em" }} variant="h5">Formace</Typography>
         <Box
           sx={{
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
+
           }}
         >
           <Box
@@ -178,7 +173,7 @@ const Formations: React.FC<{ subteamId: string }> = ({ subteamId }) => {
             {["lefU", "Cent", "rigU"].map((position) => (
               <Card
                 key={position}
-                sx={{ minWidth: 180, minHeight: 130, cursor: "pointer" }}
+                sx={{ minWidth: 180, minHeight: 130, cursor: "pointer", marginLeft: "1em", marginRight: "1em" }}
                 onClick={() => handleCardClick(position)}
               >
                 <CardContent>
@@ -191,7 +186,6 @@ const Formations: React.FC<{ subteamId: string }> = ({ subteamId }) => {
                       ? "Pravý útočník"
                       : ""}
                   </Typography>
-                  {/* Zde budou zobrazeni členové týmu */}
                   {cards[position] && (
                     <Box
                       sx={{
@@ -200,18 +194,18 @@ const Formations: React.FC<{ subteamId: string }> = ({ subteamId }) => {
                         justifyContent: "space-between",
                       }}
                     >
-                       <Box sx={{display:"block"}}>
-                      <Typography>
-                        {`${cards[position]?.name} ${cards[position]?.surname}`}
-                      </Typography>
+                      <Box sx={{ display: "block" }}>
+                        <Typography>
+                          {`${cards[position]?.name} ${cards[position]?.surname}`}
+                        </Typography>
                       </Box>
-                      <Box sx={{display:"block"}}>
-                      <Typography
-                        onClick={() => handleRemovePlayer(position)}
-                        sx={{ cursor: "pointer" }}
-                      >
-                        Odstranit
-                      </Typography>
+                      <Box sx={{ display: "block" }}>
+                        <Typography
+                          onClick={() => handleRemovePlayer(position)}
+                          sx={{ cursor: "pointer" }}
+                        >
+                          Odstranit
+                        </Typography>
                       </Box>
                     </Box>
                   )}
@@ -228,7 +222,7 @@ const Formations: React.FC<{ subteamId: string }> = ({ subteamId }) => {
             {["lefD", "rigD"].map((position) => (
               <Card
                 key={position}
-                sx={{ minWidth: 180, minHeight: 130, cursor: "pointer" }}
+                sx={{ minWidth: 180, minHeight: 130, cursor: "pointer", marginLeft: "1em", marginRight: "1em" }}
                 onClick={() => handleCardClick(position)}
               >
                 <CardContent>
@@ -247,18 +241,18 @@ const Formations: React.FC<{ subteamId: string }> = ({ subteamId }) => {
                         justifyContent: "space-between",
                       }}
                     >
-                       <Box sx={{display:"block"}}>
-                      <Typography>
-                        {`${cards[position]?.name} ${cards[position]?.surname}`}
-                      </Typography>
+                      <Box sx={{ display: "block" }}>
+                        <Typography>
+                          {`${cards[position]?.name} ${cards[position]?.surname}`}
+                        </Typography>
                       </Box>
-                      <Box sx={{display:"block"}}>
-                      <Typography
-                        onClick={() => handleRemovePlayer(position)}
-                        sx={{ cursor: "pointer" }}
-                      >
-                        Odstranit
-                      </Typography>
+                      <Box sx={{ display: "block" }}>
+                        <Typography
+                          onClick={() => handleRemovePlayer(position)}
+                          sx={{ cursor: "pointer" }}
+                        >
+                          Odstranit
+                        </Typography>
                       </Box>
                     </Box>
                   )}
