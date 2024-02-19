@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { gql, useQuery } from "@apollo/client";
+import { gql, useMutation, useQuery } from "@apollo/client";
 import {
   Box,
   CircularProgress,
@@ -22,6 +22,12 @@ const GET_COMPLETESUBTEAM_DETAILS = gql`
         position
       }
     }
+  }
+`;
+
+const UPDATE_FORMATION = gql`
+  mutation UpdateFormation($subteamId: String!, $cards: CardsInput!) {
+    updateFormation(subteamId: $subteamId, cards: $cards)
   }
 `;
 
@@ -50,6 +56,7 @@ type SubteamMember = {
   email: string;
   name: string;
   surname: string;
+  __typename: string;
   playPosition: string;
   position: string;
 };
@@ -66,6 +73,7 @@ const Formations: React.FC<{ subteamId: string }> = ({ subteamId }) => {
   const [selectedPlayer, setSelectedPlayer] = useState<SubteamMember | null>(
     null
   );
+
   const [formationName, setFormationName] = useState("");
   const [cards, setCards] = useState<Cards>({
     lefU: null,
@@ -74,6 +82,8 @@ const Formations: React.FC<{ subteamId: string }> = ({ subteamId }) => {
     lefD: null,
     rigD: null,
   });
+
+  const [updateFormation] = useMutation(UPDATE_FORMATION);
 
   if (loading)
     return (
@@ -95,6 +105,7 @@ const Formations: React.FC<{ subteamId: string }> = ({ subteamId }) => {
     data.getCompleteSubteamDetail.subteamMembers.filter(
       (member: SubteamMember) => member.position === "4"
     );
+    
 
   const filteredMembers = subteamMembers.filter(
     (member) => !Object.values(cards).includes(member)
@@ -121,6 +132,35 @@ const Formations: React.FC<{ subteamId: string }> = ({ subteamId }) => {
       ...prevCards,
       [position]: null,
     }));
+  };
+
+  const handleSave = async () => {
+    try {
+      console.log(cards);
+      const cleanedCards = Object.fromEntries(
+        Object.entries(cards).map(([key, value]) => {
+          if (value) {
+            
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            const { __typename, ...cleanedValue } = value;
+            return [key, cleanedValue];
+          } else {
+            return [key, null];
+          }
+        })
+      );
+  
+      await updateFormation({
+        variables: {
+          subteamId,
+          formationName,
+          cards: cleanedCards,
+        },
+      });
+  
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -328,12 +368,14 @@ const Formations: React.FC<{ subteamId: string }> = ({ subteamId }) => {
           />
           {Object.values(cards).every((card) => card !== null) &&
           formationName.length >= 2 ? (
-            <Button variant="contained" color="primary">
+            <Button variant="contained" color="primary" onClick={handleSave}>
               Uložit
             </Button>
           ) : (
-            <Alert severity="error">Vyplňte všechny pozice a zadejte název formace (alespoň 2 znaky)</Alert>
-            )}
+            <Alert severity="error">
+              Vyplňte všechny pozice a zadejte název formace (alespoň 2 znaky)
+            </Alert>
+          )}
         </Box>
       </Box>
     </Box>

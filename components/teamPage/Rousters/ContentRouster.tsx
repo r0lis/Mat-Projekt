@@ -134,6 +134,8 @@ const ContentRouster: React.FC<ContentRousterProps> = ({
     }
   );
 
+  console.log("data", data);
+
   const {
     loading: roleLoading,
     error: roleError,

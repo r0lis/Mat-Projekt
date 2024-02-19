@@ -288,7 +288,6 @@ export const typeDefs = gql`
     onComment: Boolean!
     Comments: [Comment]
     Seen: [SeenEntry]
-
   }
 
   input AddCommentInput {
@@ -351,8 +350,21 @@ export const typeDefs = gql`
     matchType: String
   }
 
- 
+  input SubteamMemberInput3 {
+    email: String
+    name: String
+    surname: String
+    position: String
+    playPosition: String
+  }
   
+  input CardsInput {
+    lefU: SubteamMemberInput3
+    Cent: SubteamMemberInput3
+    rigU: SubteamMemberInput3
+    lefD: SubteamMemberInput3
+    rigD: SubteamMemberInput3
+  }
   type Query {
     user(id: String): User
     getUserByNameAndSurname(email: String): UserDetail
@@ -395,7 +407,6 @@ export const typeDefs = gql`
     getDiscussionSeenUsers(discussionId: String!): [SeenUser]!
     getMatchByMatchId(matchId: String!): Match
     getTrainingByMatchId(matchId: String!): Training
-
   }
 
   type Mutation {
@@ -457,11 +468,6 @@ export const typeDefs = gql`
     deleteTraining(matchId: String!): Boolean
     updateTraining(input: UpdateTrainingInput): Boolean
     updateMatch(input: UpdateMatchInput): Boolean
-
+    updateFormation(subteamId: String!, cards: CardsInput!): Boolean
   }
-
-  
-
-
-
-`;
+  `;

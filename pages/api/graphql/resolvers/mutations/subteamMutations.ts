@@ -51,8 +51,6 @@ type AddCommentInput = {
   commentId: string;
 };
 
-
-
 type AddTrainingInput = {
   subteamIdSelected: String
   opponentName: String
@@ -63,7 +61,6 @@ type AddTrainingInput = {
   time: String
   players: [String]
   management: [String]
-  
 }
 
 type UpdateTrainingInput = {
@@ -115,6 +112,21 @@ type UpdateDiscussionInput = {
   userEmail: string;
 };
 
+type SubteamMemberInput3 = {
+  email: String
+  name: String
+  surname: String
+  position: String
+  playPosition: String
+}
+
+type CardsInput = {
+  lefU: SubteamMemberInput3
+  Cent: SubteamMemberInput3
+  rigU: SubteamMemberInput3
+  lefD: SubteamMemberInput3
+  rigD: SubteamMemberInput3
+}
 
 const generateRandomString = (length: number) => {
     let result = "";
@@ -127,7 +139,6 @@ const generateRandomString = (length: number) => {
     return result;
   };
 
-  
 export const subteamMutations = {
 
     createSubteam: async (
@@ -709,7 +720,31 @@ export const subteamMutations = {
         throw new Error("Chyba při aktualizaci treninku");
       }
     },
+
+    updateFormation: async (
+      _: any,
+      { subteamId,  cards }: { subteamId: string; cards: CardsInput },
+      context: Context
+    ) => {
+      try {
+        const subteamDoc = context.db.collection("Teams").doc(subteamId);
+        const subteamSnapshot = await subteamDoc.get();
     
+        if (!subteamSnapshot.exists) {
+          throw new Error(`Subteam with ID ${subteamId} not found`);
+        }
+    
+        await subteamDoc.update({
+           cards,
+        });
+      
+        return true;
+      } catch (error) {
+        console.error("Error updating formation:", error);
+        throw error;
+      }
+    },
+
   };
 
 
