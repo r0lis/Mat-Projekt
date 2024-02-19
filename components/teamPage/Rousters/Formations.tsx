@@ -6,6 +6,9 @@ import {
   Typography,
   Card,
   CardContent,
+  Button,
+  TextField,
+  Alert,
 } from "@mui/material";
 
 const GET_COMPLETESUBTEAM_DETAILS = gql`
@@ -63,6 +66,7 @@ const Formations: React.FC<{ subteamId: string }> = ({ subteamId }) => {
   const [selectedPlayer, setSelectedPlayer] = useState<SubteamMember | null>(
     null
   );
+  const [formationName, setFormationName] = useState("");
   const [cards, setCards] = useState<Cards>({
     lefU: null,
     Cent: null,
@@ -87,13 +91,20 @@ const Formations: React.FC<{ subteamId: string }> = ({ subteamId }) => {
 
   if (error) return <Typography>Error</Typography>;
 
-  const subteamMembers: SubteamMember[] = data.getCompleteSubteamDetail.subteamMembers.filter(
-    (member : SubteamMember) => member.position === "4"
-  );
+  const subteamMembers: SubteamMember[] =
+    data.getCompleteSubteamDetail.subteamMembers.filter(
+      (member: SubteamMember) => member.position === "4"
+    );
 
   const filteredMembers = subteamMembers.filter(
     (member) => !Object.values(cards).includes(member)
   );
+
+  const handleFormationNameChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setFormationName(event.target.value);
+  };
 
   const handleCardClick = (position: string) => {
     if (selectedPlayer && !Object.values(cards).includes(selectedPlayer)) {
@@ -116,7 +127,12 @@ const Formations: React.FC<{ subteamId: string }> = ({ subteamId }) => {
     <Box sx={{ display: "flex" }}>
       {/* Subteam Members */}
       <Box sx={{ width: "50%" }}>
-        <Typography sx={{ marginBottom: "0.5em", marginTop: "0.5em" }} variant="h5">Členové týmu</Typography>
+        <Typography
+          sx={{ marginBottom: "0.5em", marginTop: "0.5em" }}
+          variant="h5"
+        >
+          Členové týmu
+        </Typography>
 
         <Box
           sx={{
@@ -150,17 +166,23 @@ const Formations: React.FC<{ subteamId: string }> = ({ subteamId }) => {
       </Box>
 
       {/* Cards */}
-      <Box sx={{
-        marginLeft: "auto",
-        marginRight: "auto",
-      }}>
-        <Typography sx={{ marginBottom: "0.5em", marginTop: "0.5em" }} variant="h5">Formace</Typography>
+      <Box
+        sx={{
+          marginLeft: "auto",
+          marginRight: "auto",
+        }}
+      >
+        <Typography
+          sx={{ marginBottom: "0.5em", marginTop: "0.5em" }}
+          variant="h5"
+        >
+          Formace
+        </Typography>
         <Box
           sx={{
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-
           }}
         >
           <Box
@@ -173,11 +195,17 @@ const Formations: React.FC<{ subteamId: string }> = ({ subteamId }) => {
             {["lefU", "Cent", "rigU"].map((position) => (
               <Card
                 key={position}
-                sx={{ minWidth: 180, minHeight: 130, cursor: "pointer", marginLeft: "1em", marginRight: "1em" }}
+                sx={{
+                  minWidth: 180,
+                  minHeight: 150,
+                  cursor: "pointer",
+                  marginLeft: "1em",
+                  marginRight: "1em",
+                }}
                 onClick={() => handleCardClick(position)}
               >
                 <CardContent>
-                  <Typography variant="h6">
+                  <Typography sx={{ marginBottom: "0.5em" }} variant="h6">
                     {position === "lefU"
                       ? "Levý útočník"
                       : position === "Cent"
@@ -186,7 +214,7 @@ const Formations: React.FC<{ subteamId: string }> = ({ subteamId }) => {
                       ? "Pravý útočník"
                       : ""}
                   </Typography>
-                  {cards[position] && (
+                  {cards[position] ? (
                     <Box
                       sx={{
                         display: "block",
@@ -195,19 +223,31 @@ const Formations: React.FC<{ subteamId: string }> = ({ subteamId }) => {
                       }}
                     >
                       <Box sx={{ display: "block" }}>
-                        <Typography>
+                        <Typography
+                          sx={{
+                            marginBottom: "0.4em",
+                            fontSize: "1.2em",
+                            fontWeight: "500",
+                          }}
+                        >
                           {`${cards[position]?.name} ${cards[position]?.surname}`}
                         </Typography>
                       </Box>
                       <Box sx={{ display: "block" }}>
-                        <Typography
+                        <Button
                           onClick={() => handleRemovePlayer(position)}
-                          sx={{ cursor: "pointer" }}
+                          variant="contained"
+                          color="error"
+                          sx={{ width: "100%", height: "30px" }}
                         >
                           Odstranit
-                        </Typography>
+                        </Button>
                       </Box>
                     </Box>
+                  ) : (
+                    <Typography variant="body2" color="error">
+                      Doplňte
+                    </Typography>
                   )}
                 </CardContent>
               </Card>
@@ -222,18 +262,24 @@ const Formations: React.FC<{ subteamId: string }> = ({ subteamId }) => {
             {["lefD", "rigD"].map((position) => (
               <Card
                 key={position}
-                sx={{ minWidth: 180, minHeight: 130, cursor: "pointer", marginLeft: "1em", marginRight: "1em" }}
+                sx={{
+                  minWidth: 180,
+                  minHeight: 150,
+                  cursor: "pointer",
+                  marginLeft: "1em",
+                  marginRight: "1em",
+                }}
                 onClick={() => handleCardClick(position)}
               >
                 <CardContent>
-                  <Typography variant="h6">
+                  <Typography sx={{ marginBottom: "0.5em" }} variant="h6">
                     {position === "lefD"
                       ? "Levý obránce"
                       : position === "rigD"
                       ? "Pravý obránce"
                       : ""}
                   </Typography>
-                  {cards[position] && (
+                  {cards[position] ? (
                     <Box
                       sx={{
                         display: "block",
@@ -242,24 +288,52 @@ const Formations: React.FC<{ subteamId: string }> = ({ subteamId }) => {
                       }}
                     >
                       <Box sx={{ display: "block" }}>
-                        <Typography>
+                        <Typography
+                          sx={{
+                            marginBottom: "0.4em",
+                            fontSize: "1.2em",
+                            fontWeight: "500",
+                          }}
+                        >
                           {`${cards[position]?.name} ${cards[position]?.surname}`}
                         </Typography>
                       </Box>
                       <Box sx={{ display: "block" }}>
-                        <Typography
+                        <Button
                           onClick={() => handleRemovePlayer(position)}
-                          sx={{ cursor: "pointer" }}
+                          variant="contained"
+                          color="error"
+                          sx={{ width: "100%", height: "30px" }}
                         >
                           Odstranit
-                        </Typography>
+                        </Button>
                       </Box>
                     </Box>
+                  ) : (
+                    <Typography variant="body2" color="error">
+                      Doplňte
+                    </Typography>
                   )}
                 </CardContent>
               </Card>
             ))}
           </Box>
+          <TextField
+            label="Název formace"
+            variant="outlined"
+            fullWidth
+            margin="normal"
+            value={formationName}
+            onChange={handleFormationNameChange}
+          />
+          {Object.values(cards).every((card) => card !== null) &&
+          formationName.length >= 2 ? (
+            <Button variant="contained" color="primary">
+              Uložit
+            </Button>
+          ) : (
+            <Alert severity="error">Vyplňte všechny pozice a zadejte název formace (alespoň 2 znaky)</Alert>
+            )}
         </Box>
       </Box>
     </Box>
