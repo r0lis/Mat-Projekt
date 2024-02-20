@@ -737,7 +737,7 @@ export const subteamMutations = {
         const formationId = generateRandomString(30);
     
         // Získání aktuálních formací
-        const currentFormations = subteamSnapshot.data()?.formations || [];
+        const currentFormations = subteamSnapshot.data()?.Formations || [];
     
         // Vytvoření nové formace
         const newFormation = {
@@ -751,7 +751,7 @@ export const subteamMutations = {
     
         // Aktualizace dokumentu v databázi
         await subteamDoc.update({
-          formations: updatedFormations,
+          Formations: updatedFormations,
         });
     
         return true;

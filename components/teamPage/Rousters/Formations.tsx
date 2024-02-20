@@ -13,16 +13,57 @@ import {
 
 const GET_COMPLETESUBTEAM_DETAILS = gql`
   query GetCompleteSubteamDetail($subteamId: String!) {
-    getCompleteSubteamDetail(subteamId: $subteamId) {
-      subteamMembers {
-        email
-        name
-        surname
-        playPosition
-        position
+  getCompleteSubteamDetail(subteamId: $subteamId) {
+    subteamMembers {
+      email
+      name
+      surname
+      playPosition
+      position
+    }
+    Formations {
+      cards {
+        Cent {
+          email
+          name
+          surname
+          playPosition
+          position
+        }
+        lefD {
+          email
+          name
+          surname
+          playPosition
+          position
+        }
+        lefU {
+          email
+          name
+          surname
+          playPosition
+          position
+        }
+        rigD {
+          email
+          name
+          surname
+          playPosition
+          position
+        }
+        rigU {
+          email
+          name
+          surname
+          playPosition
+          position
+        }
       }
+      formationName
+      formationId
     }
   }
+}
 `;
 
 const UPDATE_FORMATION = gql`
@@ -99,7 +140,8 @@ const Formations: React.FC<{ subteamId: string }> = ({ subteamId }) => {
       </Box>
     );
 
-  if (error) return <Typography>Error</Typography>;
+  if (error) return <Typography>chyba</Typography>;
+  console.log(error);
 
   const subteamMembers: SubteamMember[] =
     data.getCompleteSubteamDetail.subteamMembers.filter(

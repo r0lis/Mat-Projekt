@@ -194,6 +194,7 @@ export const typeDefs = gql`
     Name: String
     teamId: String
     subteamId: String
+    Formations: [Formation]
     subteamMembers: [CompleteSubteamMember]
   }
   
@@ -357,6 +358,31 @@ export const typeDefs = gql`
     position: String
     playPosition: String
   }
+
+  type Formation {
+    cards: Card
+    formationId: String
+    formationName: String
+  }
+
+  type SubteamMemberCard {
+    email: String
+    name: String
+    surname: String
+    position: String
+    playPosition: String
+  }
+
+  type Card {
+    lefU: SubteamMemberCard
+    Cent: SubteamMemberCard
+    rigU: SubteamMemberCard
+    lefD: SubteamMemberCard
+    rigD: SubteamMemberCard
+  }
+  
+
+
   
   input CardsInput {
     lefU: SubteamMemberInput3

@@ -12,6 +12,7 @@ import {
   Team,
   TeamDetails2,
   MemberDetails,
+  SubteamMember,
   Subteam,
   CompleteSubteam,
   CompleteSubteamMember,
@@ -141,23 +142,17 @@ export const subteamQueries = {
     try {
       if (context.user) {
         const subteamDoc = await context.db
-          .collection("Teams")
+          .collection('Teams')
           .doc(subteamId)
           .get();
 
         if (subteamDoc.exists) {
           const subteamData = subteamDoc.data() as Subteam;
-
           const subteamMembersPromises = subteamData.subteamMembers.map(
-            async (member: {
-              email: string;
-              position: string;
-              playPosition: string;
-              role: string;
-            }) => {
+            async (member: SubteamMember) => {
               const userDoc = await context.db
-                .collection("User")
-                .where("Email", "==", member.email)
+                .collection('User')
+                .where('Email', '==', member.email)
                 .get();
 
               if (!userDoc.empty) {
@@ -171,7 +166,6 @@ export const subteamQueries = {
                   role: member.role,
                   position: member.position,
                   playPosition: member.playPosition,
-
                 };
 
                 return completeMember;
@@ -182,14 +176,12 @@ export const subteamQueries = {
           );
 
           const subteamMembers = await Promise.all(subteamMembersPromises);
-
           const completeSubteam: CompleteSubteam = {
             Name: subteamData.Name,
             teamId: subteamData.teamId,
             subteamId: subteamData.subteamId,
-            subteamMembers: subteamMembers.filter(
-              Boolean
-            ) as CompleteSubteamMember[],
+            subteamMembers: subteamMembers.filter(Boolean) as CompleteSubteamMember[],
+            Formations: subteamData.Formations || [], // Přidáme formace
           };
 
           return completeSubteam;
@@ -198,7 +190,7 @@ export const subteamQueries = {
 
       return null;
     } catch (error) {
-      console.error("Error fetching complete subteam details:", error);
+      console.error('Error fetching complete subteam details:', error);
       throw error;
     }
   },

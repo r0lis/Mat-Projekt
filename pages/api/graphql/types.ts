@@ -141,6 +141,7 @@ export type MemberDetails = {
 export type Subteam = {
   Name: string;
   teamId: string;
+  Formations: [Formations];
   subteamId: string;
   subteamMembers: SubteamMember[];
 };
@@ -157,7 +158,35 @@ export type CompleteSubteam = {
   Name: string;
   teamId: string;
   subteamId: string;
+  Formations: [Formations];
   subteamMembers: CompleteSubteamMember[];
+};
+
+export type Formations = {
+  formationId: string;
+  formationName: string;
+  cards: {
+    Cent: Card[];
+    lefD: Card[];
+    lefU: Card[];
+    rigD: Card[];
+    rigU: Card[];
+  };
+};
+
+export type SubteamMemberInput3 = {
+  email: string;
+  role: string;
+  position: string;
+  playPosition: string;
+};
+
+export type Card = {
+  email: string;
+  name: string;
+  surname: string;
+  playPosition: string;
+  position: string;
 };
 
 export type CompleteSubteamMember = {
