@@ -733,22 +733,34 @@ export const subteamMutations = {
         if (!subteamSnapshot.exists) {
           throw new Error(`Subteam with ID ${subteamId} not found`);
         }
-
+    
         const formationId = generateRandomString(30);
     
+        // Získání aktuálních formací
+        const currentFormations = subteamSnapshot.data()?.formations || [];
+    
+        // Vytvoření nové formace
+        const newFormation = {
+          formationId,
+          formationName,
+          cards,
+        };
+    
+        // Přidání nové formace k aktuálním formacím
+        const updatedFormations = [...currentFormations, newFormation];
+    
+        // Aktualizace dokumentu v databázi
         await subteamDoc.update({
-           cards,
-           formationId,
-           formationName
-
+          formations: updatedFormations,
         });
-      
+    
         return true;
       } catch (error) {
         console.error("Error updating formation:", error);
         throw error;
       }
     },
+    
 
   };
 

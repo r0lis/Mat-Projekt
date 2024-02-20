@@ -157,11 +157,22 @@ const Formations: React.FC<{ subteamId: string }> = ({ subteamId }) => {
           cards: cleanedCards,
         },
       });
+      setCards({
+        lefU: null,
+        Cent: null,
+        rigU: null,
+        lefD: null,
+        rigD: null,
+      });
+      setFormationName("");
   
+      // Show success alert
+      alert("Formace byla úspěšně uložena.");
     } catch (error) {
       console.error(error);
-    }
+    } 
   };
+
 
   return (
     <Box sx={{ display: "flex" }}>
