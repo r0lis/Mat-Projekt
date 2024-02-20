@@ -723,7 +723,7 @@ export const subteamMutations = {
 
     updateFormation: async (
       _: any,
-      { subteamId,  cards }: { subteamId: string; cards: CardsInput },
+      { subteamId, formationName, cards }: { subteamId: string; formationName: string; cards: CardsInput },
       context: Context
     ) => {
       try {
@@ -733,9 +733,14 @@ export const subteamMutations = {
         if (!subteamSnapshot.exists) {
           throw new Error(`Subteam with ID ${subteamId} not found`);
         }
+
+        const formationId = generateRandomString(30);
     
         await subteamDoc.update({
            cards,
+           formationId,
+           formationName
+
         });
       
         return true;

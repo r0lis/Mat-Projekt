@@ -468,6 +468,6 @@ export const typeDefs = gql`
     deleteTraining(matchId: String!): Boolean
     updateTraining(input: UpdateTrainingInput): Boolean
     updateMatch(input: UpdateMatchInput): Boolean
-    updateFormation(subteamId: String!, cards: CardsInput!): Boolean
+    updateFormation(subteamId: String!, formationName: String!, cards: CardsInput!): Boolean
   }
   `;

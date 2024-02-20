@@ -26,8 +26,8 @@ const GET_COMPLETESUBTEAM_DETAILS = gql`
 `;
 
 const UPDATE_FORMATION = gql`
-  mutation UpdateFormation($subteamId: String!, $cards: CardsInput!) {
-    updateFormation(subteamId: $subteamId, cards: $cards)
+  mutation UpdateFormation($subteamId: String!, $formationName: String!, $cards: CardsInput!) {
+    updateFormation(subteamId: $subteamId, formationName: $formationName, cards: $cards)
   }
 `;
 
