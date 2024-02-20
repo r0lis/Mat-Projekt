@@ -80,6 +80,12 @@ const UPDATE_FORMATION = gql`
   }
 `;
 
+const DELETE_FORMATION = gql`
+  mutation DeleteFormation($subteamId: String!, $formationId: String!) {
+    deleteFormation(subteamId: $subteamId, formationId: $formationId)
+  }
+`;
+
 const getPlayPositionText = (position: string): string => {
   switch (position) {
     case null:
@@ -110,8 +116,6 @@ type SubteamMember = {
   position: string;
 };
 
-
-
 type Formation = {
   cards: {
     lefU: SubteamMember | null;
@@ -129,9 +133,12 @@ type Cards = {
 };
 
 const Formations: React.FC<{ subteamId: string }> = ({ subteamId }) => {
-  const { loading, error, data, refetch } = useQuery(GET_COMPLETESUBTEAM_DETAILS, {
-    variables: { subteamId },
-  });
+  const { loading, error, data, refetch } = useQuery(
+    GET_COMPLETESUBTEAM_DETAILS,
+    {
+      variables: { subteamId },
+    }
+  );
 
   const [selectedPlayer, setSelectedPlayer] = useState<SubteamMember | null>(
     null
@@ -147,6 +154,7 @@ const Formations: React.FC<{ subteamId: string }> = ({ subteamId }) => {
   });
 
   const [updateFormation] = useMutation(UPDATE_FORMATION);
+  const [deleteFormation] = useMutation(DELETE_FORMATION);
 
   if (loading)
     return (
@@ -233,6 +241,23 @@ const Formations: React.FC<{ subteamId: string }> = ({ subteamId }) => {
       alert("Formace byla úspěšně uložena.");
     } catch (error) {
       console.error(error);
+    }
+  };
+
+  const handleDeleteFormation = async (formationId: string) => {
+    try {
+      await deleteFormation({
+        variables: {
+          subteamId,
+          formationId,
+        },
+      });
+      refetch();
+      // Show success alert or perform any other actions after deletion
+      alert("Formace byla úspěšně odstraněna.");
+    } catch (error) {
+      console.error(error);
+      // Handle error if necessary
     }
   };
 
@@ -453,136 +478,180 @@ const Formations: React.FC<{ subteamId: string }> = ({ subteamId }) => {
           </Box>
         </Box>
       </Box>
-      <Box sx={{ display: "flex", flexDirection: "column", width: "85%", marginLeft:"auto", marginRight:"auto" }}>
-  <Typography variant="h5" sx={{ marginBottom: "1em", marginTop:"1em" }}>
-    Vytvořené formace:
-  </Typography>
-  {data.getCompleteSubteamDetail.Formations.map(
-    (formation: Formation) => (
-      <Card key={formation.formationId} sx={{ marginBottom: "1em" }}>
-        <CardContent>
-          <Typography variant="h6" sx={{ marginBottom: "0.5em" }}>
-            {formation.formationName}
-          </Typography>
-          <Box sx={{ display: "flex", flexDirection: "column", width:"60%", marginLeft:"auto", marginRight:"auto" }}>
-            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-              {/* Box pro "Levý útočník", "Centr" a "Pravý útočník" */}
-              {Object.entries(formation.cards)
-                .filter(([position]) => ["lefU", "Cent", "rigU"].includes(position))
-                .map(([position, player]) => (
-                  <Card
-                    key={position}
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          width: "85%",
+          marginLeft: "auto",
+          marginRight: "auto",
+        }}
+      >
+        <Typography variant="h5" sx={{ marginBottom: "1em", marginTop: "1em" }}>
+          Vytvořené formace:
+        </Typography>
+        {data.getCompleteSubteamDetail.Formations.map(
+          (formation: Formation) => (
+            <Card key={formation.formationId} sx={{ marginBottom: "1em" }}>
+              <CardContent>
+                <Typography variant="h6" sx={{ marginBottom: "0.5em" }}>
+                  {formation.formationName}
+                </Typography>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    width: "60%",
+                    marginLeft: "auto",
+                    marginRight: "auto",
+                  }}
+                >
+                  <Box
+                    sx={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    {/* Box pro "Levý útočník", "Centr" a "Pravý útočník" */}
+                    {Object.entries(formation.cards)
+                      .filter(([position]) =>
+                        ["lefU", "Cent", "rigU"].includes(position)
+                      )
+                      .map(([position, player]) => (
+                        <Card
+                          key={position}
+                          sx={{
+                            minWidth: 200,
+                            minHeight: 150,
+                            cursor: "pointer",
+                            marginLeft: "1em",
+                            marginRight: "1em",
+                          }}
+                        >
+                          <CardContent>
+                            <Typography
+                              sx={{ marginBottom: "0.5em" }}
+                              variant="h6"
+                            >
+                              {position === "lefU"
+                                ? "Levý útočník"
+                                : position === "Cent"
+                                ? "Centr"
+                                : position === "rigU"
+                                ? "Pravý útočník"
+                                : ""}
+                            </Typography>
+
+                            <Box
+                              sx={{
+                                display: "block",
+                                alignItems: "center",
+                                justifyContent: "space-between",
+                              }}
+                            >
+                              <Box sx={{ display: "block" }}>
+                                <Typography
+                                  sx={{
+                                    marginBottom: "0.4em",
+                                    fontSize: "1.2em",
+                                    fontWeight: "500",
+                                  }}
+                                >
+                                  {player
+                                    ? `${player.name} ${player.surname}`
+                                    : "Není obsazen"}
+                                </Typography>
+                              </Box>
+                            </Box>
+                          </CardContent>
+                        </Card>
+                      ))}
+                  </Box>
+                  {/* Box pro "Levý obránce" a "Pravý obránce" */}
+                  <Box
                     sx={{
-                      minWidth: 200,
-                      minHeight: 150,
-                      cursor: "pointer",
-                      marginLeft: "1em",
-                      marginRight: "1em",
+                      display: "flex",
+                      flexDirection: "column",
+                      width: "100%",
                     }}
                   >
-                    <CardContent>
-                      <Typography sx={{ marginBottom: "0.5em" }} variant="h6">
-                        {position === "lefU"
-                          ? "Levý útočník"
-                          : position === "Cent"
-                          ? "Centr"
-                          : position === "rigU"
-                          ? "Pravý útočník"
-                          : ""}
-                      </Typography>
-
-                      <Box
-                        sx={{
-                          display: "block",
-                          alignItems: "center",
-                          justifyContent: "space-between",
-                        }}
-                      >
-                        <Box sx={{ display: "block" }}>
-                          <Typography
+                    <Box
+                      sx={{
+                        display: "flex",
+                        marginTop: "1em",
+                        marginLeft: "auto",
+                        marginRight: "auto",
+                      }}
+                    >
+                      {Object.entries(formation.cards)
+                        .filter(([position]) =>
+                          ["lefD", "rigD"].includes(position)
+                        )
+                        .map(([position, player]) => (
+                          <Card
+                            key={position}
                             sx={{
-                              marginBottom: "0.4em",
-                              fontSize: "1.2em",
-                              fontWeight: "500",
+                              minWidth: 200,
+                              minHeight: 150,
+                              cursor: "pointer",
+                              marginLeft: "1em",
+                              marginRight: "1em",
                             }}
                           >
-                            {player
-                              ? `${player.name} ${player.surname}`
-                              : "Není obsazen"}
-                          </Typography>
-                        </Box>
-                      </Box>
-                    </CardContent>
-                  </Card>
-                ))}
-            </Box>
-            {/* Box pro "Levý obránce" a "Pravý obránce" */}
-            <Box sx={{ display: "flex", flexDirection: "column", width:"100%",}}>
-            <Box sx={{ display: "flex",  marginTop:"1em", marginLeft:"auto", marginRight:"auto" }}>
-              {Object.entries(formation.cards)
-                .filter(([position]) => ["lefD", "rigD"].includes(position))
-                .map(([position, player]) => (
-                  <Card
-                    key={position}
-                    sx={{
-                      minWidth: 200,
-                      minHeight: 150,
-                      cursor: "pointer",
-                      marginLeft: "1em",
-                      marginRight: "1em",
-                    }}
+                            <CardContent>
+                              <Typography
+                                sx={{ marginBottom: "0.5em" }}
+                                variant="h6"
+                              >
+                                {position === "lefD"
+                                  ? "Levý obránce"
+                                  : position === "rigD"
+                                  ? "Pravý obránce"
+                                  : ""}
+                              </Typography>
+
+                              <Box
+                                sx={{
+                                  display: "block",
+                                  alignItems: "center",
+                                  justifyContent: "space-between",
+                                }}
+                              >
+                                <Box sx={{ display: "block" }}>
+                                  <Typography
+                                    sx={{
+                                      marginBottom: "0.4em",
+                                      fontSize: "1.2em",
+                                      fontWeight: "500",
+                                    }}
+                                  >
+                                    {player
+                                      ? `${player.name} ${player.surname}`
+                                      : "Není obsazen"}
+                                  </Typography>
+                                </Box>
+                              </Box>
+                            </CardContent>
+                          </Card>
+                        ))}
+                    </Box>
+                  </Box>
+                </Box>
+                <Box
+                  sx={{
+                    display: "block",
+                    justifyContent: "space-between",
+                    marginTop: "1em",
+                    marginLeft: "auto",
+                  }}
+                >
+                  <Button
+                    onClick={() => handleDeleteFormation(formation.formationId)}
+                    variant="contained"
+                    color="error"
                   >
-                    <CardContent>
-                      <Typography sx={{ marginBottom: "0.5em" }} variant="h6">
-                        {position === "lefD"
-                          ? "Levý obránce"
-                          : position === "rigD"
-                          ? "Pravý obránce"
-                          : ""}
-                      </Typography>
-
-                      <Box
-                        sx={{
-                          display: "block",
-                          alignItems: "center",
-                          justifyContent: "space-between",
-                        }}
-                      >
-                        <Box sx={{ display: "block" }}>
-                          <Typography
-                            sx={{
-                              marginBottom: "0.4em",
-                              fontSize: "1.2em",
-                              fontWeight: "500",
-                            }}
-                          >
-                            
-                            {player
-                              ? `${player.name} ${player.surname}`
-                              : "Není obsazen"}
-                          </Typography>
-                        </Box>
-                      </Box>
-                    </CardContent>
-                  </Card>
-                ))}
-            </Box>
-            </Box>
-          </Box>
-          <Box
-            sx={{
-              display: "block",
-              justifyContent: "space-between",
-              marginTop: "1em",
-              marginLeft: "auto",
-            }}
-          >
-            <Button variant="contained" color="error">
-              Odstranit
-            </Button>
-          </Box>
-        </CardContent>
-      </Card>
+                    Odstranit
+                  </Button>
+                </Box>
+              </CardContent>
+            </Card>
           )
         )}
       </Box>

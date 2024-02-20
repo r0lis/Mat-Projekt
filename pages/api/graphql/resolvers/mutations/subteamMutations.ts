@@ -760,6 +760,39 @@ export const subteamMutations = {
         throw error;
       }
     },
+    deleteFormation: async (
+      _: any,
+      { subteamId, formationId }: { subteamId: string; formationId: string },
+      context: Context
+    ) => {
+      try {
+        const subteamDoc = context.db.collection("Teams").doc(subteamId);
+        const subteamSnapshot = await subteamDoc.get();
+    
+        if (!subteamSnapshot.exists) {
+          throw new Error(`Subteam with ID ${subteamId} not found`);
+        }
+    
+        // Získání aktuálních formací
+        const currentFormations = subteamSnapshot.data()?.Formations || [];
+    
+        // Filtrujeme formace a ponecháme pouze ty, které mají jiné ID než formationId
+        const updatedFormations = currentFormations.filter(
+          (formation: any) => formation.formationId !== formationId
+        );
+    
+        // Aktualizace dokumentu v databázi
+        await subteamDoc.update({
+          Formations: updatedFormations,
+        });
+    
+        return true;
+      } catch (error) {
+        console.error("Error deleting formation:", error);
+        throw error;
+      }
+    },
+    
     
 
   };

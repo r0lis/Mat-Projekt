@@ -495,5 +495,7 @@ export const typeDefs = gql`
     updateTraining(input: UpdateTrainingInput): Boolean
     updateMatch(input: UpdateMatchInput): Boolean
     updateFormation(subteamId: String!, formationName: String!, cards: CardsInput!): Boolean
+    deleteFormation(subteamId: String!, formationId: String!): Boolean
+
   }
   `;
