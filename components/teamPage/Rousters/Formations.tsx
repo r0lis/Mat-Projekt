@@ -23,7 +23,7 @@ const GET_COMPLETESUBTEAM_DETAILS = gql`
       }
       Formations {
         cards {
-          lefU {
+           lefU {
             email
             name
             surname
@@ -502,13 +502,12 @@ const Formations: React.FC<{ subteamId: string }> = ({ subteamId }) => {
                   sx={{
                     display: "flex",
                     flexDirection: "column",
-                    width: "60%",
                     marginLeft: "auto",
                     marginRight: "auto",
                   }}
                 >
                   <Box
-                    sx={{ display: "flex", justifyContent: "space-between" }}
+                    sx={{ display: "flex",marginRight: "auto",marginLeft: "auto"}}
                   >
                     {Object.entries(formation.cards)
                       .filter(([position]) =>
@@ -521,6 +520,7 @@ const Formations: React.FC<{ subteamId: string }> = ({ subteamId }) => {
                             minWidth: 200,
                             minHeight: 150,
                             cursor: "pointer",
+                            
                             marginLeft: "1em",
                             marginRight: "1em",
                           }}
@@ -542,10 +542,6 @@ const Formations: React.FC<{ subteamId: string }> = ({ subteamId }) => {
                             <Box
                               sx={{
                                 display: "flex",
-                                flexDirection: "column",
-                                alignItems: "center",
-                                justifyContent: "space-between",
-                                height: "100%", // Zajišťuje, aby obsah byl vycentrován vertikálně
                               }}
                             >
                               <Box sx={{}}>

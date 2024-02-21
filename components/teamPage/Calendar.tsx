@@ -272,39 +272,32 @@ const CalendarComponent: React.FC<Props> = ({ teamId }) => {
           <Box
             sx={{
               backgroundColor: "#027ef2",
-              paddingLeft: "5%",
+              paddingLeft: "10%",
               borderRadius: "10px 10px 0px 0px",
               paddingRight: "5%",
               paddingTop: "1%",
               paddingBottom: "1%",
-              textAlign: "center",
             }}
           >
+            <Typography sx={{ color: "white", fontWeight: "400" }}>
+              Detail události
+            </Typography>
             <Typography
-              sx={{ color: "white", fontWeight: "500" }}
+              sx={{ color: "white", fontWeight: "500", textAlign: "" }}
               variant="h5"
               component="h2"
             >
-              Detail události
+              {selectedEvent?.type}
             </Typography>
           </Box>
-          <Box sx={{ paddingLeft: "5%", paddingRight: "5%", paddingTop: "1%" }}>
+          <Box
+            sx={{ paddingLeft: "10%", paddingRight: "10%", paddingTop: "1em" }}
+          >
             <Box
               sx={{
                 display: selectedEvent?.type === "Zápas" ? "flex" : "block",
               }}
             >
-              <Typography
-                sx={{
-                  marginRight: "auto",
-                  fontWeight: "500",
-                  fontSize: "1.1em",
-                }}
-                variant="body1"
-                gutterBottom
-              >
-                {selectedEvent?.type}
-              </Typography>
               <Typography variant="h6" component="h2" gutterBottom>
                 {selectedEvent?.title}
               </Typography>
@@ -323,9 +316,11 @@ const CalendarComponent: React.FC<Props> = ({ teamId }) => {
             <SubteamDetails subteamId={selectedEvent?.subteamId} />
 
             <Typography variant="body1" gutterBottom>
+              <span style={{ fontWeight: 500 }}>Typ zápasu:</span>{" "}
               {selectedEvent?.type === "Zápas"
-                ? "Typ zápasu: " +
-                  (selectedEvent?.matchType === "home" ? "Domácí" : "Hosté")
+                ? selectedEvent?.matchType === "home"
+                  ? "Domácí"
+                  : "Hosté"
                 : ""}
             </Typography>
             <Typography variant="body1" gutterBottom>
@@ -343,9 +338,13 @@ const CalendarComponent: React.FC<Props> = ({ teamId }) => {
               <HallInfo2 teamId={teamId} treningHallId={selectedEvent?.hall} />
             )}
           </Box>
-          <Box sx={{paddingLeft:"1%"}}>
+          <Box sx={{ paddingLeft: "1%" }}>
             <Button
-              sx={{ paddingLeft: "5%", paddingRight: "5%" }}
+              sx={{
+                paddingLeft: "10%",
+                paddingRight: "10%",
+                paddingBottom: "1.5em",
+              }}
               onClick={handleCloseModal}
             >
               Zavřít
