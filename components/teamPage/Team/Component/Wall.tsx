@@ -23,7 +23,7 @@ const Wall: React.FC<WallProps> = (id) => {
   return (
     <Box sx={{ marginLeft: "4%", marginRight: "4%" }}>
       <Box sx={{ display: "flex", paddingTop: "1em" }}>
-        <Typography>Týmová zeď</Typography>
+        <Typography sx={{fontWeight:"500", marginTop:"0.5em"}}>Týmová zeď</Typography>
         <Box sx={{ marginLeft: "auto" }}>
           <Button
             onClick={handleToggleView}
