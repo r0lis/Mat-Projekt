@@ -23,6 +23,13 @@ const GET_COMPLETESUBTEAM_DETAILS = gql`
       }
       Formations {
         cards {
+          lefU {
+            email
+            name
+            surname
+            playPosition
+            position
+          }
           Cent {
             email
             name
@@ -37,13 +44,7 @@ const GET_COMPLETESUBTEAM_DETAILS = gql`
             playPosition
             position
           }
-          lefU {
-            email
-            name
-            surname
-            playPosition
-            position
-          }
+         
           rigD {
             email
             name
@@ -509,7 +510,6 @@ const Formations: React.FC<{ subteamId: string }> = ({ subteamId }) => {
                   <Box
                     sx={{ display: "flex", justifyContent: "space-between" }}
                   >
-                    {/* Box pro "Levý útočník", "Centr" a "Pravý útočník" */}
                     {Object.entries(formation.cards)
                       .filter(([position]) =>
                         ["lefU", "Cent", "rigU"].includes(position)
@@ -541,12 +541,14 @@ const Formations: React.FC<{ subteamId: string }> = ({ subteamId }) => {
 
                             <Box
                               sx={{
-                                display: "block",
+                                display: "flex",
+                                flexDirection: "column",
                                 alignItems: "center",
                                 justifyContent: "space-between",
+                                height: "100%", // Zajišťuje, aby obsah byl vycentrován vertikálně
                               }}
                             >
-                              <Box sx={{ display: "block" }}>
+                              <Box sx={{}}>
                                 <Typography
                                   sx={{
                                     marginBottom: "0.4em",
