@@ -360,7 +360,7 @@ const TreniningComponent: React.FC<Props> = (id) => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseModal} color="primary">
-            Close
+            Zavřít
           </Button>
         </DialogActions>
       </Dialog>

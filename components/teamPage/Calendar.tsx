@@ -267,16 +267,18 @@ const CalendarComponent: React.FC<Props> = ({ teamId }) => {
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
+            border: "1.5px solid #000",
           }}
         >
           <Box
             sx={{
               backgroundColor: "#027ef2",
-              paddingLeft: "10%",
-              borderRadius: "10px 10px 0px 0px",
+              paddingLeft: "7%",
+              borderRadius: "8px 8px 0px 0px",
               paddingRight: "5%",
-              paddingTop: "1%",
+              paddingTop: "1.5%",
               paddingBottom: "1%",
+              borderBottom: "1px solid black",
             }}
           >
             <Typography sx={{ color: "white", fontWeight: "400" }}>
@@ -291,11 +293,21 @@ const CalendarComponent: React.FC<Props> = ({ teamId }) => {
             </Typography>
           </Box>
           <Box
-            sx={{ paddingLeft: "10%", paddingRight: "10%", paddingTop: "1em" }}
+            sx={{
+              marginLeft: "7%",
+              marginRight: "7%",
+              paddingLeft: "3%",
+              paddingRight: "3%",
+              paddingTop: "0.5em",
+              marginTop: "0.5em",
+              borderLeft: "3px solid gray",
+              marginBottom: "0.5em",
+            }}
           >
             <Box
               sx={{
-                display: selectedEvent?.type === "Zápas" ? "flex" : "block",
+                display: selectedEvent?.type === "Zápas" ? "flex" : "block",             
+
               }}
             >
               <Typography variant="h6" component="h2" gutterBottom>
@@ -338,12 +350,13 @@ const CalendarComponent: React.FC<Props> = ({ teamId }) => {
               <HallInfo2 teamId={teamId} treningHallId={selectedEvent?.hall} />
             )}
           </Box>
-          <Box sx={{ paddingLeft: "1%" }}>
+          <Box sx={{ paddingLeft: "1%", borderTop: "1px solid black" }}>
             <Button
               sx={{
                 paddingLeft: "10%",
                 paddingRight: "10%",
-                paddingBottom: "1.5em",
+                paddingBottom: "1em",
+                paddingTop: "1em",
               }}
               onClick={handleCloseModal}
             >
@@ -386,7 +399,6 @@ const renderEventContent = (eventInfo: any) => {
           minute: "2-digit",
         })}
       </p>{" "}
-      {/* Zobrazení času */}
     </Box>
   );
 };

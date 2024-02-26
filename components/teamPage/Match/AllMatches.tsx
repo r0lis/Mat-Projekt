@@ -400,7 +400,7 @@ const AllMatches: React.FC<Props> = ({ teamId }) => {
   };
 
   return (
-    <Box>
+    <Box sx={{paddingTop:"1em"}}>
       {subteamIds.map((subteamId) => {
         const subteamMatches = matchesData?.getAllMatchesBySubteam
           .filter(
@@ -439,6 +439,7 @@ const AllMatches: React.FC<Props> = ({ teamId }) => {
                     borderRadius: "10px",
                     backgroundColor: "rgba(0, 56, 255, 0.24)",
                     border: "2px solid rgba(0, 34, 155, 1)",
+                    boxShadow: "0px 0px 15px rgba(0, 0, 0, 0.33)",
                   }}
                   key={match.matchId}
                 >

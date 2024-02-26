@@ -118,6 +118,7 @@ const Matchs: React.FC<Props> = (id) => {
             width: "100%",
             padding: "15px 0px 15px 0px",
             borderRadius: "15px 15px 0px 0px",
+            
             display: "flex",
           }}
         >
@@ -372,7 +373,7 @@ const Matchs: React.FC<Props> = (id) => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseModal} color="primary">
-            Close
+          Zavřít
           </Button>
         </DialogActions>
       </Dialog>
