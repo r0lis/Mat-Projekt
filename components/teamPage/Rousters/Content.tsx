@@ -78,15 +78,21 @@ const Content: React.FC<TeamsProps> = ({teamId}) => {
     );
   if (subteamError) return <Typography>Chyba</Typography>;
 
+  console.log(subteams.length);
+
   return (
     <Box sx={{ marginLeft: "", marginRight: "2%" }}>
       {subteams.length === 1 ? (
         <Box ml={2}>
           {subteams.map((subteam: Subteam) => (
             <Box key={subteam.subteamId}>
-              <Typography variant="h6">Váš tým</Typography>
-
-              <Typography variant="body1"></Typography>
+  <Typography sx={{ fontWeight: "600" }} variant="h5">
+                  Přehled soupisek
+                </Typography>
+              <ContentRouster
+                      subteamId={subteam.subteamId}
+                      idTeam={teamId}
+                    />
             </Box>
           ))}
         </Box>
