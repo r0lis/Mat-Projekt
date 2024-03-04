@@ -259,7 +259,6 @@ const Members: React.FC<MembersProps> = (subteamId) => {
     try {
       // Ensure selectedMember exists and has a valid email and position
       if (selectedMember && selectedMember.email && selectedMember.position) {
-        // Call the updateSubteamMember mutation
         await updateSubteamMember({
           variables: {
             subteamId: id,
@@ -268,10 +267,8 @@ const Members: React.FC<MembersProps> = (subteamId) => {
           },
         });
 
-        // Optionally, you can reset the state or perform other actions after a successful update
         setEditModalOpen(false);
         refetch();
-        // ... any other actions you need
       } else {
         console.error("Invalid selected member data");
       }

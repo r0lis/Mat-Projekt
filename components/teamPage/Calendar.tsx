@@ -350,15 +350,13 @@ const CalendarComponent: React.FC<Props> = ({ teamId }) => {
               <HallInfo2 teamId={teamId} treningHallId={selectedEvent?.hall} />
             )}
           </Box>
-          <Box sx={{ paddingLeft: "1%", borderTop: "1px solid black" }}>
+          <Box sx={{ paddingLeft: "7%", paddingRight:"7%", borderTop: "1px solid black", backgroundColor:"#027ef2", borderRadius:"0px 0px 8px 8px", paddingTop:"0.5em", paddingBottom:"0.5em" }}>
             <Button
               sx={{
-                paddingLeft: "10%",
-                paddingRight: "10%",
-                paddingBottom: "1em",
-                paddingTop: "1em",
+               
               }}
               onClick={handleCloseModal}
+              variant="contained"
             >
               Zavřít
             </Button>

@@ -112,8 +112,6 @@ const GET_USER_ROLE_IN_TEAM = gql`
   }
 `;
 
-
-
 type Hall = {
   name: string;
   location: string;
@@ -159,15 +157,6 @@ const Halls: React.FC<Props> = ({ id }) => {
     location: string;
     gymId: string;
   } | null>(null);
-
-  const {
-    loading: loadingDetails,
-    error: errorDetails,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    data: dataDetails,
-  } = useQuery(GET_TEAM_DETAILS, {
-    variables: { teamId: id },
-  });
 
   const {
     loading: roleLoading,
@@ -223,7 +212,7 @@ const Halls: React.FC<Props> = ({ id }) => {
     ],
   });
 
-  if (loadingDetails || loadingHalls || loadingTrainingHalls || loadingGyms || roleLoading)
+  if (loadingHalls || loadingTrainingHalls || loadingGyms || roleLoading)
     return (
       <Box
         sx={{
@@ -236,7 +225,7 @@ const Halls: React.FC<Props> = ({ id }) => {
         <CircularProgress color="primary" size={50} />
       </Box>
     );
-  if (errorDetails || errorHalls || errorTrainingHalls || errorGyms || roleError)
+  if (errorHalls || errorTrainingHalls || errorGyms || roleError)
     return <Typography>Chyba</Typography>;
 
   const handleAddHall = () => {
@@ -366,16 +355,21 @@ const Halls: React.FC<Props> = ({ id }) => {
               </Typography>
             </Box>
             {role == 1 && (
-            <Box sx={{ marginLeft: isSmallWindow ? "20%" : "10%", display: addHall ? "none":"" }}>
-              <Button
-                sx={{ backgroundColor: "#027ef2" }}
-                variant="contained"
-                color="primary"
-                onClick={handleAddHall}
+              <Box
+                sx={{
+                  marginLeft: isSmallWindow ? "20%" : "10%",
+                  display: addHall ? "none" : "",
+                }}
               >
-                Přidat
-              </Button>
-            </Box>
+                <Button
+                  sx={{ backgroundColor: "#027ef2" }}
+                  variant="contained"
+                  color="primary"
+                  onClick={handleAddHall}
+                >
+                  Přidat
+                </Button>
+              </Box>
             )}
           </Box>
         </Box>
@@ -426,24 +420,20 @@ const Halls: React.FC<Props> = ({ id }) => {
               transform: "translate(-50%, -50%)",
               width: 400,
               bgcolor: "background.paper",
-              p: 4,
               borderRadius: "10px",
-              backgroundImage: `
-            linear-gradient(to bottom, #c2c3c4 80px, #ffffff 80px)
-          `,
               boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.3)",
             }}
           >
-            <Box>
+            <Box sx={{ backgroundColor: "#c2c3c4", borderRadius: "10px 10px 0px 0px", paddingTop:"2em", paddingLeft:"2em", paddingRight:"2em", paddingBottom:"1em", borderBottom:"2px solid gray" }}>
               <Typography id="info-modal-title" variant="h6" component="h2">
                 Název: {selectedHall?.name}
               </Typography>
             </Box>
-            <Box sx={{ paddingTop: "1em" }}>
+            <Box sx={{ paddingTop: "1em", paddingLeft:"2em", paddingRight:"2em", paddingBottom:"1em" }}>
               <Typography id="info-modal-description" sx={{ mt: 2 }}>
                 Umístění: {selectedHall?.location}
               </Typography>
-              <Box>
+              <Box sx={{paddingTop:"0.5em"}}>
                 <Button onClick={handleDeleteHall}>Smazat</Button>
               </Box>
             </Box>
@@ -472,17 +462,21 @@ const Halls: React.FC<Props> = ({ id }) => {
               </Typography>
             </Box>
             {role == 1 && (
-
-            <Box sx={{ marginLeft: isSmallWindow ? "20%" : "30%", display: addGym ? "none":"" }}>
-              <Button
-                sx={{ backgroundColor: "#027ef2" }}
-                variant="contained"
-                color="primary"
-                onClick={handleAddGym}
+              <Box
+                sx={{
+                  marginLeft: isSmallWindow ? "20%" : "30%",
+                  display: addGym ? "none" : "",
+                }}
               >
-                Přidat
-              </Button>
-            </Box>
+                <Button
+                  sx={{ backgroundColor: "#027ef2" }}
+                  variant="contained"
+                  color="primary"
+                  onClick={handleAddGym}
+                >
+                  Přidat
+                </Button>
+              </Box>
             )}
           </Box>
         </Box>
@@ -584,16 +578,21 @@ const Halls: React.FC<Props> = ({ id }) => {
               </Typography>
             </Box>
             {role == 1 && (
-            <Box sx={{ marginLeft: isSmallWindow ? "auto" : "10%",  display: addTreningHall ? "none":"" }}>
-              <Button
-                sx={{ backgroundColor: "#027ef2" }}
-                variant="contained"
-                color="primary"
-                onClick={handleAddTreningHall}
+              <Box
+                sx={{
+                  marginLeft: isSmallWindow ? "auto" : "10%",
+                  display: addTreningHall ? "none" : "",
+                }}
               >
-                Přidat
-              </Button>
-            </Box>
+                <Button
+                  sx={{ backgroundColor: "#027ef2" }}
+                  variant="contained"
+                  color="primary"
+                  onClick={handleAddTreningHall}
+                >
+                  Přidat
+                </Button>
+              </Box>
             )}
           </Box>
         </Box>

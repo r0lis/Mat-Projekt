@@ -273,8 +273,9 @@ const Content: React.FC<Props> = ({ teamId }) => {
   };
 
   const handleButtonClick = () => {
-    router.push(`/Team/${teamId}/#Settings`);
-    window.location.reload();
+    router.push(`/Team/${teamId}/#Settings`).then(() => {
+      window.location.reload();
+    });
   };
 
   if (

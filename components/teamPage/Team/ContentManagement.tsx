@@ -168,8 +168,6 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
     }
   }, [members, updateMembersEffectTrigger]);
 
-  // ...
-
   const handleCheckboxChange = (
     name: string,
     surname: string,
@@ -324,9 +322,7 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
                   </Button>)}
 
                   <Button sx={{backgroundColor: "#027ef2"}} onClick={handleAddTeamClick} variant="contained">
-                    <Typography sx={{ fontWeight: "600",  }}>
                       Přidat tým
-                    </Typography>
                   </Button>
                 </Box>
               </Box>
