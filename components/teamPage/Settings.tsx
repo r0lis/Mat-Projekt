@@ -22,8 +22,7 @@ const SettingsComponent: React.FC = () => {
             Správa klubu
           </Typography>
       </Box>
-
-      <Box sx={{ }}>
+      <Box>
       <Content id={id as string} />
       </Box>
     </Box>

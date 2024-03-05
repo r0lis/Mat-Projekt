@@ -266,7 +266,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
   return (
     <Box>
       <Box
-        sx={{
+        sx={{ 
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
@@ -276,14 +276,14 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
       >
         {role == 1 ? (
           <Typography
-            sx={{ fontFamily: "Roboto", fontWeight: "500", marginTop:"0.5em" }}
+            sx={{ fontFamily: "Roboto", fontWeight: "500", marginTop: "0.5em" }}
             variant="h4"
           >
             Členové klubu
           </Typography>
         ) : (
           <Typography
-            sx={{ fontFamily: "Roboto", fontWeight: "500", marginTop:"0.5em" }}
+            sx={{ fontFamily: "Roboto", fontWeight: "500", marginTop: "0.5em" }}
             variant="h4"
           >
             Členská sekce klubu
@@ -327,198 +327,203 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
           />
         </Box>
       )}
-      <TableContainer
-        sx={{
-          width: "90%",
-          marginLeft: "auto",
-          marginRight: "auto",
-          marginTop: "2em",
-          marginBottom: "3em",
-        }}
-        component={Paper}
-      >
-        <Table>
-          <TableHead sx={{ borderBottom: "1px solid #ddd" }}>
-            <TableRow>
-              <TableCell></TableCell>
-              <TableCell></TableCell>
-              <TableCell>
-                <Typography sx={{ fontFamily: "Roboto", fontWeight: "800" }}>
-                  Jméno
-                </Typography>
-              </TableCell>
-              <TableCell>
-                <Typography sx={{ fontFamily: "Roboto", fontWeight: "800" }}>
-                  Datum narození
-                </Typography>
-              </TableCell>
-              <TableCell>
-                <Typography sx={{ fontFamily: "Roboto", fontWeight: "800" }}>
-                  Práva
-                </Typography>
-              </TableCell>
-              <TableCell>
-                <Typography sx={{ fontFamily: "Roboto", fontWeight: "800" }}>
-                  Zdravotní prohlídka
-                </Typography>
-              </TableCell>
-              <TableCell>
-                <Typography sx={{ fontFamily: "Roboto", fontWeight: "800" }}>
-                  Týmy
-                </Typography>
-              </TableCell>
-              <TableCell>
-                <Typography sx={{ fontFamily: "Roboto", fontWeight: "800" }}>
-                  Štítky
-                </Typography>
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody ref={tableBodyRef}>
-            {filteredMembers.map(
-              (member: Member, index: React.Key | null | undefined) =>
-                (role === "1" || member.Email === currentUserEmail) && (
-                  <TableRow
-                    key={index}
-                    sx={{
-                      backgroundColor:
-                        member.Email === currentUserEmail && role === "1"
-                          ? "#e6e6e6"
-                          : "inherit",
-                    }}
-                  >
-                    <TableCell>
-                      {role === "1" && (
-                        <Box
-                          sx={{ height: "20px", width: "20px" }}
-                          onClick={() => handleRowClick(member)}
-                        >
-                          <ModeEditIcon />
-                        </Box>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      <Avatar
-                        sx={{ width: 50, height: 50 }}
-                        alt={member.Name[0] + member.Surname[0]}
-                        src={member.Picture}
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <Typography
-                        sx={{ fontFamily: "Roboto", fontWeight: "450" }}
-                      >
-                        {member.Surname} {member.Name}
-                      </Typography>
-                    </TableCell>
-                    <TableCell>
-                      <Typography sx={{ fontFamily: "Roboto" }}>
-                        {member.DateOfBirth &&
-                          new Date(member.DateOfBirth).toLocaleDateString(
-                            "cs-CZ",
-                            {
-                              day: "2-digit",
-                              month: "2-digit",
-                              year: "numeric",
-                            }
-                          )}{" "}
-                        / {calculateAge(member?.DateOfBirth || "")} let
-                      </Typography>
-                    </TableCell>
-                    <TableCell>
-                      {member.Role === "1" && "Management"}
-                      {member.Role === "2" && "Trenér"}
-                      {member.Role === "3" && "Hráč"}
-                      {(member.Role === "0" ||
-                        member.Role === "No Role Assigned") && (
-                        <Box sx={{ maxWidth: "15em" }}>
-                          <Alert sx={{ maxHeight: "3em" }} severity="error">
-                            <Typography
-                              sx={{ fontFamily: "Roboto", fontSize: "1vw" }}
-                            >
-                              Není zvoleno
-                            </Typography>
-                          </Alert>
-                        </Box>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      <Typography sx={{ fontFamily: "Roboto" }}>
-                        do 24.11.2023
-                      </Typography>
-                    </TableCell>
-                    <TableCell>
-                      {member.Subteams.length === 0 ? (
-                        <Alert sx={{ maxWidth: "6em" }} severity="warning">
-                          Žádný
-                        </Alert>
-                      ) : (
-                        <>
-                          {member.Subteams.slice(0, 1).map((subteam) => (
-                            <Typography
-                              key={subteam.subteamId}
-                              sx={{ fontFamily: "Roboto" }}
-                            >
-                              {subteam.Name}
-                            </Typography>
-                          ))}
-                          {member.Subteams.length > 1 && (
-                            <>
-                              <Collapse in={expandedMember === member.Email}>
-                                {member.Subteams.slice(1).map((subteam) => (
-                                  <Typography
-                                    key={subteam.subteamId}
-                                    sx={{ fontFamily: "Roboto" }}
-                                  >
-                                    {subteam.Name}
-                                  </Typography>
-                                ))}
-                              </Collapse>
-                              <Button
-                                onClick={() =>
-                                  setExpandedMember(
-                                    expandedMember === member.Email
-                                      ? null
-                                      : member.Email
-                                  )
-                                }
-                                color="primary"
-                                sx={{
-                                  fontFamily: "Roboto",
-                                  marginLeft: "-1em",
-                                }}
-                              >
-                                {expandedMember === member.Email
-                                  ? "Méně"
-                                  : "Více"}
-                              </Button>
-                            </>
-                          )}
-                        </>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      <Box
-                        sx={{
-                          border: "1px solid black",
-                          textAlign: "center",
-                          padding: "3px",
-                          borderRadius: "8px",
-                        }}
-                      >
+      {role == 1 || role == 2 ? (
+        <TableContainer
+          sx={{
+            width: "90%",
+            marginLeft: "auto",
+            marginRight: "auto",
+            marginTop: "2em",
+            marginBottom: "3em",
+          }}
+          component={Paper}
+        >
+          <Table>
+            <TableHead sx={{ borderBottom: "1px solid #ddd" }}>
+              <TableRow>
+                <TableCell></TableCell>
+                <TableCell></TableCell>
+                <TableCell>
+                  <Typography sx={{ fontFamily: "Roboto", fontWeight: "800" }}>
+                    Jméno
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography sx={{ fontFamily: "Roboto", fontWeight: "800" }}>
+                    Datum narození
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography sx={{ fontFamily: "Roboto", fontWeight: "800" }}>
+                    Práva
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography sx={{ fontFamily: "Roboto", fontWeight: "800" }}>
+                    Zdravotní prohlídka
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography sx={{ fontFamily: "Roboto", fontWeight: "800" }}>
+                    Týmy
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography sx={{ fontFamily: "Roboto", fontWeight: "800" }}>
+                    Štítky
+                  </Typography>
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody ref={tableBodyRef}>
+              {filteredMembers.map(
+                (member: Member, index: React.Key | null | undefined) =>
+                  (role === "1" || member.Email === currentUserEmail) && (
+                    <TableRow
+                      key={index}
+                      sx={{
+                        backgroundColor:
+                          member.Email === currentUserEmail && role === "1"
+                            ? "#e6e6e6"
+                            : "inherit",
+                      }}
+                    >
+                      <TableCell>
+                        {role === "1" && (
+                          <Box
+                            sx={{ height: "20px", width: "20px" }}
+                            onClick={() => handleRowClick(member)}
+                          >
+                            <ModeEditIcon />
+                          </Box>
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        <Avatar
+                          sx={{ width: 50, height: 50 }}
+                          alt={member.Name[0] + member.Surname[0]}
+                          src={member.Picture}
+                        />
+                      </TableCell>
+                      <TableCell>
                         <Typography
-                          sx={{ fontFamily: "Roboto", fontWeight: "500" }}
+                          sx={{ fontFamily: "Roboto", fontWeight: "450" }}
                         >
-                          útočník
+                          {member.Surname} {member.Name}
                         </Typography>
-                      </Box>
-                    </TableCell>
-                  </TableRow>
-                )
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
+                      </TableCell>
+                      <TableCell>
+                        <Typography sx={{ fontFamily: "Roboto" }}>
+                          {member.DateOfBirth &&
+                            new Date(member.DateOfBirth).toLocaleDateString(
+                              "cs-CZ",
+                              {
+                                day: "2-digit",
+                                month: "2-digit",
+                                year: "numeric",
+                              }
+                            )}{" "}
+                          / {calculateAge(member?.DateOfBirth || "")} let
+                        </Typography>
+                      </TableCell>
+                      <TableCell>
+                        {member.Role === "1" && "Management"}
+                        {member.Role === "2" && "Trenér"}
+                        {member.Role === "3" && "Hráč"}
+                        {(member.Role === "0" ||
+                          member.Role === "No Role Assigned") && (
+                          <Box sx={{ maxWidth: "15em" }}>
+                            <Alert sx={{ maxHeight: "3em" }} severity="error">
+                              <Typography
+                                sx={{ fontFamily: "Roboto", fontSize: "1vw" }}
+                              >
+                                Není zvoleno
+                              </Typography>
+                            </Alert>
+                          </Box>
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        <Typography sx={{ fontFamily: "Roboto" }}>
+                          do 24.11.2023
+                        </Typography>
+                      </TableCell>
+                      <TableCell>
+                        {member.Subteams.length === 0 ? (
+                          <Alert sx={{ maxWidth: "6em" }} severity="warning">
+                            Žádný
+                          </Alert>
+                        ) : (
+                          <>
+                            {member.Subteams.slice(0, 1).map((subteam) => (
+                              <Typography
+                                key={subteam.subteamId}
+                                sx={{ fontFamily: "Roboto" }}
+                              >
+                                {subteam.Name}
+                              </Typography>
+                            ))}
+                            {member.Subteams.length > 1 && (
+                              <>
+                                <Collapse in={expandedMember === member.Email}>
+                                  {member.Subteams.slice(1).map((subteam) => (
+                                    <Typography
+                                      key={subteam.subteamId}
+                                      sx={{ fontFamily: "Roboto" }}
+                                    >
+                                      {subteam.Name}
+                                    </Typography>
+                                  ))}
+                                </Collapse>
+                                <Button
+                                  onClick={() =>
+                                    setExpandedMember(
+                                      expandedMember === member.Email
+                                        ? null
+                                        : member.Email
+                                    )
+                                  }
+                                  color="primary"
+                                  sx={{
+                                    fontFamily: "Roboto",
+                                    marginLeft: "-1em",
+                                  }}
+                                >
+                                  {expandedMember === member.Email
+                                    ? "Méně"
+                                    : "Více"}
+                                </Button>
+                              </>
+                            )}
+                          </>
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        <Box
+                          sx={{
+                            border: "1px solid black",
+                            textAlign: "center",
+                            padding: "3px",
+                            borderRadius: "8px",
+                          }}
+                        >
+                          <Typography
+                            sx={{ fontFamily: "Roboto", fontWeight: "500" }}
+                          >
+                            útočník
+                          </Typography>
+                        </Box>
+                      </TableCell>
+                    </TableRow>
+                  )
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      ) : (
+        <Box>TODO DNES pro hrace, zdravotni prohlidka jine zobrazeni clena kde jsi hrac</Box>
+      )}
+
       <Modal
         open={modalOpen}
         onClose={handleCloseModal}
@@ -1075,7 +1080,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                         ? "81%"
                         : selectedMember &&
                           selectedMember.Email === currentUserEmail
-                        ? "68%"
+                        ? "69%"
                         : "80%",
                     transform: "translateY(-50%)",
                     marginLeft: "-3em",
