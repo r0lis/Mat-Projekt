@@ -29,16 +29,16 @@ import { authUtils } from "@/firebase/auth.utils";
 import RoleError from "@/components/teamPage/error/RoleError";
 import LoginError from "@/components/teamPage/error/LoginError";
 import MembershipError from "@/components/teamPage/error/MembershipError";
-
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
 const items = [
-  { label: "Overview", caption:"Přehled", image: Overview },
-  { label: "Kalendar", caption:"Kalendář", image: Calendar },
-  { label: "Events", caption:"Události", image: Events },
-  { label: "Trainings", caption:"Treninky", image: Trainings },
-  { label: "Matchs", caption:"Zápasy", image: Nominations },
-  { label: "Rouster", caption:"Soupisky", image: Rousters },
-  { label: "Team", caption:"Tým", image: TeamIcon },
+  { label: "Overview", caption: "Přehled", image: Overview },
+  { label: "Kalendar", caption: "Kalendář", image: Calendar },
+  { label: "Events", caption: "Události", image: Events },
+  { label: "Trainings", caption: "Treninky", image: Trainings },
+  { label: "Matchs", caption: "Zápasy", image: Nominations },
+  { label: "Rouster", caption: "Soupisky", image: Rousters },
+  { label: "Team", caption: "Tým", image: TeamIcon },
 ];
 
 const GET_TEAM_DETAILS = gql`
@@ -95,7 +95,6 @@ const Team: React.FC = () => {
     window.addEventListener("resize", handleResize);
     handleResizeThrottled();
     handleHashChange();
-
 
     return () => {
       window.removeEventListener("resize", handleResize);
@@ -171,14 +170,22 @@ const Team: React.FC = () => {
 
   const filteredItems = [
     ...items,
-    { label: "Members", caption: role == 1 ? "Členové": "Člen", image: Members },
+    {
+      label: "Members",
+      caption: role == 1 ? "Členové" : "Člen",
+      image: Members,
+    },
 
-    { label: "Settings", caption: role == 1 ? "Správa" : "Klub", image: Settings },
+    {
+      label: "Settings",
+      caption: role == 1 ? "Správa" : "Klub",
+      image: Settings,
+    },
   ];
   const handleLinkClick = (label: string) => {
     setActiveLink(label);
     const newUrl = `${window.location.pathname!}#${label}`;
-    window.history.pushState(null, '', newUrl);
+    window.history.pushState(null, "", newUrl);
   };
 
   const handleHover = (isHovering: boolean) => {
@@ -187,13 +194,18 @@ const Team: React.FC = () => {
     }
   };
 
-  const isMobile = windowWidth < 600; 
+  const isMobile = windowWidth < 600;
 
   return (
     <Box sx={{ display: "block", width: "100%", height: "100%" }}>
       {Boolean(team) && (
         <Box>
-          <Nav showOnlyIcon={showOnlyIcon} setShowOnlyIcon={setShowOnlyIcon} menuOpen={menuOpen} setMenu={setMenu}  />
+          <Nav
+            showOnlyIcon={showOnlyIcon}
+            setShowOnlyIcon={setShowOnlyIcon}
+            menuOpen={menuOpen}
+            setMenu={setMenu}
+          />
 
           <Box
             className="sidebarContainer"
@@ -210,7 +222,6 @@ const Team: React.FC = () => {
             }}
             onMouseLeave={() => {
               if (autoOpen) {
-                // Set a delay of 500 milliseconds (adjust as needed)
                 setTimeout(() => {
                   setShowOnlyIcon(true);
                 }, 10);
@@ -219,7 +230,7 @@ const Team: React.FC = () => {
               handleHover(false);
             }}
             sx={{
-              display: menuOpen ? "block": isMobile ? "none": "block",
+              display: menuOpen ? "block" : isMobile ? "none" : "block",
               alignItems: "center",
               backgroundColor: "#F0F2F5",
               width: showOnlyIcon ? "3.5em" : "11em",
@@ -250,9 +261,12 @@ const Team: React.FC = () => {
                     borderRight:
                       activeLink === item.label
                         ? "0.2em solid rgba(160, 32, 240, 1)"
-                        : "", // Zvýraznění aktivního odkazu
+                        : "",
                     marginRight: activeLink === item.label ? "-0.2em" : "0px",
-                    // Zvýraznění aktivního odkazu
+                    ":hover": {
+                      backgroundColor: "rgba(0, 0, 0, 0.1)", // Změna barvy pozadí při hoveru
+                      cursor: "pointer", // Změna kurzoru na ukazovátko při hoveru
+                    },
                   }}
                 >
                   <Box
@@ -272,27 +286,42 @@ const Team: React.FC = () => {
                       style={{ marginRight: "10px", marginLeft: "10px" }}
                     />
                     {showOnlyIcon ? null : (
-                      <span
-                        style={{
-                          fontSize: "1.1em",
-                          color: "black",
-                          verticalAlign: "center",
-                          marginTop: "5px",
-                          marginLeft: "10px",
-                          marginRight: "10px",
-                          opacity: showOnlyIcon ? 0 : 1,
-                          transition: "opacity 0.2s ease 0.2s",
-                          cursor: "pointer",
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          width: "100%",
                         }}
                       >
-                        {item.caption}
-                      </span>
+                        <Box sx={{ flex: 1 }}>
+                          <span
+                            style={{
+                              fontSize: "1.1em",
+                              color: "black",
+                              verticalAlign: "center",
+                              marginTop: "5px",
+                              marginLeft: "10px",
+                              marginRight: "10px",
+                              opacity: showOnlyIcon ? 0 : 1,
+                              transition: "opacity 0.2s ease 0.2s",
+                              cursor: "pointer",
+                            }}
+                          >
+                            {item.caption}
+                          </span>
+                        </Box>
+                        {activeLink === item.label && (
+                          <Box>
+                            <ArrowForwardIosIcon sx={{ marginLeft: "auto" }} />
+                          </Box>
+                        )}
+                      </Box>
                     )}
                   </Box>
                 </Box>
               ))}
 
-              {showOnlyIcon ? null  : (
+              {showOnlyIcon ? null : (
                 <span
                   style={{
                     fontSize: "1.1em",
@@ -341,16 +370,32 @@ const Team: React.FC = () => {
           </Box>
           <Box
             sx={{
-              marginLeft: menuOpen ? showOnlyIcon ? "5em" : "12em" : isMobile ? "1em" : showOnlyIcon ? "5em" : "12em",
+              marginLeft: menuOpen
+                ? showOnlyIcon
+                  ? "5em"
+                  : "12em"
+                : isMobile
+                ? "1em"
+                : showOnlyIcon
+                ? "5em"
+                : "12em",
               marginTop: "5em",
               height: "auto",
             }}
           >
             {activeLink === "Overview" && <OverviewComponent />}
-            {activeLink === "Trainings" && <TrainingsComponent teamId={id as string} />}
-            {activeLink === "Kalendar" && <CalendarComponent teamId={id as string} />}
-            {activeLink === "Rouster" && <RoustersComponent id={id as string} />}
-            {activeLink === "Matchs" && <NominationsComponent teamId={id as string}/>}
+            {activeLink === "Trainings" && (
+              <TrainingsComponent teamId={id as string} />
+            )}
+            {activeLink === "Kalendar" && (
+              <CalendarComponent teamId={id as string} />
+            )}
+            {activeLink === "Rouster" && (
+              <RoustersComponent id={id as string} />
+            )}
+            {activeLink === "Matchs" && (
+              <NominationsComponent teamId={id as string} />
+            )}
             {activeLink === "Events" && <EventsComponent />}
             {activeLink === "Team" && <TeamComponent id={id as string} />}
             {activeLink === "Members" && <MembersComponent id={id as string} />}
