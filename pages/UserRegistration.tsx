@@ -9,7 +9,6 @@ import { Box, Button, TextField, Typography, Link, Alert } from "@mui/material";
 import photo from "../public/assets/rosterbot.png";
 import pictureBackground from "../public/assets/uvodni.jpg";
 
-
 const CREATE_USER_MUTATION = gql`
   mutation CreateUser(
     $Name: String!
@@ -38,7 +37,6 @@ const CREATE_USER_MUTATION = gql`
       IdTeam
       Email
       DateOfBirth
-      # Další údaje, které chcete získat
     }
   }
 `;
@@ -52,8 +50,7 @@ const RegistrationPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [registrationSuccess, setRegistrationSuccess] = useState(false);
   const [verificationSuccess, setverificationSuccess] = useState(false);
-  const [dateOfBirth, setDateOfBirth] = useState<Date | null>(null); // Nový stav pro datum narození
-
+  const [dateOfBirth, setDateOfBirth] = useState<Date | null>(null); 
 
   const router = useRouter();
 
@@ -108,7 +105,7 @@ const RegistrationPage: React.FC = () => {
               Email: email,
               IdUser: "fefefef",
               IdTeam: ["fefefe"],
-              DateOfBirth: dateOfBirth?.toISOString() || "", // Převést datum na řetězec
+              DateOfBirth: dateOfBirth?.toISOString() || "",
             },
           });
           setverificationSuccess(true);
@@ -156,7 +153,7 @@ const RegistrationPage: React.FC = () => {
             sx={{
               width: "90%",
               position: "relative",
-              zIndex: "1", // Ensure content is above the background image
+              zIndex: "1", 
               borderRadius: "0 0 15px 15px",
             }}
           >
@@ -177,7 +174,7 @@ const RegistrationPage: React.FC = () => {
                 top: 0,
                 left: 0,
                 width: "100%",
-                zIndex: "2", // Set a higher z-index for content
+                zIndex: "2", 
               }}
             >
               <Box
@@ -225,7 +222,7 @@ const RegistrationPage: React.FC = () => {
           <Box>
             <Box
               sx={{
-                width: "75%", // Set the desired width for the box
+                width: "75%", 
                 mx: "auto",
               }}
             >
@@ -380,6 +377,7 @@ const RegistrationPage: React.FC = () => {
                         boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.2)",
                         padding: "0.7em",
                         borderRadius: "4px",
+                        "&:hover": { backgroundColor: "#b71dde", },
                       }}
                     >
                       Registrovat
@@ -411,6 +409,24 @@ const RegistrationPage: React.FC = () => {
                       marginTop: "1rem",
                       color: "#b71dde",
                       textDecoration: "none",
+                      position: "relative",
+                      "&::before": {
+                        content: "''",
+                        position: "absolute",
+                        width: "100%",
+                        height: "4px",
+                        borderRadius: "4px",
+                        backgroundColor: "#b71dde",
+                        bottom: "-4px", // Adjust position to place it below the text
+                        left: "0",
+                        transformOrigin: "right",
+                        transform: "scaleX(0)",
+                        transition: "transform 0.3s ease-in-out",
+                      },
+                      "&:hover::before": {
+                        transformOrigin: "left",
+                        transform: "scaleX(1)",
+                      },
                     }}
                   >
                     Přihlásit
@@ -422,6 +438,24 @@ const RegistrationPage: React.FC = () => {
                       marginTop: "1rem",
                       color: "#b71dde",
                       textDecoration: "none",
+                      position: "relative",
+                        "&::before": {
+                          content: "''",
+                          position: "absolute",
+                          width: "100%",
+                          height: "4px",
+                          borderRadius: "4px",
+                          backgroundColor: "#b71dde",
+                          bottom: "-4px", // Adjust position to place it below the text
+                          left: "0",
+                          transformOrigin: "right",
+                          transform: "scaleX(0)",
+                          transition: "transform 0.3s ease-in-out",
+                        },
+                        "&:hover::before": {
+                          transformOrigin: "left",
+                          transform: "scaleX(1)",
+                        },
                     }}
                   >
                     Zkusit znovu
@@ -432,6 +466,24 @@ const RegistrationPage: React.FC = () => {
                       marginTop: "1rem",
                       color: "#b71dde",
                       textDecoration: "none",
+                      position: "relative",
+                      "&::before": {
+                        content: "''",
+                        position: "absolute",
+                        width: "100%",
+                        height: "4px",
+                        borderRadius: "4px",
+                        backgroundColor: "#b71dde",
+                        bottom: "-4px", // Adjust position to place it below the text
+                        left: "0",
+                        transformOrigin: "right",
+                        transform: "scaleX(0)",
+                        transition: "transform 0.3s ease-in-out",
+                      },
+                      "&:hover::before": {
+                        transformOrigin: "left",
+                        transform: "scaleX(1)",
+                      },
                     }}
                   >
                     Zpět

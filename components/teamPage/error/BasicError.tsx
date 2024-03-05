@@ -143,6 +143,7 @@ function RoleError() {
                   border: "1px solid #ff96fc",
                   boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.2)",
                   padding: "0.7em",
+                  "&:hover": { backgroundColor: "#b71dde", },
                   borderRadius: "4px",
                   textDecoration: "none",
                   width: "80%",

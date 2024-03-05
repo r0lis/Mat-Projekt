@@ -188,6 +188,7 @@ const LoginPage: React.FC = () => {
                     boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.2)",
                     padding: "0.7em",
                     borderRadius: "4px",
+                    "&:hover": { backgroundColor: "#b71dde" },
                   }}
                 >
                   Přihlásit
@@ -216,6 +217,24 @@ const LoginPage: React.FC = () => {
                         marginTop: "1rem",
                         color: "#b71dde",
                         textDecoration: "none",
+                        position: "relative",
+                        "&::before": {
+                          content: "''",
+                          position: "absolute",
+                          width: "100%",
+                          height: "4px",
+                          borderRadius: "4px",
+                          backgroundColor: "#b71dde",
+                          bottom: "-4px", // Adjust position to place it below the text
+                          left: "0",
+                          transformOrigin: "right",
+                          transform: "scaleX(0)",
+                          transition: "transform 0.3s ease-in-out",
+                        },
+                        "&:hover::before": {
+                          transformOrigin: "left",
+                          transform: "scaleX(1)",
+                        },
                       }}
                     >
                       Registrovat
@@ -226,6 +245,24 @@ const LoginPage: React.FC = () => {
                         marginTop: "1rem",
                         color: "#b71dde",
                         textDecoration: "none",
+                        position: "relative",
+                        "&::before": {
+                          content: "''",
+                          position: "absolute",
+                          width: "100%",
+                          height: "4px",
+                          borderRadius: "4px",
+                          backgroundColor: "#b71dde",
+                          bottom: "-4px", // Adjust position to place it below the text
+                          left: "0",
+                          transformOrigin: "right",
+                          transform: "scaleX(0)",
+                          transition: "transform 0.3s ease-in-out",
+                        },
+                        "&:hover::before": {
+                          transformOrigin: "left",
+                          transform: "scaleX(1)",
+                        },
                       }}
                     >
                       Zpět

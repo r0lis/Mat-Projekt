@@ -146,6 +146,7 @@ function RoleError() {
                   borderRadius: "4px",
                   textDecoration: "none",
                   width: "80%",
+                  "&:hover": { backgroundColor: "#b71dde", },
                 }}
               >
                 <Typography
