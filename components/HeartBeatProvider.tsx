@@ -48,24 +48,16 @@ export const HeartbeatProvider = ({ children }: HeartbeatProviderProps): JSX.Ele
   
   useEffect(() => {
     const user = authUtils.getCurrentUser();
-     
-
-
-    // Check if the user is not null before starting the heartbeat
     if (user) {
-      // Spustí heartbeat každých 5 sekund (5000 milisekund)
-      const interval = setInterval(heartbeat, 5000);
+      const interval = setInterval(heartbeat, 120000);
   
       const handleBeforeUnload = () => {
-        // Tento kód se spustí, když uživatel opouští stránku
       };
       window.addEventListener('beforeunload', handleBeforeUnload);
   
-      // Zastaví heartbeat při odmontování komponentu
       return () => {
         clearInterval(interval);
         window.removeEventListener('beforeunload', handleBeforeUnload);
-  
         
       };
     } else {

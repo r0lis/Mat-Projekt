@@ -7,8 +7,10 @@ const db = firestore();
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     await processTeams(); 
+    /*
     await processMatches();
     await processTraining();
+    */
 
     res.status(200).json({ success: true });
   } catch (error) {
@@ -41,7 +43,7 @@ async function processTeams() {
     console.error("Chyba při zpracování týmů:", error);
   }
 }
-
+/*
 async function processMatches() {
   try {
     const now = new Date();
@@ -102,3 +104,4 @@ async function processTraining() {
   }
 }
 
+*/

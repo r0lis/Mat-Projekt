@@ -19,6 +19,7 @@ import {
   Avatar,
   TextField,
   Autocomplete,
+  Grid,
 } from "@mui/material";
 import Collapse from "@mui/material/Collapse";
 import React, { useEffect, useState } from "react";
@@ -514,19 +515,20 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
           </Table>
         </TableContainer>
       ) : (
-        <Box>
+        <Box sx={{ marginTop: "0.5em" }}>
           {filteredMembers.map(
             (member: Member) =>
               (role === "1" || member.Email === currentUserEmail) && (
                 <Box>
                   <Box
                     sx={{
-                      boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.3)",
-                      width: "90%",
+                      boxShadow: "0px 0px 15px rgba(0, 0, 0, 0.4)",
+                      width: "80%",
                       borderRadius: "15px 15px 0px 0px",
-                      marginLeft: "5%",
-                      marginRight: "5%",
+                      marginLeft: "9%",
+                      marginRight: "11%",
                       backgroundColor: "#909090",
+                      borderBottom: "2px solid gray",
                       padding: "0.5em",
                     }}
                   >
@@ -535,180 +537,247 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                         sx={{
                           fontFamily: "Roboto",
                           fontWeight: "500",
-                          marginLeft: "3%",
+                          marginLeft: "5%",
+                          color: "#404040",
                         }}
                       >
                         členská sekce
                       </Typography>
                     </Box>
-                    <Box>
-                      <Typography
-                        sx={{
-                          fontFamily: "Roboto",
-                          fontWeight: "500",
-                          marginLeft: "3%",
-                        }}
-                      >
-                        {member.Name} {member.Surname}
-                      </Typography>
-                    </Box>
-                    <Box>
-                      <Avatar
-                        sx={{
-                          width: 60,
-                          height: 60,
-                          marginLeft: "3%",
-                          right: "1em",
-                        }}
-                        alt="Remy Sharp"
-                        src={member.Picture}
-                      />
+                    <Box
+                      sx={{
+                        display: "flex",
+                        width: "100%",
+                        paddingTop: "0.5em",
+                        paddingBottom: "0.2em",
+                      }}
+                    >
+                      <Box>
+                        <Avatar
+                          sx={{
+                            width: 60,
+                            height: 60,
+                            left: 60,
+                            right: "",
+                          }}
+                          alt="Remy Sharp"
+                          src={member.Picture}
+                        />
                       </Box>
+                      <Box>
+                        <Typography
+                          sx={{
+                            fontFamily: "Roboto",
+                            fontWeight: "500",
+                            marginLeft: 10,
+                            marginTop: "0.35em",
+                            fontSize: "1.5em",
+                            whiteSpace: "nowrap",
+                          }}
+                        >
+                          {member.Name} {member.Surname}
+                        </Typography>
+                      </Box>
+                    </Box>
                   </Box>
                   <Box
                     sx={{
-                      boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.3)",
-                      width: "90%",
+                      boxShadow: "0px 0px 15px rgba(0, 0, 0, 0.4)",
+                      width: "80%",
                       borderRadius: "0px 0px 15px 15px",
-                      marginLeft: "5%",
-                      marginRight: "5%",
+                      marginLeft: "9%",
+                      marginRight: "11%",
                       padding: "0.5em",
+                      paddingBottom: expandedSelectedMember === member.Email ? "2em" : "0.5em", 
+                      marginBottom: expandedSelectedMember === member.Email ? "2em" : "0.5em", 
+                      
                     }}
                   >
-                    <Typography sx={{ marginLeft: "3%" }}>
-                      Věk: {calculateAge(member?.DateOfBirth || "")} let
-                    </Typography>
-                    <Typography sx={{ marginLeft: "3%" }}>
-                      Datum narození:{" "}
-                      {member.DateOfBirth &&
-                        new Date(member.DateOfBirth).toLocaleDateString(
-                          "cs-CZ",
-                          {
-                            day: "2-digit",
-                            month: "2-digit",
-                            year: "numeric",
-                          }
-                        )}
-                    </Typography>
-                    {member.Subteams.slice(0, 1).map((subteam) => (
-                        <Box sx={{ display: "flex", alignItems: "center" }}>
+                    <Grid container spacing={1} sx={{ marginLeft: "3%" }}>
+                      <Grid item xs={3}>
+                        <Box sx={{ padding: "0.5em" }}>
                           <Typography
-                            key={subteam.subteamId}
                             sx={{
-                              fontFamily: "Roboto",
+                              marginLeft: "3%",
                               color: "black",
                               fontWeight: "500",
                             }}
                           >
-                            {subteam.Name}
+                            Věk:
                           </Typography>
+                          <Typography
+                            sx={{
+                              marginLeft: "3%",
+                              color: "black",
+                              fontWeight: "500",
+                            }}
+                          >
+                            Datum narození:{" "}
+                          </Typography>
+                          <Typography
+                            sx={{
+                              marginLeft: "3%",
+                              color: "black",
+                              fontWeight: "500",
+                            }}
+                          >
+                            Email :
+                          </Typography>
+                          <Typography
+                            sx={{
+                              marginLeft: "3%",
+                              color: "black",
+                              fontWeight: "500",
+                            }}
+                          >
+                            Zdravotní prohlídka:
+                          </Typography>
+                          <Typography
+                            sx={{
+                              marginLeft: "3%",
+                              color: "black",
+                              fontWeight: "500",
+                            }}
+                          >
+                            Práva:
+                          </Typography>
+                          <Typography
+                            sx={{
+                              marginLeft: "3%",
+                              color: "black",
+                              fontWeight: "500",
+                            }}
+                          >
+                            Týmy:
+                          </Typography>
+                        </Box>
+                      </Grid>
+                      <Grid item xs={3}>
+                        <Box sx={{ padding: "0.5em" }}>
+                          <Typography
+                            sx={{ color: "black", fontWeight: "500" }}
+                          >
+                            {calculateAge(member?.DateOfBirth || "")} let
+                          </Typography>
+                          <Typography
+                            sx={{ color: "black", fontWeight: "500" }}
+                          >
+                            {member.DateOfBirth &&
+                              new Date(member.DateOfBirth).toLocaleDateString(
+                                "cs-CZ",
+                                {
+                                  day: "2-digit",
+                                  month: "2-digit",
+                                  year: "numeric",
+                                }
+                              )}
+                          </Typography>
+                          <Typography
+                            sx={{ color: "black", fontWeight: "500" }}
+                          >
+                            {member.Email}
+                          </Typography>
+                          <Typography
+                            sx={{ color: "black", fontWeight: "500" }}
+                          >
+                            do 2. 3. 2023
+                          </Typography>
+                          <Typography
+                            sx={{ color: "black", fontWeight: "500" }}
+                          >
+                            {member.Role === "1" && "Management"}
+                            {member.Role === "2" && "Trenér"}
+                            {member.Role === "3" && "Hráč"}
+                            {(member.Role === "0" ||
+                              member.Role === "No Role Assigned") && (
+                              <Box sx={{ maxWidth: "15em" }}>
+                                <Alert
+                                  sx={{ maxHeight: "2.6em" }}
+                                  severity="error"
+                                >
+                                  <Typography
+                                    sx={{ fontSize: "1em", fontWeight: "600" }}
+                                  >
+                                    Zvolte !
+                                  </Typography>
+                                </Alert>
+                              </Box>
+                            )}
+                          </Typography>
+                          {member.Subteams.slice(0, 1).map((subteam) => (
+                            <Box sx={{ display: "flex", alignItems: "center", }}>
+                              <Typography
+                                key={subteam.subteamId}
+                                sx={{
+                                  fontFamily: "Roboto",
+                                  color: "black",
+                                  fontWeight: "500",
+                                }}
+                              >
+                                {subteam.Name}
+                              </Typography>
+                              {member.Subteams.length > 1 && (
+                                <Button
+                                  onClick={() =>
+                                    setExpandedSelectedMember(
+                                      expandedSelectedMember === member.Email
+                                        ? null
+                                        : member.Email
+                                    )
+                                    
+                                  }
+                                  color="primary"
+                                  sx={{
+                                    fontFamily: "Roboto",
+                                    marginLeft: "auto",
+                                    color: "black",
+                                    fontWeight: "500",
+                                    height: "1.5em",
+                                  }}
+                                >
+                                  {expandedSelectedMember === member.Email
+                                    ? "Méně"
+                                    : "Více"}
+                                </Button>
+                              )}
+                            </Box>
+                          ))}
                           {member.Subteams.length > 1 && (
-                            <Button
-                              onClick={() =>
-                                setExpandedSelectedMember(
-                                  expandedSelectedMember ===
-                                  member.Email
-                                    ? null
-                                    : member.Email
-                                )
-                              }
-                              color="primary"
+                            <Collapse
                               sx={{
-                                fontFamily: "Roboto",
-                                marginLeft: "auto",
-                                height: "1.5em",
+                                position: "absolute",
+                                zIndex: "999",
+                                backgroundColor: "white",
+                                width: "40%",
                               }}
+                              in={expandedSelectedMember === member.Email}
                             >
-                              {expandedSelectedMember === member.Email
-                                ? "Méně"
-                                : "Více"}
-                            </Button>
+                              {member.Subteams.slice(1).map((subteam) => (
+                                <Typography
+                                  key={subteam.subteamId}
+                                  sx={{
+                                    fontFamily: "Roboto",
+                                    color: "black",
+                                    fontWeight: "500",
+                                  }}
+                                >
+                                  {subteam.Name}
+                                </Typography>
+                              ))}
+                            </Collapse>
                           )}
                         </Box>
-                      ))}
-                      {member.Subteams.length > 1 && (
-                        <Collapse
-                          sx={{
-                            position: "absolute",
-                            zIndex: "999",
-                            backgroundColor: "white",
-                            width: "40%",
-                          }}
-                          in={expandedSelectedMember === member.Email}
-                        >
-                          {member.Subteams.slice(1).map((subteam) => (
-                            <Typography
-                              key={subteam.subteamId}
-                              sx={{
-                                fontFamily: "Roboto",
-                                color: "black",
-                                fontWeight: "500",
-                              }}
-                            >
-                              {subteam.Name}
-                            </Typography>
-                          ))}
-                        </Collapse>
-                      )}
-
-                      <Typography>
-                        Zdravotni prohlidka: do 2. 3. 2023
-                      </Typography>
-                      <Typography>
-                        Práva: {member.Role === "1" && "Management"}
-                        {member.Role === "2" && "Trenér"}
-                        {member.Role === "3" && "Hráč"}
-                        {(member.Role === "0" ||
-                          member.Role === "No Role Assigned") && (
-                          <Box sx={{ maxWidth: "15em" }}>
-                            <Alert sx={{ maxHeight: "2.6em" }} severity="error">
-                              <Typography
-                                sx={{ fontSize: "1em", fontWeight: "600" }}
-                              >
-                                Zvolte !
-                              </Typography>
-                            </Alert>
-                          </Box>
-                        )}
-                      </Typography>
-                      <Typography>
-                        Email : {member.Email}
-                      </Typography>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                        }}
-                      >
-                        <Box
-                          sx={{
-                            fontFamily: "Roboto",
-                            fontWeight: "500",
-                            opacity: "0.6",
-                            marginLeft: "-0.5em",
-                            top: "-10px",
-                            position: "relative",
-                            marginTop: "1em",
-                          }}
-                        >
-                          štítky
-                        </Box>
-                        <Box
-                          sx={{
-                            border: "1px solid black",
-                            textAlign: "center",
-                            padding: "3px",
-                            borderRadius: "8px",
-                            width: "6em",
-                          }}
-                        >
-                          <Typography sx={{ fontFamily: "Roboto", fontWeight: "500" }}>
-                            útočník
-                          </Typography>
-                          </Box>
-                          </Box>
+                      </Grid>
+                    </Grid>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        marginLeft: "5%",
+                        marginRight:"5%",
+                        borderBottom: "2px solid gray",
+                      }}
+                    ></Box>
                   </Box>
-
                 </Box>
               )
           )}
