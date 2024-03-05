@@ -588,12 +588,17 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                       marginLeft: "9%",
                       marginRight: "11%",
                       padding: "0.5em",
-                      paddingBottom: expandedSelectedMember === member.Email ? "2em" : "0.5em", 
-                      marginBottom: expandedSelectedMember === member.Email ? "2em" : "0.5em", 
-                      
+                      paddingBottom:
+                        expandedSelectedMember === member.Email
+                          ? "2em"
+                          : "0.5em",
+                      marginBottom:
+                        expandedSelectedMember === member.Email
+                          ? "2em"
+                          : "0.5em",
                     }}
                   >
-                    <Grid container spacing={1} sx={{ marginLeft: "3%" }}>
+                    <Grid container spacing={2} sx={{ marginLeft: "3%" }}>
                       <Grid item xs={3}>
                         <Box sx={{ padding: "0.5em" }}>
                           <Typography
@@ -705,7 +710,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                             )}
                           </Typography>
                           {member.Subteams.slice(0, 1).map((subteam) => (
-                            <Box sx={{ display: "flex", alignItems: "center", }}>
+                            <Box sx={{ display: "flex", alignItems: "center" }}>
                               <Typography
                                 key={subteam.subteamId}
                                 sx={{
@@ -724,12 +729,12 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                                         ? null
                                         : member.Email
                                     )
-                                    
                                   }
                                   color="primary"
                                   sx={{
                                     fontFamily: "Roboto",
                                     marginLeft: "auto",
+                                    marginRight:"30%",
                                     color: "black",
                                     fontWeight: "500",
                                     height: "1.5em",
@@ -773,10 +778,51 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                       sx={{
                         display: "flex",
                         marginLeft: "5%",
-                        marginRight:"5%",
+                        marginRight: "5%",
                         borderBottom: "2px solid gray",
+                        marginTop:
+                          expandedSelectedMember === member.Email
+                            ? "2em"
+                            : "0.1em",
                       }}
                     ></Box>
+                    <Box sx={{paddingBottom:"0.5em"}}>
+                      <Button
+                        sx={{
+                          backgroundColor: "lightgray",
+                          color: "black",
+                          marginTop: "1em",
+                          padding: "1em",
+                          height: "2.5em",
+                          marginLeft: "5%",
+                          width: "90%",
+                          ":hover": {
+                            border: "1px solid black",
+                            backgroundColor:"#989898"
+                          },
+                        }}
+                      >
+                        Nahrát Zdravotní prohlídku
+                      </Button>
+                      <Button
+                        sx={{
+                          backgroundColor: "lightgray",
+                          color: "black",
+                          marginTop: "1em",
+                          padding: "1em",
+                          height: "2.5em",
+                          marginLeft: "5%",
+
+                          width: "90%",
+                          ":hover": {
+                            border: "1px solid black",
+                            backgroundColor:"#989898"
+                          },
+                        }}
+                      >
+                        Opustit klub
+                      </Button>
+                    </Box>
                   </Box>
                 </Box>
               )

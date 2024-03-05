@@ -1229,8 +1229,8 @@ const HallInfo: React.FC<HallInfoProps> = ({ teamId, hallId }) => {
           <Typography sx={{ fontWeight: "500" }}>Umístení: </Typography>
         </Grid>
         <Grid item xs={6}>
-          <Typography>{hall.name}</Typography>
-          <Typography>{hall.location}</Typography>
+          <Typography>{hall?.name}</Typography>
+          <Typography>{hall?.location}</Typography>
         </Grid>
       </Grid>
     </Box>
