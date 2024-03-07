@@ -354,6 +354,76 @@ export const teamMutations = {
     }
   },
 
+  updateMemberMedicalDoc: async (
+    _: any,
+    { email, doc, teamId }: { email: string; doc: string; teamId: string },
+    context: Context
+  ) => {
+    try {
+
+      const imageBuffer = Buffer.from(
+        doc.replace(/^data:image\/\w+;base64,/, ""),
+        "base64"
+      );
+
+      // Generate a unique filename for the image
+      const filename = `user_medical/${email}_${Date.now()}.jpg`;
+
+      const bucket = admin.storage().bucket();
+
+      // Upload the image to Firebase Storage
+      await bucket.file(filename).save(imageBuffer, {
+        metadata: {
+          contentType: "image/jpeg", // Adjust the content type based on your image type
+        },
+      });
+
+      // Get the signed URL for the uploaded image
+      const [downloadUrl] = await bucket.file(filename).getSignedUrl({
+        action: "read",
+        expires: "03-09-2491", // Adjust the expiration date as needed
+      });
+
+      // Find the team by teamId
+      const teamQuery = context.db
+        .collection("Team")
+        .where("teamId", "==", teamId);
+      const teamSnapshot = await teamQuery.get();
+
+      if (!teamSnapshot.empty) {
+        const teamDoc = teamSnapshot.docs[0];
+
+        // Update the role of the specified member in the Members array
+        const existingMembers = teamDoc.data().Members || [];
+        const updatedMembers = existingMembers.map((member: any) => {
+          if (member.member == email) {
+            return { ...member, downloadUrl };
+          }
+          return member;
+        });
+
+        // Update the Members field in the database
+        console.log(updatedMembers);
+
+        await teamDoc.ref.update({ Members: updatedMembers });
+
+        // Return the updated member details
+        const updatedMemberDetails = {
+          Name: "", // Get the name from the User collection or other source
+          Surname: "", // Get the surname from the User collection or other source
+          doc: downloadUrl,
+          Email: email,
+        };
+
+        return updatedMemberDetails;
+      }
+      return null;
+    } catch (error) {
+      console.error("Error updating member role:", error);
+      throw error;
+    }
+  },
+
   deleteMember: async (
     _: any,
     { teamId, memberEmail }: { teamId: string; memberEmail: string },

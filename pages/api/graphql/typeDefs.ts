@@ -143,6 +143,7 @@ export const typeDefs = gql`
     Surname: String!
     Role: String!
     Email: String!
+    doc: String
     DateOfBirth: String!
     Picture: String
     Subteams: [Subteam]
@@ -453,9 +454,16 @@ export const typeDefs = gql`
     uploadImageUser(imageBase64: String!, userEmail: String!): String!
     updateMemberRole(
       email: String!
-      role: String!
+      position: String!
       teamId: String!
     ): MemberDetails
+
+    updateMemberMedicalDoc(
+      email: String!
+      teamId: String!
+      doc: String!
+    ): MemberDetails
+
     deleteMember(teamId: String, memberEmail: String): Boolean
     createSubteam(
       teamId: String!

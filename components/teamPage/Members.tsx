@@ -63,6 +63,18 @@ const UPDATE_MEMBER_ROLE = gql`
   }
 `;
 
+const UPDATE_MEMBER_MEDICAL_DOC = gql`
+  mutation UpdateMemberMedicalDoc($email: String!, $doc: String!, $teamId: String!) {
+    updateMemberMedicalDoc(email: $email, doc: $doc, teamId: $teamId) {
+      Name
+      Surname
+      doc
+      Email
+    }
+  }
+`;
+
+
 const GET_USER_ROLE_IN_TEAM = gql`
   query GetUserRoleInTeam($teamId: String!, $email: String!) {
     getUserRoleInTeam(teamId: $teamId, email: $email) {
@@ -112,6 +124,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
   } | null>(null);
   const [selectedRole, setSelectedRole] = useState("");
   const [updateMemberRole] = useMutation(UPDATE_MEMBER_ROLE);
+  const [updateMemberMedicalDoc] = useMutation(UPDATE_MEMBER_MEDICAL_DOC);
   const [deleteMember] = useMutation(DELETE_MEMBER);
   const user = authUtils.getCurrentUser();
   const [modalOpenPlayerImage, setModalOpenPlayerImage] = useState(false);
@@ -284,6 +297,15 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
       if (!selectedImage) {
         throw new Error("Vyberte prosím obrázek pro tým.");
       }
+
+      await updateMemberMedicalDoc({
+        variables: {
+          email: currentUserEmail || "",
+          doc: selectedImage || "",
+          teamId: id || "",
+        },
+      });
+
 
       const imageBase64 = selectedImage;
       console.log(imageBase64);
