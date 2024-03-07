@@ -132,6 +132,7 @@ export type MemberDetails = {
   Name: string;
   Surname: string;
   Role: string;
+  doc: string;
   Email: string;
   DateOfBirth: string;
   Picture: string;

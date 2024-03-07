@@ -42,6 +42,7 @@ const GET_TEAM_MEMBERS_DETAILS = gql`
       Surname
       Role
       Email
+      doc
       Picture
       DateOfBirth
       Subteams {
@@ -97,6 +98,7 @@ interface Member {
   Email: string;
   Picture: string;
   DateOfBirth: string;
+  doc: string;
   Subteams: { Name: string; subteamId: string }[];
 }
 
@@ -120,6 +122,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
     Email: string;
     DateOfBirth: string;
     Picture: string;
+    doc: string;
     Subteams: { Name: string; subteamId: string }[];
   } | null>(null);
   const [selectedRole, setSelectedRole] = useState("");
@@ -305,6 +308,8 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
           teamId: id || "",
         },
       });
+      setSelectedImage(null);
+      await setModalOpenPlayer(false);
 
 
       const imageBase64 = selectedImage;

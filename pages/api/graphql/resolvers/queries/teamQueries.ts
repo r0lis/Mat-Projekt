@@ -210,6 +210,7 @@ export const teamQueries = {
           for (let i = 0; i < membersEmails.length; i++) {
             const email = membersEmails[i];
             const role = membersRoles[i]?.role || "No Role Assigned";
+            const pictureDoc = membersRoles[i]?.downloadUrl || "No Doc Assigned";
 
             const userQuery = context.db
               .collection("User")
@@ -237,6 +238,7 @@ export const teamQueries = {
                 Surname: userData.Surname,
                 Picture: userData.Picture ?? null,
                 Role: role,
+                doc: pictureDoc,
                 Email: userData.Email,
                 DateOfBirth: userData.DateOfBirth,
                 Subteams: filteredSubteams,
