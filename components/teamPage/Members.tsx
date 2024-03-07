@@ -20,6 +20,10 @@ import {
   TextField,
   Autocomplete,
   Grid,
+  Card,
+  CardMedia,
+  Input,
+  InputLabel,
 } from "@mui/material";
 import Collapse from "@mui/material/Collapse";
 import React, { useEffect, useState } from "react";
@@ -95,6 +99,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [editMode, setEditMode] = useState(false);
+  const [modalOpenPlayer, setModalOpenPlayer] = useState(false);
   const currentUserEmail = authUtils.getCurrentUser()?.email || "";
   const [selectedMember, setSelectedMember] = useState<{
     Name: string;
@@ -109,7 +114,9 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
   const [updateMemberRole] = useMutation(UPDATE_MEMBER_ROLE);
   const [deleteMember] = useMutation(DELETE_MEMBER);
   const user = authUtils.getCurrentUser();
+  const [modalOpenPlayerImage, setModalOpenPlayerImage] = useState(false);
   const [expandedMember, setExpandedMember] = useState<string | null>(null);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [expandedSelectedMember, setExpandedSelectedMember] = useState<
     string | null
   >(null);
@@ -262,6 +269,52 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
       age--;
     }
     return age;
+  };
+
+  const handleOpenModalPlayer = () => {
+    setModalOpenPlayer(true);
+  };
+
+  const handleCloseModalPlayer = () => {
+    setModalOpenPlayer(false);
+  };
+
+  const HandleUploadUserMedicalDoc = async () => {
+    try {
+      if (!selectedImage) {
+        throw new Error("Vyberte prosím obrázek pro tým.");
+      }
+
+      const imageBase64 = selectedImage;
+      console.log(imageBase64);
+    } catch (error: any) {
+      console.error("Error uploading user medical doc:", error.message);
+    }
+  };
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setSelectedImage(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleImageDelete = () => {
+    setSelectedImage(null);
+  };
+
+  const handleImageClick = () => {
+    if (selectedImage) {
+      setModalOpenPlayerImage(true);
+    }
+  };
+
+  const handleCloseModalPlayerImage = () => {
+    setModalOpenPlayerImage(false);
   };
 
   return (
@@ -734,7 +787,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                                   sx={{
                                     fontFamily: "Roboto",
                                     marginLeft: "auto",
-                                    marginRight:"30%",
+                                    marginRight: "30%",
                                     color: "black",
                                     fontWeight: "500",
                                     height: "1.5em",
@@ -786,7 +839,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                             : "0.1em",
                       }}
                     ></Box>
-                    <Box sx={{paddingBottom:"0.5em"}}>
+                    <Box sx={{ paddingBottom: "0.5em" }}>
                       <Button
                         sx={{
                           backgroundColor: "lightgray",
@@ -798,9 +851,10 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                           width: "90%",
                           ":hover": {
                             border: "1px solid black",
-                            backgroundColor:"#989898"
+                            backgroundColor: "#989898",
                           },
                         }}
+                        onClick={handleOpenModalPlayer}
                       >
                         Nahrát Zdravotní prohlídku
                       </Button>
@@ -816,7 +870,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                           width: "90%",
                           ":hover": {
                             border: "1px solid black",
-                            backgroundColor:"#989898"
+                            backgroundColor: "#989898",
                           },
                         }}
                       >
@@ -824,6 +878,206 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                       </Button>
                     </Box>
                   </Box>
+                  <Modal
+                    open={modalOpenPlayer}
+                    onClose={handleCloseModalPlayer}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                  >
+                    <Box
+                      sx={{
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        transform: "translate(-50%, -50%)",
+                        width: 500,
+                        bgcolor: "background.paper",
+                        border: "2px solid #000",
+                        borderRadius: "8px",
+                        boxShadow: 24,
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          backgroundColor: "#959595",
+                          paddingTop: "0.5em",
+                          paddingBottom: "0.5em",
+                          paddingLeft: "2em",
+                          paddingRight: "2em",
+                          borderRadius: "6px 6px 0px 0px",
+                        }}
+                      >
+                        <Typography
+                          id="modal-modal-title"
+                          variant="h6"
+                          component="h2"
+                        >
+                          Zdravotní prohlídka
+                        </Typography>
+                      </Box>
+                      <Box
+                        sx={{
+                          paddingTop: "0.5em",
+                          paddingBottom: "2em",
+                          paddingLeft: "2em",
+                          paddingRight: "2em",
+                        }}
+                      >
+                        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                          Sem vložte obsah modálního okna pro nahrání zdravotní
+                          prohlídky.
+                        </Typography>
+                        <InputLabel htmlFor="imageInput">
+                          <Input
+                            id="imageInput"
+                            type="file"
+                            onChange={handleImageChange}
+                            style={{ display: "none" }}
+                            inputProps={{ accept: "image/*" }}
+                          />
+                        </InputLabel>
+                        {!selectedImage && (
+                          <Box sx={{ marginTop: "0.4em", marginBottom: "1em" }}>
+                            <label htmlFor="imageInput">
+                              <Button variant="contained" component="span">
+                                Vybrat obrázek
+                              </Button>
+                            </label>
+                          </Box>
+                        )}
+
+                        {selectedImage && (
+                          <Box
+                            sx={{
+                              padding: "10px",
+                              marginTop: "0px",
+                              borderRadius: "15px",
+                              boxShadow: "0 0 10px rgba(0, 0, 0, 0.3)",
+                              marginBottom: "20px",
+                            }}
+                          >
+                            <Box
+                              style={{
+                                marginTop: "10px",
+                                marginBottom: "10px",
+                                display: "flex",
+                                alignItems: "center",
+                              }}
+                            >
+                              <Card
+                                sx={{
+                                  width: 100,
+                                  height: 100,
+                                  marginRight: "10px",
+                                }}
+                              >
+                                <CardMedia
+                                  component="img"
+                                  alt="Selected Image"
+                                  height="100"
+                                  image={selectedImage}
+                                />
+                              </Card>
+                              <Box>
+                                <Box>
+                                  <Button
+                                    sx={{
+                                      width: "100%",
+                                      marginBottom: "0.5em",
+                                    }}
+                                    variant="outlined"
+                                    onClick={handleImageClick}
+                                  >
+                                    Zobrazit
+                                  </Button>
+                                </Box>
+                                <Box>
+                                  <Button
+                                    sx={{
+                                      width: "100%",
+                                      marginBottom: "0.5em",
+                                    }}
+                                    variant="outlined"
+                                    onClick={HandleUploadUserMedicalDoc}
+                                  >
+                                    Uložit
+                                  </Button>
+                                </Box>
+                                <Box>
+                                  <Button
+                                    sx={{ width: "100%" }}
+                                    variant="outlined"
+                                    onClick={handleImageDelete}
+                                  >
+                                    Smazat obrázek
+                                  </Button>
+                                </Box>
+                              </Box>
+                            </Box>
+                          </Box>
+                        )}
+                      </Box>
+                    </Box>
+                  </Modal>
+                  <Modal
+  open={modalOpenPlayerImage}
+  onClose={handleCloseModalPlayerImage}
+  aria-labelledby="modal-modal-title"
+  aria-describedby="modal-modal-description"
+>
+  <Box
+    sx={{
+      position: "absolute",
+      top: "50%",
+      left: "50%",
+      transform: "translate(-50%, -50%)",
+      width: 700,
+      height: 700,
+      bgcolor: "background.paper",
+      border: "2px solid #000",
+      borderRadius: "8px",
+      boxShadow: 24,
+    }}
+  >
+    <Box
+      sx={{
+        backgroundColor: "#959595",
+        paddingTop: "0.5em",
+        paddingBottom: "0.5em",
+        paddingLeft: "2em",
+        paddingRight: "2em",
+        borderRadius: "6px 6px 0px 0px",
+      }}
+    >
+      <Typography
+        id="modal-modal-title"
+        variant="h6"
+        component="h2"
+      >
+        Náhled obrázku
+      </Typography>
+    </Box>
+    <Box
+      sx={{
+        paddingTop: "0.5em",
+        paddingBottom: "2em",
+        marginLeft: "10%", 
+        marginRight: "10%",
+        width: "80%", 
+        height: "80%", 
+        overflowY: "auto",
+      }}
+    >
+      {selectedImage && (
+        <img
+          src={selectedImage}
+          alt="Selected Image"
+          style={{ width: "100%", height: "auto" }} 
+        />
+      )}
+    </Box>
+  </Box>
+</Modal>
                 </Box>
               )
           )}

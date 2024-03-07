@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { gql, useApolloClient } from '@apollo/client';
+import {  useApolloClient } from '@apollo/client';
 import { authUtils } from "@/firebase/auth.utils";
 import axios from 'axios';
 
@@ -24,50 +24,39 @@ interface HeartbeatProviderProps {
 
 export const HeartbeatProvider = ({ children }: HeartbeatProviderProps): JSX.Element => {
   const [isConnected, setIsConnected] = useState(true);
+  const [userChecked, setUserChecked] = useState(false);
   const apolloClient = useApolloClient();
 
   const heartbeat = async () => {
     try {
+      console.log('Heartbeat request sent');
       axios.post("/api/teamService");
-      const response = await apolloClient.query({
-        query: gql`
-          query {
-            heartbeat
-          }
-        `,
-      });
-
-      // Můžete aktualizovat isConnected na základě odpovědi
-      setIsConnected(response.data.heartbeat);
 
     } catch (error) {
       setIsConnected(false);
     }
   };
-  const user = authUtils.getCurrentUser();
   
   useEffect(() => {
-    const user = authUtils.getCurrentUser();
-    if (user) {
-      const interval = setInterval(heartbeat, 120000);
+    const timer = setTimeout(() => {
+      const user = authUtils.getCurrentUser();
+      if (user && !userChecked) { 
+        heartbeat(); 
+        setUserChecked(true); 
+      }
   
-      const handleBeforeUnload = () => {
-      };
-      window.addEventListener('beforeunload', handleBeforeUnload);
-  
-      return () => {
-        clearInterval(interval);
-        window.removeEventListener('beforeunload', handleBeforeUnload);
-        
-      };
-    } else {
-      // If user is null, log a message indicating that the heartbeat is not started
-    }
-  }, [user, apolloClient]);
+      if (user && userChecked) { 
+        return; 
+      }
+    }, 1000); // Spuštění heartbeatu až za 1 sekundu
 
+    return () => clearTimeout(timer);
+  }, [userChecked, apolloClient]);
   return (
     <HeartbeatContext.Provider value={{ isConnected }}>
       {children}
     </HeartbeatContext.Provider>
   );
 };
+
+

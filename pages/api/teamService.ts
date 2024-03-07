@@ -7,10 +7,8 @@ const db = firestore();
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     await processTeams(); 
-    /*
     await processMatches();
     await processTraining();
-    */
 
     res.status(200).json({ success: true });
   } catch (error) {
@@ -43,7 +41,7 @@ async function processTeams() {
     console.error("Chyba při zpracování týmů:", error);
   }
 }
-/*
+
 async function processMatches() {
   try {
     const now = new Date();
@@ -53,11 +51,13 @@ async function processMatches() {
       const matchData = matchDoc.data();
       const matchDate = new Date(matchData.date + ' ' + matchData.time);
 
-      // Pokud je datum a čas zápasu starší než aktuální čas, provede se změna hisAttendance
+      if (matchData.Checked && matchData.Checked === true) {
+        continue; 
+      }
+
       if (matchDate < now) {
         const attendance = matchData.attendance || [];
 
-        // Procházení účasti a změna hisAttendance na 1, pokud je 0
         const updatedAttendance = attendance.map((record: { hisAttendance: number; }) => {
           if (record.hisAttendance === 0) {
             record.hisAttendance = 2;
@@ -65,29 +65,33 @@ async function processMatches() {
           return record;
         });
 
-        // Aktualizace účasti v dokumentu
         await matchDoc.ref.update({ attendance: updatedAttendance });
-     }
+
+        await matchDoc.ref.update({ Checked: true });
+      }
     }
   } catch (error) {
     console.error("Chyba při zpracování zápasů:", error);
   }
 }
+
 
 async function processTraining() {
   try {
     const now = new Date();
-    const matchesQuery = await db.collection("Training").get();
+    const trainingQuery = await db.collection("Training").get();
 
-    for (const matchDoc of matchesQuery.docs) {
-      const matchData = matchDoc.data();
-      const matchDate = new Date(matchData.date + ' ' + matchData.time);
+    for (const trainingDoc of trainingQuery.docs) {
+      const trainingData = trainingDoc.data();
+      const trainingDate = new Date(trainingData.date + ' ' + trainingData.time);
 
-      // Pokud je datum a čas zápasu starší než aktuální čas, provede se změna hisAttendance
-      if (matchDate < now) {
-        const attendance = matchData.attendance || [];
+      if (trainingData.Checked && trainingData.Checked === true) {
+        continue; 
+      }
 
-        // Procházení účasti a změna hisAttendance na 1, pokud je 0
+      if (trainingDate < now) {
+        const attendance = trainingData.attendance || [];
+
         const updatedAttendance = attendance.map((record: { hisAttendance: number; }) => {
           if (record.hisAttendance === 0) {
             record.hisAttendance = 2;
@@ -95,13 +99,14 @@ async function processTraining() {
           return record;
         });
 
-        // Aktualizace účasti v dokumentu
-        await matchDoc.ref.update({ attendance: updatedAttendance });
-     }
+        await trainingDoc.ref.update({ attendance: updatedAttendance });
+
+        await trainingDoc.ref.update({ Checked: true });
+      }
     }
   } catch (error) {
-    console.error("Chyba při zpracování zápasů:", error);
+    console.error("Chyba při zpracování tréninků:", error);
   }
 }
 
-*/
+
