@@ -156,15 +156,22 @@ const Overview: React.FC<OverviewProps> = (id) => {
   const today = new Date();
   const startOfWeek = new Date(today);
   startOfWeek.setDate(today.getDate() - today.getDay() + 1); // Začátek týdne
+  startOfWeek.setHours(0, 0, 0, 0); // Nastaví čas na 00:00:00
 
 
   const endOfWeek = new Date(startOfWeek);
   endOfWeek.setDate(startOfWeek.getDate() + 6); // Konec týdne
-
+  endOfWeek.setHours(23, 59, 59, 999); // Nastaví čas na 23:59:59
+    console.log(endOfWeek);
+  console.log(startOfWeek);
+  
   const matchCount = matches.filter(
     (match) =>
-      new Date(match.date) >= startOfWeek && new Date(match.date) <= endOfWeek
+      new Date(match.date) == startOfWeek  || new Date(match.date) > startOfWeek && new Date(match.date) <= endOfWeek
+   
+
   ).length;
+  console.log(matches);
 
   const trainingCount = trainings.filter(
     (training) =>
@@ -174,9 +181,11 @@ const Overview: React.FC<OverviewProps> = (id) => {
 
   const nextWeek = new Date(startOfWeek);
   nextWeek.setDate(startOfWeek.getDate() + 7);
+  nextWeek.setHours(0, 0, 0, 0);
 
   const endOfNextWeek = new Date(nextWeek);
   endOfNextWeek.setDate(endOfNextWeek.getDate() + 6);
+  endOfNextWeek.setHours(23, 59, 59, 999);
 
   const nextWeekFilteredArray = combinedArray.filter((item) => {
     const itemDate = new Date(item.date);

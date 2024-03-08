@@ -34,6 +34,7 @@ import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import { SelectChangeEvent } from "@mui/material";
 import { authUtils } from "@/firebase/auth.utils";
 import { useRef } from "react";
+import ArticleIcon from "@mui/icons-material/Article";
 
 const GET_TEAM_MEMBERS_DETAILS = gql`
   query GetTeamMembersDetails($teamId: String!) {
@@ -65,7 +66,11 @@ const UPDATE_MEMBER_ROLE = gql`
 `;
 
 const UPDATE_MEMBER_MEDICAL_DOC = gql`
-  mutation UpdateMemberMedicalDoc($email: String!, $doc: String!, $teamId: String!) {
+  mutation UpdateMemberMedicalDoc(
+    $email: String!
+    $doc: String!
+    $teamId: String!
+  ) {
     updateMemberMedicalDoc(email: $email, doc: $doc, teamId: $teamId) {
       Name
       Surname
@@ -74,7 +79,6 @@ const UPDATE_MEMBER_MEDICAL_DOC = gql`
     }
   }
 `;
-
 
 const GET_USER_ROLE_IN_TEAM = gql`
   query GetUserRoleInTeam($teamId: String!, $email: String!) {
@@ -131,6 +135,8 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
   const [deleteMember] = useMutation(DELETE_MEMBER);
   const user = authUtils.getCurrentUser();
   const [modalOpenPlayerImage, setModalOpenPlayerImage] = useState(false);
+  const [modalOpenPlayerDoc, setModalOpenPlayerDoc] = useState(false);
+  const [modalOpenPlayerImage2, setModalOpenPlayerImage2] = useState(false);
   const [expandedMember, setExpandedMember] = useState<string | null>(null);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [expandedSelectedMember, setExpandedSelectedMember] = useState<
@@ -241,7 +247,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
           variables: {
             email: selectedMember.Email,
             role: selectedRole,
-            teamId: id || "", // Pass the current team ID
+            teamId: id,
           },
         });
 
@@ -311,7 +317,6 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
       setSelectedImage(null);
       await setModalOpenPlayer(false);
 
-
       const imageBase64 = selectedImage;
       console.log(imageBase64);
     } catch (error: any) {
@@ -342,6 +347,22 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
 
   const handleCloseModalPlayerImage = () => {
     setModalOpenPlayerImage(false);
+  };
+
+  const handleOpenModalDoc = () => {
+    setModalOpenPlayerDoc(true);
+  };
+
+  const handleCloseModalPlayerDoc = () => {
+    setModalOpenPlayerDoc(false);
+  };
+
+  const handleOpenModalPlayerImage2 = () => {
+    setModalOpenPlayerImage2(true);
+  };
+
+  const handleCloseModalPlayerImage2 = () => {
+    setModalOpenPlayerImage2(false);
   };
 
   return (
@@ -762,11 +783,28 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                           >
                             {member.Email}
                           </Typography>
-                          <Typography
-                            sx={{ color: "black", fontWeight: "500" }}
-                          >
-                            do 2. 3. 2023
-                          </Typography>
+                          <Box sx={{ display: "flex" }}>
+                            <Box sx={{ marginRight: "1em" }}>
+                              <Typography sx={{ whiteSpace: "nowrap" }}>
+                                Platná do: 12.03.2023
+                              </Typography>
+                            </Box>
+                            <Button
+                              onClick={handleOpenModalDoc}
+                              sx={{
+                                backgroundColor: "lightgray",
+                                color: "black",
+                                padding: "0.1em",
+                                width: "10em",
+                                ":hover": {
+                                  border: "1px solid black",
+                                  backgroundColor: "#989898",
+                                },
+                              }}
+                            >
+                              Zobrazit
+                            </Button>
+                          </Box>
                           <Typography
                             sx={{ color: "black", fontWeight: "500" }}
                           >
@@ -1047,64 +1085,129 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                     </Box>
                   </Modal>
                   <Modal
-  open={modalOpenPlayerImage}
-  onClose={handleCloseModalPlayerImage}
-  aria-labelledby="modal-modal-title"
-  aria-describedby="modal-modal-description"
->
-  <Box
-    sx={{
-      position: "absolute",
-      top: "50%",
-      left: "50%",
-      transform: "translate(-50%, -50%)",
-      width: 700,
-      height: 700,
-      bgcolor: "background.paper",
-      border: "2px solid #000",
-      borderRadius: "8px",
-      boxShadow: 24,
-    }}
-  >
-    <Box
-      sx={{
-        backgroundColor: "#959595",
-        paddingTop: "0.5em",
-        paddingBottom: "0.5em",
-        paddingLeft: "2em",
-        paddingRight: "2em",
-        borderRadius: "6px 6px 0px 0px",
-      }}
-    >
-      <Typography
-        id="modal-modal-title"
-        variant="h6"
-        component="h2"
-      >
-        Náhled obrázku
-      </Typography>
-    </Box>
-    <Box
-      sx={{
-        paddingTop: "0.5em",
-        paddingBottom: "2em",
-        marginLeft: "10%", 
-        marginRight: "10%",
-        width: "80%", 
-        height: "80%", 
-        overflowY: "auto",
-      }}
-    >
-      {selectedImage && (
-        <img
-          src={selectedImage}
-          alt="Selected Image"
-          style={{ width: "100%", height: "auto" }} 
-        />
-      )}
-    </Box>
-  </Box>
-</Modal>
+                    open={modalOpenPlayerImage}
+                    onClose={handleCloseModalPlayerImage}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                  >
+                    <Box
+                      sx={{
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        transform: "translate(-50%, -50%)",
+                        width: 700,
+                        height: 700,
+                        bgcolor: "background.paper",
+                        border: "2px solid #000",
+                        borderRadius: "8px",
+                        boxShadow: 24,
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          backgroundColor: "#959595",
+                          paddingTop: "0.5em",
+                          paddingBottom: "0.5em",
+                          paddingLeft: "2em",
+                          paddingRight: "2em",
+                          borderRadius: "6px 6px 0px 0px",
+                        }}
+                      >
+                        <Typography
+                          id="modal-modal-title"
+                          variant="h6"
+                          component="h2"
+                        >
+                          Náhled obrázku
+                        </Typography>
+                      </Box>
+                      <Box
+                        sx={{
+                          paddingTop: "0.5em",
+                          paddingBottom: "2em",
+                          marginLeft: "10%",
+                          marginRight: "10%",
+                          width: "80%",
+                          height: "80%",
+                          overflowY: "auto",
+                        }}
+                      >
+                        {selectedImage && (
+                          <img
+                            src={selectedImage}
+                            alt="Selected Image"
+                            style={{ width: "100%", height: "auto" }}
+                          />
+                        )}
+                      </Box>
+                    </Box>
+                  </Modal>
+                  <Modal
+                    open={modalOpenPlayerDoc}
+                    onClose={handleCloseModalPlayerDoc}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                  >
+                    <Box
+                      sx={{
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        transform: "translate(-50%, -50%)",
+                        width: 700,
+                        height: 700,
+                        bgcolor: "background.paper",
+                        border: "2px solid #000",
+                        borderRadius: "8px",
+                        boxShadow: 24,
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          backgroundColor: "#959595",
+                          paddingTop: "0.5em",
+                          paddingBottom: "0.5em",
+                          paddingLeft: "2em",
+                          paddingRight: "2em",
+                          borderRadius: "6px 6px 0px 0px",
+                        }}
+                      >
+                        <Typography
+                          id="modal-modal-title"
+                          variant="h6"
+                          component="h2"
+                        >
+                          Náhled obrázku
+                        </Typography>
+                      </Box>
+                      <Box
+                        sx={{
+                          paddingTop: "0.5em",
+                          paddingBottom: "2em",
+                          marginLeft: "10%",
+                          marginRight: "10%",
+                          width: "80%",
+                          height: "80%",
+                          overflowY: "auto",
+                        }}
+                      >
+                        {member.doc == "No Doc Assigned" ? (
+                          <Box> 
+                            <Typography>
+                              Uživatel nemá nahrán žádný dokument.
+                            </Typography>
+                          </Box>
+                        ) : (
+                          <img
+                            src={member.doc}
+                            alt="Selected Image"
+                            style={{ width: "100%", height: "auto" }}
+                          />
+                        )}
+                      </Box>
+                    </Box>
+                  </Modal>
                 </Box>
               )
           )}
@@ -1414,17 +1517,84 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                 {selectedMember?.Email}
               </Typography>
 
-              <Typography
-                id="modal-description"
-                sx={{
-                  marginBottom: "1em",
-                  whiteSpace: "nowrap",
-                  color: "black",
-                  fontWeight: "500",
-                }}
+              <Box sx={{ display: "flex" }}>
+                <Box sx={{ marginRight: "1em" }}>
+                  <Typography sx={{ whiteSpace: "nowrap" }}>
+                    Platnost: 12.03.2023
+                  </Typography>
+                </Box>
+
+                <Box onClick={handleOpenModalPlayerImage2}>
+                  <ArticleIcon />
+                </Box>
+              </Box>
+
+              <Modal
+                open={modalOpenPlayerImage2}
+                onClose={handleCloseModalPlayerImage2}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
               >
-                do 2. 3. 2023
-              </Typography>
+                <Box
+                  sx={{
+                    position: "absolute",
+                    top: "50%",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)",
+                    width: 700,
+                    height: 700,
+                    bgcolor: "background.paper",
+                    border: "2px solid #000",
+                    borderRadius: "8px",
+                    boxShadow: 24,
+                  }}
+                >
+                  <Box
+                    sx={{
+                      backgroundColor: "#959595",
+                      paddingTop: "0.5em",
+                      paddingBottom: "0.5em",
+                      paddingLeft: "2em",
+                      paddingRight: "2em",
+                      borderRadius: "6px 6px 0px 0px",
+                    }}
+                  >
+                    <Typography
+                      id="modal-modal-title"
+                      variant="h6"
+                      component="h2"
+                    >
+                      Náhled obrázku
+                    </Typography>
+                  </Box>
+                  <Box
+                    sx={{
+                      paddingTop: "0.5em",
+                      paddingBottom: "2em",
+                      marginLeft: "10%",
+                      marginRight: "10%",
+                      width: "80%",
+                      height: "80%",
+                      overflowY: "auto",
+                    }}
+                  >
+                    {selectedMember &&
+                    selectedMember.doc == "No Doc Assigned" ? (
+                      <Box>
+                        <Typography>
+                          Uživatel nemá nahrán žádný dokument.
+                        </Typography>
+                      </Box>
+                    ) : (
+                      <img
+                        src={selectedMember?.doc}
+                        alt="Selected Image"
+                        style={{ width: "100%", height: "auto" }}
+                      />
+                    )}
+                  </Box>
+                </Box>
+              </Modal>
 
               {editMode ? (
                 <Box sx={{}}>
