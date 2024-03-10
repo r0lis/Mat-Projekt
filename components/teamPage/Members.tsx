@@ -35,6 +35,7 @@ import { SelectChangeEvent } from "@mui/material";
 import { authUtils } from "@/firebase/auth.utils";
 import { useRef } from "react";
 import ArticleIcon from "@mui/icons-material/Article";
+import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
 
 const GET_TEAM_MEMBERS_DETAILS = gql`
   query GetTeamMembersDetails($teamId: String!) {
@@ -45,6 +46,7 @@ const GET_TEAM_MEMBERS_DETAILS = gql`
       Email
       doc
       Picture
+      docDate
       DateOfBirth
       Subteams {
         Name
@@ -55,10 +57,21 @@ const GET_TEAM_MEMBERS_DETAILS = gql`
 `;
 
 const UPDATE_MEMBER_ROLE = gql`
-  mutation UpdateMemberRole($email: String!, $role: String!, $teamId: String!) {
-    updateMemberRole(email: $email, role: $role, teamId: $teamId) {
+  mutation UpdateMemberRole(
+    $email: String!
+    $role: String!
+    $docDate: String!
+    $teamId: String!
+  ) {
+    updateMemberRole(
+      email: $email
+      role: $role
+      docDate: $docDate
+      teamId: $teamId
+    ) {
       Name
       Surname
+      docDate
       Role
       Email
     }
@@ -101,7 +114,9 @@ interface Member {
   Role: string;
   Email: string;
   Picture: string;
+  docDate: string;
   DateOfBirth: string;
+  DateOfMedicalCheck: string;
   doc: string;
   Subteams: { Name: string; subteamId: string }[];
 }
@@ -126,7 +141,9 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
     Email: string;
     DateOfBirth: string;
     Picture: string;
+    docDate: string;
     doc: string;
+    DateOfMedicalCheck: string;
     Subteams: { Name: string; subteamId: string }[];
   } | null>(null);
   const [selectedRole, setSelectedRole] = useState("");
@@ -139,6 +156,8 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
   const [modalOpenPlayerImage2, setModalOpenPlayerImage2] = useState(false);
   const [expandedMember, setExpandedMember] = useState<string | null>(null);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [medicalDocDate, setMedicalDocDate] = useState<string | null>(null);
+
   const [expandedSelectedMember, setExpandedSelectedMember] = useState<
     string | null
   >(null);
@@ -192,9 +211,10 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
   const handleRowClick = (member: Member) => {
     setSelectedMember(member);
     setSelectedRole(member.Role);
+    setMedicalDocDate(member.docDate);
+    console.log(member.docDate);
     setModalOpen(true);
 
-    // Update the selected index based on the filtered list
     setSelectedIndex(calculateSelectedIndex());
   };
 
@@ -247,6 +267,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
           variables: {
             email: selectedMember.Email,
             role: selectedRole,
+            docDate: medicalDocDate,
             teamId: id,
           },
         });
@@ -363,6 +384,11 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
 
   const handleCloseModalPlayerImage2 = () => {
     setModalOpenPlayerImage2(false);
+  };
+
+  const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedDate = new Date(event.target.value);
+    setMedicalDocDate(selectedDate.toISOString());
   };
 
   return (
@@ -538,11 +564,30 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                           </Box>
                         )}
                       </TableCell>
-                      <TableCell>
-                        <Typography sx={{ fontFamily: "Roboto" }}>
-                          do 24.11.2023
-                        </Typography>
-                      </TableCell>
+                      {member.Role == "3" ? (
+                        <TableCell>
+                          <Typography sx={{ whiteSpace: "nowrap" }}>
+                            {member.docDate
+                              ? member.docDate === "No Date Assigned"
+                                ? "Není zvoleno"
+                                : "do: " +
+                                  new Date(member.docDate).toLocaleDateString(
+                                    "cs-CZ",
+                                    {
+                                      day: "2-digit",
+                                      month: "2-digit",
+                                      year: "numeric",
+                                    }
+                                  )
+                              : "Není zvoleno"}
+                          </Typography>
+                        </TableCell>
+                      ):(
+                        <TableCell>
+                          <HourglassEmptyIcon />
+                        </TableCell>
+
+                        )}
                       <TableCell>
                         {member.Subteams.length === 0 ? (
                           <Alert sx={{ maxWidth: "6em" }} severity="warning">
@@ -1193,7 +1238,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                         }}
                       >
                         {member.doc == "No Doc Assigned" ? (
-                          <Box> 
+                          <Box>
                             <Typography>
                               Uživatel nemá nahrán žádný dokument.
                             </Typography>
@@ -1369,7 +1414,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                 id="modal-description"
                 sx={{
                   marginTop: editMode
-                    ? "2.5em"
+                    ? "2em"
                     : selectedRole === "No Role Assigned"
                     ? "1.5em"
                     : "1em",
@@ -1518,11 +1563,36 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
               </Typography>
 
               <Box sx={{ display: "flex" }}>
-                <Box sx={{ marginRight: "1em" }}>
-                  <Typography sx={{ whiteSpace: "nowrap" }}>
-                    Platnost: 12.03.2023
-                  </Typography>
-                </Box>
+                {editMode ? (
+                  <Box>
+                    <TextField
+                      label="Platnost"
+                      type="date"
+                      value={medicalDocDate}
+                      onChange={handleDateChange}
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                    />
+                  </Box>
+                ) : (
+                  <Box sx={{ marginRight: "1em" }}>
+                    <Typography sx={{ whiteSpace: "nowrap" }}>
+                      {selectedMember
+                        ? selectedMember.docDate === "No Date Assigned"
+                          ? "Není zvoleno"
+                          : new Date(selectedMember.docDate).toLocaleDateString(
+                              "cs-CZ",
+                              {
+                                day: "2-digit",
+                                month: "2-digit",
+                                year: "numeric",
+                              }
+                            )
+                        : "Není zvoleno"}
+                    </Typography>
+                  </Box>
+                )}
 
                 <Box onClick={handleOpenModalPlayerImage2}>
                   <ArticleIcon />

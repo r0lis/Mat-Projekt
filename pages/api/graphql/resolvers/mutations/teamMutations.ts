@@ -311,7 +311,7 @@ export const teamMutations = {
 
   updateMemberRole: async (
     _: any,
-    { email, role, teamId }: { email: string; role: string; teamId: string },
+    { email, role, docDate, teamId }: { email: string; role: string; docDate: string, teamId: string },
     context: Context
   ) => {
     try {
@@ -329,7 +329,7 @@ export const teamMutations = {
         const updatedMembers = existingMembers.map((member: any) => {
           if (member.member === email) {
             // Adjust the field name here
-            return { ...member, role };
+            return { ...member, role, docDate };
           }
           return member;
         });
@@ -342,6 +342,7 @@ export const teamMutations = {
           Name: "", // Get the name from the User collection or other source
           Surname: "", // Get the surname from the User collection or other source
           Role: role,
+          docDate: docDate,
           Email: email,
         };
 

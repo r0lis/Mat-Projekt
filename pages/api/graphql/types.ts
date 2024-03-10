@@ -134,6 +134,7 @@ export type MemberDetails = {
   Role: string;
   doc: string;
   Email: string;
+  docDate: string;
   DateOfBirth: string;
   Picture: string;
   Subteams: Subteam[];

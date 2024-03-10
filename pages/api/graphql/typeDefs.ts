@@ -144,6 +144,7 @@ export const typeDefs = gql`
     Role: String!
     Email: String!
     doc: String
+    docDate: String
     DateOfBirth: String!
     Picture: String
     Subteams: [Subteam]
@@ -454,7 +455,8 @@ export const typeDefs = gql`
     uploadImageUser(imageBase64: String!, userEmail: String!): String!
     updateMemberRole(
       email: String!
-      position: String!
+      role: String!
+      docDate: String!
       teamId: String!
     ): MemberDetails
 

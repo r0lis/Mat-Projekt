@@ -154,16 +154,25 @@ const Overview: React.FC<OverviewProps> = (id) => {
   });
 
   const today = new Date();
-  const startOfWeek = new Date(today);
-  startOfWeek.setDate(today.getDate() - today.getDay() + 1); // Začátek týdne
-  startOfWeek.setHours(0, 0, 0, 0); // Nastaví čas na 00:00:00
+today.setHours(0, 0, 0, 0);
 
+const day = today.getDay();
+console.log("day", day);
 
-  const endOfWeek = new Date(startOfWeek);
-  endOfWeek.setDate(startOfWeek.getDate() + 6); // Konec týdne
-  endOfWeek.setHours(23, 59, 59, 999); // Nastaví čas na 23:59:59
-    console.log(endOfWeek);
-  console.log(startOfWeek);
+const startOfWeek = new Date(today);
+if (day === 0) { 
+  startOfWeek.setDate(today.getDate() - 6);
+} else {
+  startOfWeek.setDate(today.getDate() - day + 1); 
+}
+startOfWeek.setHours(0, 0, 0, 0);
+
+const endOfWeek = new Date(startOfWeek);
+endOfWeek.setDate(startOfWeek.getDate() + 6); 
+endOfWeek.setHours(23, 59, 59, 999); 
+
+console.log(startOfWeek);
+console.log(endOfWeek);
   
   const matchCount = matches.filter(
     (match) =>
@@ -180,8 +189,8 @@ const Overview: React.FC<OverviewProps> = (id) => {
   ).length;
 
   const nextWeek = new Date(startOfWeek);
-  nextWeek.setDate(startOfWeek.getDate() + 7);
   nextWeek.setHours(0, 0, 0, 0);
+  nextWeek.setDate(startOfWeek.getDate() + 7);
 
   const endOfNextWeek = new Date(nextWeek);
   endOfNextWeek.setDate(endOfNextWeek.getDate() + 6);

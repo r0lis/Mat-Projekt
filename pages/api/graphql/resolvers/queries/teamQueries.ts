@@ -211,6 +211,7 @@ export const teamQueries = {
             const email = membersEmails[i];
             const role = membersRoles[i]?.role || "No Role Assigned";
             const pictureDoc = membersRoles[i]?.downloadUrl || "No Doc Assigned";
+            const docDate = membersRoles[i]?.docDate || "No Date Assigned";
 
             const userQuery = context.db
               .collection("User")
@@ -240,6 +241,7 @@ export const teamQueries = {
                 Role: role,
                 doc: pictureDoc,
                 Email: userData.Email,
+                docDate: docDate,
                 DateOfBirth: userData.DateOfBirth,
                 Subteams: filteredSubteams,
               });

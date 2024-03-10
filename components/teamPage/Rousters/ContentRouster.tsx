@@ -36,6 +36,7 @@ const GET_COMPLETESUBTEAM_DETAILS = gql`
         email
         role
         position
+      
         playPosition
       }
     }
@@ -324,7 +325,7 @@ const ContentRouster: React.FC<ContentRousterProps> = ({
               (member: SubteamMember, index: number) => (
                 <TableRow key={index}>
                   <TableCell>
-                    {role === "1" && (
+                    {role === "1" || role === "2" && (
                       <Box
                         sx={{ height: "20px", width: "20px" }}
                         onClick={() => handleRowClick(member)}
