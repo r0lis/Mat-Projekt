@@ -776,7 +776,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                           >
                             Email :
                           </Typography>
-                          
+
                           <Typography
                             sx={{
                               marginLeft: "3%",
@@ -822,7 +822,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                           >
                             {member.Email}
                           </Typography>
-                         
+
                           <Typography
                             sx={{ color: "black", fontWeight: "500" }}
                           >
@@ -1118,43 +1118,40 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                           </Typography>
                           <Box sx={{ display: "flex" }}>
                             <Box sx={{ marginRight: "1em" }}>
-                            <Typography sx={{ whiteSpace: "nowrap" }}>
-                            {member.docDate
-                              ? member.docDate === "No Date Assigned"
-                                ? "Není zvoleno"
-                                : "Platná do: " +
-                                  new Date(member.docDate).toLocaleDateString(
-                                    "cs-CZ",
-                                    {
-                                      day: "2-digit",
-                                      month: "2-digit",
-                                      year: "numeric",
-                                    }
-                                  )
-                              : "Není zvoleno"}
-                          </Typography>
+                              <Typography sx={{ whiteSpace: "nowrap" }}>
+                                {member.docDate
+                                  ? member.docDate === "No Date Assigned"
+                                    ? "Není zvoleno"
+                                    : "Platná do: " +
+                                      new Date(
+                                        member.docDate
+                                      ).toLocaleDateString("cs-CZ", {
+                                        day: "2-digit",
+                                        month: "2-digit",
+                                        year: "numeric",
+                                      })
+                                  : "Není zvoleno"}
+                              </Typography>
                             </Box>
-                            {member.docDate === "No Date Assigned"
-                              ? ("")
-                              :
-                              (
-                            <Button
-                              onClick={handleOpenModalDoc}
-                              sx={{
-                                backgroundColor: "lightgray",
-                                color: "black",
-                                padding: "0.1em",
-                                width: "10em",
-                                ":hover": {
-                                  border: "1px solid black",
-                                  backgroundColor: "#989898",
-                                },
-                              }}
-                            >
-                              Zobrazit
-                            </Button>
-                              )}
-
+                            {member.docDate === "No Date Assigned" ? (
+                              ""
+                            ) : (
+                              <Button
+                                onClick={handleOpenModalDoc}
+                                sx={{
+                                  backgroundColor: "lightgray",
+                                  color: "black",
+                                  padding: "0.1em",
+                                  width: "10em",
+                                  ":hover": {
+                                    border: "1px solid black",
+                                    backgroundColor: "#989898",
+                                  },
+                                }}
+                              >
+                                Zobrazit
+                              </Button>
+                            )}
                           </Box>
                           <Typography
                             sx={{ color: "black", fontWeight: "500" }}
