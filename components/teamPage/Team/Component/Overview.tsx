@@ -157,7 +157,6 @@ const Overview: React.FC<OverviewProps> = (id) => {
 today.setHours(0, 0, 0, 0);
 
 const day = today.getDay();
-console.log("day", day);
 
 const startOfWeek = new Date(today);
 if (day === 0) { 
@@ -171,16 +170,12 @@ const endOfWeek = new Date(startOfWeek);
 endOfWeek.setDate(startOfWeek.getDate() + 6); 
 endOfWeek.setHours(23, 59, 59, 999); 
 
-console.log(startOfWeek);
-console.log(endOfWeek);
-  
   const matchCount = matches.filter(
     (match) =>
       new Date(match.date) == startOfWeek  || new Date(match.date) > startOfWeek && new Date(match.date) <= endOfWeek
    
 
   ).length;
-  console.log(matches);
 
   const trainingCount = trainings.filter(
     (training) =>
@@ -200,8 +195,6 @@ console.log(endOfWeek);
     const itemDate = new Date(item.date);
     return itemDate >= nextWeek && itemDate <= endOfNextWeek;
   });
-
-  console.log(nextWeekFilteredArray);
 
   const nextWeekMatchCount = nextWeekFilteredArray.filter(
     (item) => item.matchType != null

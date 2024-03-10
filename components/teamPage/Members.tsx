@@ -35,7 +35,7 @@ import { SelectChangeEvent } from "@mui/material";
 import { authUtils } from "@/firebase/auth.utils";
 import { useRef } from "react";
 import ArticleIcon from "@mui/icons-material/Article";
-import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
+import HourglassEmptyIcon from "@mui/icons-material/HourglassEmpty";
 
 const GET_TEAM_MEMBERS_DETAILS = gql`
   query GetTeamMembersDetails($teamId: String!) {
@@ -448,7 +448,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
           />
         </Box>
       )}
-      {role == 1 || role == 2 ? (
+      {role == 1 && (
         <TableContainer
           sx={{
             width: "90%",
@@ -582,12 +582,13 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                               : "Není zvoleno"}
                           </Typography>
                         </TableCell>
-                      ):(
+                      ) : (
                         <TableCell>
-                          <HourglassEmptyIcon />
+                          <Box>
+                            <HourglassEmptyIcon sx={{ marginLeft: "20%" }} />
+                          </Box>
                         </TableCell>
-
-                        )}
+                      )}
                       <TableCell>
                         {member.Subteams.length === 0 ? (
                           <Alert sx={{ maxWidth: "6em" }} severity="warning">
@@ -660,7 +661,294 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
             </TableBody>
           </Table>
         </TableContainer>
-      ) : (
+      )}
+      {role == 2 && (
+        <Box sx={{ marginTop: "0.5em" }}>
+          {filteredMembers.map(
+            (member: Member) =>
+              (role === "1" || member.Email === currentUserEmail) && (
+                <Box>
+                  <Box
+                    sx={{
+                      boxShadow: "0px 0px 15px rgba(0, 0, 0, 0.4)",
+                      width: "80%",
+                      borderRadius: "15px 15px 0px 0px",
+                      marginLeft: "9%",
+                      marginRight: "11%",
+                      backgroundColor: "#909090",
+                      borderBottom: "2px solid gray",
+                      padding: "0.5em",
+                    }}
+                  >
+                    <Box>
+                      <Typography
+                        sx={{
+                          fontFamily: "Roboto",
+                          fontWeight: "500",
+                          marginLeft: "5%",
+                          color: "#404040",
+                        }}
+                      >
+                        členská sekce
+                      </Typography>
+                    </Box>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        width: "100%",
+                        paddingTop: "0.5em",
+                        paddingBottom: "0.2em",
+                      }}
+                    >
+                      <Box>
+                        <Avatar
+                          sx={{
+                            width: 60,
+                            height: 60,
+                            left: 60,
+                            right: "",
+                          }}
+                          alt="Remy Sharp"
+                          src={member.Picture}
+                        />
+                      </Box>
+                      <Box>
+                        <Typography
+                          sx={{
+                            fontFamily: "Roboto",
+                            fontWeight: "500",
+                            marginLeft: 10,
+                            marginTop: "0.35em",
+                            fontSize: "1.5em",
+                            whiteSpace: "nowrap",
+                          }}
+                        >
+                          {member.Name} {member.Surname}
+                        </Typography>
+                      </Box>
+                    </Box>
+                  </Box>
+                  <Box
+                    sx={{
+                      boxShadow: "0px 0px 15px rgba(0, 0, 0, 0.4)",
+                      width: "80%",
+                      borderRadius: "0px 0px 15px 15px",
+                      marginLeft: "9%",
+                      marginRight: "11%",
+                      padding: "0.5em",
+                      paddingBottom:
+                        expandedSelectedMember === member.Email
+                          ? "2em"
+                          : "0.5em",
+                      marginBottom:
+                        expandedSelectedMember === member.Email
+                          ? "2em"
+                          : "0.5em",
+                    }}
+                  >
+                    <Grid container spacing={2} sx={{ marginLeft: "3%" }}>
+                      <Grid item xs={3}>
+                        <Box sx={{ padding: "0.5em" }}>
+                          <Typography
+                            sx={{
+                              marginLeft: "3%",
+                              color: "black",
+                              fontWeight: "500",
+                            }}
+                          >
+                            Věk:
+                          </Typography>
+                          <Typography
+                            sx={{
+                              marginLeft: "3%",
+                              color: "black",
+                              fontWeight: "500",
+                            }}
+                          >
+                            Datum narození:{" "}
+                          </Typography>
+                          <Typography
+                            sx={{
+                              marginLeft: "3%",
+                              color: "black",
+                              fontWeight: "500",
+                            }}
+                          >
+                            Email :
+                          </Typography>
+                          
+                          <Typography
+                            sx={{
+                              marginLeft: "3%",
+                              color: "black",
+                              fontWeight: "500",
+                            }}
+                          >
+                            Práva:
+                          </Typography>
+                          <Typography
+                            sx={{
+                              marginLeft: "3%",
+                              color: "black",
+                              fontWeight: "500",
+                            }}
+                          >
+                            Týmy:
+                          </Typography>
+                        </Box>
+                      </Grid>
+                      <Grid item xs={3}>
+                        <Box sx={{ padding: "0.5em" }}>
+                          <Typography
+                            sx={{ color: "black", fontWeight: "500" }}
+                          >
+                            {calculateAge(member?.DateOfBirth || "")} let
+                          </Typography>
+                          <Typography
+                            sx={{ color: "black", fontWeight: "500" }}
+                          >
+                            {member.DateOfBirth &&
+                              new Date(member.DateOfBirth).toLocaleDateString(
+                                "cs-CZ",
+                                {
+                                  day: "2-digit",
+                                  month: "2-digit",
+                                  year: "numeric",
+                                }
+                              )}
+                          </Typography>
+                          <Typography
+                            sx={{ color: "black", fontWeight: "500" }}
+                          >
+                            {member.Email}
+                          </Typography>
+                         
+                          <Typography
+                            sx={{ color: "black", fontWeight: "500" }}
+                          >
+                            {member.Role === "1" && "Management"}
+                            {member.Role === "2" && "Trenér"}
+                            {member.Role === "3" && "Hráč"}
+                            {(member.Role === "0" ||
+                              member.Role === "No Role Assigned") && (
+                              <Box sx={{ maxWidth: "15em" }}>
+                                <Alert
+                                  sx={{ maxHeight: "2.6em" }}
+                                  severity="error"
+                                >
+                                  <Typography
+                                    sx={{ fontSize: "1em", fontWeight: "600" }}
+                                  >
+                                    Zvolte !
+                                  </Typography>
+                                </Alert>
+                              </Box>
+                            )}
+                          </Typography>
+                          {member.Subteams.slice(0, 1).map((subteam) => (
+                            <Box sx={{ display: "flex", alignItems: "center" }}>
+                              <Typography
+                                key={subteam.subteamId}
+                                sx={{
+                                  fontFamily: "Roboto",
+                                  color: "black",
+                                  fontWeight: "500",
+                                }}
+                              >
+                                {subteam.Name}
+                              </Typography>
+                              {member.Subteams.length > 1 && (
+                                <Button
+                                  onClick={() =>
+                                    setExpandedSelectedMember(
+                                      expandedSelectedMember === member.Email
+                                        ? null
+                                        : member.Email
+                                    )
+                                  }
+                                  color="primary"
+                                  sx={{
+                                    fontFamily: "Roboto",
+                                    marginLeft: "auto",
+                                    marginRight: "30%",
+                                    color: "black",
+                                    fontWeight: "500",
+                                    height: "1.5em",
+                                  }}
+                                >
+                                  {expandedSelectedMember === member.Email
+                                    ? "Méně"
+                                    : "Více"}
+                                </Button>
+                              )}
+                            </Box>
+                          ))}
+                          {member.Subteams.length > 1 && (
+                            <Collapse
+                              sx={{
+                                position: "absolute",
+                                zIndex: "999",
+                                backgroundColor: "white",
+                                width: "40%",
+                              }}
+                              in={expandedSelectedMember === member.Email}
+                            >
+                              {member.Subteams.slice(1).map((subteam) => (
+                                <Typography
+                                  key={subteam.subteamId}
+                                  sx={{
+                                    fontFamily: "Roboto",
+                                    color: "black",
+                                    fontWeight: "500",
+                                  }}
+                                >
+                                  {subteam.Name}
+                                </Typography>
+                              ))}
+                            </Collapse>
+                          )}
+                        </Box>
+                      </Grid>
+                    </Grid>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        marginLeft: "5%",
+                        marginRight: "5%",
+                        borderBottom: "2px solid gray",
+                        marginTop:
+                          expandedSelectedMember === member.Email
+                            ? "2em"
+                            : "0.1em",
+                      }}
+                    ></Box>
+                    <Box sx={{ paddingBottom: "0.5em" }}>
+                      <Button
+                        sx={{
+                          backgroundColor: "lightgray",
+                          color: "black",
+                          marginTop: "1em",
+                          padding: "1em",
+                          height: "2.5em",
+                          marginLeft: "5%",
+
+                          width: "90%",
+                          ":hover": {
+                            border: "1px solid black",
+                            backgroundColor: "#989898",
+                          },
+                        }}
+                      >
+                        Opustit klub
+                      </Button>
+                    </Box>
+                  </Box>
+                </Box>
+              )
+          )}
+        </Box>
+      )}
+      {role == 3 && (
         <Box sx={{ marginTop: "0.5em" }}>
           {filteredMembers.map(
             (member: Member) =>
@@ -830,10 +1118,26 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                           </Typography>
                           <Box sx={{ display: "flex" }}>
                             <Box sx={{ marginRight: "1em" }}>
-                              <Typography sx={{ whiteSpace: "nowrap" }}>
-                                Platná do: 12.03.2023
-                              </Typography>
+                            <Typography sx={{ whiteSpace: "nowrap" }}>
+                            {member.docDate
+                              ? member.docDate === "No Date Assigned"
+                                ? "Není zvoleno"
+                                : "Platná do: " +
+                                  new Date(member.docDate).toLocaleDateString(
+                                    "cs-CZ",
+                                    {
+                                      day: "2-digit",
+                                      month: "2-digit",
+                                      year: "numeric",
+                                    }
+                                  )
+                              : "Není zvoleno"}
+                          </Typography>
                             </Box>
+                            {member.docDate === "No Date Assigned"
+                              ? ("")
+                              :
+                              (
                             <Button
                               onClick={handleOpenModalDoc}
                               sx={{
@@ -849,6 +1153,8 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                             >
                               Zobrazit
                             </Button>
+                              )}
+
                           </Box>
                           <Typography
                             sx={{ color: "black", fontWeight: "500" }}
@@ -1164,7 +1470,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                           variant="h6"
                           component="h2"
                         >
-                          Náhled obrázku
+                          Náhled zdravotní prohlídky
                         </Typography>
                       </Box>
                       <Box
@@ -1223,7 +1529,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                           variant="h6"
                           component="h2"
                         >
-                          Náhled obrázku
+                          Náhled zdravotní prohlídky
                         </Typography>
                       </Box>
                       <Box
@@ -1634,7 +1940,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                       variant="h6"
                       component="h2"
                     >
-                      Náhled obrázku
+                      Náhled zdravotní prohlídky
                     </Typography>
                   </Box>
                   <Box
@@ -1908,7 +2214,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                         : selectedMember &&
                           selectedMember.Email === currentUserEmail
                         ? "69%"
-                        : "80%",
+                        : "79.5%",
                     transform: "translateY(-50%)",
                     marginLeft: "-3em",
                     zIndex: -1,
