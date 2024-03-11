@@ -106,12 +106,27 @@ interface SubteamMember {
   position: string;
 }
 
-const calculateAttendancePercentage = (attendance: number[]): number => {
-  const totalMatches = attendance.length;
-  if (totalMatches === 0) return 0;
+const calculateAttendancePercentage = (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  matches: any[],
+  memberEmail: string
+): number => {
+  let totalMatches = 0;
+  let totalPresence = 0;
 
-  const totalPresence = attendance.filter((a) => a === 1).length;
-  return (totalPresence / totalMatches) * 100;
+  matches.forEach((match) => {
+    const attendance = match.attendance?.find(
+      (a: { player: string }) => a.player === memberEmail
+    );
+    if (attendance) {
+      totalMatches++;
+      if (attendance.hisAttendance === 1) {
+        totalPresence++;
+      }
+    }
+  });
+
+  return totalMatches > 0 ? (totalPresence / totalMatches) * 100 : 0;
 };
 
 const MatchAttendance: React.FC<props> = (id) => {
@@ -182,31 +197,34 @@ const MatchAttendance: React.FC<props> = (id) => {
   });
 
   const selectedMemberAttendance = selectedMember
-    ? filteredMatches.map((match) => {
-        const attendance = match.attendance?.find(
-          (a: { player: string }) => a.player === selectedMember
-        );
+  ? filteredMatches.map((match) => {
+      // Zjistěte, zda je vybraný člen pozván na tento zápas
+      const isInvited = match.attendance?.some((a: { player: string }) => a.player === selectedMember);
+      if (isInvited) {
+        const attendance = match.attendance?.find((a: { player: string }) => a.player === selectedMember);
         return {
           name: match.date,
           hisAttendance: attendance ? attendance.hisAttendance : 0,
         };
-      })
-    : [];
+      }
+      // Pokud není pozván, vraťte null
+      return null;
+    }).filter(Boolean) // Odfiltrujte nullové hodnoty
+  : [];
 
-  const pieChartData = [
-    {
-      name: "Přítomen",
-      value: selectedMemberAttendance.filter(
-        (entry) => entry.hisAttendance === 1
-      ).length,
-    },
-    {
-      name: "Nepřítomen",
-      value: selectedMemberAttendance.filter(
-        (entry) => entry.hisAttendance === 2
-      ).length,
-    },
-  ];
+const pieChartData = selectedMemberAttendance.length > 0
+  ? [
+      {
+        name: "Přítomen",
+        value: selectedMemberAttendance.filter((entry) => entry?.hisAttendance === 1).length,
+      },
+      {
+        name: "Nepřítomen",
+        value: selectedMemberAttendance.filter((entry) => entry?.hisAttendance === 2).length,
+      },
+    ]
+  : [];
+
 
   return (
     <Box sx={{ marginLeft: "2%", marginRight: "2%" }}>
@@ -283,12 +301,8 @@ const MatchAttendance: React.FC<props> = (id) => {
                     <TableCell>
                       {`${Math.round(
                         calculateAttendancePercentage(
-                          filteredMatches.map((match) => {
-                            const attendance = match.attendance?.find(
-                              (a) => a.player === member.email
-                            );
-                            return attendance ? attendance.hisAttendance : 0;
-                          })
+                          filteredMatches,
+                          member.email
                         )
                       )} / 100`}
                     </TableCell>
