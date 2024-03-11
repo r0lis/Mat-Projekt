@@ -225,7 +225,6 @@ const AddMatch: React.FC<Props> = ({ teamId, closeAddMatch }) => {
       skip: !subteamIdSelected,
       onCompleted: (data) => {
         setCompleteData(data);
-        console.log("Complete data:", data);
       },
     }
   );

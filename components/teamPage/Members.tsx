@@ -1702,7 +1702,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
               <Typography
                 id="modal-description"
                 sx={{
-                  marginTop: "1em",
+                  marginTop: editMode ? "2em" : "1em",
                   fontFamily: "Roboto",
                   fontSize: "1em",
                   marginBottom: "1em",
@@ -1717,7 +1717,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                 id="modal-description"
                 sx={{
                   marginTop: editMode
-                    ? "2em"
+                    ? "2.5em"
                     : selectedRole === "No Role Assigned"
                     ? "1.5em"
                     : "1em",
@@ -1880,7 +1880,9 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                   </Box>
                 ) : (
                   <Box sx={{ marginRight: "1em" }}>
-                    <Typography sx={{ whiteSpace: "nowrap" }}>
+                    <Typography
+                      sx={{ whiteSpace: "nowrap", marginBottom: "1em" }}
+                    >
                       {selectedMember
                         ? selectedMember.docDate === "No Date Assigned"
                           ? "Není zvoleno"
@@ -1897,7 +1899,10 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                   </Box>
                 )}
 
-                <Box onClick={handleOpenModalPlayerImage2}>
+                <Box
+                  sx={{ paddingTop: editMode ? "0.8em" : "" }}
+                  onClick={handleOpenModalPlayerImage2}
+                >
                   <ArticleIcon />
                 </Box>
               </Box>
@@ -2004,7 +2009,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                   </React.Fragment>
                 </Box>
               ) : (
-                <Box sx={{ marginBottom: "1em" }}>
+                <Box sx={{ marginTop: "" }}>
                   <Typography id="modal-description" sx={{ color: "black" }}>
                     {selectedMember?.Role === "1" && (
                       <Typography sx={{ color: "black", fontWeight: "500" }}>
@@ -2210,8 +2215,26 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                         ? "81%"
                         : selectedMember &&
                           selectedMember.Email === currentUserEmail
-                        ? "69%"
+                        ? "68%"
                         : "79.5%",
+                    transform: "translateY(-50%)",
+                    marginLeft: "-3em",
+                    zIndex: -1,
+                  }}
+                />
+                <Box
+                  sx={{
+                    width: "100%",
+                    borderBottom: "2px solid gray", // Change the color as needed
+                    position: "absolute",
+                    top:
+                      selectedMember?.Role === "0" ||
+                      selectedMember?.Role === "No Role Assigned"
+                        ? "81%"
+                        : selectedMember &&
+                          selectedMember.Email === currentUserEmail
+                        ? "15.5%"
+                        : "15%",
                     transform: "translateY(-50%)",
                     marginLeft: "-3em",
                     zIndex: -1,
