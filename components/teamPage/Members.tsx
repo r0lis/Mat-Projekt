@@ -793,6 +793,35 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                               fontWeight: "500",
                             }}
                           >
+                            Telefon:
+                          </Typography>
+
+                          <Typography
+                            sx={{
+                              marginLeft: "3%",
+                              color: "black",
+                              fontWeight: "500",
+                            }}
+                          >
+                            Adresa:
+                          </Typography>
+                          <Typography
+                            sx={{
+                              marginLeft: "3%",
+                              color: "black",
+                              fontWeight: "500",
+                            }}
+                          >
+                            PSČ:
+                          </Typography>
+
+                          <Typography
+                            sx={{
+                              marginLeft: "3%",
+                              color: "black",
+                              fontWeight: "500",
+                            }}
+                          >
                             Práva:
                           </Typography>
                           <Typography
@@ -830,6 +859,23 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                             sx={{ color: "black", fontWeight: "500" }}
                           >
                             {member.Email}
+                          </Typography>
+
+                          <Typography
+                            sx={{ color: "black", fontWeight: "500" }}
+                          >
+                            {formatPhoneNumber(member.phoneNumber)}
+                          </Typography>
+
+                          <Typography
+                            sx={{ color: "black", fontWeight: "500" }}
+                          >
+                            {member.street} {member.streetNumber} {member.city}
+                          </Typography>
+                          <Typography
+                            sx={{ color: "black", fontWeight: "500" }}
+                          >
+                            {member.postalCode}
                           </Typography>
 
                           <Typography
