@@ -46,6 +46,11 @@ const GET_TEAM_MEMBERS_DETAILS = gql`
       Email
       doc
       Picture
+      street
+      streetNumber
+      postalCode
+      city
+      phoneNumber
       docDate
       DateOfBirth
       Subteams {

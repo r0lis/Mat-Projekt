@@ -155,6 +155,11 @@ export const typeDefs = gql`
     Email: String!
     doc: String
     docDate: String
+    street: String
+    streetNumber: String
+    postalCode: String
+    city: String
+    phoneNumber: String
     DateOfBirth: String!
     Picture: String
     Subteams: [Subteam]

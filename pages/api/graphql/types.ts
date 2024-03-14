@@ -14,6 +14,11 @@ export type User = {
   IdUser: string;
   IdTeam: [String];
   IsAdmin: boolean;
+  street: string;
+  streetNumber: string;
+  postalCode: string;
+  city: string;
+  phoneNumber: string;
   Email: string;
   DateOfBirth: string;
   Picture: string;
@@ -141,6 +146,11 @@ export type MemberDetails = {
   Email: string;
   docDate: string;
   DateOfBirth: string;
+  city: string;
+  street: string;
+  streetNumber: string;
+  postalCode: string;
+  phoneNumber: string;
   Picture: string;
   Subteams: Subteam[];
 };
