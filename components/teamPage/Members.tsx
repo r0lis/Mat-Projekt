@@ -121,6 +121,11 @@ interface Member {
   Picture: string;
   docDate: string;
   DateOfBirth: string;
+  phoneNumber: string;
+  city: string;
+  street: string;
+  streetNumber: string;
+  postalCode: string;
   DateOfMedicalCheck: string;
   doc: string;
   Subteams: { Name: string; subteamId: string }[];
@@ -146,6 +151,11 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
     Email: string;
     DateOfBirth: string;
     Picture: string;
+    street: string;
+    streetNumber: string;
+    postalCode: string;
+    city: string;
+    phoneNumber: string;
     docDate: string;
     doc: string;
     DateOfMedicalCheck: string;
@@ -396,6 +406,21 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
     setMedicalDocDate(selectedDate.toISOString());
   };
 
+  const formatPhoneNumber = (phoneNumber: string | undefined) => {
+    const cleaned = ("" + phoneNumber).replace(/\D/g, "");
+    const match = cleaned.match(/^(\d{1,3})(\d{1,3})?(\d{1,3})?(\d{1,3})?$/);
+    if (match) {
+      return (
+        "+ 420 " +
+        match[1] +
+        (match[2] ? " " + match[2] : "") +
+        (match[3] ? " " + match[3] : "") +
+        (match[4] ? " " + match[4] : "")
+      );
+    }
+    return phoneNumber;
+  };
+
   return (
     <Box>
       <Box
@@ -492,11 +517,6 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                 <TableCell>
                   <Typography sx={{ fontFamily: "Roboto", fontWeight: "800" }}>
                     Týmy
-                  </Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography sx={{ fontFamily: "Roboto", fontWeight: "800" }}>
-                    Štítky
                   </Typography>
                 </TableCell>
               </TableRow>
@@ -643,22 +663,6 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                             )}
                           </>
                         )}
-                      </TableCell>
-                      <TableCell>
-                        <Box
-                          sx={{
-                            border: "1px solid black",
-                            textAlign: "center",
-                            padding: "3px",
-                            borderRadius: "8px",
-                          }}
-                        >
-                          <Typography
-                            sx={{ fontFamily: "Roboto", fontWeight: "500" }}
-                          >
-                            útočník
-                          </Typography>
-                        </Box>
                       </TableCell>
                     </TableRow>
                   )
@@ -838,7 +842,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                               member.Role === "No Role Assigned") && (
                               <Box sx={{ maxWidth: "15em" }}>
                                 <Alert
-                                  sx={{ maxHeight: "2.6em" }}
+                                  sx={{ maxHeight: "" }}
                                   severity="error"
                                 >
                                   <Typography
@@ -1168,7 +1172,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                               member.Role === "No Role Assigned") && (
                               <Box sx={{ maxWidth: "15em" }}>
                                 <Alert
-                                  sx={{ maxHeight: "2.6em" }}
+                                  sx={{ maxHeight: "" }}
                                   severity="error"
                                 >
                                   <Typography
@@ -1653,7 +1657,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
               <Typography
                 id="modal-description"
                 sx={{
-                  marginTop: "1em",
+                  marginTop: "0em",
                   fontFamily: "Roboto",
                   fontSize: "1em",
                   marginBottom: "1em",
@@ -1707,6 +1711,19 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
               <Typography
                 id="modal-description"
                 sx={{
+                  marginTop: "1em",
+                  fontFamily: "Roboto",
+                  fontSize: "1em",
+                  marginBottom: "1em",
+                  color: "black",
+                  fontWeight: "500",
+                }}
+              >
+                Telefon:
+              </Typography>
+              <Typography
+                id="modal-description"
+                sx={{
                   marginTop: editMode ? "2em" : "1em",
                   fontFamily: "Roboto",
                   fontSize: "1em",
@@ -1747,7 +1764,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
               <Typography
                 id="modal-description"
                 sx={{
-                  marginTop: "1em",
+                  marginTop: "0em",
                   marginBottom: "1em",
                   color: "black",
                   fontWeight: "500",
@@ -1868,6 +1885,17 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                 }}
               >
                 {selectedMember?.Email}
+              </Typography>
+
+              <Typography
+                id="modal-description"
+                sx={{
+                  marginBottom: "1em",
+                  color: "black",
+                  fontWeight: "500",
+                }}
+              >
+                {formatPhoneNumber(selectedMember?.phoneNumber)}
               </Typography>
 
               <Box sx={{ display: "flex" }}>
@@ -2034,7 +2062,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                     {(selectedMember?.Role === "0" ||
                       selectedMember?.Role === "No Role Assigned") && (
                       <Box sx={{ maxWidth: "15em", marginBottom: "1em" }}>
-                        <Alert sx={{ maxHeight: "2.6em" }} severity="error">
+                        <Alert sx={{ }} severity="error">
                           <Typography
                             sx={{ fontSize: "1em", fontWeight: "600" }}
                           >
@@ -2051,61 +2079,6 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
 
           {editMode ? (
             <Box sx={{ paddingLeft: "1em" }}>
-              <Box
-                sx={{
-                  fontFamily: "Roboto",
-                  fontWeight: "500",
-                  opacity: "0.6",
-
-                  top: "-10px",
-                  position: "relative",
-                  marginTop: "1em",
-                }}
-              >
-                štítky
-              </Box>
-
-              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                <Box
-                  sx={{
-                    border: "1px solid black",
-                    textAlign: "center",
-                    padding: "3px",
-                    borderRadius: "8px",
-                    width: "6em",
-                  }}
-                >
-                  <Typography sx={{ fontFamily: "Roboto", fontWeight: "500" }}>
-                    útočník
-                  </Typography>
-                </Box>
-                <Box
-                  sx={{
-                    border: "1px solid black",
-                    textAlign: "center",
-                    padding: "3px",
-                    borderRadius: "8px",
-                    width: "6em",
-                  }}
-                >
-                  <Typography sx={{ fontFamily: "Roboto", fontWeight: "500" }}>
-                    A-Tým
-                  </Typography>
-                </Box>
-                <Box
-                  sx={{
-                    border: "1px solid black",
-                    textAlign: "center",
-                    padding: "3px",
-                    borderRadius: "8px",
-                    width: "6em",
-                  }}
-                >
-                  <Typography sx={{ fontFamily: "Roboto", fontWeight: "500" }}>
-                    Levá strana
-                  </Typography>
-                </Box>
-              </Box>
               <Button
                 sx={{
                   backgroundColor: "lightgray",
@@ -2137,70 +2110,16 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                     top:
                       selectedMember?.Role === "0" ||
                       selectedMember?.Role === "No Role Assigned"
-                        ? "55%"
+                        ? "79%"
                         : selectedMember &&
                           selectedMember.Email === currentUserEmail
-                        ? "56%"
-                        : "53%",
+                        ? "81.5%"
+                        : "77.5%",
                     transform: "translateY(-50%)",
                     marginLeft: "-3em",
                     zIndex: -1,
                   }}
                 />
-                <Box
-                  sx={{
-                    fontFamily: "Roboto",
-                    fontWeight: "500",
-                    opacity: "0.6",
-                    marginLeft: "-0.5em",
-                    top: "-10px",
-                    position: "relative",
-                    marginTop: "1em",
-                  }}
-                >
-                  štítky
-                </Box>
-              </Box>
-              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                <Box
-                  sx={{
-                    border: "1px solid black",
-                    textAlign: "center",
-                    padding: "3px",
-                    borderRadius: "8px",
-                    width: "6em",
-                  }}
-                >
-                  <Typography sx={{ fontFamily: "Roboto", fontWeight: "500" }}>
-                    útočník
-                  </Typography>
-                </Box>
-                <Box
-                  sx={{
-                    border: "1px solid black",
-                    textAlign: "center",
-                    padding: "3px",
-                    borderRadius: "8px",
-                    width: "6em",
-                  }}
-                >
-                  <Typography sx={{ fontFamily: "Roboto", fontWeight: "500" }}>
-                    A-Tým
-                  </Typography>
-                </Box>
-                <Box
-                  sx={{
-                    border: "1px solid black",
-                    textAlign: "center",
-                    padding: "3px",
-                    borderRadius: "8px",
-                    width: "6em",
-                  }}
-                >
-                  <Typography sx={{ fontFamily: "Roboto", fontWeight: "500" }}>
-                    Levá strana
-                  </Typography>
-                </Box>
               </Box>
 
               <Box
@@ -2217,11 +2136,11 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                     top:
                       selectedMember?.Role === "0" ||
                       selectedMember?.Role === "No Role Assigned"
-                        ? "81%"
+                        ? "61%"
                         : selectedMember &&
                           selectedMember.Email === currentUserEmail
-                        ? "68%"
-                        : "79.5%",
+                        ? "65%"
+                        : "61.5%",
                     transform: "translateY(-50%)",
                     marginLeft: "-3em",
                     zIndex: -1,
@@ -2235,11 +2154,11 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                     top:
                       selectedMember?.Role === "0" ||
                       selectedMember?.Role === "No Role Assigned"
-                        ? "81%"
+                        ? "15%"
                         : selectedMember &&
                           selectedMember.Email === currentUserEmail
-                        ? "15.5%"
-                        : "15%",
+                        ? "17%"
+                        : "16%",
                     transform: "translateY(-50%)",
                     marginLeft: "-3em",
                     zIndex: -1,
@@ -2261,8 +2180,8 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
               </Box>
               <Box sx={{ marginLeft: "1em" }}>
                 <Typography sx={{ fontFamily: "Roboto", fontWeight: "500" }}>
-                  Skořenice 30 <br />
-                  56501 Choceň
+                  {selectedMember?.street} {selectedMember?.streetNumber} <br />
+                  {selectedMember?.postalCode} {selectedMember?.city} <br />
                 </Typography>
               </Box>
               <Box
