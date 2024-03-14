@@ -79,6 +79,11 @@ export type CreateUserInput = {
   IdTeam: [String];
   Email: string;
   DateOfBirth: string;
+  postalCode: string;
+  city: string;
+  street: string;
+  streetNumber: string;
+  phoneNumber: string;
 };
 
 export type CreateUserToTeamInput = {

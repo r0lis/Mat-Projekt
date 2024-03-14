@@ -404,7 +404,9 @@ const Members: React.FC<MembersProps> = (subteamId) => {
                 </Box>
               </Box>
             ) : (
-              <Typography>Všichni členové jsou přidáni.</Typography>
+              <Box sx={{marginLeft:"10%", marginRight:"10%", marginBottom:"1em"}}>
+              <Alert severity="success">Všichni členové jsou přidáni.</Alert>
+              </Box>
             )}
           </Box>
           <Box sx={{ marginLeft: "10%" }}>

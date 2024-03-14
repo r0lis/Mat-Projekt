@@ -43,6 +43,11 @@ export const userMutations = {
         Email: input.Email,
         IsAdmin: IsAdmin,
         DateOfBirth: new Date(input.DateOfBirth).toISOString(),
+        postalCode: input.postalCode,
+        city: input.city,
+        street: input.street,
+        streetNumber: input.streetNumber,
+        phoneNumber: input.phoneNumber,
       };
 
       await newUserDoc.set(newUser);
@@ -60,32 +65,26 @@ export const userMutations = {
     context: Context
   ) => {
     try {
-      // Decode the base64 image
       const imageBuffer = Buffer.from(
         imageBase64.replace(/^data:image\/\w+;base64,/, ""),
         "base64"
       );
 
-      // Generate a unique filename for the image
       const filename = `user_logos/${userEmail}_${Date.now()}.jpg`;
 
-      // Reference to the Firebase Storage bucket
       const bucket = admin.storage().bucket();
 
-      // Upload the image to Firebase Storage
       await bucket.file(filename).save(imageBuffer, {
         metadata: {
           contentType: "image/jpeg", // Adjust the content type based on your image type
         },
       });
 
-      // Get the signed URL for the uploaded image
       const [downloadUrl] = await bucket.file(filename).getSignedUrl({
         action: "read",
         expires: "03-09-2491", // Adjust the expiration date as needed
       });
 
-      // Update the team document with the download URL
       const teamQuery = context.db
         .collection("User")
         .where("Email", "==", userEmail);

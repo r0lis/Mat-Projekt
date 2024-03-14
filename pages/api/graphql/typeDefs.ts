@@ -8,6 +8,11 @@ export const typeDefs = gql`
     IdTeam: [String]!
     Email: String!
     DateOfBirth: String!
+    postalCode: String
+    city: String
+    street: String
+    streetNumber: String
+    phoneNumber: String
   }
 
   input CreateUserInput {
@@ -17,6 +22,11 @@ export const typeDefs = gql`
     IdTeam: [String]!
     Email: String!
     DateOfBirth: String!
+    postalCode: String!
+    city: String!
+    street: String!
+    streetNumber: String!
+    phoneNumber: String!
   }
 
   input CreateUserToTeamInput {
@@ -382,9 +392,6 @@ export const typeDefs = gql`
     lefD: SubteamMemberCard
     rigD: SubteamMemberCard
   }
-  
-
-
   
   input CardsInput {
     lefU: SubteamMemberInput3

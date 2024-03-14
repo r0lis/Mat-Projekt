@@ -5,7 +5,15 @@ import React, { useEffect, useState } from "react";
 import { authUtils } from "../firebase/auth.utils";
 import { useMutation, gql } from "@apollo/client";
 import { useRouter } from "next/router";
-import { Box, Button, TextField, Typography, Link, Alert } from "@mui/material";
+import {
+  Box,
+  Button,
+  TextField,
+  Typography,
+  Link,
+  Alert,
+  InputAdornment,
+} from "@mui/material";
 import photo from "../public/assets/rosterbot.png";
 import pictureBackground from "../public/assets/uvodni.jpg";
 
@@ -17,8 +25,11 @@ const CREATE_USER_MUTATION = gql`
     $IdUser: String!
     $IdTeam: [String]!
     $DateOfBirth: String!
-
-
+    $postalCode: String!
+    $city: String!
+    $street: String!
+    $streetNumber: String!
+    $phoneNumber: String!
   ) {
     createUser(
       input: {
@@ -28,7 +39,11 @@ const CREATE_USER_MUTATION = gql`
         IdUser: $IdUser
         IdTeam: $IdTeam
         DateOfBirth: $DateOfBirth
-
+        postalCode: $postalCode
+        city: $city
+        street: $street
+        streetNumber: $streetNumber
+        phoneNumber: $phoneNumber
       }
     ) {
       Name
@@ -50,8 +65,19 @@ const RegistrationPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [registrationSuccess, setRegistrationSuccess] = useState(false);
   const [verificationSuccess, setverificationSuccess] = useState(false);
-  const [dateOfBirth, setDateOfBirth] = useState<Date | null>(null); 
-
+  const [dateOfBirth, setDateOfBirth] = useState<Date | null>(null);
+  const [postalCode, setPostalCode] = useState("");
+  const [postalCodeError, setPostalCodeError] = useState(false);
+  const [city, setCity] = useState("");
+  const [street, setStreet] = useState("");
+  const [streetNumber, setStreetNumber] = useState("");
+  const [phoneNumberError, setPhoneNumberError] = useState(false);
+  const [streetError, setStreetError] = useState(false);
+  const [streetNumberError, setStreetNumberError] = useState(false);
+  const [cityError, setCityError] = useState(false);
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const router = useRouter();
 
   const [createUser] = useMutation(CREATE_USER_MUTATION);
@@ -62,7 +88,7 @@ const RegistrationPage: React.FC = () => {
   const handleRegister = async () => {
     try {
       if (!isEmailValid || !isPasswordValid) {
-        throw new Error("Neplatný e-mail nebo heslo.");
+        throw new Error("Neplatný e-mail nebo heslo nebo adresa.");
       }
 
       if (password !== confirmPassword) {
@@ -106,6 +132,11 @@ const RegistrationPage: React.FC = () => {
               IdUser: "fefefef",
               IdTeam: ["fefefe"],
               DateOfBirth: dateOfBirth?.toISOString() || "",
+              postalCode: postalCode,
+              city: city,
+              street: street,
+              streetNumber: streetNumber,
+              phoneNumber: phoneNumber.replace(/\s/g, ""),
             },
           });
           setverificationSuccess(true);
@@ -124,6 +155,47 @@ const RegistrationPage: React.FC = () => {
     }
   };
 
+  const validatePostalCode = (postalCode: string) => {
+    const postalCodeRegex = /^\d{3}\s\d{2}$/;
+    return postalCodeRegex.test(postalCode);
+  };
+
+  const validatePhoneNumber = (phoneNumber: string) => {
+    const phoneNumberRegex = /^\d{9}$/; // Předpokládáme, že telefonní číslo má 9 číslic
+    return phoneNumberRegex.test(phoneNumber);
+  };
+
+  const handlePhoneNumberChange = (e: { target: { value: any } }) => {
+    const { value } = e.target;
+    setPhoneNumber(value.replace(/\s/g, "")); // Remove whitespace from phone number
+    console.log(phoneNumber);
+    setPhoneNumberError(!validatePhoneNumber(value));
+  };
+
+  const handlePostalCodeChange = (e: { target: { value: any } }) => {
+    const { value } = e.target;
+    setPostalCode(value);
+    setPostalCodeError(!validatePostalCode(value));
+  };
+
+  const handleCityChange = (e: { target: { value: any } }) => {
+    const { value } = e.target;
+    setCity(value);
+    setCityError(value.length === 0);
+  };
+
+  const handleStreetChange = (e: { target: { value: any } }) => {
+    const { value } = e.target;
+    setStreet(value);
+    setStreetError(value.length === 0);
+  };
+
+  const handleStreetNumberChange = (e: { target: { value: any } }) => {
+    const { value } = e.target;
+    setStreetNumber(value);
+    setStreetNumberError(value.length === 0);
+  };
+
   return (
     <Box
       sx={{
@@ -133,6 +205,9 @@ const RegistrationPage: React.FC = () => {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
+        paddingTop: "2em",
+        paddingBottom: "2em",
+
       }}
     >
       <Box
@@ -151,9 +226,9 @@ const RegistrationPage: React.FC = () => {
         <Box sx={{ display: "flex", flexDirection: "row", width: "100%" }}>
           <Box
             sx={{
-              width: "90%",
+              width: "100%",
               position: "relative",
-              zIndex: "1", 
+              zIndex: "1",
               borderRadius: "0 0 15px 15px",
             }}
           >
@@ -174,7 +249,7 @@ const RegistrationPage: React.FC = () => {
                 top: 0,
                 left: 0,
                 width: "100%",
-                zIndex: "2", 
+                zIndex: "2",
               }}
             >
               <Box
@@ -222,7 +297,7 @@ const RegistrationPage: React.FC = () => {
           <Box>
             <Box
               sx={{
-                width: "75%", 
+                width: "75%",
                 mx: "auto",
               }}
             >
@@ -290,21 +365,95 @@ const RegistrationPage: React.FC = () => {
                       margin="normal"
                     />
                     <TextField
-                      type="password"
+                      label="Telefonní číslo"
+                      variant="outlined"
+                      value={phoneNumber}
+                      onChange={handlePhoneNumberChange}
+                      fullWidth
+                      margin="normal"
+                      error={phoneNumberError}
+                      helperText={
+                        phoneNumberError ? "Neplatné telefonní číslo" : ""
+                      }
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">+420</InputAdornment>
+                        ),
+                      }}
+                    />
+                    <TextField
+                      label="PSČ"
+                      variant="outlined"
+                      value={postalCode}
+                      onChange={handlePostalCodeChange}
+                      fullWidth
+                      margin="normal"
+                      error={postalCodeError}
+                      helperText={postalCodeError ? "Neplatné PSČ" : ""}
+                    />
+                    <TextField
+                      label="Město"
+                      variant="outlined"
+                      value={city}
+                      onChange={handleCityChange}
+                      fullWidth
+                      margin="normal"
+                      error={cityError}
+                      helperText={cityError ? "Město není vyplněno" : ""}
+                    />
+                    <TextField
+                      label="Ulice"
+                      variant="outlined"
+                      value={street}
+                      onChange={handleStreetChange}
+                      fullWidth
+                      margin="normal"
+                      error={streetError}
+                      helperText={streetError ? "Ulice není vyplněna" : ""}
+                    />
+                    <TextField
+                      label="Číslo popisné/orientační"
+                      variant="outlined"
+                      value={streetNumber}
+                      onChange={handleStreetNumberChange}
+                      fullWidth
+                      margin="normal"
+                      error={streetNumberError}
+                      helperText={
+                        streetNumberError ? "Číslo popisné není vyplněno" : ""
+                      }
+                    />
+                    <Box sx={{display:"flex"}}>
+                    <TextField
+                      type={showPassword ? "text" : "password"}
                       label="Heslo"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       fullWidth
                       margin="normal"
                     />
+                    <Button onClick={() => setShowPassword(!showPassword)}>
+                      {showPassword ? "Skrýt" : "Zobrazit"}
+                    </Button>
+                    </Box>
+                    <Box sx={{display:"flex"}}> 
                     <TextField
-                      type="password"
+                      type={showConfirmPassword ? "text" : "password"}
                       label="Potvrzení hesla"
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
                       fullWidth
                       margin="normal"
                     />
+                    <Button
+                      onClick={() =>
+                        setShowConfirmPassword(!showConfirmPassword)
+                      }
+                    >
+                      
+                      {showConfirmPassword ? "Skrýt" : "Zobrazit"}
+                    </Button>
+                    </Box>
                   </>
                 )}
                 <Box>
@@ -377,7 +526,7 @@ const RegistrationPage: React.FC = () => {
                         boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.2)",
                         padding: "0.7em",
                         borderRadius: "4px",
-                        "&:hover": { backgroundColor: "#b71dde", },
+                        "&:hover": { backgroundColor: "#b71dde" },
                       }}
                     >
                       Registrovat
@@ -439,23 +588,23 @@ const RegistrationPage: React.FC = () => {
                       color: "#b71dde",
                       textDecoration: "none",
                       position: "relative",
-                        "&::before": {
-                          content: "''",
-                          position: "absolute",
-                          width: "100%",
-                          height: "4px",
-                          borderRadius: "4px",
-                          backgroundColor: "#b71dde",
-                          bottom: "-4px", // Adjust position to place it below the text
-                          left: "0",
-                          transformOrigin: "right",
-                          transform: "scaleX(0)",
-                          transition: "transform 0.3s ease-in-out",
-                        },
-                        "&:hover::before": {
-                          transformOrigin: "left",
-                          transform: "scaleX(1)",
-                        },
+                      "&::before": {
+                        content: "''",
+                        position: "absolute",
+                        width: "100%",
+                        height: "4px",
+                        borderRadius: "4px",
+                        backgroundColor: "#b71dde",
+                        bottom: "-4px", // Adjust position to place it below the text
+                        left: "0",
+                        transformOrigin: "right",
+                        transform: "scaleX(0)",
+                        transition: "transform 0.3s ease-in-out",
+                      },
+                      "&:hover::before": {
+                        transformOrigin: "left",
+                        transform: "scaleX(1)",
+                      },
                     }}
                   >
                     Zkusit znovu

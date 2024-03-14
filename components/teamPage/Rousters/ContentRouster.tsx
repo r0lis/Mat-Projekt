@@ -135,8 +135,6 @@ const ContentRouster: React.FC<ContentRousterProps> = ({
     }
   );
 
-  console.log("data", data);
-
   const {
     loading: roleLoading,
     error: roleError,
@@ -179,6 +177,7 @@ const ContentRouster: React.FC<ContentRousterProps> = ({
   if (error || roleError) return <Typography>Chyba</Typography>;
 
   const role = roleData?.getUserRoleInTeam.role || "";
+  
 
   const filteredMembersToShow = searchInput
     ? filteredMembers.filter(
@@ -231,14 +230,11 @@ const ContentRouster: React.FC<ContentRousterProps> = ({
 
   async function handleUpdateMember(): Promise<void> {
     try {
-      console.log("selectedMember", selectedMember);
-      // Ensure selectedMember exists and has a valid email and position
       if (
         selectedMember &&
         selectedMember.email &&
         selectedMember.playPosition
       ) {
-        // Call the updateSubteamMember mutation
         await updateSubteamMember({
           variables: {
             subteamId: subteamId,
@@ -247,10 +243,8 @@ const ContentRouster: React.FC<ContentRousterProps> = ({
           },
         });
 
-        // Optionally, you can reset the state or perform other actions after a successful update
         setEditMode(false);
         refetch();
-        // ... any other actions you need
       } else {
         console.error("Invalid selected member data");
       }
@@ -258,6 +252,8 @@ const ContentRouster: React.FC<ContentRousterProps> = ({
       console.error("Error updating subteam member:", error);
     }
   }
+  const isRole1Or2 = role === "1" || role === "2";
+
 
   return (
     <Box>
@@ -325,7 +321,7 @@ const ContentRouster: React.FC<ContentRousterProps> = ({
               (member: SubteamMember, index: number) => (
                 <TableRow key={index}>
                   <TableCell>
-                    {role === "1" || role === "2" && (
+                    {isRole1Or2 && (
                       <Box
                         sx={{ height: "20px", width: "20px" }}
                         onClick={() => handleRowClick(member)}

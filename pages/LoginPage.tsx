@@ -11,6 +11,7 @@ const LoginPage: React.FC = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const router = useRouter();
 
@@ -161,15 +162,20 @@ const LoginPage: React.FC = () => {
                   fullWidth
                   margin="normal"
                 />
-                <TextField
-                  type="password"
-                  label="Heslo"
-                  value={password}
-                  onSubmit={handleLogin}
-                  onChange={(e) => setPassword(e.target.value)}
-                  fullWidth
-                  margin="normal"
-                />
+                <Box sx={{ display: "flex" }}>
+                  <TextField
+                      type={showPassword ? "text" : "password"}
+                      label="Heslo"
+                    value={password}
+                    onSubmit={handleLogin}
+                    onChange={(e) => setPassword(e.target.value)}
+                    fullWidth
+                    margin="normal"
+                  />
+                   <Button onClick={() => setShowPassword(!showPassword)}>
+                      {showPassword ? "Skrýt" : "Zobrazit"}
+                    </Button>
+                </Box>
 
                 <Button
                   variant="contained"

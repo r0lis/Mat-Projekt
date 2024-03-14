@@ -163,7 +163,7 @@ const CalendarComponent: React.FC<Props> = ({ teamId }) => {
             title: match.opponentName,
             start: `${match.date}T${match.time}`,
             end: `${match.date}T${match.endTime}`,
-            type: "Zápas", // Přidání typu události
+            type: "Zápas", 
             hall: match.selectedHallId,
             subteamId: match.subteamIdSelected,
             matchType: match.matchType,
@@ -182,7 +182,7 @@ const CalendarComponent: React.FC<Props> = ({ teamId }) => {
             title: training.description,
             start: `${training.date}T${training.time}`,
             end: `${training.date}T${training.endTime}`,
-            type: "Trénink", // Přidání typu události
+            type: "Trénink", 
             hall: training.selectedHallId,
             subteamId: training.subteamIdSelected,
             description: training.description,
@@ -225,16 +225,16 @@ const CalendarComponent: React.FC<Props> = ({ teamId }) => {
 
   return (
     <Box sx={{ marginBottom: "5em" }}>
-      <Box sx={{ marginLeft: "1em" }}>
+      <Box sx={{ marginLeft: "1em", }}>
         <Typography variant="h4">Kalendář</Typography>
       </Box>
       <Box
         sx={{
-          maxWidth: "1000px",
+          maxWidth: "auto",
           height: "700px",
           marginTop: "2em",
-          marginLeft: "auto",
-          marginRight: "auto",
+          marginLeft: "5%",
+          marginRight: "5%",
           paddingBottom: "5em",
           display: "block",
         }}
@@ -251,8 +251,8 @@ const CalendarComponent: React.FC<Props> = ({ teamId }) => {
           editable={true}
           selectable={true}
           selectMirror={true}
-          eventContent={renderEventContent} // Přidání vlastní funkce pro formátování událostí
-          eventClick={handleEventClick} // Handler pro kliknutí na událost
+          eventContent={renderEventContent}
+          eventClick={handleEventClick}
         />
       </Box>
       <Box sx={{ marginLeft: "1em" }}></Box>

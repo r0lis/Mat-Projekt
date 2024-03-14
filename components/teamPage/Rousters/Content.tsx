@@ -14,7 +14,7 @@ import { gql, useQuery } from "@apollo/client";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import NoTeam from "@/components/teamPage/Team/Component/Noteam";
-import ContentRouster from "./ContentRouster";  
+import ContentRouster from "./ContentRouster";
 
 const GET_SUBTEAMS = gql`
   query GetYourSubteamData($teamId: String!, $email: String!) {
@@ -35,7 +35,7 @@ interface Subteam {
   Name: string;
 }
 
-const Content: React.FC<TeamsProps> = ({teamId}) => {
+const Content: React.FC<TeamsProps> = ({ teamId }) => {
   const user = authUtils.getCurrentUser();
   const {
     loading,
@@ -86,13 +86,10 @@ const Content: React.FC<TeamsProps> = ({teamId}) => {
         <Box ml={2}>
           {subteams.map((subteam: Subteam) => (
             <Box key={subteam.subteamId}>
-  <Typography sx={{ fontWeight: "600" }} variant="h5">
-                  Přehled soupisek
-                </Typography>
-              <ContentRouster
-                      subteamId={subteam.subteamId}
-                      idTeam={teamId}
-                    />
+              <Typography sx={{ fontWeight: "600" }} variant="h5">
+                Přehled soupisek
+              </Typography>
+              <ContentRouster subteamId={subteam.subteamId} idTeam={teamId} />
             </Box>
           ))}
         </Box>
