@@ -81,6 +81,8 @@ const RegistrationPage: React.FC = () => {
   const { id, email: initialEmail } = router.query;
   const [dateOfBirth, setDateOfBirth] = useState<Date | null>(null); // Nový stav pro datum narození
   const userEmail: string = (initialEmail as string) || "";
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const [createUser] = useMutation(CREATE_USER_TO_TEAM_MUTATION);
 
@@ -394,22 +396,36 @@ const RegistrationPage: React.FC = () => {
                       margin="normal"
                       disabled={!!initialEmail}
                     />
-                    <TextField
-                      type="password"
-                      label="Heslo"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      fullWidth
-                      margin="normal"
-                    />
-                    <TextField
-                      type="password"
-                      label="Potvrzení hesla"
-                      value={confirmPassword}
-                      onChange={(e) => setConfirmPassword(e.target.value)}
-                      fullWidth
-                      margin="normal"
-                    />
+                    <Box sx={{ display: "flex" }}>
+                      <TextField
+                        type={showPassword ? "text" : "password"}
+                        label="Heslo"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        fullWidth
+                        margin="normal"
+                      />
+                      <Button onClick={() => setShowPassword(!showPassword)}>
+                        {showPassword ? "Skrýt" : "Zobrazit"}
+                      </Button>
+                    </Box>
+                    <Box sx={{ display: "flex" }}>
+                      <TextField
+                        type={showConfirmPassword ? "text" : "password"}
+                        label="Potvrzení hesla"
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        fullWidth
+                        margin="normal"
+                      />
+                      <Button
+                        onClick={() =>
+                          setShowConfirmPassword(!showConfirmPassword)
+                        }
+                      >
+                        {showConfirmPassword ? "Skrýt" : "Zobrazit"}
+                      </Button>
+                    </Box>
                   </>
                 )}
                 <Box>
