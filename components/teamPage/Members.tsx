@@ -36,6 +36,7 @@ import { authUtils } from "@/firebase/auth.utils";
 import { useRef } from "react";
 import ArticleIcon from "@mui/icons-material/Article";
 import HourglassEmptyIcon from "@mui/icons-material/HourglassEmpty";
+import { useRouter } from "next/router";
 
 const GET_TEAM_MEMBERS_DETAILS = gql`
   query GetTeamMembersDetails($teamId: String!) {
@@ -166,12 +167,14 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
   const [updateMemberMedicalDoc] = useMutation(UPDATE_MEMBER_MEDICAL_DOC);
   const [deleteMember] = useMutation(DELETE_MEMBER);
   const user = authUtils.getCurrentUser();
+  const router = useRouter();
   const [modalOpenPlayerImage, setModalOpenPlayerImage] = useState(false);
   const [modalOpenPlayerDoc, setModalOpenPlayerDoc] = useState(false);
   const [modalOpenPlayerImage2, setModalOpenPlayerImage2] = useState(false);
   const [expandedMember, setExpandedMember] = useState<string | null>(null);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [medicalDocDate, setMedicalDocDate] = useState<string | null>(null);
+  const [modalOpenLeave, setModalOpenLeave] = useState(false);
 
   const [expandedSelectedMember, setExpandedSelectedMember] = useState<
     string | null
@@ -419,6 +422,22 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
       );
     }
     return phoneNumber;
+  };
+
+  const handleLeaveTeam = async () => {
+    try {
+      await deleteMember({
+        variables: {
+          teamId: id || "",
+          memberEmail: currentUserEmail || "",
+        },
+      });
+
+      await refetch();
+      router.push("/");
+    } catch (error: any) {
+      console.error("Error leaving team:", error.message);
+    }
   };
 
   return (
@@ -803,25 +822,6 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                               fontWeight: "500",
                             }}
                           >
-                            Adresa:
-                          </Typography>
-                          <Typography
-                            sx={{
-                              marginLeft: "3%",
-                              color: "black",
-                              fontWeight: "500",
-                            }}
-                          >
-                            PSČ:
-                          </Typography>
-
-                          <Typography
-                            sx={{
-                              marginLeft: "3%",
-                              color: "black",
-                              fontWeight: "500",
-                            }}
-                          >
                             Práva:
                           </Typography>
                           <Typography
@@ -870,27 +870,13 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                           <Typography
                             sx={{ color: "black", fontWeight: "500" }}
                           >
-                            {member.street} {member.streetNumber} {member.city}
-                          </Typography>
-                          <Typography
-                            sx={{ color: "black", fontWeight: "500" }}
-                          >
-                            {member.postalCode}
-                          </Typography>
-
-                          <Typography
-                            sx={{ color: "black", fontWeight: "500" }}
-                          >
                             {member.Role === "1" && "Management"}
                             {member.Role === "2" && "Trenér"}
                             {member.Role === "3" && "Hráč"}
                             {(member.Role === "0" ||
                               member.Role === "No Role Assigned") && (
                               <Box sx={{ maxWidth: "15em" }}>
-                                <Alert
-                                  sx={{ maxHeight: "" }}
-                                  severity="error"
-                                >
+                                <Alert sx={{ maxHeight: "" }} severity="error">
                                   <Typography
                                     sx={{ fontSize: "1em", fontWeight: "600" }}
                                   >
@@ -977,8 +963,61 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                             : "0.1em",
                       }}
                     ></Box>
+                    <Box
+                      sx={{
+                        marginLeft: "5%",
+                        marginRight: "5%",
+                        marginTop: "0.5em",
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          fontFamily: "Roboto",
+                          color: "black",
+                          fontWeight: "500",
+                        }}
+                      >
+                        Kontaktní adresa:
+                      </Typography>
+                    </Box>
+                    <Box
+                      sx={{
+                        marginLeft: "5%",
+                        marginRight: "5%",
+                        marginBottom: "0.5em",
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          fontFamily: "Roboto",
+                          color: "black",
+                          fontWeight: "500",
+                        }}
+                      >
+                        {member.street} {member.streetNumber},
+                      </Typography>
+                      <Typography
+                        sx={{
+                          fontFamily: "Roboto",
+                          color: "black",
+                          fontWeight: "500",
+                        }}
+                      >
+                        {member.postalCode} {member.city}
+                      </Typography>
+                    </Box>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        marginLeft: "5%",
+                        marginRight: "5%",
+                        borderBottom: "2px solid gray",
+                        marginTop: "0.1em",
+                      }}
+                    ></Box>
                     <Box sx={{ paddingBottom: "0.5em" }}>
                       <Button
+                        onClick={() => setModalOpenLeave(true)}
                         sx={{
                           backgroundColor: "lightgray",
                           color: "black",
@@ -998,6 +1037,37 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                       </Button>
                     </Box>
                   </Box>
+                  <Modal
+                    open={modalOpenLeave}
+                    onClose={() => setModalOpenLeave(false)}
+                    aria-labelledby="modal-title"
+                    aria-describedby="modal-description"
+                  >
+                    <Box
+                      sx={{
+                        position: "absolute",
+                        width: 400,
+                        bgcolor: "background.paper",
+                        border: "2px solid #000",
+                        boxShadow: 24,
+                        p: 4,
+                        top: "50%",
+                        left: "50%",
+                        transform: "translate(-50%, -50%)",
+                      }}
+                    >
+                      <Typography id="modal-title" variant="h6" component="h2">
+                        Opravdu chcete opustit klub?
+                      </Typography>
+                      <Typography id="modal-description" sx={{ mt: 2 }}>
+                        Po opuštění klubu nebudete mít přístup k jeho zdrojům a
+                        informacím.
+                      </Typography>
+                      <Button onClick={handleLeaveTeam} sx={{ mt: 4 }}>
+                        Potvrdit
+                      </Button>
+                    </Box>
+                  </Modal>
                 </Box>
               )
           )}
@@ -1217,10 +1287,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                             {(member.Role === "0" ||
                               member.Role === "No Role Assigned") && (
                               <Box sx={{ maxWidth: "15em" }}>
-                                <Alert
-                                  sx={{ maxHeight: "" }}
-                                  severity="error"
-                                >
+                                <Alert sx={{ maxHeight: "" }} severity="error">
                                   <Typography
                                     sx={{ fontSize: "1em", fontWeight: "600" }}
                                   >
@@ -2108,7 +2175,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                     {(selectedMember?.Role === "0" ||
                       selectedMember?.Role === "No Role Assigned") && (
                       <Box sx={{ maxWidth: "15em", marginBottom: "1em" }}>
-                        <Alert sx={{ }} severity="error">
+                        <Alert sx={{}} severity="error">
                           <Typography
                             sx={{ fontSize: "1em", fontWeight: "600" }}
                           >

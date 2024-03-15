@@ -38,7 +38,7 @@ const AddToTeam: React.FC = () => {
   const { id, email: initialEmail } = router.query;
   const [loginMutation] = useMutation(LOGIN_MUTATION);
   const [progress, setProgress] = useState(0);
-
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     // Předvyplnění e-mailu, pokud je k dispozici v URL
@@ -274,14 +274,19 @@ if (isUserMember == false) {
                       disabled={!!initialEmail}
 
                     />
+                    <Box sx={{ display: "flex" }}>
                     <TextField
-                      type="password"
+                      type={showPassword ? "text" : "password"}
                       label="Heslo"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       fullWidth
                       margin="normal"
                     />
+                    <Button onClick={() => setShowPassword(!showPassword)}>
+                      {showPassword ? "Skrýt" : "Zobrazit"}
+                    </Button>
+                  </Box>
                   </>
                 )}
                 <Box>
