@@ -176,6 +176,11 @@ export const typeDefs = gql`
     Id: String
     DateOfBirth: String
     Picture: String
+    city: String
+    street: String
+    streetNumber: String
+    postalCode: String
+    phoneNumber: String
   }
   
   type UserRoleInTeam {

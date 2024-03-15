@@ -10,7 +10,7 @@ import {
   Link,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react"; 
+import React, { useState } from "react";
 import TeamLogoImg from "../../public/assets/logotym.png";
 import { useRouter } from "next/router";
 import BasicError from "../teamPage/error/BasicError";
@@ -24,6 +24,11 @@ const GET_USER_INFO = gql`
       Id
       DateOfBirth
       Picture
+      city
+      street
+      streetNumber
+      postalCode
+      phoneNumber
     }
   }
 `;
@@ -83,22 +88,20 @@ const Content: React.FC = () => {
   const surname = userInfoData?.getUserByNameAndSurname.Surname || "";
   const userPicture = userInfoData?.getUserByNameAndSurname.Picture || "";
   const initials = name[0] + surname[0];
-  const isMobile = window.innerWidth < 600; 
-
+  const isMobile = window.innerWidth < 600;
 
   if (userInfoLoading || userIdLoading)
     return (
       <Box
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        height: "100vh",
-        
-      }}
-    >
-      <CircularProgress color="primary" size={50} />
-    </Box>
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "100vh",
+        }}
+      >
+        <CircularProgress color="primary" size={50} />
+      </Box>
     );
 
   if (userIdError || userInfoError) return <Typography>Chyba</Typography>;
@@ -123,7 +126,22 @@ const Content: React.FC = () => {
 
   const handleBackClick = () => {
     setEditMode(false); // Set editMode to false
-  }
+  };
+
+  const formatPhoneNumber = (phoneNumber: string | undefined) => {
+    const cleaned = ("" + phoneNumber).replace(/\D/g, "");
+    const match = cleaned.match(/^(\d{1,3})(\d{1,3})?(\d{1,3})?(\d{1,3})?$/);
+    if (match) {
+      return (
+        "+ 420 " +
+        match[1] +
+        (match[2] ? " " + match[2] : "") +
+        (match[3] ? " " + match[3] : "") +
+        (match[4] ? " " + match[4] : "")
+      );
+    }
+    return phoneNumber;
+  };
 
   return (
     <Box
@@ -135,11 +153,18 @@ const Content: React.FC = () => {
         marginTop: "2em",
         padding: isMobile ? "0.5em" : "3%",
         paddingTop: isMobile ? "1em" : "",
-        borderRadius: "10px", 
+        borderRadius: "10px",
         marginBottom: "2em",
       }}
     >
-      <Box sx={{ display: "flex", marginBottom: "0em", marginLeft:"3em", marginRight:"3em" }}>
+      <Box
+        sx={{
+          display: "flex",
+          marginBottom: "0em",
+          marginLeft: "3em",
+          marginRight: "3em",
+        }}
+      >
         <Typography sx={{ fontSize: "2.8em", fontWeight: "500" }}>
           {name} {surname}
         </Typography>
@@ -148,23 +173,32 @@ const Content: React.FC = () => {
             height: "5em",
             width: "5em",
             marginLeft: "auto",
-           
           }}
           alt={initials}
           src={userPicture} // Set src to user's picture URL if it exists
         />
       </Box>
       {editMode === false ? (
-      <><Box sx={{ marginBottom: "1.5em", marginLeft: "3em", marginRight: "3em" }}>
-          <Typography sx={{ fontSize: "1.5em", fontWeight: "500" }}>
-            Email:
-          </Typography>
-          <Typography sx={{ fontSize: "1.2em" }}>{user?.email}</Typography>
-        </Box><Box sx={{ marginBottom: "2em", marginLeft: "3em", marginRight: "3em" }}>
+        <>
+          <Box
+            sx={{
+              marginBottom: "1.5em",
+              marginLeft: "3em",
+              marginRight: "3em",
+            }}
+          >
+            <Typography sx={{ fontSize: "1.5em", fontWeight: "500" }}>
+              Email:
+            </Typography>
+            <Typography sx={{ fontSize: "1.2em" }}>{user?.email}</Typography>
+          </Box>
+          <Box
+            sx={{ marginBottom: "2em", marginLeft: "3em", marginRight: "3em" }}
+          >
             <Typography sx={{ fontSize: "1.5em", fontWeight: "500" }}>
               Datum narození:
             </Typography>
-            <Typography sx={{ fontSize: "1.2em", }}>
+            <Typography sx={{ fontSize: "1.2em" }}>
               {userInfoData?.getUserByNameAndSurname.DateOfBirth &&
                 new Date(
                   userInfoData?.getUserByNameAndSurname.DateOfBirth
@@ -179,44 +213,76 @@ const Content: React.FC = () => {
               )}{" "}
               let
             </Typography>
-          </Box><Box sx={{ marginLeft: "3em", marginRight: "3em" }}>
+          </Box>
+          <Box
+            sx={{ marginBottom: "2em", marginLeft: "3em", marginRight: "3em" }}
+          >
+            <Typography sx={{ fontSize: "1.5em", fontWeight: "500" }}>
+            Telefon:
+            </Typography>
+            <Typography sx={{ fontSize: "1.2em" }}>
+              {formatPhoneNumber(userInfoData?.getUserByNameAndSurname.phoneNumber)}
+            </Typography>
+          </Box>
+          <Box
+            sx={{ marginBottom: "2em", marginLeft: "3em", marginRight: "3em" }}
+          >
+            <Typography sx={{ fontSize: "1.5em", fontWeight: "500" }}>
+              Adresa:
+            </Typography>
+            <Typography sx={{ fontSize: "1.2em" }}>
+              {userInfoData?.getUserByNameAndSurname.street}{" "}{userInfoData?.getUserByNameAndSurname.streetNumber},{" "}{userInfoData?.getUserByNameAndSurname.postalCode}{" "}{userInfoData?.getUserByNameAndSurname.city}
+            </Typography>
+          </Box>
+          <Box sx={{ marginLeft: "3em", marginRight: "3em" }}>
             <Typography sx={{ fontSize: "1.7em", fontWeight: "500" }}>
               Týmy:
             </Typography>
             {userTeamsData &&
-              userTeamsData.getUserTeamsByEmail &&
-              userTeamsData.getUserTeamsByEmail.length > 0 ? (
-              userTeamsData.getUserTeamsByEmail.map((team: Team, index: number) => (
-                <Box
-                  sx={{
-                    marginBottom: "1em",
-                    padding: "2%",
-                    borderRadius: "10px",
-                    ...hoverStyle,
-                    border: "1px solid gray",
-                  }}
-                >
-                  <Link
-                    key={index}
-                    href={`/Team/${team.teamId}`}
-                    style={{
-                      textDecoration: "none",
-                      display: "flex",
-                      alignItems: "center",
+            userTeamsData.getUserTeamsByEmail &&
+            userTeamsData.getUserTeamsByEmail.length > 0 ? (
+              userTeamsData.getUserTeamsByEmail.map(
+                (team: Team, index: number) => (
+                  <Box
+                    sx={{
+                      marginBottom: "1em",
+                      padding: "2%",
+                      borderRadius: "10px",
+                      ...hoverStyle,
+                      border: "1px solid gray",
                     }}
                   >
-                    <img
-                      src={team.Logo}
-                      alt="Team Logo"
+                    <Link
+                      key={index}
+                      href={`/Team/${team.teamId}`}
                       style={{
-                        width: "50px",
-                        height: "50px",
-                        marginRight: "1em",
-                      }} />
-                    <div style={{ color: "black", fontSize: "1.3em", fontWeight: "600" }}>{team.Name}</div>
-                  </Link>
-                </Box>
-              ))
+                        textDecoration: "none",
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
+                      <img
+                        src={team.Logo}
+                        alt="Team Logo"
+                        style={{
+                          width: "50px",
+                          height: "50px",
+                          marginRight: "1em",
+                        }}
+                      />
+                      <div
+                        style={{
+                          color: "black",
+                          fontSize: "1.3em",
+                          fontWeight: "600",
+                        }}
+                      >
+                        {team.Name}
+                      </div>
+                    </Link>
+                  </Box>
+                )
+              )
             ) : (
               <Box
                 sx={{
@@ -225,18 +291,22 @@ const Content: React.FC = () => {
                   borderRadius: "10px",
                   border: "1px solid gray",
                   backgroundColor: "lightgray",
-                  marginLeft: "3em", marginRight: "3em"
+                  marginLeft: "3em",
+                  marginRight: "3em",
                 }}
               >
                 Nepatříte do žádného klubu
               </Box>
             )}
-          </Box><Box sx={{ marginTop: "1em", marginLeft: "3em", marginRight: "3em" }}>
+          </Box>
+          <Box sx={{ marginTop: "1em", marginLeft: "3em", marginRight: "3em" }}>
             <Button onClick={handleEditClick}>Upravit</Button>
-          </Box></>) : (
-        <Box sx={{ marginTop: "1em",marginLeft:"3em", marginRight:"3em" }}>
+          </Box>
+        </>
+      ) : (
+        <Box sx={{ marginTop: "1em", marginLeft: "3em", marginRight: "3em" }}>
           <Edit />
-        <Button onClick={handleBackClick}>Zpět</Button>
+          <Button onClick={handleBackClick}>Zpět</Button>
         </Box>
       )}
     </Box>

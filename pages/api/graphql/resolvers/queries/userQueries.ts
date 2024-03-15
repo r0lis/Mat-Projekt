@@ -82,6 +82,11 @@ export const userQueries = {
           Id: userData.IdUser,
           DateOfBirth: userData.DateOfBirth,
           Picture: userData.Picture || false,
+          phoneNumber: userData.phoneNumber,
+          street: userData.street,
+          streetNumber: userData.streetNumber,
+          postalCode: userData.postalCode,
+          city: userData.city,
         };
       }
     }
