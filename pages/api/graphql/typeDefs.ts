@@ -36,6 +36,11 @@ export const typeDefs = gql`
     IdTeam: [String]!
     Email: String!
     DateOfBirth: String!
+    postalCode: String!
+    city: String!
+    street: String!
+    streetNumber: String!
+    phoneNumber: String!
   }
 
   input CreateTeamInput {
@@ -451,7 +456,7 @@ export const typeDefs = gql`
 
   type Mutation {
     createUser(input: CreateUserInput): User
-    createUserToTeam(input: CreateUserInput): User
+    createUserToTeam(input: CreateUserToTeamInput): User
     createTeam(input: CreateTeamInput): Team
     deleteUserByEmail(email: String): Boolean
     updateUserRoles(

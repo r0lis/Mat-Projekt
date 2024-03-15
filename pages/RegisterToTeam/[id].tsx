@@ -18,6 +18,7 @@ import {
   OutlinedTextFieldProps,
   StandardTextFieldProps,
   TextFieldVariants,
+  InputAdornment,
 } from "@mui/material";
 import photo from "../../public/assets/rosterbot.png";
 import pictureBackground from "../../public/assets/uvodni.jpg";
@@ -44,6 +45,11 @@ const CREATE_USER_TO_TEAM_MUTATION = gql`
     $IdUser: String!
     $IdTeam: [String]!
     $DateOfBirth: String!
+    $postalCode: String!
+    $city: String!
+    $street: String!
+    $streetNumber: String!
+    $phoneNumber: String!
   ) {
     createUserToTeam(
       input: {
@@ -53,6 +59,11 @@ const CREATE_USER_TO_TEAM_MUTATION = gql`
         IdUser: $IdUser
         IdTeam: $IdTeam
         DateOfBirth: $DateOfBirth
+        postalCode: $postalCode
+        city: $city
+        street: $street
+        streetNumber: $streetNumber
+        phoneNumber: $phoneNumber
       }
     ) {
       Name
@@ -61,7 +72,6 @@ const CREATE_USER_TO_TEAM_MUTATION = gql`
       IdTeam
       Email
       DateOfBirth
-      # Další údaje, které chcete získat
     }
   }
 `;
@@ -81,10 +91,23 @@ const RegistrationPage: React.FC = () => {
   const { id, email: initialEmail } = router.query;
   const [dateOfBirth, setDateOfBirth] = useState<Date | null>(null); // Nový stav pro datum narození
   const userEmail: string = (initialEmail as string) || "";
+  const [postalCode, setPostalCode] = useState("");
+  const [postalCodeError, setPostalCodeError] = useState(false);
+  const [city, setCity] = useState("");
+  const [street, setStreet] = useState("");
+  const [streetNumber, setStreetNumber] = useState("");
+  const [phoneNumberError, setPhoneNumberError] = useState(false);
+  const [streetError, setStreetError] = useState(false);
+  const [streetNumberError, setStreetNumberError] = useState(false);
+  const [cityError, setCityError] = useState(false);
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const [createUser] = useMutation(CREATE_USER_TO_TEAM_MUTATION);
+
+  const isEmailValid = email.includes("@");
+  const isPasswordValid = password.length >= 6;
 
   useEffect(() => {
     // Předvyplnění e-mailu, pokud je k dispozici v URL
@@ -165,8 +188,6 @@ const RegistrationPage: React.FC = () => {
     );
   }
 
-  const isEmailValid = email.includes("@");
-  const isPasswordValid = password.length >= 6;
 
   const handleRegister = async () => {
     try {
@@ -212,6 +233,11 @@ const RegistrationPage: React.FC = () => {
               IdUser: "fefefef",
               IdTeam: [id as string],
               DateOfBirth: dateOfBirth?.toISOString() || "",
+              postalCode: postalCode,
+              city: city,
+              street: street,
+              streetNumber: streetNumber,
+              phoneNumber: phoneNumber.replace(/\s/g, ""),
             },
           });
           setverificationSuccess(true);
@@ -228,6 +254,47 @@ const RegistrationPage: React.FC = () => {
       setError(error.message);
       await authUtils.deleteUser();
     }
+  };
+
+  const validatePostalCode = (postalCode: string) => {
+    const postalCodeRegex = /^\d{3}\s\d{2}$/;
+    return postalCodeRegex.test(postalCode);
+  };
+
+  const validatePhoneNumber = (phoneNumber: string) => {
+    const phoneNumberRegex = /^\d{9}$/; // Předpokládáme, že telefonní číslo má 9 číslic
+    return phoneNumberRegex.test(phoneNumber);
+  };
+
+  const handlePhoneNumberChange = (e: { target: { value: any } }) => {
+    const { value } = e.target;
+    setPhoneNumber(value.replace(/\s/g, "")); // Remove whitespace from phone number
+    console.log(phoneNumber);
+    setPhoneNumberError(!validatePhoneNumber(value));
+  };
+
+  const handlePostalCodeChange = (e: { target: { value: any } }) => {
+    const { value } = e.target;
+    setPostalCode(value);
+    setPostalCodeError(!validatePostalCode(value));
+  };
+
+  const handleCityChange = (e: { target: { value: any } }) => {
+    const { value } = e.target;
+    setCity(value);
+    setCityError(value.length === 0);
+  };
+
+  const handleStreetChange = (e: { target: { value: any } }) => {
+    const { value } = e.target;
+    setStreet(value);
+    setStreetError(value.length === 0);
+  };
+
+  const handleStreetNumberChange = (e: { target: { value: any } }) => {
+    const { value } = e.target;
+    setStreetNumber(value);
+    setStreetNumberError(value.length === 0);
   };
 
   return (
@@ -395,6 +462,65 @@ const RegistrationPage: React.FC = () => {
                       fullWidth
                       margin="normal"
                       disabled={!!initialEmail}
+                    />
+                     <TextField
+                      label="Telefonní číslo"
+                      variant="outlined"
+                      value={phoneNumber}
+                      onChange={handlePhoneNumberChange}
+                      fullWidth
+                      margin="normal"
+                      error={phoneNumberError}
+                      helperText={
+                        phoneNumberError ? "Neplatné telefonní číslo" : ""
+                      }
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">+420</InputAdornment>
+                        ),
+                      }}
+                    />
+                    <TextField
+                      label="PSČ"
+                      variant="outlined"
+                      value={postalCode}
+                      onChange={handlePostalCodeChange}
+                      fullWidth
+                      margin="normal"
+                      error={postalCodeError}
+                      helperText={postalCodeError ? "Neplatné PSČ" : ""}
+                    />
+                    <TextField
+                      label="Město"
+                      variant="outlined"
+                      value={city}
+                      onChange={handleCityChange}
+                      fullWidth
+                      margin="normal"
+                      error={cityError}
+                      helperText={cityError ? "Město není vyplněno" : ""}
+                    />
+                    <TextField
+                      label="Ulice"
+                      variant="outlined"
+                      value={street}
+                      onChange={handleStreetChange}
+                      fullWidth
+                      margin="normal"
+                      error={streetError}
+                      helperText={streetError ? "Ulice není vyplněna" : ""}
+                    />
+                    <TextField
+                      label="Číslo popisné/orientační"
+                      variant="outlined"
+                      value={streetNumber}
+                      onChange={handleStreetNumberChange}
+                      fullWidth
+                      margin="normal"
+                      error={streetNumberError}
+                      helperText={
+                        streetNumberError ? "Číslo popisné není vyplněno" : ""
+                      }
                     />
                     <Box sx={{ display: "flex" }}>
                       <TextField

@@ -121,6 +121,11 @@ export const userMutations = {
         Email: input.Email,
         IsAdmin: IsAdmin,
         DateOfBirth: new Date(input.DateOfBirth).toISOString(),
+        postalCode: input.postalCode,
+        city: input.city,
+        street: input.street,
+        streetNumber: input.streetNumber,
+        phoneNumber: input.phoneNumber,
       };
 
       await newUserDoc.set(newUser);

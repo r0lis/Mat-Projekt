@@ -432,55 +432,77 @@ export const teamMutations = {
   ) => {
     try {
       if (context.user) {
-        // Find the team by teamId
+        // Find all teams with the given teamId in the Team collection
         const teamQuery = context.db
           .collection("Team")
           .where("teamId", "==", teamId);
         const teamSnapshot = await teamQuery.get();
-
+  
         if (!teamSnapshot.empty) {
-          const teamDoc = teamSnapshot.docs[0];
-          const existingMembers = teamDoc.data().Members || [];
-
-          // Remove the specified memberEmail from Members
-          const updatedMembers = existingMembers.filter(
-            (member: { member: string; role: string }) =>
-              member.member !== memberEmail
-          );
-
-          // Update the Members field in the database
-          await teamDoc.ref.update({ Members: updatedMembers });
-
-          // Also remove the member from MembersEmails if present
-          const existingMembersEmails = teamDoc.data().MembersEmails || [];
-          const updatedMembersEmails = existingMembersEmails.filter(
-            (email: string) => email !== memberEmail
-          );
-
-          // Update the MembersEmails field in the database
-          await teamDoc.ref.update({ MembersEmails: updatedMembersEmails });
-
-          // Delete the teamId from IdTeam in the User collection
-          const userQuery = context.db
-            .collection("User")
-            .where("Email", "==", memberEmail);
-
-          const userSnapshot = await userQuery.get();
-
-          if (!userSnapshot.empty) {
-            userSnapshot.forEach(async (userDoc) => {
-              const existingIdTeam = userDoc.data().IdTeam || [];
-              const updatedIdTeam = existingIdTeam.filter(
-                (id: string) => id !== teamId
-              );
-
-              // Update the IdTeam field in the User collection
-              await userDoc.ref.update({ IdTeam: updatedIdTeam });
-            });
-          }
-
-          return true;
+          // Iterate over each team with the given teamId
+          teamSnapshot.forEach(async (teamDoc) => {
+            const existingMembers = teamDoc.data().Members || [];
+  
+            // Remove the specified memberEmail from Members
+            const updatedMembers = existingMembers.filter(
+              (member: { member: string; role: string }) =>
+                member.member !== memberEmail
+            );
+  
+            // Update the Members field in the database for each team
+            await teamDoc.ref.update({ Members: updatedMembers });
+  
+            // Also remove the member from MembersEmails if present
+            const existingMembersEmails = teamDoc.data().MembersEmails || [];
+            const updatedMembersEmails = existingMembersEmails.filter(
+              (email: string) => email !== memberEmail
+            );
+  
+            // Update the MembersEmails field in the database for each team
+            await teamDoc.ref.update({ MembersEmails: updatedMembersEmails });
+  
+            // Find the team by teamId in the Teams collection
+            const teamsQuery = context.db
+              .collection("Teams")
+              .where("teamId", "==", teamId);
+            const teamsSnapshot = await teamsQuery.get();
+  
+            if (!teamsSnapshot.empty) {
+              // Iterate over each team with the given teamId
+              teamsSnapshot.forEach(async (teamsDoc) => {
+                // Remove the member from SubteamMembers
+                const subteamMembers = teamsDoc.data().subteamMembers || [];
+                const updatedSubteamMembers = subteamMembers.filter(
+                  (subteamMember: any) => subteamMember.email !== memberEmail
+                );
+  
+                // Update the SubteamMembers field in the database for each team
+                await teamsDoc.ref.update({ subteamMembers: updatedSubteamMembers });
+              });
+            }
+          });
         }
+  
+        // Delete the teamId from IdTeam in the User collection
+        const userQuery = context.db
+          .collection("User")
+          .where("Email", "==", memberEmail);
+  
+        const userSnapshot = await userQuery.get();
+  
+        if (!userSnapshot.empty) {
+          userSnapshot.forEach(async (userDoc) => {
+            const existingIdTeam = userDoc.data().IdTeam || [];
+            const updatedIdTeam = existingIdTeam.filter(
+              (id: string) => id !== teamId
+            );
+  
+            // Update the IdTeam field in the User collection
+            await userDoc.ref.update({ IdTeam: updatedIdTeam });
+          });
+        }
+  
+        return true;
       }
       return false;
     } catch (error) {
@@ -488,6 +510,7 @@ export const teamMutations = {
       throw error;
     }
   },
+  
 
   addHallToTeam: async (
     _: any,
