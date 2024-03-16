@@ -23,6 +23,18 @@ import {
 import "firebase/storage";
 import * as admin from "firebase-admin";
 
+interface UpdateUserInput {
+  Name: string;
+  Surname: string;
+  DateOfBirth: string;
+  postalCode: string;
+  city: string;
+  street: string;
+  streetNumber: string;
+  phoneNumber: string;
+}
+
+
 export const userMutations = {
   createUser: async (
     _: any,
@@ -133,6 +145,37 @@ export const userMutations = {
       return newUser;
     } catch (error) {
       console.error("Chyba při vytváření uživatele:", error);
+      throw error;
+    }
+  },
+
+  updateUser: async (
+    _: any,
+    { email, input }: { email: string; input: UpdateUserInput },
+    context: Context
+  ) => {
+    try {
+      const userQuery = context.db
+        .collection("User")
+        .where("Email", "==", email);
+      const userSnapshot = await userQuery.get();
+      if (!userSnapshot.empty) {
+        const userDoc = userSnapshot.docs[0];
+        await userDoc.ref.update({
+          Name: input.Name,
+          Surname: input.Surname,
+          DateOfBirth: input.DateOfBirth,
+          postalCode: input.postalCode,
+          city: input.city,
+          street: input.street,
+          streetNumber: input.streetNumber,
+          phoneNumber: input.phoneNumber,
+        });
+        return true;
+      }
+      return false;
+    } catch (error) {
+      console.error("Error updating user:", error);
       throw error;
     }
   },

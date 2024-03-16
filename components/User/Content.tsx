@@ -218,10 +218,12 @@ const Content: React.FC = () => {
             sx={{ marginBottom: "2em", marginLeft: "3em", marginRight: "3em" }}
           >
             <Typography sx={{ fontSize: "1.5em", fontWeight: "500" }}>
-            Telefon:
+              Telefon:
             </Typography>
             <Typography sx={{ fontSize: "1.2em" }}>
-              {formatPhoneNumber(userInfoData?.getUserByNameAndSurname.phoneNumber)}
+              {formatPhoneNumber(
+                userInfoData?.getUserByNameAndSurname.phoneNumber
+              )}
             </Typography>
           </Box>
           <Box
@@ -231,7 +233,10 @@ const Content: React.FC = () => {
               Adresa:
             </Typography>
             <Typography sx={{ fontSize: "1.2em" }}>
-              {userInfoData?.getUserByNameAndSurname.street}{" "}{userInfoData?.getUserByNameAndSurname.streetNumber},{" "}{userInfoData?.getUserByNameAndSurname.postalCode}{" "}{userInfoData?.getUserByNameAndSurname.city}
+              {userInfoData?.getUserByNameAndSurname.street}{" "}
+              {userInfoData?.getUserByNameAndSurname.streetNumber},{" "}
+              {userInfoData?.getUserByNameAndSurname.postalCode}{" "}
+              {userInfoData?.getUserByNameAndSurname.city}
             </Typography>
           </Box>
           <Box sx={{ marginLeft: "3em", marginRight: "3em" }}>
@@ -305,7 +310,7 @@ const Content: React.FC = () => {
         </>
       ) : (
         <Box sx={{ marginTop: "1em", marginLeft: "3em", marginRight: "3em" }}>
-          <Edit />
+          <Edit onEditModeChange={setEditMode} />{" "}
           <Button onClick={handleBackClick}>Zpět</Button>
         </Box>
       )}

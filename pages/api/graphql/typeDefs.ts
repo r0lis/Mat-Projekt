@@ -419,6 +419,20 @@ export const typeDefs = gql`
     lefD: SubteamMemberInput3
     rigD: SubteamMemberInput3
   }
+
+  input UpdateUserInput {
+    Name: String
+    Surname: String
+    Email: String
+    DateOfBirth: String
+    postalCode: String
+    city: String
+    street: String
+    streetNumber: String
+    phoneNumber: String
+  }
+
+
   type Query {
     user(id: String): User
     getUserByNameAndSurname(email: String): UserDetail
@@ -533,5 +547,6 @@ export const typeDefs = gql`
     updateFormation(subteamId: String!, formationName: String!, cards: CardsInput!): Boolean
     deleteFormation(subteamId: String!, formationId: String!): Boolean
     deleteSubteamMember(subteamId: String!, email: String!): Boolean
+    updateUser(email: String!, input: UpdateUserInput): Boolean
   }
   `;
