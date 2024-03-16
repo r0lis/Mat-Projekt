@@ -2231,7 +2231,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                     ? "79%"
                     : selectedMember?.Role === "0" ||
                       selectedMember?.Role === "No Role Assigned"
-                      ? "81.5%"
+                      ? "78%"
                       : "77.5%",
                     transform: "translateY(-50%)",
                     marginLeft: "-3em",
@@ -2260,7 +2260,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                         ? "61%"
                         : selectedMember?.Role === "0" ||
                           selectedMember?.Role === "No Role Assigned"
-                        ? "61%"
+                        ? "60%"
                         : "61.5%",
                     transform: "translateY(-50%)",
                     marginLeft: "-3em",
@@ -2282,7 +2282,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                         ? "17%"
                         : selectedMember?.Role === "0" ||
                           selectedMember?.Role === "No Role Assigned"
-                        ? "15%"
+                        ? "16%"
                         : "16%",
                     transform: "translateY(-50%)",
                     marginLeft: "-3em",
