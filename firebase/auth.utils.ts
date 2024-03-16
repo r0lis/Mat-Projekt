@@ -5,6 +5,7 @@ import {
   deleteUser,
   getAuth,
   sendEmailVerification,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
 } from 'firebase/auth';
 
@@ -17,6 +18,15 @@ export const authUtils = {
   },
   logout: async () => {
     await auth.signOut();
+  },
+  forgotPassword: async (email: string) => {
+    try {
+      // Odeslat e-mail pro obnovu hesla
+      await sendPasswordResetEmail(auth, email);
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
   },
   sendEmailVerification: async () => {
     try {

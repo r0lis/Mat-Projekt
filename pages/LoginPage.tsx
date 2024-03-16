@@ -30,6 +30,17 @@ const LoginPage: React.FC = () => {
     }
   };
 
+  const handleForgotPassword = async () => {
+    try {
+      await authUtils.forgotPassword(email);
+      setError("E-mail pro obnovu hesla byl úspěšně odeslán.");
+    } catch (error) {
+      setError(
+        "Nepodařilo se odeslat e-mail pro obnovu hesla. Zkontrolujte, zda je zadaná e-mailová adresa správná."
+      );
+    }
+  };
+
   return (
     <Box
       sx={{
@@ -164,17 +175,17 @@ const LoginPage: React.FC = () => {
                 />
                 <Box sx={{ display: "flex" }}>
                   <TextField
-                      type={showPassword ? "text" : "password"}
-                      label="Heslo"
+                    type={showPassword ? "text" : "password"}
+                    label="Heslo"
                     value={password}
                     onSubmit={handleLogin}
                     onChange={(e) => setPassword(e.target.value)}
                     fullWidth
                     margin="normal"
                   />
-                   <Button onClick={() => setShowPassword(!showPassword)}>
-                      {showPassword ? "Skrýt" : "Zobrazit"}
-                    </Button>
+                  <Button onClick={() => setShowPassword(!showPassword)}>
+                    {showPassword ? "Skrýt" : "Zobrazit"}
+                  </Button>
                 </Box>
 
                 <Button
@@ -244,6 +255,36 @@ const LoginPage: React.FC = () => {
                       }}
                     >
                       Registrovat
+                    </Link>
+                    <Link
+                      onClick={handleForgotPassword}
+                      sx={{
+                        marginRight: "1rem",
+                        marginTop: "1rem",
+                        color: "#b71dde",
+                        textDecoration: "none",
+                        cursor: "pointer",
+                        position: "relative",
+                        "&::before": {
+                          content: "''",
+                          position: "absolute",
+                          width: "100%",
+                          height: "4px",
+                          borderRadius: "4px",
+                          backgroundColor: "#b71dde",
+                          bottom: "-4px", // Adjust position to place it below the text
+                          left: "0",
+                          transformOrigin: "right",
+                          transform: "scaleX(0)",
+                          transition: "transform 0.3s ease-in-out",
+                        },
+                        "&:hover::before": {
+                          transformOrigin: "left",
+                          transform: "scaleX(1)",
+                        },
+                      }}
+                    >
+                      Zapomenuté heslo
                     </Link>
                     <Link
                       href="/"
