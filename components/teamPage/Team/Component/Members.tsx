@@ -79,6 +79,13 @@ const UPDATE_SUBTEAM_MEMBER = gql`
   }
 `;
 
+const DELETE_SUBTEAM_MEMBER = gql`
+mutation DeleteSubteamMember($subteamId: String!, $email: String!) {
+  deleteSubteamMember(subteamId: $subteamId, email: $email)
+}
+`;
+
+
 type MembersProps = {
   subteamId: string;
   idTeam: string;
@@ -132,6 +139,33 @@ const getPositionText = (position: string): string => {
   }
 };
 
+type DeleteConfirmationModalProps = {
+  open: boolean;
+  onClose: () => void;
+  onDelete: () => void;
+};
+
+const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({
+  open,
+  onClose,
+  onDelete,
+}) => {
+  return (
+    <Dialog open={open} onClose={onClose}>
+      <DialogTitle>Opravdu chcete smazat člena týmu?</DialogTitle>
+      <DialogContent>
+        Tato akce je nevratná. Opravdu chcete pokračovat?
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={onClose}>Zrušit</Button>
+        <Button onClick={onDelete} color="error">
+          Ano, smazat
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+};
+
 const Members: React.FC<MembersProps> = (subteamId) => {
   const user = authUtils.getCurrentUser();
   const id = subteamId.subteamId;
@@ -145,6 +179,8 @@ const Members: React.FC<MembersProps> = (subteamId) => {
   const [isEditModalOpen, setEditModalOpen] = useState(false);
   const userEmail = user?.email;
   const [updateSubteamMember] = useMutation(UPDATE_SUBTEAM_MEMBER);
+  const [deleteSubteamMember] = useMutation(DELETE_SUBTEAM_MEMBER);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
   const handleCheckboxChange = (
     email: string,
@@ -251,6 +287,26 @@ const Members: React.FC<MembersProps> = (subteamId) => {
   const handleEditClick = (member: Member) => {
     setSelectedMember(member);
     setEditModalOpen(true);
+  };
+
+  const handleDeleteClick = (member: Member) => {
+    setSelectedMember(member);
+    setDeleteModalOpen(true);
+  };
+
+  const handleDeleteConfirmation = async () => {
+    try {
+      await deleteSubteamMember({
+        variables: {
+          subteamId: id,
+          email: selectedMember?.email,
+        },
+      });
+      setDeleteModalOpen(false);
+      refetch();
+    } catch (error) {
+      console.error("Error deleting subteam member:", error);
+    }
   };
 
   const role = roleData.getUserRoleInTeam.role;
@@ -536,6 +592,18 @@ const Members: React.FC<MembersProps> = (subteamId) => {
                     <TableCell>{getPositionText(member.position)}</TableCell>
                     <TableCell>
                       {editMember && (
+                        <Box>
+                        <Button
+                  sx={{
+                    backgroundColor: "red",
+                    ":hover": { backgroundColor: "gray" },
+                    color: "white",
+                    marginRight: "1em",
+                  }}
+                  onClick={() => handleDeleteClick(member)}
+                >
+                  Smazat
+                </Button>
                         <Button
                           sx={{
                             backgroundColor: "#027ef2",
@@ -548,6 +616,7 @@ const Members: React.FC<MembersProps> = (subteamId) => {
                         >
                           Upravit
                         </Button>
+                        </Box>
                       )}
                     </TableCell>
                   </TableRow>
@@ -616,6 +685,11 @@ const Members: React.FC<MembersProps> = (subteamId) => {
           </DialogActions>
         </Box>
       </Dialog>
+      <DeleteConfirmationModal
+        open={deleteModalOpen}
+        onClose={() => setDeleteModalOpen(false)}
+        onDelete={handleDeleteConfirmation}
+      />
     </Box>
   );
 };

@@ -463,6 +463,37 @@ export const subteamMutations = {
         throw error;
       }
     },
+
+    deleteSubteamMember: async (
+      _: any,
+      { subteamId, email }: { subteamId: string; email: string },
+      context: Context
+    ) => {
+      try {
+        const subteamDoc = context.db.collection("Teams").doc(subteamId);
+        const subteamSnapshot = await subteamDoc.get();
+    
+        if (!subteamSnapshot.exists) {
+          throw new Error(`Subteam with ID ${subteamId} not found`);
+        }
+    
+        const existingMembers = subteamSnapshot.data()?.subteamMembers || [];
+    
+        const updatedMembers = existingMembers.filter(
+          (member: { email: string }) => member.email !== email
+        );
+    
+        await subteamDoc.update({
+          subteamMembers: updatedMembers,
+        });
+    
+        return true;
+      } catch (error) {
+        console.error("Error deleting subteam member:", error);
+        throw error;
+      }
+    }
+    ,
     
     deleteTraining: async (
       _: any,
