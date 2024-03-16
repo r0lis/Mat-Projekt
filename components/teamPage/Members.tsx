@@ -1834,20 +1834,22 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
               >
                 Telefon:
               </Typography>
-              <Typography
-                id="modal-description"
-                sx={{
-                  marginTop: editMode ? "2em" : "1em",
-                  fontFamily: "Roboto",
-                  fontSize: "1em",
-                  marginBottom: "1em",
-                  whiteSpace: "nowrap",
-                  color: "black",
-                  fontWeight: "500",
-                }}
-              >
-                Zdravotní prohlídka:
-              </Typography>
+              {selectedMember?.Role === "3" && (
+                <Typography
+                  id="modal-description"
+                  sx={{
+                    marginTop: editMode ? "2em" : "1em",
+                    fontFamily: "Roboto",
+                    fontSize: "1em",
+                    marginBottom: "1em",
+                    whiteSpace: "nowrap",
+                    color: "black",
+                    fontWeight: "500",
+                  }}
+                >
+                  Zdravotní prohlídka:
+                </Typography>
+              )}
               <Typography
                 id="modal-description"
                 sx={{
@@ -2010,48 +2012,48 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
               >
                 {formatPhoneNumber(selectedMember?.phoneNumber)}
               </Typography>
-
-              <Box sx={{ display: "flex" }}>
-                {editMode ? (
-                  <Box>
-                    <TextField
-                      label="Platnost"
-                      type="date"
-                      value={medicalDocDate}
-                      onChange={handleDateChange}
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                    />
-                  </Box>
-                ) : (
-                  <Box sx={{ marginRight: "1em" }}>
-                    <Typography
-                      sx={{ whiteSpace: "nowrap", marginBottom: "1em" }}
-                    >
-                      {selectedMember
-                        ? selectedMember.docDate === "No Date Assigned"
-                          ? "Není zvoleno"
-                          : new Date(selectedMember.docDate).toLocaleDateString(
-                              "cs-CZ",
-                              {
+              {selectedMember?.Role === "3" && (
+                <Box sx={{ display: "flex" }}>
+                  {editMode ? (
+                    <Box>
+                      <TextField
+                        label="Platnost"
+                        type="date"
+                        value={medicalDocDate}
+                        onChange={handleDateChange}
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                      />
+                    </Box>
+                  ) : (
+                    <Box sx={{ marginRight: "1em" }}>
+                      <Typography
+                        sx={{ whiteSpace: "nowrap", marginBottom: "1em" }}
+                      >
+                        {selectedMember
+                          ? selectedMember.docDate === "No Date Assigned"
+                            ? "Není zvoleno"
+                            : new Date(
+                                selectedMember.docDate
+                              ).toLocaleDateString("cs-CZ", {
                                 day: "2-digit",
                                 month: "2-digit",
                                 year: "numeric",
-                              }
-                            )
-                        : "Není zvoleno"}
-                    </Typography>
-                  </Box>
-                )}
+                              })
+                          : "Není zvoleno"}
+                      </Typography>
+                    </Box>
+                  )}
 
-                <Box
-                  sx={{ paddingTop: editMode ? "0.8em" : "" }}
-                  onClick={handleOpenModalPlayerImage2}
-                >
-                  <ArticleIcon />
+                  <Box
+                    sx={{ paddingTop: editMode ? "0.8em" : "" }}
+                    onClick={handleOpenModalPlayerImage2}
+                  >
+                    <ArticleIcon />
+                  </Box>
                 </Box>
-              </Box>
+              )}
 
               <Modal
                 open={modalOpenPlayerImage2}
@@ -2221,13 +2223,16 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                     borderBottom: "2px solid gray", // Change the color as needed
                     position: "absolute",
                     top:
-                      selectedMember?.Role === "0" ||
+                    selectedMember?.Role === "1" ||
+                    selectedMember?.Role === "2" && selectedMember?.Email === currentUserEmail ? "80%"
+                    :    selectedMember?.Role === "1" ||
+                    selectedMember?.Role === "2"
+                      ? "76%": selectedMember?.Email === currentUserEmail
+                    ? "79%"
+                    : selectedMember?.Role === "0" ||
                       selectedMember?.Role === "No Role Assigned"
-                        ? "79%"
-                        : selectedMember &&
-                          selectedMember.Email === currentUserEmail
-                        ? "81.5%"
-                        : "77.5%",
+                      ? "81.5%"
+                      : "77.5%",
                     transform: "translateY(-50%)",
                     marginLeft: "-3em",
                     zIndex: -1,
@@ -2247,12 +2252,15 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                     borderBottom: "2px solid gray", // Change the color as needed
                     position: "absolute",
                     top:
-                      selectedMember?.Role === "0" ||
-                      selectedMember?.Role === "No Role Assigned"
+                        selectedMember?.Role === "1" ||
+                        selectedMember?.Role === "2" && selectedMember?.Email === currentUserEmail ? "62%" 
+                        :    selectedMember?.Role === "1" ||
+                        selectedMember?.Role === "2"
+                          ? "60%" : selectedMember?.Email === currentUserEmail
                         ? "61%"
-                        : selectedMember &&
-                          selectedMember.Email === currentUserEmail
-                        ? "65%"
+                        : selectedMember?.Role === "0" ||
+                          selectedMember?.Role === "No Role Assigned"
+                        ? "61%"
                         : "61.5%",
                     transform: "translateY(-50%)",
                     marginLeft: "-3em",
@@ -2265,12 +2273,16 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                     borderBottom: "2px solid gray", // Change the color as needed
                     position: "absolute",
                     top:
-                      selectedMember?.Role === "0" ||
-                      selectedMember?.Role === "No Role Assigned"
-                        ? "15%"
-                        : selectedMember &&
-                          selectedMember.Email === currentUserEmail
+                    
+                        selectedMember?.Role === "1" ||
+                        selectedMember?.Role === "2" && selectedMember?.Email === currentUserEmail ? "18%" 
+                        :    selectedMember?.Role === "1" ||
+                        selectedMember?.Role === "2"
+                          ? "17%" : selectedMember?.Email === currentUserEmail
                         ? "17%"
+                        : selectedMember?.Role === "0" ||
+                          selectedMember?.Role === "No Role Assigned"
+                        ? "15%"
                         : "16%",
                     transform: "translateY(-50%)",
                     marginLeft: "-3em",
