@@ -7,7 +7,6 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableHead,
   TableRow,
 } from "@mui/material";
 import React from "react";
@@ -21,6 +20,7 @@ const GET_TEAM_MEMBERS_DETAILS = gql`
       Role
       Email
       Picture
+      phoneNumber
       DateOfBirth
       Subteams {
         Name
@@ -32,6 +32,21 @@ const GET_TEAM_MEMBERS_DETAILS = gql`
 
 type Props = {
   id: string;
+};
+
+const formatPhoneNumber = (phoneNumber: string | undefined) => {
+  const cleaned = ("" + phoneNumber).replace(/\D/g, "");
+  const match = cleaned.match(/^(\d{1,3})(\d{1,3})?(\d{1,3})?(\d{1,3})?$/);
+  if (match) {
+    return (
+      "+ 420 " +
+      match[1] +
+      (match[2] ? " " + match[2] : "") +
+      (match[3] ? " " + match[3] : "") +
+      (match[4] ? " " + match[4] : "")
+    );
+  }
+  return phoneNumber;
 };
 
 const Contacts: React.FC<Props> = ({ id }) => {
@@ -69,11 +84,6 @@ const Contacts: React.FC<Props> = ({ id }) => {
           </Box>
           <Box sx={{marginLeft:"2%", marginRight:"2%"}}>
           <Table>
-            <TableHead>
-              <TableRow>
-                
-              </TableRow>
-            </TableHead>
             <TableBody>
               {teamMembers
                 .filter((member: any) => member.Role === "1")
@@ -81,6 +91,7 @@ const Contacts: React.FC<Props> = ({ id }) => {
                   <TableRow key={index}>
                     <TableCell>{member.Name} {member.Surname}</TableCell>
                     <TableCell>{member.Email}</TableCell>
+                    <TableCell>{formatPhoneNumber(member.phoneNumber)}</TableCell>
                   </TableRow>
                 ))}
             </TableBody>
@@ -91,11 +102,6 @@ const Contacts: React.FC<Props> = ({ id }) => {
           </Box>
           <Box sx={{marginLeft:"2%", marginRight:"2%"}}>
           <Table>
-            <TableHead>
-              <TableRow>
-              
-              </TableRow>
-            </TableHead>
             <TableBody>
               {teamMembers
                 .filter((member: any) => member.Role === "2")
@@ -103,6 +109,7 @@ const Contacts: React.FC<Props> = ({ id }) => {
                   <TableRow key={index}>
                     <TableCell>{member.Name} {member.Surname}</TableCell>
                     <TableCell>{member.Email}</TableCell>
+                    <TableCell>{formatPhoneNumber(member.phoneNumber)}</TableCell>
                   </TableRow>
                 ))}
             </TableBody>

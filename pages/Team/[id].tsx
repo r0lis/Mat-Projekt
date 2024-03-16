@@ -10,7 +10,6 @@ import Trainings from "../../public/assets/training.png";
 import Calendar from "../../public/assets/Kalendar.png";
 import Rousters from "../../public/assets/network.png";
 import Nominations from "../../public/assets/Nomination.png";
-import Events from "../../public/assets/Event.png";
 import Members from "../../public/assets/Members.png";
 import Settings from "../../public/assets/Settings.png";
 import Image from "next/image";
@@ -19,7 +18,6 @@ import TrainingsComponent from "@/components/teamPage/Trenining";
 import CalendarComponent from "@/components/teamPage/Calendar";
 import RoustersComponent from "@/components/teamPage/Rousters";
 import NominationsComponent from "@/components/teamPage/Matchs";
-import EventsComponent from "@/components/teamPage/Events";
 import MembersComponent from "@/components/teamPage/Members";
 import SettingsComponent from "@/components/teamPage/Settings";
 import TeamIcon from "@/public/assets/people.png";
@@ -34,7 +32,6 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 const items = [
   { label: "Overview", caption: "Přehled", image: Overview },
   { label: "Kalendar", caption: "Kalendář", image: Calendar },
-  { label: "Events", caption: "Události", image: Events },
   { label: "Trainings", caption: "Treninky", image: Trainings },
   { label: "Matchs", caption: "Zápasy", image: Nominations },
   { label: "Rouster", caption: "Soupisky", image: Rousters },
@@ -396,7 +393,6 @@ const Team: React.FC = () => {
             {activeLink === "Matchs" && (
               <NominationsComponent teamId={id as string} />
             )}
-            {activeLink === "Events" && <EventsComponent />}
             {activeLink === "Team" && <TeamComponent id={id as string} />}
             {activeLink === "Members" && <MembersComponent id={id as string} />}
             {activeLink === "Settings" && <SettingsComponent />}

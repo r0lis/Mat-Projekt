@@ -24,6 +24,7 @@ import {
   Select,
   Alert,
 } from "@mui/material";
+import HourglassEmptyIcon from "@mui/icons-material/HourglassEmpty";
 
 const GET_COMPLETESUBTEAM_DETAILS = gql`
   query GetCompleteSubteamDetail($subteamId: String!) {
@@ -36,7 +37,8 @@ const GET_COMPLETESUBTEAM_DETAILS = gql`
         email
         role
         position
-      
+        doc
+        docDate
         playPosition
       }
     }
@@ -73,6 +75,8 @@ interface SubteamMember {
   surname: string;
   picture: string;
   dateOfBirth: string;
+  doc: string;
+  docDate: string;
   position: string;
   playPosition: string;
 }
@@ -117,6 +121,8 @@ const ContentRouster: React.FC<ContentRousterProps> = ({
     role: string;
     email: string;
     dateOfBirth: string;
+    doc: string;
+    docDate: string;
     picture: string;
     position: string;
     playPosition: string;
@@ -177,7 +183,6 @@ const ContentRouster: React.FC<ContentRousterProps> = ({
   if (error || roleError) return <Typography>Chyba</Typography>;
 
   const role = roleData?.getUserRoleInTeam.role || "";
-  
 
   const filteredMembersToShow = searchInput
     ? filteredMembers.filter(
@@ -254,6 +259,7 @@ const ContentRouster: React.FC<ContentRousterProps> = ({
   }
   const isRole1Or2 = role === "1" || role === "2";
 
+  console.log("filteredMembersToShow", filteredMembersToShow);
 
   return (
     <Box>
@@ -363,9 +369,31 @@ const ContentRouster: React.FC<ContentRousterProps> = ({
                       {getPlayPositionText(member.playPosition)}
                     </Typography>
                   </TableCell>
-                  <TableCell>
-                    <Typography> do 2. 3. 2023</Typography>
-                  </TableCell>
+                  {member.role === "3" ? (
+                    <TableCell>
+                      <Typography sx={{ whiteSpace: "nowrap" }}>
+                        {member.docDate
+                          ? member.docDate === "No Date Assigned"
+                            ? "Není zvoleno"
+                            : "do: " +
+                              new Date(member.docDate).toLocaleDateString(
+                                "cs-CZ",
+                                {
+                                  day: "2-digit",
+                                  month: "2-digit",
+                                  year: "numeric",
+                                }
+                              )
+                          : "Není zvoleno"}
+                      </Typography>
+                    </TableCell>
+                  ) : (
+                    <TableCell>
+                      <Box>
+                        <HourglassEmptyIcon sx={{ marginLeft: "20%" }} />
+                      </Box>
+                    </TableCell>
+                  )}
                 </TableRow>
               )
             )}
@@ -597,8 +625,6 @@ const ContentRouster: React.FC<ContentRousterProps> = ({
                           ...(prevMember as SubteamMember), // Assert that prevMember is of type Member
                           playPosition: e.target.value as string,
                         }));
-                        
-                        
                       }}
                     >
                       <MenuItem value="1">Centr</MenuItem>
@@ -680,8 +706,7 @@ const ContentRouster: React.FC<ContentRousterProps> = ({
                   display: "flex",
                   alignItems: "center",
                 }}
-              >
-              </Box>
+              ></Box>
               <Box
                 sx={{
                   display: "flex",

@@ -376,7 +376,12 @@ const Halls: React.FC<Props> = ({ id }) => {
         {addHall ? (
           <AddHall id={id} onClose={handleCloseAddHall} />
         ) : (
-          <Box sx={{ marginLeft: "2%", marginTop: "0.5em" }}>
+          <Box
+            sx={{
+              marginLeft: "2%",
+              marginTop: "0.5em",
+            }}
+          >
             {halls && halls.length > 0 ? (
               <List>
                 {halls.map((hall: Hall, index: number) => (
@@ -424,22 +429,42 @@ const Halls: React.FC<Props> = ({ id }) => {
               boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.3)",
             }}
           >
-            <Box sx={{ backgroundColor: "#c2c3c4", borderRadius: "10px 10px 0px 0px", paddingTop:"2em", paddingLeft:"2em", paddingRight:"2em", paddingBottom:"1em", borderBottom:"2px solid gray" }}>
+            <Box
+              sx={{
+                backgroundColor: "#c2c3c4",
+                borderRadius: "10px 10px 0px 0px",
+                paddingTop: "2em",
+                paddingLeft: "2em",
+                paddingRight: "2em",
+                paddingBottom: "1em",
+                borderBottom: "2px solid gray",
+              }}
+            >
               <Typography id="info-modal-title" variant="h6" component="h2">
                 Název: {selectedHall?.name}
               </Typography>
             </Box>
-            <Box sx={{ paddingTop: "1em", paddingLeft:"2em", paddingRight:"2em", paddingBottom:"1em" }}>
+            <Box
+              sx={{
+                paddingTop: "1em",
+                paddingLeft: "2em",
+                paddingRight: "2em",
+                paddingBottom: "1em",
+              }}
+            >
               <Typography id="info-modal-description" sx={{ mt: 2 }}>
                 Umístění: {selectedHall?.location}
               </Typography>
-              <Box sx={{paddingTop:"0.5em"}}>
+              {role == 1 && (
+              <Box sx={{ paddingTop: "0.5em" }}>
                 <Button onClick={handleDeleteHall}>Smazat</Button>
               </Box>
+              )}
             </Box>
           </Box>
         </Modal>
       </Box>
+      <Box sx={{borderRight:"2px solid gray", marginLeft:"auto", marginRight:"auto"}}></Box>
       <Box
         sx={{
           marginLeft: isSmallWindow ? "0" : "auto",
@@ -484,7 +509,8 @@ const Halls: React.FC<Props> = ({ id }) => {
           <AddGym id={id} onClose={handleCloseAddGym} />
         ) : (
           <Box
-            sx={{ marginLeft: isSmallWindow ? "3%" : "", marginTop: "0.5em" }}
+            sx={{ marginLeft: isSmallWindow ? "3%" : "", marginTop: "0.5em",
+          }}
           >
             {gyms && gyms.length > 0 ? (
               <List>
@@ -546,13 +572,17 @@ const Halls: React.FC<Props> = ({ id }) => {
               <Typography id="info-modal-description" sx={{ mt: 2 }}>
                 Umístění: {selectedGym?.location}
               </Typography>
+              {role == 1 && (
               <Box>
                 <Button onClick={handleDeleteGym}>Smazat</Button>
               </Box>
+              )}
             </Box>
           </Box>
         </Modal>
       </Box>
+      <Box sx={{borderRight:"2px solid gray", marginLeft:"auto", marginRight:"auto"}}></Box>
+
       <Box
         sx={{
           marginLeft: isSmallWindow ? "0" : "auto",
@@ -666,9 +696,11 @@ const Halls: React.FC<Props> = ({ id }) => {
               <Typography id="info-modal-description" sx={{ mt: 2 }}>
                 Umístění: {selectedTreningHall?.location}
               </Typography>
+              {role == 1 && (
               <Box>
                 <Button onClick={handleDeleteTreningHall}>Smazat</Button>
               </Box>
+              )}
             </Box>
           </Box>
         </Modal>

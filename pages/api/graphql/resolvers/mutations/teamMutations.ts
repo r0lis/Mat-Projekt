@@ -110,7 +110,11 @@ export const teamMutations = {
     try {
       const newTeamDoc = context.db.collection("Team").doc();
       const teamId = generateRandomString(30);
+      const timeCreated = new Date();
+      const formattedTimeCreated = `${timeCreated.getDate()}.${timeCreated.getMonth() + 1}. ${timeCreated.getFullYear()}`;
+
       await addUserToTeam(context, input.AdminEmail, teamId);
+
 
       const newTeam = {
         Name: input.Name,
@@ -123,7 +127,7 @@ export const teamMutations = {
         OwnerName: input.OwnerName,
         OwnerSurname: input.OwnerSurname,
         Finished: false,
-        TimeCreated: firestore.Timestamp.now(),
+        TimeCreated: formattedTimeCreated,
       };
 
       await newTeamDoc.set(newTeam);

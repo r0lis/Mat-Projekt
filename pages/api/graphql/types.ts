@@ -18,6 +18,8 @@ export type User = {
   streetNumber: string;
   postalCode: string;
   city: string;
+  doc: string;
+  docDate: string;
   phoneNumber: string;
   Email: string;
   DateOfBirth: string;
@@ -29,7 +31,7 @@ export type Team = {
   teamId: string;
   MembersEmails: [String];
   AdminEmail: string;
-  Members: { member: string; role: string }[];
+  Members: { member: string; role: string, doc: string, docDate: string }[];
   Email: string;
   Logo: string;
   Place: string;
@@ -172,6 +174,8 @@ export type SubteamMember = {
   email: string;
   role: string;
   position: string;
+  doc: string;
+  docDate: string;
   playPosition: string;
 };
 
@@ -218,6 +222,8 @@ export type CompleteSubteamMember = {
   picture: string;
   dateOfBirth: string;
   playPosition: string;
+  doc: string;
+  docDate: string;
   role: string;
   position: string;
 };

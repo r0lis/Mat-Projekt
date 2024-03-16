@@ -1,13 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-import {
-  Box,
-  CircularProgress,
-  Typography,
-} from "@mui/material";
+import { Box, CircularProgress, Typography } from "@mui/material";
 import React from "react";
-import { gql,  useQuery } from "@apollo/client";
-
+import { gql, useQuery } from "@apollo/client";
 
 const GET_TEAM_DETAILS = gql`
   query GetTeam($teamId: String!) {
@@ -29,9 +24,7 @@ type Props = {
   id: string;
 };
 
-const Info: React.FC<Props> = (teamId ) => {
-
-
+const Info: React.FC<Props> = (teamId) => {
   const {
     loading: loadingDetails,
     error: errorDetails,
@@ -40,9 +33,7 @@ const Info: React.FC<Props> = (teamId ) => {
     variables: { teamId: teamId.id },
   });
 
- 
-
-  if (  loadingDetails)
+  if (loadingDetails)
     return (
       <Box
         sx={{
@@ -59,41 +50,36 @@ const Info: React.FC<Props> = (teamId ) => {
 
   const teamDetails = dataDetails.getTeam;
 
-  
 
   return (
-      <Box sx={{ marginTop: "1em" }}>
-            <Typography sx={{ fontFamily: "Roboto", fontWeight: "600" }}>
-              Vytvořeno
-            </Typography>
-            <Typography sx={{ fontFamily: "Roboto" }}>
-              17.01.2024
-            </Typography>
-            <Typography sx={{ fontFamily: "Roboto", fontWeight: "600" }}>
-              Klubový email
-            </Typography>
-            <Typography sx={{ fontFamily: "Roboto" }}>
-              {teamDetails.Email}
-            </Typography>
-            <Typography sx={{ fontFamily: "Roboto", fontWeight: "600" }}>
-              Majitel
-            </Typography>
-            <Typography sx={{ fontFamily: "Roboto" }}>
-              {teamDetails.OwnerName} {teamDetails.OwnerSurname}
-            </Typography>
-            <Typography sx={{ fontFamily: "Roboto", fontWeight: "600" }}>
-              Email majitele
-            </Typography>
-            <Typography sx={{ fontFamily: "Roboto" }}>
-              {teamDetails.AdminEmail}
-            </Typography>
-            <Typography sx={{ fontFamily: "Roboto", fontWeight: "600" }}>
-              Místo
-            </Typography>
-            <Typography sx={{ fontFamily: "Roboto" }}>
-              {teamDetails.Place}
-            </Typography>
-          </Box>
+    <Box sx={{ marginTop: "1em" }}>
+      <Typography sx={{ fontFamily: "Roboto", fontWeight: "600" }}>
+        Vytvořeno
+      </Typography>
+      <Typography sx={{ fontFamily: "Roboto" }}>
+        {teamDetails.TimeCreated}
+      </Typography>
+      <Typography sx={{ fontFamily: "Roboto", fontWeight: "600" }}>
+        Klubový email
+      </Typography>
+      <Typography sx={{ fontFamily: "Roboto" }}>{teamDetails.Email}</Typography>
+      <Typography sx={{ fontFamily: "Roboto", fontWeight: "600" }}>
+        Majitel
+      </Typography>
+      <Typography sx={{ fontFamily: "Roboto" }}>
+        {teamDetails.OwnerName} {teamDetails.OwnerSurname}
+      </Typography>
+      <Typography sx={{ fontFamily: "Roboto", fontWeight: "600" }}>
+        Email majitele
+      </Typography>
+      <Typography sx={{ fontFamily: "Roboto" }}>
+        {teamDetails.AdminEmail}
+      </Typography>
+      <Typography sx={{ fontFamily: "Roboto", fontWeight: "600" }}>
+        Místo
+      </Typography>
+      <Typography sx={{ fontFamily: "Roboto" }}>{teamDetails.Place}</Typography>
+    </Box>
   );
 };
 

@@ -179,7 +179,7 @@ const Content: React.FC<Props> = (teamId) => {
   useEffect(() => {
     if (!halls || !treningHalls || !gyms || halls.length === 0 || treningHalls.length === 0 || gyms.length === 0) {
       setShowWarning(true);
-      setWarningMessage("Některá sportovní nejsou přidány. Přidejte prosím.");
+      setWarningMessage("Některá sportovní centra nejsou přidány. Přidejte prosím.");
     } else {
       setShowWarning(false);
       setWarningMessage("");

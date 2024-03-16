@@ -212,6 +212,8 @@ export const typeDefs = gql`
   type SubteamMember {
     email: String!
     role: String!
+    doc: String
+    docDate: String
     position: String!
     playPosition: String!
   }
@@ -231,6 +233,8 @@ export const typeDefs = gql`
     email: String
     dateOfBirth: String
     picture: String
+    doc: String
+    docDate: String
     role: String
     position: String
     playPosition: String

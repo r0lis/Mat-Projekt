@@ -245,7 +245,7 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
 
     if (!hasRole1 || !hasRole2Or3) {
       setError(
-        "Musíte mít alespoň jednoho člena s roli 1 a jednoho s rolí 2 nebo 3."
+        "Musíte mít alespoň jednoho člena s role Management a jednoho s rolí Trenér nebo Hráč."
       );
       return;
     }

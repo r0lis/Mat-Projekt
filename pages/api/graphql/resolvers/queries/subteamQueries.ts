@@ -141,59 +141,61 @@ export const subteamQueries = {
   ): Promise<CompleteSubteam | null> => {
     try {
       if (context.user) {
-        const subteamDoc = await context.db
-          .collection('Teams')
-          .doc(subteamId)
-          .get();
-
+        const subteamDoc = await context.db.collection('Teams').doc(subteamId).get();
         if (subteamDoc.exists) {
           const subteamData = subteamDoc.data() as Subteam;
-          const subteamMembersPromises = subteamData.subteamMembers.map(
-            async (member: SubteamMember) => {
-              const userDoc = await context.db
-                .collection('User')
-                .where('Email', '==', member.email)
-                .get();
-
-              if (!userDoc.empty) {
-                const userData = userDoc.docs[0].data() as User;
-                const completeMember: CompleteSubteamMember = {
-                  name: userData.Name,
-                  surname: userData.Surname,
-                  email: userData.Email,
-                  dateOfBirth: userData.DateOfBirth,
-                  picture: userData.Picture,
-                  role: member.role,
-                  position: member.position,
-                  playPosition: member.playPosition,
-                };
-
-                return completeMember;
+          const teamId = subteamData.teamId;
+  
+          const teamDoc = await context.db.collection('Team').where('teamId', '==', teamId).get();
+          if (!teamDoc.empty) {
+            const teamData = teamDoc.docs[0].data() as Team;
+            const subteamMembersPromises = subteamData.subteamMembers.map(
+              async (member: SubteamMember) => {
+                const userDoc = await context.db.collection('User').where('Email', '==', member.email).get();
+                if (!userDoc.empty) {
+                  const userData = userDoc.docs[0].data() as User;
+                  // Najít odpovídajícího člena v poli Members v kolekci Team
+                  const teamMember = teamData.Members.find((m: any) => m.member === member.email);
+                  // Získat doc a docDate z nalezeného člena
+                  const docDate = teamMember?.docDate || "No Date Assigned";
+                  const doc = teamMember?.doc || "No Doc Assigned";
+                  const completeMember: CompleteSubteamMember = {
+                    name: userData.Name,
+                    surname: userData.Surname,
+                    email: userData.Email,
+                    dateOfBirth: userData.DateOfBirth,
+                    picture: userData.Picture,
+                    role: member.role,
+                    position: member.position,
+                    playPosition: member.playPosition,
+                    docDate: docDate,
+                    doc: doc,
+                  };
+                  return completeMember;
+                }
+                return null;
               }
-
-              return null;
-            }
-          );
-
-          const subteamMembers = await Promise.all(subteamMembersPromises);
-          const completeSubteam: CompleteSubteam = {
-            Name: subteamData.Name,
-            teamId: subteamData.teamId,
-            subteamId: subteamData.subteamId,
-            subteamMembers: subteamMembers.filter(Boolean) as CompleteSubteamMember[],
-            Formations: subteamData.Formations || [], // Přidáme formace
-          };
-
-          return completeSubteam;
+            );
+  
+            const subteamMembers = await Promise.all(subteamMembersPromises);
+            const completeSubteam: CompleteSubteam = {
+              Name: subteamData.Name,
+              teamId: subteamData.teamId,
+              subteamId: subteamData.subteamId,
+              subteamMembers: subteamMembers.filter(Boolean) as CompleteSubteamMember[],
+              Formations: subteamData.Formations || [],
+            };
+            return completeSubteam;
+          }
         }
       }
-
       return null;
     } catch (error) {
       console.error('Error fetching complete subteam details:', error);
       throw error;
     }
   },
+  
 
   getMissingSubteamMembers: async (
     _: any,
