@@ -107,8 +107,6 @@ const Content: React.FC = () => {
     }
   };
 
-  
-
   const handleEdit = (index: number) => {
     setEditIndex(index);
     setEmailValue(emails[index]);
