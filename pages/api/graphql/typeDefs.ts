@@ -432,7 +432,6 @@ export const typeDefs = gql`
     phoneNumber: String
   }
 
-
   type Query {
     user(id: String): User
     getUserByNameAndSurname(email: String): UserDetail

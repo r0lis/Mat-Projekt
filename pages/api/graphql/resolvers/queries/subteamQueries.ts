@@ -400,7 +400,6 @@ export const subteamQueries = {
     }
   },
 
-
   getAllTrainingBySubteamId: async (
     _: any,
     { subteamId }: { subteamId: string },
@@ -420,7 +419,6 @@ export const subteamQueries = {
       throw error;
     }
   },
-
 
   getTrainingsBySubteam: async (
     _: any,

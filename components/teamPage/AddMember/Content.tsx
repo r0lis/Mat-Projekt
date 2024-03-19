@@ -32,8 +32,6 @@ const CHECK_EMAILS_IN_TEAM_QUERY = gql`
   }
 `;
 
-
-
 const Content: React.FC = () => {
   const router = useRouter();
   const { id } = router.query;
@@ -282,6 +280,11 @@ const Content: React.FC = () => {
               >
                 Potvrdit
               </Button>
+              <Link href={`/Team/${id}`}>
+                <Button variant="contained" sx={{ marginLeft: "10px",marginTop: 2 }}>
+                  Zrušit
+                </Button>
+              </Link>
             </form>
           )}
         </Box>

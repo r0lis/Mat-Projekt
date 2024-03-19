@@ -24,8 +24,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const mailOptions = {
         from: 'appteammanager@gmail.com',
         to: email,
-        subject: 'Pozvánka na registraci',
-        html: `Registrace: <a href="${registrationLink}">${registrationLink}</a>`,
+        subject: 'Pozvánka do aplikace pro Florbalové kluby',
+
+        html: 
+        ` 
+        <h1>Pozvánka do florbalového klubu</h1>
+        <p>Dobrý den,</p>
+        <p>Byli jste pozváni do naší aplikace vaším klubem. Pro dokončení přidání do klubu klikněte na následující odkaz:</p>
+        <p>Registrace: <a href="${registrationLink}">${registrationLink}</a></p>
+        <p>Tento odkaz vás přesměruje do aplikace, kde si můžete vytvořit svůj účet. Pokud již účet vlastníte, stačí se přihlásit, a do klubu budete přidáni automaticky.</p>
+        <p>S pozdravem,</p>
+        <p>Aplikace pro florbalové kluby</p>
+        `,
       };
 
       await transporter.sendMail(mailOptions);

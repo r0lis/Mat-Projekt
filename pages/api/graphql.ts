@@ -19,7 +19,6 @@ type Context = {
 
 const db = firestore();
 
-
 const schema = createSchema({
   typeDefs,
   resolvers,

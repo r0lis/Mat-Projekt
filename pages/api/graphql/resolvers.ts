@@ -1,7 +1,3 @@
-/* eslint-disable @typescript-eslint/strict-boolean-expressions */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/ban-types */
 import 'firebase/storage';
 import { userQueries } from "./resolvers/queries/userQueries";
 import { teamQueries } from "./resolvers/queries/teamQueries";

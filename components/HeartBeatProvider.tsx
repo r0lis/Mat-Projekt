@@ -48,7 +48,7 @@ export const HeartbeatProvider = ({ children }: HeartbeatProviderProps): JSX.Ele
       if (user && userChecked) { 
         return; 
       }
-    }, 1000); // Spuštění heartbeatu až za 1 sekundu
+    }, 1000); 
 
     return () => clearTimeout(timer);
   }, [userChecked, apolloClient]);
