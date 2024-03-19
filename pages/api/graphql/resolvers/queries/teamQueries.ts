@@ -140,7 +140,7 @@ export const teamQueries = {
 
   checkEmailsInTeam: async (
     _: any,
-    { teamId, emails }: { teamId: string; emails: string[] },
+    { teamId }: { teamId: string },
     context: Context
   ) => {
     try {
@@ -152,11 +152,9 @@ export const teamQueries = {
       if (!teamSnapshot.empty) {
         const teamData = teamSnapshot.docs[0].data() as Team;
 
-        const duplicateEmails = emails.filter((email) =>
-          teamData.MembersEmails?.includes(email)
-        );
+        const existingEmails = teamData.MembersEmails || [];
 
-        return duplicateEmails;
+        return existingEmails;
       }
 
       return [];
@@ -165,6 +163,7 @@ export const teamQueries = {
       throw error;
     }
   },
+
   getTeamLogo: async (
     _: any,
     { teamId }: { teamId: string },

@@ -27,8 +27,8 @@ mutation UpdateMembers($teamId: String!, $newMembers: [String!]!) {
 }
 `;
 const CHECK_EMAILS_IN_TEAM_QUERY = gql`
-  query CheckEmailsInTeam($teamId: String!, $emails: [String!]!) {
-    checkEmailsInTeam(teamId: $teamId, emails: $emails)
+  query CheckEmailsInTeam($teamId: String!) {
+    checkEmailsInTeam(teamId: $teamId)
   }
 `;
 
@@ -43,25 +43,22 @@ const Content: React.FC = () => {
 
   const [isCreated, setIsCreated] = useState(false);
 
-  const { data, loading } = useQuery<{ checkEmailsInTeam: string[] }>(CHECK_EMAILS_IN_TEAM_QUERY, {
-    variables: {
-      teamId: id,
-      emails: emails,
-    },
-  });
-
-  
-
   // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
   const [updateMembersMutation] = useMutation(UPDATE_MEMBERS_MUTATION);
 
-  
+  const { data, loading } = useQuery<{ checkEmailsInTeam: string[] }>(CHECK_EMAILS_IN_TEAM_QUERY, {
+    variables: {
+      teamId: id,
+    },
+  });
+
+  if (loading) return <CircularProgress />;
+
+
+  console.log(data);
+
   const handleCreateTeam = async () => {
      try {
-      if (data && data.checkEmailsInTeam.length > 0) {
-        setError("Následující e-maily již existují v týmu: " + data.checkEmailsInTeam.join(", "));
-        return;
-      }
 
       const response = await updateMembersMutation({
         variables: {
@@ -82,6 +79,18 @@ const Content: React.FC = () => {
 
   const addEmail = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    const existingEmails = data?.checkEmailsInTeam || [];
+
+    if (existingEmails.includes(emailValue)) {
+      setError2("Tento e-mail již existuje v týmu.");
+      return; // Ukončení funkce, pokud je e-mail již v seznamu
+    }
+    if (emails.includes(emailValue)) {
+      setError2("Tento e-mail již byl přidán.");
+      return; // Ukončení funkce, pokud je e-mail již v seznamu
+    }
+    
     if (emailValue.trim() !== "" && emailRegex.test(emailValue)) {
       if (editIndex !== null) {
         const updatedEmails = [...emails];
