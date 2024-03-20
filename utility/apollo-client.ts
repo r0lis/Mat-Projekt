@@ -9,7 +9,7 @@ import {
   } from '@apollo/client';
   import { setContext } from '@apollo/client/link/context';
   import { onError } from '@apollo/client/link/error';
-  
+
   import { authUtils } from '@/firebase/auth.utils';
   // import { auth } from '../components/userContext';
   const isServer = typeof window === 'undefined';

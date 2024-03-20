@@ -85,9 +85,9 @@ const PhotoProvider: React.FC = () => {
         disabled={!selectedImage || loading}
         variant="contained"
         color="primary"
-        sx={{ marginTop: 1 }}
+        sx={{ marginTop: 1, marginBottom: 1}}
       >
-        Upload Image
+        Uložit obrázek
       </Button>
     </Box>
   );
