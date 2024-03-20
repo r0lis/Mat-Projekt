@@ -46,6 +46,7 @@ const GET_COMPLETESUBTEAM_DETAILS = gql`
         picture
         email
         role
+        playPosition
         position
       }
     }
@@ -78,6 +79,7 @@ interface SubteamMember {
   email: string;
   picture: string;
   role: string;
+  playPosition: string;
   position: string;
 }
 
@@ -86,6 +88,27 @@ interface Hall {
   location: string;
   hallId: string;
 }
+
+const getPlayPositionText = (position: string): string => {
+  switch (position) {
+    case null:
+      return "Není zvolena pozice";
+    case "1":
+      return "Centr";
+    case "2":
+      return "Levý křídlo";
+    case "3":
+      return "Pravý křídlo";
+    case "4":
+      return "Levý obránce";
+    case "5":
+      return "Pravý obránce";
+    case "6":
+      return "Brankář";
+    default:
+      return "";
+  }
+};
 
 const getPositionText = (position: string): string => {
   switch (position) {
@@ -488,6 +511,7 @@ const AddMatch: React.FC<Props> = ({ teamId, closeAddMatch }) => {
                     <TableCell></TableCell>
                     <TableCell>Jméno</TableCell>
                     <TableCell>Pozice</TableCell>
+                    <TableCell>Herní pozice</TableCell>
                     <TableCell>Přidat</TableCell>
                   </TableRow>
                 </TableHead>
@@ -503,6 +527,9 @@ const AddMatch: React.FC<Props> = ({ teamId, closeAddMatch }) => {
                         </TableCell>
                         <TableCell>
                           {getPositionText(member.position)}
+                        </TableCell>
+                        <TableCell>
+                          {getPlayPositionText(member.playPosition)}
                         </TableCell>
                         <TableCell>
                           <Checkbox
@@ -526,6 +553,7 @@ const AddMatch: React.FC<Props> = ({ teamId, closeAddMatch }) => {
                     <TableCell></TableCell>
                     <TableCell>Jméno</TableCell>
                     <TableCell>Pozice</TableCell>
+                    <TableCell>Herní pozice</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -543,6 +571,9 @@ const AddMatch: React.FC<Props> = ({ teamId, closeAddMatch }) => {
                         </TableCell>
                         <TableCell>
                           {getPositionText(member.position)}
+                        </TableCell>
+                        <TableCell>
+                          {getPlayPositionText(member.playPosition)}
                         </TableCell>
                       </TableRow>
                     ))}

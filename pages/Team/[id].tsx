@@ -344,7 +344,7 @@ const Team: React.FC = () => {
                       whiteSpace: "nowrap",
                     }}
                   >
-                    Auto open
+                    Auto menu
                   </Typography>
                   <Box
                     sx={{
