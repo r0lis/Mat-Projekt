@@ -612,7 +612,19 @@ const ContentRouster: React.FC<ContentRousterProps> = ({
                   fontWeight: "500",
                 }}
               >
-                do 2. 3. 2023
+                 {selectedMember?.docDate
+                          ? selectedMember.docDate === "No Date Assigned"
+                            ? "Není zvoleno"
+                            : "do: " +
+                              new Date(selectedMember.docDate).toLocaleDateString(
+                                "cs-CZ",
+                                {
+                                  day: "2-digit",
+                                  month: "2-digit",
+                                  year: "numeric",
+                                }
+                              )
+                          : "Není zvoleno"}
               </Typography>
 
               {editMode && selectedMember ? (

@@ -241,7 +241,7 @@ const Content: React.FC = () => {
           </Box>
           <Box sx={{ marginLeft: "3em", marginRight: "3em" }}>
             <Typography sx={{ fontSize: "1.7em", fontWeight: "500" }}>
-              Týmy:
+              Kluby:
             </Typography>
             {userTeamsData &&
             userTeamsData.getUserTeamsByEmail &&

@@ -19,5 +19,6 @@
       }
     ]
   },
+  
   "ignorePatterns": ["src/**/*.test.ts", "src/frontend/generated/*","next.config.js"]
 }
