@@ -5,7 +5,6 @@ import Box from "@mui/material/Box";
 import { useRouter } from "next/router";
 import { gql, useQuery } from "@apollo/client";
 import { CircularProgress, Switch, Typography } from "@mui/material";
-import Overview from "../../public/assets/Overview.png";
 import Trainings from "../../public/assets/training.png";
 import Calendar from "../../public/assets/Kalendar.png";
 import Rousters from "../../public/assets/network.png";
@@ -13,7 +12,6 @@ import Nominations from "../../public/assets/Nomination.png";
 import Members from "../../public/assets/Members.png";
 import Settings from "../../public/assets/Settings.png";
 import Image from "next/image";
-import OverviewComponent from "@/components/teamPage/Overview";
 import TrainingsComponent from "@/components/teamPage/Trenining";
 import CalendarComponent from "@/components/teamPage/Calendar";
 import RoustersComponent from "@/components/teamPage/Rousters";
@@ -30,7 +28,6 @@ import MembershipError from "@/components/teamPage/error/MembershipError";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
 const items = [
-  { label: "Overview", caption: "Přehled", image: Overview },
   { label: "Kalendar", caption: "Kalendář", image: Calendar },
   { label: "Trainings", caption: "Treninky", image: Trainings },
   { label: "Matchs", caption: "Zápasy", image: Nominations },
@@ -380,7 +377,6 @@ const Team: React.FC = () => {
               height: "auto",
             }}
           >
-            {activeLink === "Overview" && <OverviewComponent />}
             {activeLink === "Trainings" && (
               <TrainingsComponent teamId={id as string} />
             )}

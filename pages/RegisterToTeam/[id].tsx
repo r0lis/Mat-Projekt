@@ -425,7 +425,7 @@ const RegistrationPage: React.FC = () => {
                   <>
                     <TextField
                       type="text"
-                      label="Name"
+                      label="Jméno"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       fullWidth
@@ -433,7 +433,7 @@ const RegistrationPage: React.FC = () => {
                     />
                     <TextField
                       type="text"
-                      label="Surname"
+                      label="Přijmení"
                       value={surname}
                       onChange={(e) => setSurname(e.target.value)}
                       fullWidth

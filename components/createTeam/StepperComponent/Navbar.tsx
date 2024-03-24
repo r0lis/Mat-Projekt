@@ -151,17 +151,7 @@ const Navbar: React.FC = () => {
               marginLeft: { xs: "auto", md: "auto" },
             }}
           >
-            <Typography
-              sx={{
-                color: "white",
-                fontWeight: "bold",
-                fontSize: "1.4vw",
-                marginLeft: "%",
-                marginTop: "8px",
-              }}
-            >
-              Management
-            </Typography>
+           
           </Box>
 
           <IconButton
