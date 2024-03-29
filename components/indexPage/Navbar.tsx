@@ -18,7 +18,9 @@ import { authUtils } from "../../firebase/auth.utils";
 import { useQuery } from "@apollo/client";
 import { gql } from "graphql-tag";
 import TeamLogoImg from "../../public/assets/logotym.png";
+import logo from "../../public/assets/logo3.png";
 import { Avatar, CircularProgress } from "@mui/material";
+import logo2 from "../../public/assets/logo1.png";
 
 const GET_USER_INFO = gql`
   query GetUserInfo($email: String!) {
@@ -142,24 +144,11 @@ const Navbar: React.FC = () => {
     >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <div className="logoAndButtonStyle">
-            <Typography
-              variant="h6"
-              noWrap
-              component="a"
-              href="#app-bar-with-responsive-menu"
-              sx={{
-                fontFamily: "monospace",
-                fontWeight: "bold",
-                letterSpacing: ".3rem",
-                color: "white",
-                textDecoration: "none",
-                marginTop: "0.5em",
-              }}
-            >
-              LOGO
-            </Typography>
-          </div>
+          <Box>
+
+          
+          <img src={logo.src} alt="logo" style={{width:"10em", position:"absolute", top:"0.5em", marginLeft:"4em" }}/>
+          </Box>
 
           <Box
             sx={{
@@ -205,9 +194,10 @@ const Navbar: React.FC = () => {
           <Box
             sx={{
               position: "relative",
-              marginLeft: ["25%", "40%", "20%"],
+              marginLeft: ["", "0%", "0%"],
               flexGrow: 1,
               display: { xs: "flex", md: "none" },
+              marginTop: {xs: "0.5em"}
             }}
           >
             <IconButton
@@ -236,7 +226,7 @@ const Navbar: React.FC = () => {
               onClose={handleCloseNavMenu}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
+                <MenuItem key={page}  onClick={handleCloseNavMenu}>
                   <Typography textAlign="center">{page}</Typography>
                 </MenuItem>
               ))}
@@ -458,16 +448,8 @@ const Navbar: React.FC = () => {
                         marginTop: "2em",
                       }}
                     >
-                      <Typography
-                        sx={{
-                          color: "black",
-                          fontWeight: "bold",
-                          fontSize: "1.7vw",
-                          lineHeight: "20px",
-                        }}
-                      >
-                        LOGO
-                      </Typography>
+                                <img src={logo2.src} alt="logo" style={{width:"15em",  top:"0.5em", }}/>
+
                     </Box>
                     <Box sx={{ borderBottom: "7px solid #b71dde " }}></Box>
 
