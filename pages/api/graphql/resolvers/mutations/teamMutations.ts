@@ -319,7 +319,7 @@ export const teamMutations = {
     context: Context
   ) => {
     try {
-      // Find the team by teamId
+      // Find the team by teamId in the Team collection
       const teamQuery = context.db
         .collection("Team")
         .where("teamId", "==", teamId);
@@ -349,7 +349,27 @@ export const teamMutations = {
           docDate: docDate,
           Email: email,
         };
-
+        // Now, find the teams by teamId in the Teams collection
+        const teamsQuery = context.db
+          .collection("Teams")
+          .where("teamId", "==", teamId);
+        const teamsSnapshot = await teamsQuery.get();
+  
+        if (!teamsSnapshot.empty) {
+          // Iterate through each document and update the member role in subteamMembers array
+          for (const teamDoc of teamsSnapshot.docs) {
+            const existingSubteamMembers = teamDoc.data().subteamMembers || [];
+            const updatedSubteamMembers = existingSubteamMembers.map((subteamMember: any) => {
+              if (subteamMember.email === email) {
+                return { ...subteamMember, role };
+              }
+              return subteamMember;
+            });
+            // Update the subteamMembers field in the database
+            await teamDoc.ref.update({ subteamMembers: updatedSubteamMembers });
+          }
+        }
+  
         return updatedMemberDetails;
       }
       return null;
