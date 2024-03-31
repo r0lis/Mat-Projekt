@@ -149,9 +149,9 @@ const Navbar: React.FC = () => {
               src={logo.src}
               alt="logo"
               style={{
-                width: isSmallView? "8em" : "10em",
+                width: isSmallView? "6em" : "10em",
                 position: "absolute",
-                top: isSmallView? "0.8em" : "0.5em",
+                top: isSmallView? "1.25em" : "0.5em",
                 marginLeft: "3em",
               }}
             />
@@ -213,7 +213,7 @@ const Navbar: React.FC = () => {
               aria-controls="menu-appbar"
               aria-haspopup="true"
               onClick={handleOpenNavMenu}
-              sx={{marginTop: isSmallView? "0.1em" : "0" }}
+              sx={{marginTop: isSmallView? "0.2em" : "0" }}
               color="inherit"
             >
               <MenuIcon />
