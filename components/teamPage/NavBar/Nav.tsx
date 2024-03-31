@@ -9,15 +9,15 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useState } from "react";
-import CircleNotificationsIcon from "@mui/icons-material/CircleNotifications";
 import MenuIcon from "@mui/icons-material/Menu";
-import HomeIcon from '@mui/icons-material/Home';
+import HomeIcon from "@mui/icons-material/Home";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import { gql, useQuery } from "@apollo/client";
 import { authUtils } from "../../../firebase/auth.utils";
 import { useRouter } from "next/router";
+import logo from "../../../public/assets/logo1.png";
 
 const GET_USER_INFO = gql`
   query GetUserInfo($email: String!) {
@@ -55,14 +55,17 @@ interface NavProps {
   setMenu: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon, menuOpen, setMenu }) => {
+const Nav: React.FC<NavProps> = ({
+  showOnlyIcon,
+  setShowOnlyIcon,
+  menuOpen,
+  setMenu,
+}) => {
   const router = useRouter();
   const { id } = router.query;
   const user = authUtils.getCurrentUser();
   const [, setMenuOpen] = useState(false);
   const [anchorEl2, setAnchorEl2] = useState<null | HTMLElement>(null);
-  const [, setMenuOpen2] = useState(false);
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const {
     loading: roleLoading,
@@ -89,16 +92,15 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon, menuOpen, setM
   if (loading || roleLoading)
     return (
       <Box
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        height: "100vh",
-        
-      }}
-    >
-      <CircularProgress color="primary" size={50} />
-    </Box>
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "100vh",
+        }}
+      >
+        <CircularProgress color="primary" size={50} />
+      </Box>
     );
   if (error) return <p>Chyba: {error.message}</p>;
   if (roleError) return <p>Chyba: {roleError.message}</p>;
@@ -118,8 +120,7 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon, menuOpen, setM
   };
   const toggleContentVisibilityMobile = () => {
     setMenu(!menuOpen);
-    };
-
+  };
 
   const handleOpenMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl2(event.currentTarget);
@@ -128,15 +129,6 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon, menuOpen, setM
   const handleCloseMenu = () => {
     setMenuOpen(false);
     setAnchorEl2(null);
-  };
-
-  const handleOpenMenu2 = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleCloseMenu2 = () => {
-    setMenuOpen2(false);
-    setAnchorEl(null);
   };
 
   const handleLogout = async () => {
@@ -157,21 +149,9 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon, menuOpen, setM
     border: "1px solid #ff96fc",
   };
 
-  const buttonStyle2 = {
-    backgroundColor: "#FFE0FE",
-    marginBottom: "1em",
-    marginTop: "1em",
-    width: "11em",
-    "&:hover": {
-      backgroundColor: "#b71dde",
-    },
-    border: "1px solid #ff96fc",
-  };
-
   const isSmallView = window.innerWidth >= 850;
   const isSmallView2 = window.innerWidth >= 550;
-  const isMobile = window.innerWidth < 600; 
-
+  const isMobile = window.innerWidth < 600;
 
   return (
     <Box>
@@ -182,21 +162,22 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon, menuOpen, setM
           display: "flex",
           justifyContent: "space-between",
           height: "4.2em",
-          alignItems:"hotizontal",
+          alignItems: "hotizontal",
         }}
       >
         <Toolbar>
-          {isMobile ?
-          ( <IconButton
-            color="inherit"
-            aria-label="open sidebar"
-            onClick={toggleContentVisibilityMobile}
-          >
-            <Box sx={{ marginTop: isMobile ? "14px": "11px" }}>
-              <MenuIcon sx={{ color: "white" }} />
-            </Box>
-          </IconButton>):(
-              <IconButton
+          {isMobile ? (
+            <IconButton
+              color="inherit"
+              aria-label="open sidebar"
+              onClick={toggleContentVisibilityMobile}
+            >
+              <Box sx={{ marginTop: isMobile ? "14px" : "11px" }}>
+                <MenuIcon sx={{ color: "white" }} />
+              </Box>
+            </IconButton>
+          ) : (
+            <IconButton
               color="inherit"
               aria-label="open sidebar"
               onClick={toggleContentVisibility}
@@ -204,8 +185,9 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon, menuOpen, setM
               <Box sx={{ marginTop: "11px" }}>
                 <MenuIcon sx={{ color: "white" }} />
               </Box>
-            </IconButton>)}
-                  
+            </IconButton>
+          )}
+
           <Box
             sx={{
               display: "flex",
@@ -220,17 +202,17 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon, menuOpen, setM
                 width: "2.8em",
                 height: "2.8em",
                 marginRight: "30px",
-                marginTop: isMobile ? "5px": "3px",
+                marginTop: isMobile ? "5px" : "3px",
               }}
             />
-            <Box sx={{  display: isSmallView2 ? "flex": "none",}}>
+            <Box sx={{ display: isSmallView2 ? "flex" : "none" }}>
               <Typography
                 sx={{
                   color: "white",
                   fontWeight: "bold",
                   fontSize: "1.6em",
                   marginLeft: "%",
-                  marginTop: isMobile ? "9px": "4px",
+                  marginTop: isMobile ? "9px" : "4px",
                   whiteSpace: "nowrap",
                 }}
               >
@@ -241,13 +223,13 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon, menuOpen, setM
 
           <Box
             sx={{
-              display: isSmallView ? "flex": "none",
+              display: isSmallView ? "flex" : "none",
               alignItems: "center",
               marginLeft: { xs: "auto", md: "auto" },
               marginRight: "1%",
               backgroundColor: "rgba(255, 255, 255, 0.2)",
               borderRadius: "10px",
-              marginTop: isMobile ? "9px": "3px",
+              marginTop: isMobile ? "9px" : "3px",
               padding: "0.2em",
               paddingRight: "1em",
               paddingLeft: "1em",
@@ -269,247 +251,35 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon, menuOpen, setM
           <IconButton
             color="inherit"
             aria-label="open sidebar"
-            sx={{marginLeft: isSmallView ? "" : "auto", marginRight: isSmallView ? "" : "",}} 
+            sx={{
+              marginLeft: isSmallView ? "" : "auto",
+              marginRight: isSmallView ? "" : "",
+            }}
           >
-            <Box sx={{ display: "flex", marginTop: isMobile ? "15px": "10px" }}>
+            <Box
+              sx={{ display: "flex", marginTop: isMobile ? "15px" : "10px" }}
+            >
               <Link href={`/`}>
-                <HomeIcon sx={{ color: "white", marginTop: isMobile ? "15´´px": ""  }} />
+                <HomeIcon
+                  sx={{ color: "white", marginTop: isMobile ? "15´´px" : "" }}
+                />
               </Link>
             </Box>
           </IconButton>
 
-          <Box sx={{marginLeft: isSmallView ? "" : "", marginRight: isSmallView ? "2%" : "",}} >
-            <Box onClick={handleOpenMenu2}>
-              <IconButton
-                color="inherit"
-                aria-label="open sidebar"
-                sx={{
-                  display: "flex",
-                  marginLeft:  "0.5%",
-                  fontSize: "24px",
-                }}
-              >
-                <Box sx={{ display: "flex",marginTop: isMobile ? "9px":"4px" }}>
-                  <CircleNotificationsIcon sx={{ color: "white" }} />
-                </Box>
-              </IconButton>
-            </Box>
-            <Menu
-              id="menu-appbar2"
-              anchorEl={anchorEl}
-              open={Boolean(anchorEl)}
-              onClose={handleCloseMenu2}
-              sx={{
-                display: {
-                  xs: "block",
-                  marginTop: "1em",
-                  marginLeft: "2em",
-                },
-              }}
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "center",
-              }}
-            >
-              <Box sx={{ width: "20rem", height: "auto" }}>
-                {user ? (
-                  <>
-                    <Box>
-                      <>
-                        <Box>
-                          <Box
-                            style={{
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                              marginTop: "4%",
-                              marginBottom: "4%",
-                            }}
-                          >
-                            <Typography
-                              sx={{
-                                color: "black",
-                                fontSize: "1.3em",
-                                fontWeight: "bold",
-                                marginBottom: "0.5em",
-                                textAlign: "center",
-                              }}
-                            >
-                              {userInfoLoading
-                                ? "Načítání..."
-                                : userInfoError
-                                ? "Chyba"
-                                : userInfoData?.getUserByNameAndSurname.Name +
-                                  " " +
-                                  userInfoData?.getUserByNameAndSurname.Surname}
-                            </Typography>
-                          </Box>
-                        </Box>
-                        <Box
-                          sx={{
-                            borderBottom: "7px solid #b71dde ",
-                            marginBottom: "1em",
-                          }}
-                        ></Box>
-
-                        <Box sx={{ marginLeft: "7%", marginRight: "7%" }}>
-                          <Typography
-                            sx={{
-                              color: "black",
-                              textAlign: "center",
-                              fontSize: "1.2em",
-                              fontWeight: "bold",
-                              textDecoration: "none",
-                            }}
-                          >
-                            notifikace
-                          </Typography>
-                        </Box>
-                        <Box
-                          sx={{
-                            borderBottom: "7px solid #b71dde ",
-                            marginTop: "1em",
-                            marginBottom: "1em",
-                          }}
-                        ></Box>
-
-                        <Box
-                          sx={{
-                            alignItems: "center",
-                            textAlign: "center",
-                            position: "relative",
-                            display: "flex",
-                            flexDirection: "column",
-                            justifyContent: "center",
-                          }}
-                        >
-                          <Link href={`/User/${userId}`}>
-                            <Button sx={buttonStyle}>
-                              <Typography
-                                sx={{
-                                  color: "black",
-                                  fontWeight: "bold",
-                                  fontSize: "1 vw",
-                                  lineHeight: "20px",
-                                  padding: "5px",
-                                }}
-                              >
-                                Správa účtu
-                              </Typography>
-                            </Button>
-                          </Link>
-
-                          <Button onClick={handleLogout} sx={buttonStyle2}>
-                            <Typography
-                              sx={{
-                                color: "black",
-                                fontWeight: "bold",
-                                fontSize: "1 vw",
-                                lineHeight: "20px",
-                                padding: "5px",
-                              }}
-                            >
-                              Odhlásit se
-                            </Typography>
-                          </Button>
-                        </Box>
-                      </>
-                    </Box>
-                  </>
-                ) : (
-                  <>
-                    <Box
-                      sx={{
-                        alignItems: "center",
-                        textAlign: "center",
-                        position: "relative",
-                        display: "flex",
-                        flexDirection: "column",
-                        justifyContent: "center",
-                        marginBottom: "2em",
-                        marginTop: "2em",
-                      }}
-                    >
-                      <Typography
-                        sx={{
-                          color: "black",
-                          fontWeight: "bold",
-                          fontSize: "1.7vw",
-                          lineHeight: "20px",
-                        }}
-                      >
-                        LOGO
-                      </Typography>
-                    </Box>
-                    <Box sx={{ borderBottom: "7px solid #b71dde " }}></Box>
-
-                    <Box
-                      sx={{
-                        alignItems: "center",
-                        textAlign: "center",
-                        position: "relative",
-                        display: "flex",
-                        flexDirection: "column",
-                        justifyContent: "center",
-                      }}
-                    >
-                      <Link href="/LoginPage">
-                        <Button sx={buttonStyle2}>
-                          <Typography
-                            sx={{
-                              color: "black",
-                              fontWeight: "bold",
-                              fontSize: "1 vw",
-                              lineHeight: "20px",
-                              padding: "5px",
-                            }}
-                          >
-                            Přihlásit se
-                          </Typography>
-                        </Button>
-                      </Link>
-                    </Box>
-                    <Box
-                      sx={{
-                        alignItems: "center",
-                        textAlign: "center",
-                        position: "relative",
-                        display: "flex",
-                        flexDirection: "column",
-                        marginBottom: "1em",
-                        justifyContent: "center",
-                      }}
-                    >
-                      <Link href="/UserRegistration">
-                        <Button sx={buttonStyle}>
-                          <Typography
-                            sx={{
-                              color: "black",
-                              fontWeight: "bold",
-                              fontSize: "1 vw",
-                              lineHeight: "20px",
-                              padding: "5px",
-                            }}
-                          >
-                            Vytvořit účet
-                          </Typography>
-                        </Button>
-                      </Link>
-                    </Box>
-                  </>
-                )}
-              </Box>
-            </Menu>
-          </Box>
-
-          <Box sx={{marginLeft: isSmallView ? "" : "5%", marginRight: isSmallView ? "" : "5%",  }}>
+          <Box
+            sx={{
+              marginLeft: isSmallView ? "" : "5%",
+              marginRight: isSmallView ? "" : "5%",
+            }}
+          >
             <Box
               onClick={handleOpenMenu}
               sx={{
                 display: "flex",
                 alignItems: "center",
                 marginLeft: { xs: "0", md: "2.5em" },
-                marginTop: isMobile ? "6px": "3px",
+                marginTop: isMobile ? "6px" : "3px",
               }}
             >
               <Avatar
@@ -581,23 +351,33 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon, menuOpen, setM
                           }}
                         ></Box>
 
-                        <Box sx={{ marginLeft: "7%", marginRight: "7%" }}>
-                          <Typography
-                            sx={{
-                              color: "black",
-                              textAlign: "center",
-                              fontSize: "1.2em",
-                              fontWeight: "bold",
-                              textDecoration: "none",
+                        <Box
+                          sx={{
+                            alignItems: "center",
+                            textAlign: "center",
+                            position: "relative",
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "center",
+                            "&:hover img": {
+                              transform: "scale(1.1)",
+                              transition: "transform 0.3s ease",
+                            },
+                          }}
+                        >
+                          <img
+                            src={logo.src}
+                            alt="logo"
+                            style={{
+                              width: "15em",
+                              top: "0.5em",
+                              transition: "transform 0.3s ease",
                             }}
-                          >
-                            demo
-                          </Typography>
+                          />
                         </Box>
                         <Box
                           sx={{
                             borderBottom: "7px solid #b71dde ",
-                            marginTop: "1em",
                             marginBottom: "1em",
                           }}
                         ></Box>
@@ -627,7 +407,19 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon, menuOpen, setM
                               </Typography>
                             </Button>
                           </Link>
-                          <Button onClick={handleLogout} style={buttonStyle2}>
+                          <Button
+                            onClick={handleLogout}
+                            sx={{
+                              backgroundColor: "#FFE0FE",
+                              marginBottom: "1em",
+                              marginTop: "1em",
+                              width: "11em",
+                              "&:hover": {
+                                backgroundColor: "#b71dde",
+                              },
+                              border: "1px solid #ff96fc",
+                            }}
+                          >
                             <Typography
                               sx={{
                                 color: "black",
@@ -679,11 +471,29 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon, menuOpen, setM
                         display: "flex",
                         flexDirection: "column",
                         justifyContent: "center",
-                        buttonStyle2,
+                        backgroundColor: "#FFE0FE",
+                        marginBottom: "1em",
+                        marginTop: "1em",
+                        width: "11em",
+                        "&:hover": {
+                          backgroundColor: "#b71dde",
+                        },
+                        border: "1px solid #ff96fc",
                       }}
                     >
                       <Link href="/LoginPage">
-                        <Button sx={buttonStyle2}>
+                        <Button
+                          sx={{
+                            backgroundColor: "#FFE0FE",
+                            marginBottom: "1em",
+                            marginTop: "1em",
+                            width: "11em",
+                            "&:hover": {
+                              backgroundColor: "#b71dde",
+                            },
+                            border: "1px solid #ff96fc",
+                          }}
+                        >
                           <Typography
                             sx={{
                               color: "black",
@@ -707,7 +517,13 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon, menuOpen, setM
                         flexDirection: "column",
                         marginBottom: "1em",
                         justifyContent: "center",
-                        buttonStyle2,
+                        backgroundColor: "#FFE0FE",
+                        marginTop: "1em",
+                        width: "11em",
+                        "&:hover": {
+                          backgroundColor: "#b71dde",
+                        },
+                        border: "1px solid #ff96fc",
                       }}
                     >
                       <Link href="/UserRegistration">
@@ -732,7 +548,14 @@ const Nav: React.FC<NavProps> = ({ showOnlyIcon, setShowOnlyIcon, menuOpen, setM
             </Menu>
           </Box>
 
-          <Box sx={{ display: isSmallView ? "flex": "none", alignItems: "center", marginLeft: "1%", marginRight: isSmallView ? "1%":"" }}>
+          <Box
+            sx={{
+              display: isSmallView ? "flex" : "none",
+              alignItems: "center",
+              marginLeft: "1%",
+              marginRight: isSmallView ? "1%" : "",
+            }}
+          >
             <Typography
               sx={{
                 color: "white",
