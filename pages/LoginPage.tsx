@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { Box, Button, TextField, Typography, Link } from "@mui/material";
 import photo from "../public/assets/rosterbot.png";
 import pictureBackground from "../public/assets/uvodni.jpg";
+import logo from "../public/assets/logo3.png";
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -41,6 +42,9 @@ const LoginPage: React.FC = () => {
     }
   };
 
+  const isSmallView = window.innerWidth <= 800;
+
+
   return (
     <Box
       sx={{
@@ -70,6 +74,7 @@ const LoginPage: React.FC = () => {
             sx={{
               width: "90%",
               position: "relative",
+              display: isSmallView ? "none" : "",
               zIndex: "1", // Ensure content is above the background image
               borderRadius: "0 0 15px 15px",
             }}
@@ -95,32 +100,29 @@ const LoginPage: React.FC = () => {
               }}
             >
               <Box
-                sx={{ marginLeft: "10%", marginRight: "10%", zIndex: "999" }}
+                sx={{
+                  marginLeft: "5%",
+                  marginRight: "10%",
+                  zIndex: "999",
+                  marginTop: "1.5em",
+                }}
               >
-                <Typography
-                  sx={{
-                    color: "white",
-                    fontFamily: "Roboto",
-                    fontWeight: "700",
-                    marginTop: "1em",
-                  }}
-                >
-                  LOGO
-                </Typography>
+                <img src={logo.src} alt="logo" width="20%" height="auto" />
                 <Typography
                   variant="h4"
                   sx={{
                     margin: "1rem",
-                    marginTop: "0.7em",
-                    marginBottom: "auto",
+                    marginTop: "0em",
+                    marginBottom: "",
                     fontSize: "4vw",
                     fontFamily: "Roboto",
+                    marginLeft: "10%",
                     fontWeight: "bold",
                     color: "white",
                     textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
                   }}
                 >
-                  TEAM MANAGER
+                  Aplikace pro klubovou správu
                 </Typography>
               </Box>
               <Box
@@ -128,7 +130,7 @@ const LoginPage: React.FC = () => {
                   marginLeft: "10%",
                   marginRight: "10%",
                   zIndex: "999",
-                  marginTop: "2em",
+                  marginTop: "0.5em",
                   position: "relative",
                 }}
               >
@@ -136,18 +138,32 @@ const LoginPage: React.FC = () => {
               </Box>
             </Box>
           </Box>
-          <Box sx={{ width: "60%" }}>
+          <Box sx={{ width: isSmallView? "100%" : "60%" }}>
+          {isSmallView && (
+              <Box
+                sx={{
+                  backgroundColor: "#b71dde",
+                  height: "5em",
+                  borderRadius: "15px 15px 0 0",
+                }}
+              >
+                <Box sx={{ marginLeft: "2em", paddingTop: "0.8em" }}>
+                  <img src={logo.src} alt="logo" width="150" height="auto" />
+                </Box>
+              </Box>
+            )}
             <Box
               sx={{
                 width: "75%", // Set the desired width for the box
                 mx: "auto",
+                
               }}
             >
               <Box
                 sx={{
                   marginLeft: "auto",
                   marginRight: "auto",
-                  marginTop: "2em",
+                  marginTop: isSmallView? "1em" : "2em",
                   textAlign: "center",
                 }}
               >
@@ -155,7 +171,7 @@ const LoginPage: React.FC = () => {
                   variant="h4"
                   sx={{
                     margin: "1rem",
-                    marginTop: "1em",
+                    marginTop: isSmallView? "0em" : "1em",
                     fontFamily: "Roboto",
                     fontWeight: "500",
                   }}
@@ -183,9 +199,32 @@ const LoginPage: React.FC = () => {
                     fullWidth
                     margin="normal"
                   />
-                  <Button onClick={() => setShowPassword(!showPassword)}>
-                    {showPassword ? "Skrýt" : "Zobrazit"}
+                  <Box sx={{marginTop:"auto", marginBottom:"auto"}}>
+                  <Button
+                    variant="contained"
+                    onClick={() => setShowPassword(!showPassword)}
+                    sx={{
+                      marginRight: "auto",
+                      marginLeft:"0.5em",
+                      display: "block",
+                      backgroundColor: "#FFE0FE",
+                      color: "black",
+                      fontFamily: "Roboto",
+                      fontWeight: "700",
+                      border: "1px solid #ff96fc",
+                      boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.2)",
+                      padding: "0.3em",
+                      borderRadius: "4px",
+                      "&:hover": { backgroundColor: "#b71dde" },
+                    }}
+                  >
+                    {showPassword ? (
+                      "Skrýt"
+                    ) : (
+                     "Zobrazit"
+                    )}
                   </Button>
+                  </Box>
                 </Box>
 
                 <Button
@@ -225,95 +264,120 @@ const LoginPage: React.FC = () => {
                       fontFamily: "Roboto",
                       fontWeight: "700",
                       color: "#b71dde",
+                      marginBottom: "0.2rem",
                     }}
                   >
-                    <Link
-                      href="/UserRegistration"
-                      sx={{
-                        marginRight: "1rem",
-                        marginTop: "1rem",
-                        color: "#b71dde",
-                        textDecoration: "none",
-                        position: "relative",
-                        "&::before": {
-                          content: "''",
-                          position: "absolute",
-                          width: "100%",
-                          height: "4px",
-                          borderRadius: "4px",
-                          backgroundColor: "#b71dde",
-                          bottom: "-4px", // Adjust position to place it below the text
-                          left: "0",
-                          transformOrigin: "right",
-                          transform: "scaleX(0)",
-                          transition: "transform 0.3s ease-in-out",
-                        },
-                        "&:hover::before": {
-                          transformOrigin: "left",
-                          transform: "scaleX(1)",
-                        },
-                      }}
-                    >
-                      Registrovat
-                    </Link>
-                    <Link
-                      onClick={handleForgotPassword}
-                      sx={{
-                        marginRight: "1rem",
-                        marginTop: "1rem",
-                        color: "#b71dde",
-                        textDecoration: "none",
-                        cursor: "pointer",
-                        position: "relative",
-                        "&::before": {
-                          content: "''",
-                          position: "absolute",
-                          width: "100%",
-                          height: "4px",
-                          borderRadius: "4px",
-                          backgroundColor: "#b71dde",
-                          bottom: "-4px", // Adjust position to place it below the text
-                          left: "0",
-                          transformOrigin: "right",
-                          transform: "scaleX(0)",
-                          transition: "transform 0.3s ease-in-out",
-                        },
-                        "&:hover::before": {
-                          transformOrigin: "left",
-                          transform: "scaleX(1)",
-                        },
-                      }}
-                    >
-                      Zapomenuté heslo
-                    </Link>
-                    <Link
-                      href="/"
-                      sx={{
-                        marginTop: "1rem",
-                        color: "#b71dde",
-                        textDecoration: "none",
-                        position: "relative",
-                        "&::before": {
-                          content: "''",
-                          position: "absolute",
-                          width: "100%",
-                          height: "4px",
-                          borderRadius: "4px",
-                          backgroundColor: "#b71dde",
-                          bottom: "-4px", // Adjust position to place it below the text
-                          left: "0",
-                          transformOrigin: "right",
-                          transform: "scaleX(0)",
-                          transition: "transform 0.3s ease-in-out",
-                        },
-                        "&:hover::before": {
-                          transformOrigin: "left",
-                          transform: "scaleX(1)",
-                        },
-                      }}
-                    >
-                      Zpět
-                    </Link>
+                    <Box>
+                      <Link
+                        href="/UserRegistration"
+                        sx={{
+                          marginRight: "1rem",
+                          marginTop: "1rem",
+                          color: "#b71dde",
+                          textDecoration: "none",
+                          position: "relative",
+                          "&::before": {
+                            content: "''",
+                            position: "absolute",
+                            width: "100%",
+                            height: "4px",
+                            borderRadius: "4px",
+                            backgroundColor: "#b71dde",
+                            bottom: "-4px", // Adjust position to place it below the text
+                            left: "0",
+                            transformOrigin: "right",
+                            transform: "scaleX(0)",
+                            transition: "transform 0.3s ease-in-out",
+                          },
+                          "&:hover::before": {
+                            transformOrigin: "left",
+                            transform: "scaleX(1)",
+                          },
+                        }}
+                      >
+                        Registrovat
+                      </Link>
+                    </Box>
+                  </Typography>
+
+                  <Typography
+                    sx={{
+                      fontFamily: "Roboto",
+                      fontWeight: "700",
+                      color: "#b71dde",
+                      marginBottom: "0.2rem",
+                    }}
+                  >
+                    <Box>
+                      <Link
+                        onClick={handleForgotPassword}
+                        sx={{
+                          marginRight: "1rem",
+                          marginTop: "1.5rem",
+                          color: "#b71dde",
+                          textDecoration: "none",
+                          cursor: "pointer",
+                          position: "relative",
+                          "&::before": {
+                            content: "''",
+                            position: "absolute",
+                            width: "100%",
+                            height: "4px",
+                            borderRadius: "4px",
+                            backgroundColor: "#b71dde",
+                            bottom: "-4px", // Adjust position to place it below the text
+                            left: "0",
+                            transformOrigin: "right",
+                            transform: "scaleX(0)",
+                            transition: "transform 0.3s ease-in-out",
+                          },
+                          "&:hover::before": {
+                            transformOrigin: "left",
+                            transform: "scaleX(1)",
+                          },
+                        }}
+                      >
+                        Zapomenuté heslo
+                      </Link>
+                    </Box>
+                  </Typography>
+                  <Typography
+                    sx={{
+                      fontFamily: "Roboto",
+                      fontWeight: "700",
+                      color: "#b71dde",
+                    }}
+                  >
+                    <Box>
+                      <Link
+                        href="/"
+                        sx={{
+                          marginTop: "1rem",
+                          color: "#b71dde",
+                          textDecoration: "none",
+                          position: "relative",
+                          "&::before": {
+                            content: "''",
+                            position: "absolute",
+                            width: "100%",
+                            height: "4px",
+                            borderRadius: "4px",
+                            backgroundColor: "#b71dde",
+                            bottom: "-4px", // Adjust position to place it below the text
+                            left: "0",
+                            transformOrigin: "right",
+                            transform: "scaleX(0)",
+                            transition: "transform 0.3s ease-in-out",
+                          },
+                          "&:hover::before": {
+                            transformOrigin: "left",
+                            transform: "scaleX(1)",
+                          },
+                        }}
+                      >
+                        Zpět
+                      </Link>
+                    </Box>
                   </Typography>
                 </Box>
 

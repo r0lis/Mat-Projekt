@@ -16,6 +16,7 @@ import {
 } from "@mui/material";
 import photo from "../public/assets/rosterbot.png";
 import pictureBackground from "../public/assets/uvodni.jpg";
+import logo from "../public/assets/logo3.png";
 
 const CREATE_USER_MUTATION = gql`
   mutation CreateUser(
@@ -196,6 +197,9 @@ const RegistrationPage: React.FC = () => {
     setStreetNumberError(value.length === 0);
   };
 
+  const isSmallView = window.innerWidth <= 1000;
+  console.log(isSmallView);
+
   return (
     <Box
       sx={{
@@ -207,7 +211,6 @@ const RegistrationPage: React.FC = () => {
         alignItems: "center",
         paddingTop: "2em",
         paddingBottom: "2em",
-
       }}
     >
       <Box
@@ -228,6 +231,7 @@ const RegistrationPage: React.FC = () => {
             sx={{
               width: "100%",
               position: "relative",
+              display: isSmallView ? "none" : "",
               zIndex: "1",
               borderRadius: "0 0 15px 15px",
             }}
@@ -255,16 +259,9 @@ const RegistrationPage: React.FC = () => {
               <Box
                 sx={{ marginLeft: "10%", marginRight: "10%", zIndex: "999" }}
               >
-                <Typography
-                  sx={{
-                    color: "white",
-                    fontFamily: "Roboto",
-                    fontWeight: "700",
-                    marginTop: "1em",
-                  }}
-                >
-                  LOGO
-                </Typography>
+                <Box sx={{ paddingTop: "0.5em" }}>
+                  <img src={logo.src} alt="logo" width="120" height="auto" />
+                </Box>
                 <Typography
                   variant="h4"
                   sx={{
@@ -295,6 +292,20 @@ const RegistrationPage: React.FC = () => {
             </Box>
           </Box>
           <Box>
+            {isSmallView && (
+              <Box
+                sx={{
+                  backgroundColor: "#b71dde",
+                  height: "5em",
+                  borderRadius: "15px 15px 0 0",
+                }}
+              >
+                <Box sx={{ marginLeft: "2em", paddingTop: "0.8em" }}>
+                  <img src={logo.src} alt="logo" width="150" height="auto" />
+                </Box>
+              </Box>
+            )}
+
             <Box
               sx={{
                 width: "75%",
@@ -423,36 +434,72 @@ const RegistrationPage: React.FC = () => {
                         streetNumberError ? "Číslo popisné není vyplněno" : ""
                       }
                     />
-                    <Box sx={{display:"flex"}}>
-                    <TextField
-                      type={showPassword ? "text" : "password"}
-                      label="Heslo"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      fullWidth
-                      margin="normal"
-                    />
-                    <Button onClick={() => setShowPassword(!showPassword)}>
-                      {showPassword ? "Skrýt" : "Zobrazit"}
-                    </Button>
+                    <Box sx={{ display: "flex" }}>
+                      <TextField
+                        type={showPassword ? "text" : "password"}
+                        label="Heslo"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        fullWidth
+                        margin="normal"
+                      />
+                      <Box sx={{ marginTop: "auto", marginBottom: "auto" }}>
+                        <Button
+                          variant="contained"
+                          onClick={() => setShowPassword(!showPassword)}
+                          sx={{
+                            marginRight: "auto",
+                            marginLeft: "0.5em",
+                            display: "block",
+                            backgroundColor: "#FFE0FE",
+                            color: "black",
+                            fontFamily: "Roboto",
+                            fontWeight: "700",
+                            border: "1px solid #ff96fc",
+                            boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.2)",
+                            padding: "0.3em",
+                            borderRadius: "4px",
+                            "&:hover": { backgroundColor: "#b71dde" },
+                          }}
+                        >
+                          {showPassword ? "Skrýt" : "Zobrazit"}
+                        </Button>
+                      </Box>
                     </Box>
-                    <Box sx={{display:"flex"}}> 
-                    <TextField
-                      type={showConfirmPassword ? "text" : "password"}
-                      label="Potvrzení hesla"
-                      value={confirmPassword}
-                      onChange={(e) => setConfirmPassword(e.target.value)}
-                      fullWidth
-                      margin="normal"
-                    />
-                    <Button
-                      onClick={() =>
-                        setShowConfirmPassword(!showConfirmPassword)
-                      }
-                    >
-                      
-                      {showConfirmPassword ? "Skrýt" : "Zobrazit"}
-                    </Button>
+                    <Box sx={{ display: "flex" }}>
+                      <TextField
+                        type={showConfirmPassword ? "text" : "password"}
+                        label="Potvrzení hesla"
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        fullWidth
+                        margin="normal"
+                      />
+
+                      <Box sx={{ marginTop: "auto", marginBottom: "auto" }}>
+                        <Button
+                          variant="contained"
+                          onClick={() =>
+                            setShowConfirmPassword(!showConfirmPassword)
+                          }
+                          sx={{
+                            marginRight: "auto",
+                            marginLeft: "0.5em",
+                            display: "block",
+                            backgroundColor: "#FFE0FE",
+                            color: "black",
+                            fontFamily: "Roboto",
+                            fontWeight: "700",
+                            border: "1px solid #ff96fc",
+                            boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.2)",
+                            padding: "0.3em",
+                            borderRadius: "4px",
+                            "&:hover": { backgroundColor: "#b71dde" },
+                          }}
+                        >
+                          {showConfirmPassword ? "Skrýt" : "Zobrazit"}
+                        </Button>
+                      </Box>
                     </Box>
                   </>
                 )}
