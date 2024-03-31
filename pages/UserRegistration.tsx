@@ -198,7 +198,6 @@ const RegistrationPage: React.FC = () => {
   };
 
   const isSmallView = window.innerWidth <= 1000;
-  console.log(isSmallView);
 
   return (
     <Box

@@ -251,7 +251,7 @@ const LoginPage: React.FC = () => {
                 </Button>
                 <Box
                   sx={{
-                    marginTop: "1em",
+                    marginTop: "1.5em",
                     marginBottom: "2em",
                     marginLeft: "auto",
                     marginRight: "auto",

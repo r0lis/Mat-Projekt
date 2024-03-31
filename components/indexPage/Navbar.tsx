@@ -81,7 +81,7 @@ const Navbar: React.FC = () => {
   const userPicture = userInfoData?.getUserByNameAndSurname.Picture || "";
   const initials = name[0] + surname[0];
   const test = true;
-  console.log(initials);
+  const isSmallView = window.innerWidth <= 500;
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -145,9 +145,16 @@ const Navbar: React.FC = () => {
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Box>
-
-          
-          <img src={logo.src} alt="logo" style={{width:"10em", position:"absolute", top:"0.5em", marginLeft:"4em" }}/>
+            <img
+              src={logo.src}
+              alt="logo"
+              style={{
+                width: isSmallView? "8em" : "10em",
+                position: "absolute",
+                top: isSmallView? "0.8em" : "0.5em",
+                marginLeft: "3em",
+              }}
+            />
           </Box>
 
           <Box
@@ -169,7 +176,7 @@ const Navbar: React.FC = () => {
                   color: "white",
                   display: "block",
                   fontWeight: "bold",
-                  fontSize: "1.1vw",
+                  fontSize: "1em",
                   position: "relative",
                   lineHeight: "20px",
                 }}
@@ -197,7 +204,7 @@ const Navbar: React.FC = () => {
               marginLeft: ["", "0%", "0%"],
               flexGrow: 1,
               display: { xs: "flex", md: "none" },
-              marginTop: {xs: "0.5em"}
+              marginTop: { xs: "0.5em" },
             }}
           >
             <IconButton
@@ -226,7 +233,7 @@ const Navbar: React.FC = () => {
               onClose={handleCloseNavMenu}
             >
               {pages.map((page) => (
-                <MenuItem key={page}  onClick={handleCloseNavMenu}>
+                <MenuItem key={page} onClick={handleCloseNavMenu}>
                   <Typography textAlign="center">{page}</Typography>
                 </MenuItem>
               ))}
@@ -239,19 +246,24 @@ const Navbar: React.FC = () => {
                 height: "6%",
                 width: "6%",
                 position: "relative",
-                marginTop: "0.4em",
+                marginTop:isSmallView? "0.6em" : "0.4em",
+               
               }}
               onClick={handleOpenMenu}
             >
               <Avatar
                 sx={{
-                  height: "2.7em",
-                  width: "2.7em",
+                  height: isSmallView? "2em" : "2.7em",
+                  width: isSmallView? "2em" : "2.7em",
                   marginLeft: "auto",
                   marginRight: ["0.5rem", "1.5rem", "1rem"],
-                }}
+                  "&:hover img": {
+                    transform: "scale(1.1)",
+                    transition: "transform 0.3s ease",
+                  },                }}
                 alt={initials}
-                src={user ? userPicture : LoginIcon.src} // Set src to user's picture URL if it exists
+                src={user ? userPicture : LoginIcon.src}
+                 // Set src to user's picture URL if it exists
               />
             </Box>
             <Menu
@@ -446,10 +458,17 @@ const Navbar: React.FC = () => {
                         justifyContent: "center",
                         marginBottom: "2em",
                         marginTop: "2em",
+                        "&:hover img": {
+                          transform: "scale(1.1)",
+                          transition: "transform 0.3s ease",
+                        },
                       }}
                     >
-                                <img src={logo2.src} alt="logo" style={{width:"15em",  top:"0.5em", }}/>
-
+                      <img
+                        src={logo2.src}
+                        alt="logo"
+                        style={{ width: "15em", top: "0.5em",transition: "transform 0.3s ease" }}
+                      />
                     </Box>
                     <Box sx={{ borderBottom: "7px solid #b71dde " }}></Box>
 
@@ -517,12 +536,19 @@ const Navbar: React.FC = () => {
           <Box sx={{ marginRight: "5%", marginLeft: "3%", marginTop: "0.5em" }}>
             <Link style={{ textDecoration: "none" }} href="/CreateTeam">
               <Button
-                className="CreateTeamButton"
                 sx={{
                   backgroundColor: "#b71dde",
-                  borderRadius: "7px",
+                  borderRadius: "11px",
                   boxShadow: "0 0 10px rgba(51, 0, 45, 0.8)",
                   border: "1px solid #b71dde",
+                  position: "relative",
+                  padding: isSmallView? "6px 6px" : "6px 16px",
+                  height: isSmallView? "0" : "3rem",
+
+                  ":hover": {
+                    backgroundColor: "gray",
+                    boxShadow: "0 0 10px rgba(51, 0, 45, 0.8)",
+                  },
                 }}
                 variant="contained"
               >
