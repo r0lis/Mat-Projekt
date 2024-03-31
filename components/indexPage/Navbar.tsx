@@ -213,6 +213,7 @@ const Navbar: React.FC = () => {
               aria-controls="menu-appbar"
               aria-haspopup="true"
               onClick={handleOpenNavMenu}
+              sx={{marginTop: isSmallView? "0.1em" : "0" }}
               color="inherit"
             >
               <MenuIcon />
@@ -255,6 +256,7 @@ const Navbar: React.FC = () => {
                 sx={{
                   height: isSmallView? "2em" : "2.7em",
                   width: isSmallView? "2em" : "2.7em",
+                  marginTop: isSmallView? "0.6em" : "",
                   marginLeft: "auto",
                   marginRight: ["0.5rem", "1.5rem", "1rem"],
                   "&:hover img": {
@@ -542,9 +544,9 @@ const Navbar: React.FC = () => {
                   boxShadow: "0 0 10px rgba(51, 0, 45, 0.8)",
                   border: "1px solid #b71dde",
                   position: "relative",
-                  padding: isSmallView? "6px 6px" : "6px 16px",
+                  padding: isSmallView? "10px 6px" : "6px 16px",
                   height: isSmallView? "0" : "3rem",
-
+                  marginTop: isSmallView? "0.3em" : "0",
                   ":hover": {
                     backgroundColor: "gray",
                     boxShadow: "0 0 10px rgba(51, 0, 45, 0.8)",
