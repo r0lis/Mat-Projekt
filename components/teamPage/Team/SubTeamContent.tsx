@@ -254,7 +254,7 @@ const Content: React.FC<ContentProps> = ({ subteamId, idTeam }) => {
                   }}
                   onClick={() => setSelectedButton("attendance")}
                 >
-                  Doházka
+                  Docházka
                 </Button>
                 <Button
                   style={{
@@ -337,7 +337,7 @@ const Content: React.FC<ContentProps> = ({ subteamId, idTeam }) => {
                 }}
                 onClick={() => setSelectedButton("attendance")}
               >
-                Doházka
+                Docházka
               </Button>
               <Button
                 style={{

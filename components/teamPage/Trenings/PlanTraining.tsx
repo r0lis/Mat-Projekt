@@ -228,7 +228,7 @@ const PlanTraining: React.FC<Props> = ({ teamId }) => {
                   }}
                 >
                   <Typography variant="h6">
-                    Trenink: {training.opponentName}
+                    Trénink: {training.opponentName}
                   </Typography>
                   <Box sx={{ display: "flex" }}>
                     <Typography>
