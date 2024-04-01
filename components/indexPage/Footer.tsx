@@ -52,7 +52,7 @@ const Footer: React.FC = () => {
           <Box
             sx={{
               borderTop: "6px solid #B71DDE",
-              marginTop: "2%",
+              marginTop: "3.5%",
               display: "flex",
               justifyContent: "center",
               padding: "2%",
@@ -64,6 +64,7 @@ const Footer: React.FC = () => {
               flexDirection: "column",
               alignItems: "center",
               textAlign: "center",
+              fontFamily: "Roboto",
             }}
           >
             <Box sx={{ fontSize: "1.4vw", fontWeight: "bold" }}>
@@ -79,29 +80,29 @@ const Footer: React.FC = () => {
           <Box
             sx={{
               borderTop: "6px solid #B71DDE",
-              marginTop: "2%",
+              marginTop: "3.5%",
               display: "flex",
               justifyContent: "center",
               padding: "2%",
             }}
           ></Box>
           <Box sx={{ textAlign: "center", marginBottom: "2%" }}>
-            <Box sx={{ fontSize: "1.4vw", fontWeight: "bold" }}>
-              <Typography>Sledujte nás na sítích</Typography>
+            <Box sx={{ fontSize: "1.4vw", fontWeight: "bold", paddingBottom:'1em' }}>
+              <Typography sx={{ paddingBottom:'0.5em' }}>Sledujte nás na sítích</Typography>
               <img
                 src={FacebookIcon.src}
                 alt="Facebook"
-                style={{ marginRight: "4%", width: "6.5em", height: "6.5em" }}
+                style={{ marginRight: "3%", width: "6.5em", height: "6.5em" }}
               />
               <img
                 src={InstagramIcon.src}
                 alt="Instagram"
-                style={{ marginRight: "4%", width: "6.5em", height: "6.5em" }}
+                style={{ marginRight: "3%", width: "6.5em", height: "6.5em" }}
               />
               <img
                 src={TwitterIcon.src}
                 alt="Twitter"
-                style={{ marginRight: "4%", width: "6.5em", height: "6.5em" }}
+                style={{ marginRight: "3%", width: "6.5em", height: "6.5em" }}
               />
             </Box>
           </Box>

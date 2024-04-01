@@ -4,13 +4,14 @@ import LeftDownArr from "../../public/assets/arrowLeftDown.png";
 import RightDownArr from "../../public/assets/arrowRightDown.png";
 
 const HowToUse: React.FC = () => {
+  const isMobile = window.innerWidth < 900;
   return (
     <Box style={{ zIndex: "-999", backgroundColor: "#F0F2F5" }}>
       <Box
         sx={{
           borderLeft: "6.5px solid #B71DDE",
           position: "relative",
-          marginLeft: "10%",
+          marginLeft: ["7%", "10%", "10%"],
           backgroundColor: "#F0F2F5",
           "@media screen and (max-width: 768px)": {
             borderLeft: "5px solid #B71DDE",
@@ -28,8 +29,8 @@ const HowToUse: React.FC = () => {
           <Typography
             sx={{
               display: "block",
-              marginLeft: "30%",
-              fontSize: "2.2vw",
+              marginLeft: ["20%", "22%", "30%"],
+              fontSize: ["3em", "3em", "2em"],
               paddingTop: "6%",
               paddingBottom: "5%",
               fontWeight: "bold",
@@ -45,31 +46,34 @@ const HowToUse: React.FC = () => {
               <Box
                 sx={{
                   marginBottom: "8%",
-                  width: "50%",
+                  width: ["80%", "60%", "50%"],
                   height: "10em",
-                  marginLeft: "1.5%",
+                  marginLeft: ["", "1.3%", "1.5%"],
                   boxShadow: "0 0 10px rgba(0, 0, 0, 0.4)",
-                  borderRadius: "20px",
+                  borderRadius: ["10px", "15px", "20px"],
                   fontWeight: "bold",
                   textAlign: "center",
                   fontSize: "1.8vw",
-                  backgroundImage:
-                    "linear-gradient(to bottom, #B71DDE 20%, white 20%)",
+                  backgroundImage: isMobile
+                    ? "linear-gradient(to bottom, #B71DDE 30%, white 30%)"
+                    : "linear-gradient(to bottom, #B71DDE 20%, white 20%)",
                 }}
               >
                 <Box
                   sx={{
                     display: "block",
-                    paddingTop: "0.5em",
-                    paddingBottom: "0.2em",
-                    borderBottom: "2px solid black",
+                    paddingTop: isMobile ? "0.4em" : "0.4em",
+                    paddingBottom: isMobile ? "" : "0.3em",
+                    borderBottom: isMobile
+                      ? "1px solid black"
+                      : "2px solid black",
                   }}
                 >
                   <Typography
                     sx={{
                       top: "0%",
                       color: "white",
-                      fontSize: "1.5vw",
+                      fontSize: isMobile ? "1.7em" : "1.5vw",
                       fontFamily: "Roboto",
                       fontWeight: "500",
                     }}
@@ -80,7 +84,7 @@ const HowToUse: React.FC = () => {
                 <Box
                   sx={{
                     paddingLeft: "5%",
-                    paddingTop: "10%",
+                    paddingTop: ["5%", "8%", "10%"],
                     paddingBottom: "auto",
                     marginRight: "5%",
                     display: "block",
@@ -88,7 +92,7 @@ const HowToUse: React.FC = () => {
                 >
                   <Typography
                     sx={{
-                      fontSize: "1.4vw",
+                      fontSize: ["1.2em", "1.2em", "1.4vw"],
                       textAlign: "center",
                       justifyContent: "center",
                       fontFamily: "Roboto",
@@ -117,39 +121,42 @@ const HowToUse: React.FC = () => {
                   height: "10%",
                   left: 0,
                   marginTop: "20%",
-                  marginLeft: "25%",
+                  marginLeft: isMobile? "0" : "25%",
                 }}
                 src={LeftDownArr.src}
                 alt="arrow"
               />
               <Box
                 sx={{
-                  marginBottom: "8%",
-                  width: "50%",
-                  height: "10em",
                   marginRight: 0,
+                  marginBottom: "8%",
+                  width: ["80%", "60%", "50%"],
+                  height: "10em",
                   boxShadow: "0 0 10px rgba(0, 0, 0, 0.4)",
-                  borderRadius: "20px",
+                  borderRadius: ["10px", "15px", "20px"],
                   fontWeight: "bold",
                   textAlign: "center",
                   fontSize: "1.8vw",
-                  backgroundImage:
-                    "linear-gradient(to bottom, #B71DDE 20%, white 20%)",
+                  backgroundImage: isMobile
+                    ? "linear-gradient(to bottom, #B71DDE 30%, white 30%)"
+                    : "linear-gradient(to bottom, #B71DDE 20%, white 20%)",
                 }}
               >
-                <Box
+               <Box
                   sx={{
                     display: "block",
-                    paddingTop: "0.5em",
-                    paddingBottom: "0.2em",
-                    borderBottom: "2px solid black",
+                    paddingTop: isMobile ? "0.4em" : "0.4em",
+                    paddingBottom: isMobile ? "" : "0.3em",
+                    borderBottom: isMobile
+                      ? "1px solid black"
+                      : "2px solid black",
                   }}
                 >
-                  <Typography
+                 <Typography
                     sx={{
                       top: "0%",
                       color: "white",
-                      fontSize: "1.5vw",
+                      fontSize: isMobile ? "1.7em" : "1.5vw",
                       fontFamily: "Roboto",
                       fontWeight: "500",
                     }}
@@ -160,7 +167,7 @@ const HowToUse: React.FC = () => {
                 <Box
                   sx={{
                     paddingLeft: "5%",
-                    paddingTop: "10%",
+                    paddingTop: ["5%", "8%", "10%"],
                     paddingBottom: "auto",
                     marginRight: "5%",
                     display: "block",
@@ -168,7 +175,7 @@ const HowToUse: React.FC = () => {
                 >
                   <Typography
                     sx={{
-                      fontSize: "1.4vw",
+                      fontSize: ["1.2em", "1.2em", "1.4vw"],
                       textAlign: "center",
                       justifyContent: "center",
                       fontFamily: "Roboto",
@@ -184,31 +191,35 @@ const HowToUse: React.FC = () => {
               <Box
                 sx={{
                   marginBottom: "8%",
-                  width: "50%",
+                  width: ["80%", "60%", "50%"],
                   height: "10em",
-                  marginLeft: "1.5%",
+                  marginLeft: ["", "1.3%", "1.5%"],
                   boxShadow: "0 0 10px rgba(0, 0, 0, 0.4)",
-                  borderRadius: "20px",
+                  borderRadius: ["10px", "15px", "20px"],
                   fontWeight: "bold",
                   textAlign: "center",
                   fontSize: "1.8vw",
-                  backgroundImage:
-                    "linear-gradient(to bottom, #B71DDE 20%, white 20%)",
+                  backgroundImage: isMobile
+                    ? "linear-gradient(to bottom, #B71DDE 30%, white 30%)"
+                    : "linear-gradient(to bottom, #B71DDE 20%, white 20%)",
                 }}
+              
               >
                 <Box
                   sx={{
                     display: "block",
-                    paddingTop: "0.5em",
-                    paddingBottom: "0.2em",
-                    borderBottom: "2px solid black",
+                    paddingTop: isMobile ? "0.4em" : "0.4em",
+                    paddingBottom: isMobile ? "" : "0.3em",
+                    borderBottom: isMobile
+                      ? "1px solid black"
+                      : "2px solid black",
                   }}
                 >
                   <Typography
                     sx={{
                       top: "0%",
                       color: "white",
-                      fontSize: "1.5vw",
+                      fontSize: isMobile ? "1.7em" : "1.5vw",
                       fontFamily: "Roboto",
                       fontWeight: "500",
                     }}
@@ -219,7 +230,7 @@ const HowToUse: React.FC = () => {
                 <Box
                   sx={{
                     paddingLeft: "5%",
-                    paddingTop: "10%",
+                    paddingTop: ["3%", "6%", "10%"],
                     paddingBottom: "auto",
                     marginRight: "5%",
                     display: "block",
@@ -227,7 +238,7 @@ const HowToUse: React.FC = () => {
                 >
                   <Typography
                     sx={{
-                      fontSize: "1.4vw",
+                      fontSize: ["1.2em", "1.2em", "1.4vw"],
                       textAlign: "center",
                       justifyContent: "center",
                       fontFamily: "Roboto",
@@ -253,33 +264,37 @@ const HowToUse: React.FC = () => {
             <Box style={{ display: "flex", alignItems: "center" }}>
               <Box
                 sx={{
-                  marginBottom: "8%",
-                  width: "50%",
-                  height: "10em",
-                  marginRight: 0,
-                  marginLeft: "37%",
+                 
+                  marginLeft: isMobile? "10%" : "37%",
                   boxShadow: "0 0 10px rgba(0, 0, 0, 0.4)",
-                  borderRadius: "20px",
-                  fontWeight: "bold",
-                  textAlign: "center",
-                  fontSize: "1.8vw",
-                  backgroundImage:
-                    "linear-gradient(to bottom, #B71DDE 20%, white 20%)",
+                    marginBottom: "8%",
+                    width: ["80%", "60%", "50%"],
+                    height: "10em",
+                    borderRadius: ["10px", "15px", "20px"],
+                    fontWeight: "bold",
+                    textAlign: "center",
+                    fontSize: "1.8vw",
+                    backgroundImage: isMobile
+                      ? "linear-gradient(to bottom, #B71DDE 30%, white 30%)"
+                      : "linear-gradient(to bottom, #B71DDE 20%, white 20%)",
+                  
                 }}
               >
                 <Box
                   sx={{
                     display: "block",
-                    paddingTop: "0.5em",
-                    paddingBottom: "0.2em",
-                    borderBottom: "2px solid black",
+                    paddingTop: isMobile ? "0.4em" : "0.4em",
+                    paddingBottom: isMobile ? "" : "0.3em",
+                    borderBottom: isMobile
+                      ? "1px solid black"
+                      : "2px solid black",
                   }}
                 >
                   <Typography
                     sx={{
                       top: "0%",
                       color: "white",
-                      fontSize: "1.5vw",
+                      fontSize: isMobile ? "1.7em" : "1.5vw",
                       fontFamily: "Roboto",
                       fontWeight: "500",
                     }}
@@ -290,7 +305,7 @@ const HowToUse: React.FC = () => {
                 <Box
                   sx={{
                     paddingLeft: "5%",
-                    paddingTop: "10%",
+                    paddingTop: ["3%", "6%", "10%"],
                     paddingBottom: "auto",
                     marginRight: "5%",
                     display: "block",
@@ -298,7 +313,7 @@ const HowToUse: React.FC = () => {
                 >
                   <Typography
                     sx={{
-                      fontSize: "1.4vw",
+                      fontSize: ["1.2em", "1.2em", "1.4vw"],
                       textAlign: "center",
                       justifyContent: "center",
                       fontFamily: "Roboto",

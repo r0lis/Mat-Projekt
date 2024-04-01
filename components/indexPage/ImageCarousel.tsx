@@ -52,7 +52,7 @@ const SwipeableTextMobileStepper: React.FC = () => {
       <Box sx={{ backgroundColor: "#F0F2F5" }}>
         <Box
           sx={{
-            marginLeft: "10%",
+            marginLeft: ["7%", "10%", "10%"],
             borderLeft: "6.5px solid #B71DDE",
             backgroundColor: "#F0F2F5",
             "@media screen and (max-width: 768px)": {
@@ -75,11 +75,11 @@ const SwipeableTextMobileStepper: React.FC = () => {
               <Typography
                 sx={{
                   display: "block",
-                  fontSize: "2.2vw",
+                  fontSize: ["3em", "3em", "2em"],
                   paddingTop: "6%",
                   paddingBottom: "5%",
                   fontWeight: "bold",
-                  marginLeft: "30%",
+                  marginLeft: ["20%", "22%", "30%"],
                 }}
               >
                 Ukázky z <span style={{ color: "#B71DDE" }}>aplikace</span>
@@ -96,7 +96,7 @@ const SwipeableTextMobileStepper: React.FC = () => {
             backgroundColor: "white",
             paddingTop: "6%",
             paddingBottom: "4%",
-            width: "80%",
+            width: ["85%", "80%", "80%"],
             height: "100%",
             marginLeft: "auto",
             marginRight: "auto",
@@ -104,7 +104,7 @@ const SwipeableTextMobileStepper: React.FC = () => {
             boxShadow: "0 0 10px rgba(0, 0, 0, 0.21)",
           }}
         >
-          <Box sx={{ maxWidth: "70%", flexGrow: 1 }}>
+          <Box sx={{ maxWidth: ["95%", "80%", "70%"], flexGrow: 1 }}>
             <AutoPlaySwipeableViews
               style={{ color: "purple" }}
               axis={theme.direction === "rtl" ? "x-reverse" : "x"}

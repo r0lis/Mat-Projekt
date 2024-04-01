@@ -7,6 +7,7 @@ import trainingPlanImg from "../../public/assets/training.png";
 import Settings from "../../public/assets/Settings.png";
 
 const AppContent: React.FC = () => {
+  const isMobile = window.innerWidth < 900;
   return (
     <Box style={{ zIndex: "-999", backgroundColor: "#F0F2F5" }}>
       <Box sx={{ zIndex: "50" }}>
@@ -15,7 +16,7 @@ const AppContent: React.FC = () => {
             backgroundColor: "#F0F2F5",
             borderLeft: "6.5px solid #B71DDE",
             position: "relative",
-            marginLeft: "10%",
+            marginLeft: ["7%", "10%", "10%",],
             "@media screen and (max-width: 768px)": {
               borderLeft: "5px solid #B71DDE",
             },
@@ -29,7 +30,7 @@ const AppContent: React.FC = () => {
               paddingTop: "5%",
             }}
           >
-            <Typography sx={{ fontSize: "2vw", fontWeight: "bold" }}>
+            <Typography sx={{ fontSize: ["3em","3em", "2em"], fontWeight: "bold" }}>
               Co aplikace <span style={{ color: "#B71DDE" }}>poskytuje</span> ?
             </Typography>
           </Box>
@@ -37,7 +38,7 @@ const AppContent: React.FC = () => {
             style={{ backgroundColor: "#F0F2F5" }}
             sx={{
               position: "relative",
-              marginLeft: "14%",
+              marginLeft: ["4%", "7%", "14%"],
               backgroundColor: "F0F2F5",
             }}
           >
@@ -52,7 +53,7 @@ const AppContent: React.FC = () => {
                 backgroundColor: "#B71DDE",
                 borderRadius: "10px",
                 "@media screen and (max-width: 768px)": {
-                  width: "4px",
+                  width: "1px",
                   borderLeft: "5px solid #B71DDE",
                 },
               }}
@@ -68,7 +69,7 @@ const AppContent: React.FC = () => {
                 sx={{
                   marginTop: "7%",
                   marginBottom: "7%",
-                  width: "50%",
+                  width: ["67%", "60%", "50%"],
                   padding: "5% 10% 5% 10%",
                   marginLeft: "1.5%",
                   marginRight: "auto",
@@ -77,14 +78,14 @@ const AppContent: React.FC = () => {
                   fontWeight: "bold",
                   textAlign: "center",
                   display: "flex",
-                  fontSize: "1.6vw",
+                  fontSize: ["0.9em", "1.5em", "1.8em"],
                   alignItems: "center",
                   border: "1px solid #ff96fc",
                 }}
               >
                 <img
-                  style={{ width: "10%", marginRight: "5%" }}
-                  src={comunicationImg.src}
+                style={{ width: isMobile? "13%": "10%", marginRight: "5%" }}
+                src={comunicationImg.src}
                 />
                 Skvělá komunikace v klubu
               </Box>
@@ -93,7 +94,7 @@ const AppContent: React.FC = () => {
           <Box
             sx={{
               position: "relative",
-              marginLeft: "14%",
+              marginLeft: ["4%", "7%", "14%"],
               backgroundColor: "#F0F2F5",
             }}
           >
@@ -108,7 +109,7 @@ const AppContent: React.FC = () => {
                 backgroundColor: "#B71DDE",
                 borderRadius: "10px",
                 "@media screen and (max-width: 768px)": {
-                  width: "4px",
+                  width: "1px",
                   borderLeft: "5px solid #B71DDE",
                 },
               }}
@@ -117,7 +118,7 @@ const AppContent: React.FC = () => {
               sx={{
                 marginTop: "7%",
                 marginBottom: "7%",
-                width: "50%",
+                width: ["67%", "60%", "50%"],
                 padding: "5% 10% 5% 10%",
                 marginLeft: "1.5%",
                 marginRight: "auto",
@@ -126,13 +127,13 @@ const AppContent: React.FC = () => {
                 fontWeight: "bold",
                 textAlign: "center",
                 display: "flex",
-                fontSize: "1.6vw",
+                fontSize: ["0.9em", "1.5em", "1.8em"],
                 alignItems: "center",
                 border: "1px solid #ff96fc",
               }}
             >
               <img
-                style={{ width: "10%", marginRight: "5%" }}
+                style={{ width: isMobile? "13%": "10%", marginRight: "5%" }}
                 src={Settings.src}
               />{" "}
               Správa více týmů v klubu
@@ -141,7 +142,7 @@ const AppContent: React.FC = () => {
           <Box
             sx={{
               position: "relative",
-              marginLeft: "14%",
+              marginLeft: ["4%", "7%", "14%"],
               backgroundColor: "#F0F2F5",
             }}
           >
@@ -156,7 +157,7 @@ const AppContent: React.FC = () => {
                 backgroundColor: "#B71DDE",
                 borderRadius: "10px",
                 "@media screen and (max-width: 768px)": {
-                  width: "4px",
+                  width: "1px",
                   borderLeft: "5px solid #B71DDE",
                 },
               }}
@@ -165,7 +166,7 @@ const AppContent: React.FC = () => {
               sx={{
                 marginTop: "7%",
                 marginBottom: "7%",
-                width: "50%",
+                width: ["67%", "60%", "50%"],
                 padding: "5% 10% 5% 10%",
                 marginLeft: "1.5%",
                 marginRight: "auto",
@@ -174,13 +175,13 @@ const AppContent: React.FC = () => {
                 fontWeight: "bold",
                 textAlign: "center",
                 display: "flex",
-                fontSize: "1.6vw",
+                fontSize: ["0.9em", "1.5em", "1.8em"],
                 alignItems: "center",
                 border: "1px solid #ff96fc",
               }}
             >
               <img
-                style={{ width: "10%", marginRight: "5%" }}
+                style={{ width: isMobile? "13%": "10%", marginRight: "5%" }}
                 src={teamImg.src}
               />{" "}
               Tvoření soupisek, přehled docházky událostí
@@ -189,7 +190,7 @@ const AppContent: React.FC = () => {
           <Box
             sx={{
               position: "relative",
-              marginLeft: "14%",
+              marginLeft: ["4%", "7%", "14%"],
               backgroundColor: "#F0F2F5",
             }}
           >
@@ -204,7 +205,7 @@ const AppContent: React.FC = () => {
                 backgroundColor: "#B71DDE",
                 borderRadius: "10px",
                 "@media screen and (max-width: 768px)": {
-                  width: "4px",
+                  width: "1px",
                   borderLeft: "5px solid #B71DDE",
                 },
               }}
@@ -213,7 +214,7 @@ const AppContent: React.FC = () => {
               sx={{
                 marginTop: "7%",
                 marginBottom: "7%",
-                width: "50%",
+                width: ["67%", "60%", "50%"],
                 padding: "5% 10% 5% 10%",
                 marginLeft: "1.5%",
                 marginRight: "auto",
@@ -222,7 +223,7 @@ const AppContent: React.FC = () => {
                 fontWeight: "bold",
                 textAlign: "center",
                 display: "flex",
-                fontSize: "1.6vw",
+                fontSize: ["0.9em", "1.5em", "1.8em"],
                 alignItems: "center",
                 border: "1px solid #ff96fc",
               }}
@@ -237,7 +238,7 @@ const AppContent: React.FC = () => {
           <Box
             sx={{
               position: "relative",
-              marginLeft: "14%",
+              marginLeft: ["4%", "7%", "14%"],
               backgroundColor: "#F0F2F5",
             }}
           >
@@ -252,7 +253,7 @@ const AppContent: React.FC = () => {
                 backgroundColor: "#B71DDE",
                 borderRadius: "10px",
                 "@media screen and (max-width: 768px)": {
-                  width: "4px",
+                  width: "1px",
                   borderLeft: "5px solid #B71DDE",
                 },
               }}
@@ -260,7 +261,7 @@ const AppContent: React.FC = () => {
             <Box
               sx={{
                 marginTop: "8%",
-                width: "50%",
+                width: ["67%", "60%", "50%"],
                 padding: "6% 10% 6% 10%",
                 marginLeft: "1.5%",
                 marginRight: "auto",
@@ -269,13 +270,13 @@ const AppContent: React.FC = () => {
                 fontWeight: "bold",
                 textAlign: "center",
                 display: "flex",
-                fontSize: "1.8vw",
+                fontSize: ["0.9em", "1.5em", "1.8em"],
                 alignItems: "center",
                 border: "1px solid #ff96fc",
               }}
             >
               <img
-                style={{ width: "10%", marginRight: "5%" }}
+                style={{ width: isMobile? "13%": "10%", marginRight: "5%" }}
                 src={listHospitalImg.src}
               />{" "}
               Zdravotní prohlídky
