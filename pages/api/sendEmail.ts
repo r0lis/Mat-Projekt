@@ -19,7 +19,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     for (const email of emails) {
-      const registrationLink = `https://team-app-sand.vercel.app/Invite/${teamId}?email=${encodeURIComponent(email)}`;
+      const registrationLink = `https://clubflow.vercel.app//Invite/${teamId}?email=${encodeURIComponent(email)}`;
       const mailOptions = {
         from: 'appteammanager@gmail.com',
         to: email,

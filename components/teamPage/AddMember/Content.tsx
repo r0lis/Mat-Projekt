@@ -162,7 +162,7 @@ const Content: React.FC = () => {
             Uživatele byli přidáni!
             <Link href={`/Team/${id}`}>
               <Button variant="contained" sx={{ marginLeft: "10px" }}>
-                Přejít na Team
+                Přejít zpět do klubu
               </Button>
             </Link>
           </Alert>
