@@ -636,7 +636,7 @@ const Edit: React.FC<Props> = ({ matchId, onClose }) => {
               </Button>
             </Box>
             <Box sx={{ marginBottom: "1em" }}>
-              <Button onClick={onClose}>Close</Button>
+              <Button onClick={onClose}>Zavřít</Button>
             </Box>
           </Box>
         </Box>

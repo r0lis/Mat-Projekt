@@ -703,7 +703,7 @@ const RegistrationPage: React.FC = () => {
                         }}
                       >
                         <Alert severity="info">
-                          <Typography>Jste na hlavní stránku.</Typography>
+                          <Typography>Jste směrovány na hlavní stránku.</Typography>
                         </Alert>
                       </Box>
                       <LinearProgress variant="determinate" value={progress} />

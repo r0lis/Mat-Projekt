@@ -76,11 +76,9 @@ const GET_COMPLETESUBTEAM_DETAILS = gql`
 
 const UPDATE_TRAINING = gql`
   mutation UpdateTraining($input: UpdateTrainingInput!) {
-    updateTraining(input: $input) 
-    
+    updateTraining(input: $input)
   }
 `;
-
 
 const getPositionText = (position: string): string => {
   switch (position) {
@@ -108,10 +106,9 @@ interface SubteamMember {
   position: string;
 }
 
-
 interface Training {
   matchId: string;
-  teamId:string;
+  teamId: string;
   opponentName: string;
   selectedHallId: string;
   subteamIdSelected: string;
@@ -143,9 +140,9 @@ type Props = {
 const Edit: React.FC<Props> = ({ matchId, onClose }) => {
   const [selectedMembers, setSelectedMembers] = useState<string[]>([]);
   const [selectedTrainingHallId, setSelectedTrainingHallId] = useState<
-  string | null
->(null);
-const [time, setTime] = useState<string>("");
+    string | null
+  >(null);
+  const [time, setTime] = useState<string>("");
   const [endTime, setEndTime] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [opponentName, setOpponentName] = useState<string>("");
@@ -159,18 +156,25 @@ const [time, setTime] = useState<string>("");
   });
   const [updateTraining] = useMutation(UPDATE_TRAINING);
 
-
   const { loading, error, data } = useQuery(GET_TRAINING_BY_MATCH_ID, {
     variables: { matchId },
   });
 
-  const { loading: subteamLoading, error: subteamError, data: subteamData } =
-    useQuery(GET_COMPLETESUBTEAM_DETAILS, {
-      variables: { subteamId: data?.getTrainingByMatchId?.subteamIdSelected || "" },
-    });
+  const {
+    loading: subteamLoading,
+    error: subteamError,
+    data: subteamData,
+  } = useQuery(GET_COMPLETESUBTEAM_DETAILS, {
+    variables: {
+      subteamId: data?.getTrainingByMatchId?.subteamIdSelected || "",
+    },
+  });
 
-  
-  const {loading: hallLoading, error: hallError, data: hallsData } = useQuery(GET_TEAM_HALLS, {
+  const {
+    loading: hallLoading,
+    error: hallError,
+    data: hallsData,
+  } = useQuery(GET_TEAM_HALLS, {
     variables: { teamId: data?.getTrainingByMatchId?.teamId || "" },
   });
 
@@ -187,31 +191,29 @@ const [time, setTime] = useState<string>("");
     }
   }, [loading, error, data]);
 
-
   if (loading || subteamLoading || hallLoading)
-  return (
-    <Box
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        height: "80vh",
-      }}
-    >
-      <CircularProgress color="primary" size={50} />
-    </Box>
-  );
-if (subteamError || subteamError || hallError)
-  return <Typography>Chyba</Typography>;
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "80vh",
+        }}
+      >
+        <CircularProgress color="primary" size={50} />
+      </Box>
+    );
+  if (subteamError || subteamError || hallError)
+    return <Typography>Chyba</Typography>;
 
   const trainingData: Training = data.getTrainingByMatchId;
   const subteamIdSelected = trainingData.subteamIdSelected;
   const teamId = trainingData.teamId;
 
-
   const handleSelectAllPlayers = () => {
     const playersPosition4 =
-    subteamData?.getCompleteSubteamDetail?.subteamMembers
+      subteamData?.getCompleteSubteamDetail?.subteamMembers
         .filter((member: SubteamMember) => member.position === "4")
         .map((player: SubteamMember) => player.email) || [];
 
@@ -274,11 +276,11 @@ if (subteamError || subteamError || hallError)
   };
 
   const hasPosition4Member = selectedMembers.some((email) =>
-  subteamData?.getCompleteSubteamDetail?.subteamMembers.some(
-    (member: SubteamMember) =>
-      member.email === email && member.position === "4"
-  )
-);
+    subteamData?.getCompleteSubteamDetail?.subteamMembers.some(
+      (member: SubteamMember) =>
+        member.email === email && member.position === "4"
+    )
+  );
 
   const handleSave = async () => {
     setErrorMessages([]);
@@ -360,9 +362,9 @@ if (subteamError || subteamError || hallError)
           },
         },
       });
-      
-      onClose()
-      window.location.reload()
+
+      onClose();
+      window.location.reload();
     } catch (error) {
       console.error("Error while updating training:", error);
     }
@@ -399,7 +401,7 @@ if (subteamError || subteamError || hallError)
             sx={{ width: "50%", marginTop: "1em" }}
             value={opponentName}
             onChange={handleOpponentNameChange}
-            />
+          />
         </Box>
         <Box>
           <TextField
@@ -407,7 +409,7 @@ if (subteamError || subteamError || hallError)
             type="date"
             sx={{ width: "50%", marginTop: "1em" }}
             value={date}
-              onChange={handleDateChange}
+            onChange={handleDateChange}
             InputLabelProps={{
               shrink: true,
             }}
@@ -434,10 +436,10 @@ if (subteamError || subteamError || hallError)
         </Box>
         <Box>
           <TextField
-              label="Konec"
-              type="time"
-              value={endTime}
-              onChange={(e) => setEndTime(e.target.value)}
+            label="Konec"
+            type="time"
+            value={endTime}
+            onChange={(e) => setEndTime(e.target.value)}
             sx={{ width: "50%", marginTop: "1em" }}
             InputLabelProps={{
               shrink: true,
@@ -455,7 +457,6 @@ if (subteamError || subteamError || hallError)
           <TextField
             label="Popis"
             sx={{ width: "50%", marginTop: "1em" }}
-
             value={description}
             onChange={handleDescriptionChange}
             InputLabelProps={{
@@ -464,141 +465,137 @@ if (subteamError || subteamError || hallError)
             multiline
             rows={4}
             helperText={`Minimálně 20 znaků, maximálně 250 znaků (${description.length}/250)`}
-            />
+          />
         </Box>
-        
-        <Box sx={{ marginTop: "0.5em" }}>
-            <Typography variant="h6">Seznam členů týmu</Typography>
-            <Button
-              variant="outlined"
-              onClick={handleSelectAllPlayers}
-              sx={{ margin: "0.5em" }}
-            >
-              Vybrat všechny hráče
-            </Button>
-            <TableContainer>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell></TableCell>
-                    <TableCell>Jméno</TableCell>
-                    <TableCell>Pozice</TableCell>
-                    <TableCell>Přidat</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {subteamData?.getCompleteSubteamDetail?.subteamMembers.map(
-                    (member: SubteamMember) => (
-                      <TableRow key={member.email}>
-                        <TableCell>
-                          <Avatar src={member.picture} />
-                        </TableCell>
-                        <TableCell>
-                          {member.name} {member.surname}
-                        </TableCell>
-                        <TableCell>
-                          {getPositionText(member.position)}
-                        </TableCell>
-                        <TableCell>
-                          <Checkbox
-                            onChange={() => handleCheckboxChange(member.email)}
-                            checked={selectedMembers.includes(member.email)}
-                          />
-                        </TableCell>
-                      </TableRow>
-                    )
-                  )}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </Box>
-          <Box sx={{ marginTop: "1em" }}>
-            <Typography variant="h6">Vybraní členové týmu</Typography>
-            <TableContainer>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell></TableCell>
-                    <TableCell>Jméno</TableCell>
-                    <TableCell>Pozice</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {subteamData?.getCompleteSubteamDetail?.subteamMembers
-                    .filter((member: SubteamMember) =>
-                      selectedMembers.includes(member.email)
-                    )
-                    .map((member: SubteamMember) => (
-                      <TableRow key={member.email}>
-                        <TableCell>
-                          <Avatar src={member.picture} />
-                        </TableCell>
-                        <TableCell>
-                          {member.name} {member.surname}
-                        </TableCell>
-                        <TableCell>
-                          {getPositionText(member.position)}
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </Box>
 
-          <Box>
-            <Box>
-              <Typography variant="h6">Dostupné Haly</Typography>
-              <TableContainer>
-                <Table>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell></TableCell>
-                      <TableCell>Název</TableCell>
-                      <TableCell>Lokace</TableCell>
-                      <TableCell>Vybrat</TableCell>
+        <Box sx={{ marginTop: "0.5em" }}>
+          <Typography variant="h6">Seznam členů týmu</Typography>
+          <Button
+            variant="outlined"
+            onClick={handleSelectAllPlayers}
+            sx={{ margin: "0.5em" }}
+          >
+            Vybrat všechny hráče
+          </Button>
+          <TableContainer>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell></TableCell>
+                  <TableCell>Jméno</TableCell>
+                  <TableCell>Pozice</TableCell>
+                  <TableCell>Přidat</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {subteamData?.getCompleteSubteamDetail?.subteamMembers.map(
+                  (member: SubteamMember) => (
+                    <TableRow key={member.email}>
+                      <TableCell>
+                        <Avatar src={member.picture} />
+                      </TableCell>
+                      <TableCell>
+                        {member.name} {member.surname}
+                      </TableCell>
+                      <TableCell>{getPositionText(member.position)}</TableCell>
+                      <TableCell>
+                        <Checkbox
+                          onChange={() => handleCheckboxChange(member.email)}
+                          checked={selectedMembers.includes(member.email)}
+                        />
+                      </TableCell>
                     </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {hallsData?.getTreningHallsByTeamId.map((hall: Hall) => (
-                      <TableRow key={hall.treningHallId}>
-                        <TableCell></TableCell>
-                        <TableCell>{hall.name}</TableCell>
-                        <TableCell>{hall.location}</TableCell>
-                        <TableCell>
-                          <Checkbox
-                            onChange={() =>
-                              handleHallCheckboxChange(hall.treningHallId)
-                            }
-                            checked={
-                              selectedTrainingHallId === hall.treningHallId
-                            }
-                          />
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </Box>
+                  )
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Box>
+        <Box sx={{ marginTop: "1em" }}>
+          <Typography variant="h6">Vybraní členové týmu</Typography>
+          <TableContainer>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell></TableCell>
+                  <TableCell>Jméno</TableCell>
+                  <TableCell>Pozice</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {subteamData?.getCompleteSubteamDetail?.subteamMembers
+                  .filter((member: SubteamMember) =>
+                    selectedMembers.includes(member.email)
+                  )
+                  .map((member: SubteamMember) => (
+                    <TableRow key={member.email}>
+                      <TableCell>
+                        <Avatar src={member.picture} />
+                      </TableCell>
+                      <TableCell>
+                        {member.name} {member.surname}
+                      </TableCell>
+                      <TableCell>{getPositionText(member.position)}</TableCell>
+                    </TableRow>
+                  ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Box>
+
+        <Box>
+          <Box>
+            <Typography variant="h6">Dostupné Haly</Typography>
+            <TableContainer>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell></TableCell>
+                    <TableCell>Název</TableCell>
+                    <TableCell>Lokace</TableCell>
+                    <TableCell>Vybrat</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {hallsData?.getTreningHallsByTeamId.map((hall: Hall) => (
+                    <TableRow key={hall.treningHallId}>
+                      <TableCell></TableCell>
+                      <TableCell>{hall.name}</TableCell>
+                      <TableCell>{hall.location}</TableCell>
+                      <TableCell>
+                        <Checkbox
+                          onChange={() =>
+                            handleHallCheckboxChange(hall.treningHallId)
+                          }
+                          checked={
+                            selectedTrainingHallId === hall.treningHallId
+                          }
+                        />
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
           </Box>
-          {errorMessages.length > 0 && (
-            <Box sx={{ marginBottom: "1em" }}>
-              {errorMessages.map((message, index) => (
-                <Alert
-                  sx={{ marginBottom: "0.5em" }}
-                  key={index}
-                  severity="error"
-                >
-                  {message}
-                </Alert>
-              ))}
-            </Box>
-          )}
+        </Box>
+        {errorMessages.length > 0 && (
+          <Box sx={{ marginBottom: "1em" }}>
+            {errorMessages.map((message, index) => (
+              <Alert
+                sx={{ marginBottom: "0.5em" }}
+                key={index}
+                severity="error"
+              >
+                {message}
+              </Alert>
+            ))}
+          </Box>
+        )}
 
         {/* Other fields to be filled similarly */}
-        <Button onClick={handleSave}>Save</Button>
-        <Button onClick={onClose}>Close</Button>
+        <Button onClick={handleSave}> Upravit trénink</Button>
+        <Button onClick={onClose}>Zrušit</Button>
       </Box>
     </Box>
   );

@@ -133,7 +133,7 @@ const Edit: React.FC<Props> = (teamId ) => {
           sx={{ fontFamily: "Roboto", fontWeight: "600" }}
           variant="h6"
         >
-          Změnit obrázek
+          Změnit klubové logo
         </Typography>
 
         <InputLabel htmlFor="imageInput">
@@ -149,7 +149,7 @@ const Edit: React.FC<Props> = (teamId ) => {
           <Box sx={{ marginTop: "0.4em", marginBottom: "1em" }}>
             <label htmlFor="imageInput">
               <Button variant="contained" component="span">
-                Vybrat obrázek
+                Vybrat logo
               </Button>
             </label>
           </Box>
@@ -180,7 +180,7 @@ const Edit: React.FC<Props> = (teamId ) => {
                 />
               </Card>
               <Button variant="outlined" onClick={handleImageDelete}>
-                Smazat obrázek
+                Smazat logo
               </Button>
             </Box>
           </Box>

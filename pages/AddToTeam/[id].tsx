@@ -422,7 +422,7 @@ const AddToTeam: React.FC = () => {
                         }}
                       >
                         <Alert severity="info">
-                          <Typography>Jste přesměrován do týmu.</Typography>
+                          <Typography>Jste přesměrován do klubu.</Typography>
                         </Alert>
                       </Box>
                       <LinearProgress variant="determinate" value={progress} />

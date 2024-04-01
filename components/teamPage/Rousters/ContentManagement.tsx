@@ -98,17 +98,19 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
                 </Typography>
               </Box>
               <Box sx={{ marginLeft: "auto", marginRight: "" }}>
-                {data &&
-                  data.getSubteamData &&
-                  data.getSubteamData.length > 1 && (
-                    <Box>
-                      <Button
+              <Box>
+
+              <Button
                         sx={{ marginRight: "2em", backgroundColor: "#027ef2" }}
                         onClick={toggleShowFormations}
                         variant="contained"
                       >
                         {showFormations ? "Soupisky" : "Formace"}
                       </Button>
+                {data &&
+                  data.getSubteamData &&
+                  data.getSubteamData.length > 1 && (
+                    
                       <Button
                         sx={{ marginRight: "2em", backgroundColor: "#027ef2" }}
                         onClick={handleToggleSelect}
@@ -121,9 +123,10 @@ const ContentManagement: React.FC<TeamsProps> = ({ teamId }) => {
                           <ExpandMoreIcon />
                         )}
                       </Button>
-                    </Box>
                   )}
               </Box>
+              </Box>
+
             </Box>
             <>
               {data && data.getSubteamData && data.getSubteamData.length > 0 ? (
