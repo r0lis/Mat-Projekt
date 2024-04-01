@@ -265,16 +265,17 @@ const RegistrationPage: React.FC = () => {
                   variant="h4"
                   sx={{
                     margin: "1rem",
-                    marginTop: "0.7em",
-                    marginBottom: "auto",
+                    marginTop: "0em",
+                    marginBottom: "",
                     fontSize: "4vw",
                     fontFamily: "Roboto",
+                    marginLeft: "5%",
                     fontWeight: "bold",
                     color: "white",
                     textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
                   }}
                 >
-                  TEAM MANAGER
+                  Aplikace pro klubovou správu
                 </Typography>
               </Box>
               <Box

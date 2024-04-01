@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import { authUtils } from "../../firebase/auth.utils";
 import { useMutation, gql, useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
+import logo from "../../public/assets/logo3.png";
+
 import {
   Box,
   Button,
@@ -17,8 +19,14 @@ import photo from "../../public/assets/rosterbot.png";
 import pictureBackground from "../../public/assets/uvodni.jpg";
 
 const CHECK_USER_MEMBERSHIP = gql`
-  query CheckUserMembershipInvite($teamId: String!, $currentUserEmail: String!) {
-    checkUserMembershipInvite(teamId: $teamId, currentUserEmail: $currentUserEmail)
+  query CheckUserMembershipInvite(
+    $teamId: String!
+    $currentUserEmail: String!
+  ) {
+    checkUserMembershipInvite(
+      teamId: $teamId
+      currentUserEmail: $currentUserEmail
+    )
   }
 `;
 
@@ -76,7 +84,6 @@ const AddToTeam: React.FC = () => {
     };
   }, [loginSuccess, id, router]);
 
-
   const {
     loading: loadingUser,
     error: errorUser,
@@ -86,39 +93,39 @@ const AddToTeam: React.FC = () => {
   });
 
   if (loadingUser)
-  return (
-    <Box
-    sx={{
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      height: "100vh",
-    }}
-  >
-    <CircularProgress color="primary" size={50} />
-  </Box>
-  );
-if (errorUser) {
-  console.error("Error checking user membership:", errorUser);
-  return <p>Error checking user membership</p>;
-}
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "100vh",
+        }}
+      >
+        <CircularProgress color="primary" size={50} />
+      </Box>
+    );
+  if (errorUser) {
+    console.error("Error checking user membership:", errorUser);
+    return <p>Error checking user membership</p>;
+  }
 
-const isUserMember = dataUser.checkUserMembershipInvite;
-if (isUserMember == false) {
-  return (
-    <Box>
-      <Alert severity="error">
-        Tato akce neni dostupná
-        <br />
-        <Link href="/">
-          <Button sx={{ backgroundColor: "red" }}>
-            <Typography sx={{ color: "#fff" }}>Zpět</Typography>
-          </Button>
-        </Link>
-      </Alert>
-    </Box>
-  );
-}
+  const isUserMember = dataUser.checkUserMembershipInvite;
+  if (isUserMember == false) {
+    return (
+      <Box>
+        <Alert severity="error">
+          Tato akce neni dostupná
+          <br />
+          <Link href="/">
+            <Button sx={{ backgroundColor: "red" }}>
+              <Typography sx={{ color: "#fff" }}>Zpět</Typography>
+            </Button>
+          </Link>
+        </Alert>
+      </Box>
+    );
+  }
 
   const handleLogin = async () => {
     try {
@@ -135,6 +142,8 @@ if (isUserMember == false) {
       setLoginSuccessSuccess(false);
     }
   };
+
+  const isSmallView = window.innerWidth <= 800;
 
   return (
     <Box
@@ -164,6 +173,7 @@ if (isUserMember == false) {
           <Box
             sx={{
               width: "90%",
+              display: isSmallView ? "none" : "",
               position: "relative",
               zIndex: "1", // Ensure content is above the background image
               borderRadius: "0 0 15px 15px",
@@ -190,32 +200,30 @@ if (isUserMember == false) {
               }}
             >
               <Box
-                sx={{ marginLeft: "10%", marginRight: "10%", zIndex: "999" }}
+                sx={{
+                  marginLeft: "10%",
+                  marginRight: "10%",
+                  zIndex: "999",
+                  marginTop: "1.5em",
+                }}
               >
-                <Typography
-                  sx={{
-                    color: "white",
-                    fontFamily: "Roboto",
-                    fontWeight: "700",
-                    marginTop: "1em",
-                  }}
-                >
-                  LOGO
-                </Typography>
+                <img src={logo.src} alt="logo" width="20%" height="auto" />
+
                 <Typography
                   variant="h4"
                   sx={{
                     margin: "1rem",
-                    marginTop: "0.7em",
-                    marginBottom: "auto",
+                    marginTop: "0em",
+                    marginBottom: "",
                     fontSize: "4vw",
                     fontFamily: "Roboto",
+                    marginLeft: "10%",
                     fontWeight: "bold",
                     color: "white",
                     textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
                   }}
                 >
-                  TEAM MANAGER
+                  Aplikace pro klubovou správu
                 </Typography>
               </Box>
               <Box
@@ -231,19 +239,33 @@ if (isUserMember == false) {
               </Box>
             </Box>
           </Box>
-          <Box>
+          <Box sx={{ width: isSmallView? "100%" : "60%" }}>
+          {isSmallView && (
+              <Box
+                sx={{
+                  backgroundColor: "#b71dde",
+                  height: "5em",
+                  borderRadius: "15px 15px 0 0",
+                }}
+              >
+                <Box sx={{ marginLeft: "2em", paddingTop: "0.8em" }}>
+                  <img src={logo.src} alt="logo" width="150" height="auto" />
+                </Box>
+              </Box>
+            )}
             <Box
               sx={{
                 width: "75%", // Set the desired width for the box
                 mx: "auto",
+                paddingBottom:  isSmallView? "1em" : ""
               }}
             >
               <Box
                 sx={{
                   marginLeft: "auto",
                   marginRight: "auto",
-                  width: "100%ss",
-                  marginTop: "5em",
+                  width: "100%",
+                  marginTop: isSmallView? "" :  "5em",
                   textAlign: "center",
                 }}
               >
@@ -251,7 +273,7 @@ if (isUserMember == false) {
                   variant="h4"
                   sx={{
                     margin: "1rem",
-                    marginTop: "1em",
+                    marginTop: isSmallView? "" : "1em",
                     fontFamily: "Roboto",
                     fontWeight: "500",
                   }}
@@ -272,21 +294,43 @@ if (isUserMember == false) {
                       fullWidth
                       margin="normal"
                       disabled={!!initialEmail}
-
                     />
                     <Box sx={{ display: "flex" }}>
-                    <TextField
-                      type={showPassword ? "text" : "password"}
-                      label="Heslo"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      fullWidth
-                      margin="normal"
-                    />
-                    <Button onClick={() => setShowPassword(!showPassword)}>
-                      {showPassword ? "Skrýt" : "Zobrazit"}
-                    </Button>
+                      <TextField
+                        type={showPassword ? "text" : "password"}
+                        label="Heslo"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        fullWidth
+                        margin="normal"
+                      />
+                       <Box sx={{marginTop:"auto", marginBottom:"auto"}}>
+                  <Button
+                    variant="contained"
+                    onClick={() => setShowPassword(!showPassword)}
+                    sx={{
+                      marginRight: "auto",
+                      marginLeft:"0.5em",
+                      display: "block",
+                      backgroundColor: "#FFE0FE",
+                      color: "black",
+                      fontFamily: "Roboto",
+                      fontWeight: "700",
+                      border: "1px solid #ff96fc",
+                      boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.2)",
+                      padding: "0.3em",
+                      borderRadius: "4px",
+                      "&:hover": { backgroundColor: "#b71dde" },
+                    }}
+                  >
+                    {showPassword ? (
+                      "Skrýt"
+                    ) : (
+                     "Zobrazit"
+                    )}
+                  </Button>
                   </Box>
+                    </Box>
                   </>
                 )}
                 <Box>
@@ -315,7 +359,6 @@ if (isUserMember == false) {
                     <Alert
                       severity="success"
                       sx={{
-                        
                         marginTop: "1rem",
                         textAlign: "center",
                       }} // Set background color to orange
@@ -323,7 +366,7 @@ if (isUserMember == false) {
                       <Typography
                         variant="body1"
                         color="success"
-                        sx={{ marginTop: "1rem", marginBottom:'1rem' }}
+                        sx={{ marginTop: "1rem", marginBottom: "1rem" }}
                       >
                         Přihlášení se zdařilo.
                       </Typography>
@@ -337,7 +380,7 @@ if (isUserMember == false) {
                       marginTop: "1rem",
                       marginLeft: "auto",
                       marginRight: "auto",
-                      minWidth: "400px", // Adjust the width as needed
+                     
                     }}
                   >
                     {!loginSuccess && (
@@ -371,8 +414,16 @@ if (isUserMember == false) {
                         marginRight: "auto",
                       }}
                     >
-                      <Box sx={{ marginBottom: "1em", marginTop: "1em", textAlign:'center' }}>
-                        <Alert severity="info"><Typography>Jste přesměrován do týmu.</Typography></Alert>
+                      <Box
+                        sx={{
+                          marginBottom: "1em",
+                          marginTop: "1em",
+                          textAlign: "center",
+                        }}
+                      >
+                        <Alert severity="info">
+                          <Typography>Jste přesměrován do týmu.</Typography>
+                        </Alert>
                       </Box>
                       <LinearProgress variant="determinate" value={progress} />
                     </Box>

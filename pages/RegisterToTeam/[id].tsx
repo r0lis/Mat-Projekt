@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { authUtils } from "../../firebase/auth.utils";
 import { useMutation, gql, useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
+import logo from "../../public/assets/logo3.png";
 import {
   Box,
   Button,
@@ -297,6 +298,8 @@ const RegistrationPage: React.FC = () => {
     setStreetNumberError(value.length === 0);
   };
 
+  const isSmallView = window.innerWidth <= 1000;
+
   return (
     <Box
       sx={{
@@ -325,6 +328,7 @@ const RegistrationPage: React.FC = () => {
           <Box
             sx={{
               width: "90%",
+              display: isSmallView ? "none" : "",
               position: "relative",
               zIndex: "1", // Ensure content is above the background image
               borderRadius: "0 0 15px 15px",
@@ -353,30 +357,24 @@ const RegistrationPage: React.FC = () => {
               <Box
                 sx={{ marginLeft: "10%", marginRight: "10%", zIndex: "999" }}
               >
-                <Typography
-                  sx={{
-                    color: "white",
-                    fontFamily: "Roboto",
-                    fontWeight: "700",
-                    marginTop: "1em",
-                  }}
-                >
-                  LOGO
-                </Typography>
+                <Box sx={{ paddingTop: "0.5em" }}>
+                  <img src={logo.src} alt="logo" width="120" height="auto" />
+                </Box>
                 <Typography
                   variant="h4"
                   sx={{
                     margin: "1rem",
-                    marginTop: "0.7em",
-                    marginBottom: "auto",
+                    marginTop: "0em",
+                    marginBottom: "",
                     fontSize: "4vw",
                     fontFamily: "Roboto",
+                    marginLeft: "5%",
                     fontWeight: "bold",
                     color: "white",
                     textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
                   }}
                 >
-                  TEAM MANAGER
+                  Aplikace pro klubovou správu
                 </Typography>
               </Box>
               <Box
@@ -393,6 +391,19 @@ const RegistrationPage: React.FC = () => {
             </Box>
           </Box>
           <Box>
+          {isSmallView && (
+              <Box
+                sx={{
+                  backgroundColor: "#b71dde",
+                  height: "5em",
+                  borderRadius: "15px 15px 0 0",
+                }}
+              >
+                <Box sx={{ marginLeft: "2em", paddingTop: "0.8em" }}>
+                  <img src={logo.src} alt="logo" width="150" height="auto" />
+                </Box>
+              </Box>
+            )}
             <Box
               sx={{
                 width: "75%", // Set the desired width for the box
@@ -531,9 +542,28 @@ const RegistrationPage: React.FC = () => {
                         fullWidth
                         margin="normal"
                       />
-                      <Button onClick={() => setShowPassword(!showPassword)}>
-                        {showPassword ? "Skrýt" : "Zobrazit"}
-                      </Button>
+                       <Box sx={{ marginTop: "auto", marginBottom: "auto" }}>
+                        <Button
+                          variant="contained"
+                          onClick={() => setShowPassword(!showPassword)}
+                          sx={{
+                            marginRight: "auto",
+                            marginLeft: "0.5em",
+                            display: "block",
+                            backgroundColor: "#FFE0FE",
+                            color: "black",
+                            fontFamily: "Roboto",
+                            fontWeight: "700",
+                            border: "1px solid #ff96fc",
+                            boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.2)",
+                            padding: "0.3em",
+                            borderRadius: "4px",
+                            "&:hover": { backgroundColor: "#b71dde" },
+                          }}
+                        >
+                          {showPassword ? "Skrýt" : "Zobrazit"}
+                        </Button>
+                      </Box>
                     </Box>
                     <Box sx={{ display: "flex" }}>
                       <TextField
@@ -544,13 +574,30 @@ const RegistrationPage: React.FC = () => {
                         fullWidth
                         margin="normal"
                       />
-                      <Button
-                        onClick={() =>
-                          setShowConfirmPassword(!showConfirmPassword)
-                        }
-                      >
-                        {showConfirmPassword ? "Skrýt" : "Zobrazit"}
-                      </Button>
+                     <Box sx={{ marginTop: "auto", marginBottom: "auto" }}>
+                        <Button
+                          variant="contained"
+                          onClick={() =>
+                            setShowConfirmPassword(!showConfirmPassword)
+                          }
+                          sx={{
+                            marginRight: "auto",
+                            marginLeft: "0.5em",
+                            display: "block",
+                            backgroundColor: "#FFE0FE",
+                            color: "black",
+                            fontFamily: "Roboto",
+                            fontWeight: "700",
+                            border: "1px solid #ff96fc",
+                            boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.2)",
+                            padding: "0.3em",
+                            borderRadius: "4px",
+                            "&:hover": { backgroundColor: "#b71dde" },
+                          }}
+                        >
+                          {showConfirmPassword ? "Skrýt" : "Zobrazit"}
+                        </Button>
+                      </Box>
                     </Box>
                   </>
                 )}
