@@ -1394,6 +1394,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                         Nahrát Zdravotní prohlídku
                       </Button>
                       <Button
+                        onClick={() => setModalOpenLeave(true)}
                         sx={{
                           backgroundColor: "lightgray",
                           color: "black",
@@ -1412,6 +1413,37 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                         Opustit klub
                       </Button>
                     </Box>
+                    <Modal
+                    open={modalOpenLeave}
+                    onClose={() => setModalOpenLeave(false)}
+                    aria-labelledby="modal-title"
+                    aria-describedby="modal-description"
+                  >
+                    <Box
+                      sx={{
+                        position: "absolute",
+                        width: 400,
+                        bgcolor: "background.paper",
+                        border: "2px solid #000",
+                        boxShadow: 24,
+                        p: 4,
+                        top: "50%",
+                        left: "50%",
+                        transform: "translate(-50%, -50%)",
+                      }}
+                    >
+                      <Typography id="modal-title" variant="h6" component="h2">
+                        Opravdu chcete opustit klub?
+                      </Typography>
+                      <Typography id="modal-description" sx={{ mt: 2 }}>
+                        Po opuštění klubu nebudete mít přístup k jeho zdrojům a
+                        informacím.
+                      </Typography>
+                      <Button onClick={handleLeaveTeam} sx={{ mt: 4 }}>
+                        Potvrdit
+                      </Button>
+                    </Box>
+                  </Modal>
                   </Box>
                   <Modal
                     open={modalOpenPlayer}
@@ -1459,8 +1491,8 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                         }}
                       >
                         <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                          Sem vložte obsah modálního okna pro nahrání zdravotní
-                          prohlídky.
+                          Sem vložte fotku pro nahrání zdravotní
+                          prohlídky. Nenahrávejte velké soubory.
                         </Typography>
                         <InputLabel htmlFor="imageInput">
                           <Input
