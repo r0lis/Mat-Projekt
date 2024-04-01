@@ -376,7 +376,7 @@ const Edit: React.FC<Props> = ({ matchId, onClose }) => {
           sx={{ fontFamily: "Roboto", fontWeight: "500" }}
           variant="h5"
         >
-          Upravit trenink
+          Upravit trénink
         </Typography>
       </Box>
       <Box sx={{ width: "80%", marginLeft: "auto", marginRight: "auto" }}>

@@ -65,7 +65,7 @@ const AddTreningHall: React.FC<Props> = ({ onClose, id }) => {
         <Typography
           sx={{ fontSize: "1.2em", fontWeight: "500", marginTop: "1em" }}
         >
-          Přidat treninkovou halu
+          Přidat tréninkovou halu
         </Typography>
       </Box>
       <Box sx={{}}>

@@ -29,7 +29,7 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
 const items = [
   { label: "Kalendar", caption: "Kalendář", image: Calendar },
-  { label: "Trainings", caption: "Treninky", image: Trainings },
+  { label: "Trainings", caption: "Tréninky", image: Trainings },
   { label: "Matchs", caption: "Zápasy", image: Nominations },
   { label: "Rouster", caption: "Soupisky", image: Rousters },
   { label: "Team", caption: "Tým", image: TeamIcon },

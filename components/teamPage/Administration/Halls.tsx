@@ -604,7 +604,7 @@ const Halls: React.FC<Props> = ({ id }) => {
                 sx={{ fontWeight: "500", whiteSpace: "nowrap" }}
                 variant="h5"
               >
-                Treninkové haly
+                Tréninkové haly
               </Typography>
             </Box>
             {role == 1 && (
@@ -660,7 +660,7 @@ const Halls: React.FC<Props> = ({ id }) => {
                 ))}
               </List>
             ) : (
-              <Typography>Žádné treninkové haly</Typography>
+              <Typography>Žádné tréninkové haly</Typography>
             )}
           </Box>
         )}

@@ -164,7 +164,7 @@ const PastTraining: React.FC<Props> = ({ teamId }) => {
    
   
   if (!matchesData?.getPastTrainingsBySubteam || lenght === 0) {
-    return <Typography sx={{paddingLeft:"3%", paddingRight:"3%"}}>Nemáte žádný trénink který proběhl za poslední týden.</Typography>;
+    return <Typography sx={{paddingLeft:"3%", paddingRight:"3%"}}>Nemáte žádný trénink, který proběhl za poslední týden.</Typography>;
   }
 
   return (
@@ -223,7 +223,7 @@ const PastTraining: React.FC<Props> = ({ teamId }) => {
                     }}
                   >
                     <Typography variant="h6">
-                      Trenink: {training.opponentName}
+                      Trénink: {training.opponentName}
                     </Typography>
                     <Box sx={{ display: "flex" }}>
                       <Typography>

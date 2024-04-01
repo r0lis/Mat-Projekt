@@ -292,7 +292,7 @@ const AllTrainings: React.FC<Props> = ({ teamId }) => {
         </Box>
         <Box sx={{ padding: "1em", display: "flex" }}>
           {isRole3 ? (
-            <Typography>Treninky nejsou k dispozici</Typography>
+            <Typography>Tréninky nejsou k dispozici</Typography>
           ) : (
             <Typography>Dokončete vytvoření klubu ve správě.</Typography>
           )}
@@ -342,7 +342,7 @@ const AllTrainings: React.FC<Props> = ({ teamId }) => {
           </Typography>
         </Box>
         <Box sx={{ padding: "1em", display: "flex" }}>
-          <Typography>Nemáte naplánovaný žádný trenink.</Typography>
+          <Typography>Nemáte naplánovaný žádný trénink.</Typography>
         </Box>
       </Box>
     );
@@ -455,7 +455,7 @@ const AllTrainings: React.FC<Props> = ({ teamId }) => {
                     }}
                   >
                     <Typography variant="h6">
-                      Trenink: {training.opponentName}
+                      Trénink: {training.opponentName}
                       {(() => {
                         const trainingDate = new Date(
                           `${training.date}T${training.time}`
@@ -795,7 +795,7 @@ const AllTrainings: React.FC<Props> = ({ teamId }) => {
                     <Box>
                       <Box sx={{ display: "flex" }}>
                         <Typography sx={{ fontWeight: "500" }}>
-                          Popis treninku
+                          Popis tréninku
                         </Typography>
                         <IconButton
                           sx={{ marginLeft: "1%", marginTop: "-10px" }}

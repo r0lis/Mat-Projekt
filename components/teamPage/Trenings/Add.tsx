@@ -377,7 +377,7 @@ const AddMatch: React.FC<Props> = ({ teamId, closeAddTraining }) => {
             sx={{ fontFamily: "Roboto", fontWeight: "500" }}
             variant="h5"
           >
-            Přidat trenink
+            Přidat trénink
           </Typography>
         </Box>
 
@@ -608,7 +608,7 @@ const AddMatch: React.FC<Props> = ({ teamId, closeAddTraining }) => {
           <Box sx={{ marginTop: "1em" }}>
             <Box sx={{ marginBottom: "0.5em" }}>
               <Button variant="contained" onClick={handleAddMatch}>
-                Přidat trenink
+                Přidat trénink
               </Button>
             </Box>
             <Box sx={{ marginBottom: "1em" }}>

@@ -165,7 +165,7 @@ const PlanMatch: React.FC<Props> = ({ teamId }) => {
   const length = matchesData?.getPastMatchesBySubteam.map((subteam: { subteamId: string; matches: Match[] }) => subteam.matches).flat().length;
 
   if (!matchesData?.getPastMatchesBySubteam || length === 0){
-    return <Typography sx={{paddingLeft:"3%", paddingRight:"3%"}}>Nemáte žádný zápas který proběhl za poslední týden.</Typography>;
+    return <Typography sx={{paddingLeft:"3%", paddingRight:"3%"}}>Nemáte žádný zápas, který proběhl za poslední týden.</Typography>;
   }
 
   return (
