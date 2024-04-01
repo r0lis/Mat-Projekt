@@ -2,6 +2,7 @@ import React from "react";
 import pictureBackground from "../../../public/assets/uvodni1.jpg";
 import photo from "../../../public/assets/rosterbot.png";
 import { Box, Button, Typography, Link, Alert } from "@mui/material";
+import logo from "../../../public/assets/logo3.png";
 
 function RoleError() {
   return (
@@ -58,40 +59,38 @@ function RoleError() {
               }}
             >
               <Box
-                sx={{ marginLeft: "10%", marginRight: "10%", zIndex: "999" }}
+                sx={{
+                  marginLeft: "10%",
+                  marginRight: "10%",
+                  zIndex: "999",
+                  marginTop: "1.5em",
+                }}
               >
-                <Typography
-                  sx={{
-                    color: "white",
-                    fontFamily: "Roboto",
-                    fontWeight: "700",
-                    marginTop: "1em",
-                  }}
-                >
-                  LOGO
-                </Typography>
+                <img src={logo.src} alt="logo" width="20%" height="auto" />
+
                 <Typography
                   variant="h4"
                   sx={{
                     margin: "1rem",
-                    marginTop: "0.7em",
-                    marginBottom: "auto",
-                    fontSize: "3vw",
+                    marginTop: "0em",
+                    marginBottom: "",
+                    fontSize: "4vw",
                     fontFamily: "Roboto",
+                    marginLeft: "10%",
                     fontWeight: "bold",
                     color: "white",
                     textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
                   }}
                 >
-                  TEAM MANAGER
+                  Aplikace pro klubovou správu
                 </Typography>
               </Box>
               <Box
                 sx={{
-                  marginLeft: "10%",
-                  marginRight: "10%",
+                  marginLeft: "15%",
+                  marginRight: "15%",
                   zIndex: "999",
-                  marginTop: "2em",
+                  marginTop: "1em",
                   position: "relative",
                 }}
               >
