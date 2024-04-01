@@ -5,7 +5,7 @@ import { Box } from "@mui/material";
 const FooterImg: React.FC = () => {
   return (
     <Box
-      sx={{ position: "relative", height: "60vh", backgroundColor: "#F0F2F5" }}
+      sx={{ position: "relative", height: "60vh", backgroundColor: "#F0F2F5",}}
     >
       <Box
         sx={{
@@ -34,7 +34,7 @@ const FooterImg: React.FC = () => {
           left: "50%",
           transform: "translate(-50%, -50%)",
           color: "white",
-          fontSize: "4vw",
+          fontSize: ["2.5em", "3em", "4em"],
           textAlign: "center",
           opacity: 1,
           fontWeight: "bold",

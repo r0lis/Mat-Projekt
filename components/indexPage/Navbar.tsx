@@ -139,10 +139,10 @@ const Navbar: React.FC = () => {
 
   return (
     <AppBar
-      sx={{ backgroundColor: "#DA1AAD", height: "4.5em" }}
+      sx={{ backgroundColor: "#DA1AAD", height: "4.5em", minWidth: "100%",}}
       position="static"
     >
-      <Container maxWidth="xl">
+      <Container >
         <Toolbar disableGutters>
           <Box>
             <img

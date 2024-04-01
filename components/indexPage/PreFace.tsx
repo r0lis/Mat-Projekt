@@ -5,6 +5,7 @@ import arrowRight from "../../public/assets/arrow-right.png";
 import { Box } from "@mui/material";
 
 const PreFace: React.FC = () => {
+  const isMobile = window.innerWidth < 900;
   return (
     <Box
       sx={{
@@ -36,17 +37,17 @@ const PreFace: React.FC = () => {
         sx={{
           width: "27%",
           position: "absolute",
-          left: "15%",
+          left: ["8%","10%","15%"],
           height: "50%",
           marginTop: "0",
           textAlign: "left",
           padding: "1em",
-          top: ["6%", "8%", "10%"],
+          top: ["2%", "8%", "10%"],
         }}
       >
         <Box
           sx={{
-            fontSize: ["1em", "2.1em", "3.5em",],
+            fontSize: ["1.5em", "2.1em", "3.5em",],
             fontWeight: "bold",
             color: "white",
             textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
@@ -55,6 +56,7 @@ const PreFace: React.FC = () => {
         >
           WEBOVÁ APLIKACE PRO FLORBALOVÉ KLUBY
         </Box>
+        {isMobile ? (<Box></Box>) : (
         <Box
           sx={{
             fontSize: ["0.7em", "0.9em", "1.15em",],
@@ -66,13 +68,14 @@ const PreFace: React.FC = () => {
           veškerý přehled o vašem klubu na jednom místě. Aplikace je zdarma a má
           několik funkcí a výhod.
         </Box>
+        )}
         <Box
           sx={{
-            fontSize: ["0.8em", "1em", "1.15em",],
+            fontSize: ["0.9em", "1.1em", "1.15em",],
             color: "black",
             display: "flex",
             whiteSpace: "nowrap",
-            marginTop: ["7%", "10%", "18%"],
+            marginTop: ["12%", "10%", "18%"],
             width: "100%",
             marginLeft: "10%",
             alignItems: "center",
@@ -83,14 +86,14 @@ const PreFace: React.FC = () => {
           <img
             src={arrowRight.src}
             alt="arrowRight"
-            height={"8%"}
-            width={"8%"}
+            height={ isMobile? "12%" :"8%"}
+            width={isMobile? "12%" :"8%"}
             style={{ marginRight: "2%" }}
           />{" "}
           OBJEV VÝHODY
           <Box
             sx={{
-              fontSize: [ "0.9em", "1em", "1.25em"],
+              fontSize: [ "0.9em", "1.1em", "1.25em"],
               color: "white",
               paddingLeft: "10%",
             }}
