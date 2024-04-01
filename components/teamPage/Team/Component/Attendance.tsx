@@ -22,7 +22,7 @@ const Attendance: React.FC<AttendanceProps> = ({ subteamId }) => {
           onClick={() => setSelectedAttendance("training")}
           sx={{width:"10em"}}
         >
-          Treninky
+          Tréninky
         </Button>
         <Button
           variant={selectedAttendance === "match" ? "contained" : "outlined"}
