@@ -15,6 +15,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import NoTeam from "@/components/teamPage/Team/Component/Noteam";
 import ContentRouster from "./ContentRouster";
+import Formations from "./Formations";
 
 const GET_SUBTEAMS = gql`
   query GetYourSubteamData($teamId: String!, $email: String!) {
@@ -22,6 +23,15 @@ const GET_SUBTEAMS = gql`
       Name
       subteamId
       teamId
+    }
+  }
+`;
+
+const GET_USER_ROLE_IN_TEAM = gql`
+  query GetUserRoleInTeam($teamId: String!, $email: String!) {
+    getUserRoleInTeam(teamId: $teamId, email: $email) {
+      email
+      role
     }
   }
 `;
@@ -45,8 +55,19 @@ const Content: React.FC<TeamsProps> = ({ teamId }) => {
     variables: { teamId: teamId, email: user?.email || "" },
     skip: !user,
   });
+
+  const {
+    loading: roleLoading,
+    error: roleError,
+    data: roleData,
+  } = useQuery(GET_USER_ROLE_IN_TEAM, {
+    variables: { teamId: teamId, email: user?.email || "" },
+    skip: !user,
+  });
+
   const [isSelectVisible, setIsSelectVisible] = useState(false);
   const [selectedSubteam, setSelectedSubteam] = useState<string | null>(null);
+  const [showFormations, setShowFormations] = useState(false);
   const subteams: Subteam[] = data?.getYourSubteamData || [];
   useEffect(() => {
     if (data && data.getYourSubteamData && data.getYourSubteamData.length > 0) {
@@ -63,7 +84,7 @@ const Content: React.FC<TeamsProps> = ({ teamId }) => {
     setIsSelectVisible(!isSelectVisible);
   };
 
-  if (loading)
+  if (loading || roleLoading)
     return (
       <Box
         sx={{
@@ -76,9 +97,13 @@ const Content: React.FC<TeamsProps> = ({ teamId }) => {
         <CircularProgress color="primary" size={50} />
       </Box>
     );
-  if (subteamError) return <Typography>Chyba</Typography>;
+  if (subteamError || roleError) return <Typography>Chyba</Typography>;
 
-  console.log(subteams.length);
+  const toggleShowFormations = () => {
+    setShowFormations(!showFormations);
+  };
+
+  const role = roleData?.getUserRoleInTeam.role || "";
 
   return (
     <Box sx={{ marginLeft: "", marginRight: "2%" }}>
@@ -86,10 +111,29 @@ const Content: React.FC<TeamsProps> = ({ teamId }) => {
         <Box ml={2}>
           {subteams.map((subteam: Subteam) => (
             <Box key={subteam.subteamId}>
+              <Box sx={{ display: "flex" }}>
               <Typography sx={{ fontWeight: "600" }} variant="h5">
                 Přehled soupisek
               </Typography>
-              <ContentRouster subteamId={subteam.subteamId} idTeam={teamId} />
+              {role === "2" && (
+              <Button 
+                sx={{ marginLeft: "auto", backgroundColor: "#027ef2", marginRight:"5%" }}
+                onClick={toggleShowFormations}
+                variant="contained"
+              >
+                {showFormations ? "Soupisky" : "Formace"}
+              </Button>
+              )}
+              </Box>
+
+              {showFormations ? (
+                      <Formations subteamId={subteam.subteamId} />
+                    ) : (
+                      <ContentRouster
+                        subteamId={subteam.subteamId}
+                        idTeam={teamId}
+                      />
+                    )}
             </Box>
           ))}
         </Box>
@@ -99,9 +143,20 @@ const Content: React.FC<TeamsProps> = ({ teamId }) => {
         <>
           <Box sx={{ display: "flex" }}>
             <Box>
-              <Typography variant="h6">Váš tým</Typography>
+              <Typography sx={{ fontWeight: "600" }} variant="h5">
+                Přehled soupisek
+              </Typography>{" "}
             </Box>
             <Box sx={{ marginLeft: "auto" }}>
+              {role === "2" && (
+              <Button
+                sx={{ marginRight: "2em", backgroundColor: "#027ef2" }}
+                onClick={toggleShowFormations}
+                variant="contained"
+              >
+                {showFormations ? "Soupisky" : "Formace"}
+              </Button>
+              )}
               <Button
                 sx={{ marginRight: "2em", backgroundColor: "#027ef2" }}
                 onClick={handleToggleSelect}
@@ -130,10 +185,14 @@ const Content: React.FC<TeamsProps> = ({ teamId }) => {
               <div key={subteam.subteamId}>
                 {selectedSubteam === subteam.subteamId && (
                   <Typography variant="body1">
-                    <ContentRouster
-                      subteamId={subteam.subteamId}
-                      idTeam={teamId}
-                    />
+                    {showFormations ? (
+                      <Formations subteamId={subteam.subteamId} />
+                    ) : (
+                      <ContentRouster
+                        subteamId={subteam.subteamId}
+                        idTeam={teamId}
+                      />
+                    )}
                   </Typography>
                 )}
               </div>

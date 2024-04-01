@@ -259,7 +259,6 @@ const ContentRouster: React.FC<ContentRousterProps> = ({
   }
   const isRole1Or2 = role === "1" || role === "2";
 
-  console.log("filteredMembersToShow", filteredMembersToShow);
 
   return (
     <Box>
