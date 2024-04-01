@@ -96,15 +96,15 @@ const SwipeableTextMobileStepper: React.FC = () => {
             backgroundColor: "white",
             paddingTop: "6%",
             paddingBottom: "4%",
-            width: ["85%", "80%", "80%"],
+            width: ["100%", "80%", "80%"],
             height: "100%",
             marginLeft: "auto",
             marginRight: "auto",
-            borderRadius: "10px",
+            borderRadius: ["0px", "10px", "10px"],
             boxShadow: "0 0 10px rgba(0, 0, 0, 0.21)",
           }}
         >
-          <Box sx={{ maxWidth: ["95%", "80%", "70%"], flexGrow: 1 }}>
+          <Box sx={{ maxWidth: ["98%", "80%", "70%"], flexGrow: 1 }}>
             <AutoPlaySwipeableViews
               style={{ color: "purple" }}
               axis={theme.direction === "rtl" ? "x-reverse" : "x"}
