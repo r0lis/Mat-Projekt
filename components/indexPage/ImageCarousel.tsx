@@ -49,10 +49,29 @@ const SwipeableTextMobileStepper: React.FC = () => {
 
   return (
     <>
-      <div className="mainDiv2">
-        <div className="leftBorderDivImg">
-          <div className="leftBorderDivText">
-            <div className="appContentTextCarousel">
+      <Box sx={{ backgroundColor: "#F0F2F5" }}>
+        <Box
+          sx={{
+            marginLeft: "10%",
+            borderLeft: "6.5px solid #B71DDE",
+            backgroundColor: "#F0F2F5",
+            "@media screen and (max-width: 768px)": {
+              borderLeft: "5px solid #B71DDE",
+            },
+          }}
+        >
+          <Box className="leftBorderDivText">
+            <Box
+              sx={{
+                fontSize: "1.4vw",
+                color: "black",
+                position: "relative",
+                paddingLeft: "5%",
+                paddingTop: "5%",
+                marginLeft: "auto",
+                marginRight: "auto",
+              }}
+            >
               <Typography
                 sx={{
                   display: "block",
@@ -65,10 +84,26 @@ const SwipeableTextMobileStepper: React.FC = () => {
               >
                 Ukázky z <span style={{ color: "#B71DDE" }}>aplikace</span>
               </Typography>
-            </div>
-          </div>
-        </div>
-        <div className="divCarousel">
+            </Box>
+          </Box>
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            flexDirection: "column",
+            backgroundColor: "white",
+            paddingTop: "6%",
+            paddingBottom: "4%",
+            width: "80%",
+            height: "100%",
+            marginLeft: "auto",
+            marginRight: "auto",
+            borderRadius: "10px",
+            boxShadow: "0 0 10px rgba(0, 0, 0, 0.21)",
+          }}
+        >
           <Box sx={{ maxWidth: "70%", flexGrow: 1 }}>
             <AutoPlaySwipeableViews
               style={{ color: "purple" }}
@@ -78,7 +113,7 @@ const SwipeableTextMobileStepper: React.FC = () => {
               enableMouseEvents
             >
               {images.map((step, index) => (
-                <div>
+                <Box>
                   {Math.abs(activeStep - index) <= 2 ? (
                     <Box
                       component="img"
@@ -92,12 +127,12 @@ const SwipeableTextMobileStepper: React.FC = () => {
                       src={step.imgPath}
                     />
                   ) : null}
-                </div>
+                </Box>
               ))}
             </AutoPlaySwipeableViews>
             <MobileStepper
               steps={maxSteps}
-              className="mobileStepperStyle"
+              sx={{ backgroundColor: "white" }}
               position="static"
               activeStep={activeStep}
               nextButton={
@@ -132,8 +167,8 @@ const SwipeableTextMobileStepper: React.FC = () => {
               }
             />
           </Box>
-        </div>{" "}
-      </div>
+        </Box>{" "}
+      </Box>
     </>
   );
 };

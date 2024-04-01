@@ -2,54 +2,111 @@ import React from "react";
 import FacebookIcon from "../../public/assets/facebook.png";
 import InstagramIcon from "../../public/assets/instagram.png";
 import TwitterIcon from "../../public/assets/twitter.png";
+import { Box, Typography } from "@mui/material";
+import logo from "../../public/assets/logobile.png";
 
 const Footer: React.FC = () => {
   return (
     <>
-      <div className="footerContainerStyle">
-        <div className="todoStyle">
-          <div className="columnStyle">
-            <p>LOGO ProFlorbal</p>
+      <Box
+        sx={{
+          borderTop: "6px solid #B71DDE",
+          marginTop: "5%",
+          display: "flex",
+          justifyContent: "space-between",
+          padding: "20px",
+          "@media screen and (max-width: 768px)": {
+            borderTop: "5px solid #B71DDE",
+          },
+        }}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            marginLeft: "15%",
+            marginRight: "auto",
+            flex: 3,
+          }}
+        >
+          <Box
+            sx={{
+              flex: 1,
+              textAlign: "left",
+              fontSize: "1.4vw",
+              fontWeight: "bold",
+            }}
+          >
+            <Typography>LOGO ProFlorbal</Typography>
             <span style={{ fontSize: "1.2vw" }}>
-              <p>Aplikace pro florbalové kluby</p>
-              <p>Efektivní komunikace</p>
-              <p>Vše na jednom místě</p>
-              <p>Správa více týmů v jednom klubu</p>
-             
+              <Typography>Aplikace pro florbalové kluby</Typography>
+              <Typography>Efektivní komunikace</Typography>
+              <Typography>Vše na jednom místě</Typography>
+              <Typography>Správa více týmů v jednom klubu</Typography>
             </span>
-          </div>
+          </Box>
 
-          <div className="columnStyle">
-            <p>Kontakty: </p>
+          <Box
+            sx={{
+              flex: 1,
+              textAlign: "left",
+              fontSize: "1.4vw",
+              fontWeight: "bold",
+            }}
+          >
+            <Typography>Kontakty: </Typography>
             <span style={{ fontSize: "1.2vw" }}>
-              <p>appteammanager@gmail.com</p>
-              <p>Lukáš Rolenec</p>
-              <p>luky.rolenec@seznam.cz</p>
-              <p>+420 732 742 713</p>
+              <Typography>appteammanager@gmail.com</Typography>
+              <Typography>Lukáš Rolenec</Typography>
+              <Typography>luky.rolenec@seznam.cz</Typography>
+              <Typography>+420 732 742 713</Typography>
             </span>
-          </div>
+          </Box>
 
-          <div className="columnStyle">
-            <p>Sledujte nás na sítích</p>
+          <Box
+            sx={{
+              flex: 1,
+              textAlign: "left",
+              fontSize: "1.4vw",
+              fontWeight: "bold",
+            }}
+          >
+            <Typography>Sledujte nás na sítích</Typography>
             <img
               src={FacebookIcon.src}
               alt="Facebook"
-              className="socialIconStyle"
+              style={{ marginRight: "4%", width: "2.5em", height: "2.5em" }}
             />
             <img
               src={InstagramIcon.src}
               alt="Instagram"
-              className="socialIconStyle"
+              style={{ marginRight: "4%", width: "2.5em", height: "2.5em" }}
             />
             <img
               src={TwitterIcon.src}
               alt="Twitter"
-              className="socialIconStyle"
+              style={{ marginRight: "4%", width: "2.5em", height: "2.5em" }}
             />
-          </div>
-        </div>
-      </div>
-      <div className="footerBarStyle">LOGO</div>
+          </Box>
+        </Box>
+      </Box>
+      <Box
+        sx={{
+          backgroundColor: "#B71DDE",
+          height: "60px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          color: "white",
+          fontWeight: "bold",
+          fontSize: "1.4vw",
+        }}
+      >
+        <img
+          src={logo.src}
+          alt="Logo"
+          style={{ width: "10em", height: "auto", marginTop:"0.5em"}}
+        />
+      </Box>
     </>
   );
 };

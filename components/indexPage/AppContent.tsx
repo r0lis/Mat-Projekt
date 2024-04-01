@@ -1,58 +1,290 @@
-import { Typography } from '@mui/material'
-import React from 'react'
-import comunicationImg from '../../public/assets/message.png';
-import teamImg from '../../public/assets/network.png';
-import listHospitalImg from '../../public/assets/patient.png';
-import trainingPlanImg from '../../public/assets/training.png';
+import { Box, Typography } from "@mui/material";
+import React from "react";
+import comunicationImg from "../../public/assets/message.png";
+import teamImg from "../../public/assets/network.png";
+import listHospitalImg from "../../public/assets/patient.png";
+import trainingPlanImg from "../../public/assets/training.png";
 import Settings from "../../public/assets/Settings.png";
 
-
 const AppContent: React.FC = () => {
+  return (
+    <Box style={{ zIndex: "-999", backgroundColor: "#F0F2F5" }}>
+      <Box sx={{ zIndex: "50" }}>
+        <Box
+          sx={{
+            backgroundColor: "#F0F2F5",
+            borderLeft: "6.5px solid #B71DDE",
+            position: "relative",
+            marginLeft: "10%",
+            "@media screen and (max-width: 768px)": {
+              borderLeft: "5px solid #B71DDE",
+            },
+          }}
+        >
+          <Box
+            sx={{
+              fontSize: "1.2vw",
+              color: "black",
+              paddingLeft: "5%",
+              paddingTop: "5%",
+            }}
+          >
+            <Typography sx={{ fontSize: "2vw", fontWeight: "bold" }}>
+              Co aplikace <span style={{ color: "#B71DDE" }}>poskytuje</span> ?
+            </Typography>
+          </Box>
+          <Box
+            style={{ backgroundColor: "#F0F2F5" }}
+            sx={{
+              position: "relative",
+              marginLeft: "14%",
+              backgroundColor: "F0F2F5",
+            }}
+          >
+            <Box
+              sx={{
+                content: "''",
+                position: "absolute",
+                top: 0,
+                left: "-5px",
+                height: "100%",
+                width: "6px",
+                backgroundColor: "#B71DDE",
+                borderRadius: "10px",
+                "@media screen and (max-width: 768px)": {
+                  width: "4px",
+                  borderLeft: "5px solid #B71DDE",
+                },
+              }}
+            ></Box>
+            <Box
+              sx={{
+                textAlign: "center",
+                justifyContent: "center",
+                backgroundColor: "#F0F2F5",
+              }}
+            >
+              <Box
+                sx={{
+                  marginTop: "7%",
+                  marginBottom: "7%",
+                  width: "50%",
+                  padding: "5% 10% 5% 10%",
+                  marginLeft: "1.5%",
+                  marginRight: "auto",
+                  backgroundColor: "#FFE0FE",
+                  borderRadius: "10px",
+                  fontWeight: "bold",
+                  textAlign: "center",
+                  display: "flex",
+                  fontSize: "1.6vw",
+                  alignItems: "center",
+                  border: "1px solid #ff96fc",
+                }}
+              >
+                <img
+                  style={{ width: "10%", marginRight: "5%" }}
+                  src={comunicationImg.src}
+                />
+                Skvělá komunikace v klubu
+              </Box>
+            </Box>
+          </Box>
+          <Box
+            sx={{
+              position: "relative",
+              marginLeft: "14%",
+              backgroundColor: "#F0F2F5",
+            }}
+          >
+            <Box
+              sx={{
+                content: "''",
+                position: "absolute",
+                top: 0,
+                left: "-5px",
+                height: "100%",
+                width: "6px",
+                backgroundColor: "#B71DDE",
+                borderRadius: "10px",
+                "@media screen and (max-width: 768px)": {
+                  width: "4px",
+                  borderLeft: "5px solid #B71DDE",
+                },
+              }}
+            ></Box>{" "}
+            <Box
+              sx={{
+                marginTop: "7%",
+                marginBottom: "7%",
+                width: "50%",
+                padding: "5% 10% 5% 10%",
+                marginLeft: "1.5%",
+                marginRight: "auto",
+                backgroundColor: "#FFE0FE",
+                borderRadius: "10px",
+                fontWeight: "bold",
+                textAlign: "center",
+                display: "flex",
+                fontSize: "1.6vw",
+                alignItems: "center",
+                border: "1px solid #ff96fc",
+              }}
+            >
+              <img
+                style={{ width: "10%", marginRight: "5%" }}
+                src={Settings.src}
+              />{" "}
+              Správa více týmů v klubu
+            </Box>
+          </Box>
+          <Box
+            sx={{
+              position: "relative",
+              marginLeft: "14%",
+              backgroundColor: "#F0F2F5",
+            }}
+          >
+            <Box
+              sx={{
+                content: "''",
+                position: "absolute",
+                top: 0,
+                left: "-5px",
+                height: "100%",
+                width: "6px",
+                backgroundColor: "#B71DDE",
+                borderRadius: "10px",
+                "@media screen and (max-width: 768px)": {
+                  width: "4px",
+                  borderLeft: "5px solid #B71DDE",
+                },
+              }}
+            ></Box>{" "}
+            <Box
+              sx={{
+                marginTop: "7%",
+                marginBottom: "7%",
+                width: "50%",
+                padding: "5% 10% 5% 10%",
+                marginLeft: "1.5%",
+                marginRight: "auto",
+                backgroundColor: "#FFE0FE",
+                borderRadius: "10px",
+                fontWeight: "bold",
+                textAlign: "center",
+                display: "flex",
+                fontSize: "1.6vw",
+                alignItems: "center",
+                border: "1px solid #ff96fc",
+              }}
+            >
+              <img
+                style={{ width: "10%", marginRight: "5%" }}
+                src={teamImg.src}
+              />{" "}
+              Tvoření soupisek, přehled docházky událostí
+            </Box>
+          </Box>
+          <Box
+            sx={{
+              position: "relative",
+              marginLeft: "14%",
+              backgroundColor: "#F0F2F5",
+            }}
+          >
+            <Box
+              sx={{
+                content: "''",
+                position: "absolute",
+                top: 0,
+                left: "-5px",
+                height: "100%",
+                width: "6px",
+                backgroundColor: "#B71DDE",
+                borderRadius: "10px",
+                "@media screen and (max-width: 768px)": {
+                  width: "4px",
+                  borderLeft: "5px solid #B71DDE",
+                },
+              }}
+            ></Box>{" "}
+            <Box
+              sx={{
+                marginTop: "7%",
+                marginBottom: "7%",
+                width: "50%",
+                padding: "5% 10% 5% 10%",
+                marginLeft: "1.5%",
+                marginRight: "auto",
+                backgroundColor: "#FFE0FE",
+                borderRadius: "10px",
+                fontWeight: "bold",
+                textAlign: "center",
+                display: "flex",
+                fontSize: "1.6vw",
+                alignItems: "center",
+                border: "1px solid #ff96fc",
+              }}
+            >
+              <img
+                style={{ width: "10%", marginRight: "5%" }}
+                src={trainingPlanImg.src}
+              />{" "}
+              Tvoření tréninkových plánů
+            </Box>
+          </Box>
+          <Box
+            sx={{
+              position: "relative",
+              marginLeft: "14%",
+              backgroundColor: "#F0F2F5",
+            }}
+          >
+            <Box
+              sx={{
+                content: "''",
+                position: "absolute",
+                top: 0,
+                left: "-5px",
+                height: "100%",
+                width: "6px",
+                backgroundColor: "#B71DDE",
+                borderRadius: "10px",
+                "@media screen and (max-width: 768px)": {
+                  width: "4px",
+                  borderLeft: "5px solid #B71DDE",
+                },
+              }}
+            ></Box>{" "}
+            <Box
+              sx={{
+                marginTop: "8%",
+                width: "50%",
+                padding: "6% 10% 6% 10%",
+                marginLeft: "1.5%",
+                marginRight: "auto",
+                backgroundColor: "#FFE0FE",
+                borderRadius: "10px",
+                fontWeight: "bold",
+                textAlign: "center",
+                display: "flex",
+                fontSize: "1.8vw",
+                alignItems: "center",
+                border: "1px solid #ff96fc",
+              }}
+            >
+              <img
+                style={{ width: "10%", marginRight: "5%" }}
+                src={listHospitalImg.src}
+              />{" "}
+              Zdravotní prohlídky
+            </Box>
+          </Box>
+        </Box>
+      </Box>
+    </Box>
+  );
+};
 
-    return (
-        <div style={{zIndex:'-999', backgroundColor:'#F0F2F5'}} >
-
-            <div className='mainDiv'>
-                <div style={{ backgroundColor: '#F0F2F5' }} className='divAppContent2'>
-                    <div className='appContentTextContent'>
-                        <Typography sx={{ fontSize: '2vw', fontWeight: 'bold' }}>
-                            Co aplikace <span style={{ color: '#B71DDE' }}>poskytuje</span> ?
-                        </Typography>
-                    </div>
-                    <div style={{ backgroundColor: '#F0F2F5' }} className='leftBorderDiv'>
-                        <div className='leftBorderPseudoElement'></div>
-                        <div className='DivBlock'>
-                            <div className='featuresDiv'>
-                                <img className='iconStyle' src={comunicationImg.src} />
-                                Skvělá komunikace v klubu
-                            </div>
-                        </div>
-                    </div>
-                    <div className='leftBorderDiv'>
-                        <div className='leftBorderPseudoElement'></div>
-                        <div className='featuresDiv'><img className='iconStyle' src={Settings.src} /> Správa více týmů v klubu</div>
-                    </div>
-                    <div className='leftBorderDiv'>
-                        <div className='leftBorderPseudoElement'></div>
-                        <div className='featuresDiv'><img className='iconStyle' src={teamImg.src} /> Tvoření soupisek, přehled docházky událostí</div>
-                    </div>
-                    <div className='leftBorderDiv'>
-                        <div className='leftBorderPseudoElement'></div>
-                        <div className='featuresDiv'><img className='iconStyle' src={trainingPlanImg.src} /> Tvoření tréninkových plánů</div>
-                    </div>
-                    <div className='leftBorderDiv'>
-                        <div className='leftBorderPseudoElement'></div>
-                        <div className='lastfeaturesDiv'><img className='iconStyle' src={listHospitalImg.src} /> Zdravotní prohlídky</div>
-
-
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-
-    )
-}
-
-export default AppContent
+export default AppContent;
