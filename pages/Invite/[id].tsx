@@ -3,14 +3,29 @@ import React, { useEffect } from "react";
 import { useRouter } from "next/router";
 import photo from "../../public/assets/rosterbot.png";
 import pictureBackground from "../../public/assets/uvodni.jpg";
-import { Alert, Box, Button, CircularProgress, Link, Typography } from "@mui/material";
+import {
+  Alert,
+  Box,
+  Button,
+  CircularProgress,
+  Link,
+  Typography,
+} from "@mui/material";
 import { gql, useQuery } from "@apollo/client";
+import logo from "../../public/assets/logo3.png";
 
 const CHECK_USER_MEMBERSHIP = gql`
-  query CheckUserMembershipInvite($teamId: String!, $currentUserEmail: String!) {
-    checkUserMembershipInvite(teamId: $teamId, currentUserEmail: $currentUserEmail)
+  query CheckUserMembershipInvite(
+    $teamId: String!
+    $currentUserEmail: String!
+  ) {
+    checkUserMembershipInvite(
+      teamId: $teamId
+      currentUserEmail: $currentUserEmail
+    )
   }
 `;
+
 
 
 const Invite: React.FC = () => {
@@ -18,9 +33,11 @@ const Invite: React.FC = () => {
   const { id } = router.query;
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { id, email, token } = router.query as { id: string; email: string; token: string };
-
-    
+    const { id, email, token } = router.query as {
+      id: string;
+      email: string;
+      token: string;
+    };
   }, [router.query]);
   const currentUserEmail = router.query.email;
 
@@ -32,11 +49,9 @@ const Invite: React.FC = () => {
     variables: { teamId: router.query.id, currentUserEmail },
   });
 
-  
-
   if (loadingUser)
-  return (
-    <Box
+    return (
+      <Box
         sx={{
           display: "flex",
           alignItems: "center",
@@ -46,28 +61,29 @@ const Invite: React.FC = () => {
       >
         <CircularProgress color="primary" size={50} />
       </Box>
-  );
-if (errorUser) {
-  console.error("Error checking user membership:", errorUser);
-  return <p>Error checking user membership</p>;
-}
+    );
+  if (errorUser) {
+    console.error("Error checking user membership:", errorUser);
+    return <p>Error checking user membership</p>;
+  }
 
-const isUserMember = dataUser.checkUserMembershipInvite;
-if (isUserMember == false) {
-  return (
-    <Box>
-      <Alert severity="error">
-        Tato akce neni dostupná
-        <br />
-        <Link href="/">
-          <Button sx={{ backgroundColor: "red" }}>
-            <Typography sx={{ color: "#fff" }}>Zpět</Typography>
-          </Button>
-        </Link>
-      </Alert>
-    </Box>
-  );
-}
+  const isUserMember = dataUser.checkUserMembershipInvite;
+  if (isUserMember == false) {
+    return (
+      <Box>
+        <Alert severity="error">
+          Tato akce neni dostupná
+          <br />
+          <Link href="/">
+            <Button sx={{ backgroundColor: "red" }}>
+              <Typography sx={{ color: "#fff" }}>Zpět</Typography>
+            </Button>
+          </Link>
+        </Alert>
+      </Box>
+    );
+  }
+  const isSmallView = window.innerWidth <= 800;
 
   return (
     <Box
@@ -97,8 +113,9 @@ if (isUserMember == false) {
         <Box sx={{ display: "flex", flexDirection: "row", width: "100%" }}>
           <Box
             sx={{
-              width: "60%",
-              maxHeight: "30em",
+              width: "100%",
+              display: isSmallView ? "none" : "",
+              minHeight: "30em",
               position: "relative",
               zIndex: "1", // Ensure content is above the background image
               borderRadius: "0 0 15px 15px",
@@ -125,23 +142,20 @@ if (isUserMember == false) {
               }}
             >
               <Box
-                sx={{ marginLeft: "10%", marginRight: "10%", zIndex: "999" }}
+                sx={{
+                  marginLeft: "5%",
+                  marginRight: "10%",
+                  zIndex: "999",
+                  marginTop: "1.5em",
+                }}
               >
-                <Typography
-                  sx={{
-                    color: "white",
-                    fontFamily: "Roboto",
-                    fontWeight: "700",
-                    marginTop: "1em",
-                  }}
-                >
-                  LOGO
-                </Typography>
+                <img src={logo.src} alt="logo" width="20%" height="auto" />
+
                 <Typography
                   variant="h4"
                   sx={{
                     margin: "1rem",
-                    marginTop: "0.7em",
+                    marginTop: "0em",
                     marginBottom: "auto",
                     fontSize: "4vw",
                     fontFamily: "Roboto",
@@ -150,15 +164,15 @@ if (isUserMember == false) {
                     textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
                   }}
                 >
-                  TEAM MANAGER
+                  Aplikace pro klubovou správu
                 </Typography>
 
                 <Box
                   sx={{
-                    marginLeft: "5%",
-                    marginRight: "5%",
+                    marginLeft: "10%",
+                    marginRight: "10%",
                     zIndex: "999",
-                    marginTop: "2em",
+                    marginTop: "1em",
                     position: "relative",
                   }}
                 >
@@ -174,18 +188,33 @@ if (isUserMember == false) {
               </Box>
             </Box>
           </Box>
-          <Box sx={{ marginLeft: "auto", marginRight: "auto" }}>
+          <Box sx={{width:"100%"}}>
             <Box>
+               {isSmallView && (
+              <Box
+                sx={{
+                  backgroundColor: "#b71dde",
+                  height: "5em",
+                  borderRadius: "15px 15px 0 0",
+                }}
+              >
+                <Box sx={{ marginLeft: "2em", paddingTop: "0.8em" }}>
+                  <img src={logo.src} alt="logo" width="150" height="auto" />
+                </Box>
+              </Box>
+            )}
               <Box
                 sx={{
                   width: "100%", // Set the desired width for the box
                   textAlign: "center",
                   position: "relative",
                   display: "flex",
+                  paddingBottom: isSmallView ? "1em" : "0",
                   marginLeft: "auto",
                   marginRight: "auto",
                 }}
               >
+                
                 <Box
                   sx={{
                     marginLeft: "auto",
@@ -196,13 +225,13 @@ if (isUserMember == false) {
                   }}
                 >
                   <Typography
-                    variant="h4"
+                    variant="h5"
                     sx={{
                       marginBottom: "1em",
-                      fontSize: "2.7vw",
+                      fontSize: isSmallView? "" : "2.5em",
                       fontFamily: "Roboto",
                       fontWeight: "800",
-                      marginTop: "40%",
+                      marginTop: isSmallView? "5%" : "20%",
 
                       textAlign: "center",
                     }}
