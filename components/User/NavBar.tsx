@@ -16,7 +16,7 @@ const NavBar: React.FC = () => {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+      <AppBar position="static" sx={{ backgroundColor: "#A020F0",  display: "flex", }}>
         <Toolbar>
           <IconButton
             size="large"
