@@ -63,7 +63,7 @@ const HowToUse: React.FC = () => {
                   sx={{
                     display: "block",
                     paddingTop: isMobile ? "0.4em" : "0.4em",
-                    paddingBottom: isMobile ? "0.5em" : "0.3em",
+                    paddingBottom: isMobile ? "0.5em" : "0.25em",
                     borderBottom: isMobile
                       ? "1px solid black"
                       : "2px solid black",
@@ -76,6 +76,7 @@ const HowToUse: React.FC = () => {
                       fontSize: isMobile ? "1.7em" : "1.5vw",
                       fontFamily: "Roboto",
                       fontWeight: "500",
+                      paddingTop: "0.1em",
                     }}
                   >
                     Krok 1
@@ -147,7 +148,7 @@ const HowToUse: React.FC = () => {
                   sx={{
                     display: "block",
                     paddingTop: isMobile ? "0.4em" : "0.4em",
-                    paddingBottom: isMobile ? "0.5em" : "0.3em",
+                    paddingBottom: isMobile ? "0.5em" : "0.25em",
                     borderBottom: isMobile
                       ? "1px solid black"
                       : "2px solid black",
@@ -209,7 +210,7 @@ const HowToUse: React.FC = () => {
                   sx={{
                     display: "block",
                     paddingTop: isMobile ? "0.4em" : "0.4em",
-                    paddingBottom: isMobile ? "0.5em" : "0.3em",
+                    paddingBottom: isMobile ? "0.5em" : "0.25em",
                     borderBottom: isMobile
                       ? "1px solid black"
                       : "2px solid black",
@@ -222,6 +223,7 @@ const HowToUse: React.FC = () => {
                       fontSize: isMobile ? "1.7em" : "1.5vw",
                       fontFamily: "Roboto",
                       fontWeight: "500",
+                      paddingTop: "0.1em",
                     }}
                   >
                     Krok 3
@@ -284,7 +286,7 @@ const HowToUse: React.FC = () => {
                   sx={{
                     display: "block",
                     paddingTop: isMobile ? "0.4em" : "0.4em",
-                    paddingBottom: isMobile ? "0.5em" : "0.3em",
+                    paddingBottom: isMobile ? "0.5em" : "0.25em",
                     borderBottom: isMobile
                       ? "1px solid black"
                       : "2px solid black",
@@ -294,6 +296,7 @@ const HowToUse: React.FC = () => {
                     sx={{
                       top: "0%",
                       color: "white",
+                      paddingTop: "0.1em",
                       fontSize: isMobile ? "1.7em" : "1.5vw",
                       fontFamily: "Roboto",
                       fontWeight: "500",
