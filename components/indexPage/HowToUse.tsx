@@ -161,6 +161,7 @@ const HowToUse: React.FC = () => {
                       fontSize: isMobile ? "1.7em" : "1.5vw",
                       fontFamily: "Roboto",
                       fontWeight: "500",
+                      paddingTop: "0.1em",
                     }}
                   >
                     Krok 2
