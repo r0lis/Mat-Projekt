@@ -74,17 +74,24 @@ const GET_USER_ROLE_IN_TEAM = gql`
 `;
 
 const UPDATE_SUBTEAM_MEMBER = gql`
-  mutation UpdateSubteamMember($subteamId: String!, $email: String!, $position: String!) {
-    updateSubteamMember(subteamId: $subteamId, email: $email, position: $position)
+  mutation UpdateSubteamMember(
+    $subteamId: String!
+    $email: String!
+    $position: String!
+  ) {
+    updateSubteamMember(
+      subteamId: $subteamId
+      email: $email
+      position: $position
+    )
   }
 `;
 
 const DELETE_SUBTEAM_MEMBER = gql`
-mutation DeleteSubteamMember($subteamId: String!, $email: String!) {
-  deleteSubteamMember(subteamId: $subteamId, email: $email)
-}
+  mutation DeleteSubteamMember($subteamId: String!, $email: String!) {
+    deleteSubteamMember(subteamId: $subteamId, email: $email)
+  }
 `;
-
 
 type MembersProps = {
   subteamId: string;
@@ -238,16 +245,15 @@ const Members: React.FC<MembersProps> = (subteamId) => {
   if (loading || missingMembersLoading || roleLoading)
     return (
       <Box
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        height: "80vh",
-        
-      }}
-    >
-      <CircularProgress color="primary" size={50} />
-    </Box>
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "80vh",
+        }}
+      >
+        <CircularProgress color="primary" size={50} />
+      </Box>
     );
   if (error || missingMembersError || roleError)
     return <Typography>Chyba</Typography>;
@@ -334,7 +340,7 @@ const Members: React.FC<MembersProps> = (subteamId) => {
   }
 
   return (
-    <Box sx={{paddingTop:"1.5em"}}>
+    <Box sx={{ paddingTop: "1.5em" }}>
       {addMember ? (
         <Box>
           <Box sx={{ marginLeft: "10%" }}>
@@ -417,42 +423,56 @@ const Members: React.FC<MembersProps> = (subteamId) => {
                       <Table>
                         <TableHead>
                           <TableRow>
-                            <TableCell>Člen</TableCell>
+                            <TableCell>Jméno</TableCell>
+                            <TableCell>Příjmení</TableCell>
                             <TableCell>E-mail</TableCell>
                             <TableCell>Práva</TableCell>
                             <TableCell>Pozice</TableCell>
                           </TableRow>
                         </TableHead>
                         <TableBody>
-                          {addMembers.map((member) => (
-                            <TableRow
-                              sx={{ borderTop: "2px solid gray" }}
-                              key={member.email}
-                            >
-                              <TableCell>{member.email}</TableCell>
-                              <TableCell>{member.email}</TableCell>
-                              <TableCell>
-                                {" "}
-                                {getRoleText(member.role.toString())}
-                              </TableCell>
-                              <TableCell>
-                                <Select
-                                  value={member.position || "0"} // Default to "0" if position is not set
-                                  onChange={(e) =>
-                                    handlePositionChange(e, member.email)
-                                  }
+                          {addMembers.map((member) => {
+                            // Find the member in missingMembers based on email
+                            const missingMember = missingMembers.find(
+                              (m: { email: string }) => m.email === member.email
+                            );
+                            // Render only if missingMember is found
+                            if (missingMember) {
+                              return (
+                                <TableRow
+                                  sx={{ borderTop: "2px solid gray" }}
+                                  key={missingMember.email}
                                 >
-                                  <MenuItem value="0">Vyberte</MenuItem>
-                                  <MenuItem value="1">Správce</MenuItem>
-                                  <MenuItem value="2">Hlavní trenér</MenuItem>
-                                  <MenuItem value="3">
-                                    Asistent trenéra
-                                  </MenuItem>
-                                  <MenuItem value="4">Hráč</MenuItem>
-                                </Select>
-                              </TableCell>
-                            </TableRow>
-                          ))}
+                                  <TableCell>{missingMember.name}</TableCell>
+                                  <TableCell>{missingMember.surname}</TableCell>
+                                  <TableCell>{missingMember.email}</TableCell>
+                                  <TableCell>
+                                    {getRoleText(missingMember.role.toString())}
+                                  </TableCell>
+                                  <TableCell>
+                                    <Select
+                                      value={member.position || "0"} // Default to "0" if position is not set
+                                      onChange={(e) =>
+                                        handlePositionChange(e, member.email)
+                                      }
+                                    >
+                                      <MenuItem value="0">Vyberte</MenuItem>
+                                      <MenuItem value="1">Správce</MenuItem>
+                                      <MenuItem value="2">
+                                        Hlavní trenér
+                                      </MenuItem>
+                                      <MenuItem value="3">
+                                        Asistent trenéra
+                                      </MenuItem>
+                                      <MenuItem value="4">Hráč</MenuItem>
+                                    </Select>
+                                  </TableCell>
+                                </TableRow>
+                              );
+                            } else {
+                              return null; // If member not found in missingMembers, don't render
+                            }
+                          })}
                         </TableBody>
                       </Table>
                     </TableContainer>
@@ -460,8 +480,14 @@ const Members: React.FC<MembersProps> = (subteamId) => {
                 </Box>
               </Box>
             ) : (
-              <Box sx={{marginLeft:"10%", marginRight:"10%", marginBottom:"1em"}}>
-              <Alert severity="success">Všichni členové jsou přidáni.</Alert>
+              <Box
+                sx={{
+                  marginLeft: "10%",
+                  marginRight: "10%",
+                  marginBottom: "1em",
+                }}
+              >
+                <Alert severity="success">Všichni členové jsou přidáni.</Alert>
               </Box>
             )}
           </Box>
@@ -573,7 +599,7 @@ const Members: React.FC<MembersProps> = (subteamId) => {
                 <TableRow>
                   <TableCell>Člen</TableCell>
                   <TableCell>E-mail</TableCell>
-                  {(role == 1 &&<TableCell>Práva</TableCell>)}
+                  {role == 1 && <TableCell>Práva</TableCell>}
                   <TableCell>Pozice</TableCell>
                   {editMember && <TableCell>Úprava</TableCell>}
                 </TableRow>
@@ -588,34 +614,38 @@ const Members: React.FC<MembersProps> = (subteamId) => {
                       {member.name} {member.surname}
                     </TableCell>
                     <TableCell>{member.email}</TableCell>
-                    {(role == 1 &&<TableCell>{getRoleText(member.role.toString())}</TableCell>)}
+                    {role == 1 && (
+                      <TableCell>
+                        {getRoleText(member.role.toString())}
+                      </TableCell>
+                    )}
                     <TableCell>{getPositionText(member.position)}</TableCell>
                     <TableCell>
                       {editMember && (
                         <Box>
-                        <Button
-                  sx={{
-                    backgroundColor: "red",
-                    ":hover": { backgroundColor: "gray" },
-                    color: "white",
-                    marginRight: "1em",
-                  }}
-                  onClick={() => handleDeleteClick(member)}
-                >
-                  Smazat
-                </Button>
-                        <Button
-                          sx={{
-                            backgroundColor: "#027ef2",
-                            ":hover": {
-                              backgroundColor: "gray",
-                            },
-                            color: "white",
-                          }}
-                          onClick={() => handleEditClick(member)}
-                        >
-                          Upravit
-                        </Button>
+                          <Button
+                            sx={{
+                              backgroundColor: "red",
+                              ":hover": { backgroundColor: "gray" },
+                              color: "white",
+                              marginRight: "1em",
+                            }}
+                            onClick={() => handleDeleteClick(member)}
+                          >
+                            Smazat
+                          </Button>
+                          <Button
+                            sx={{
+                              backgroundColor: "#027ef2",
+                              ":hover": {
+                                backgroundColor: "gray",
+                              },
+                              color: "white",
+                            }}
+                            onClick={() => handleEditClick(member)}
+                          >
+                            Upravit
+                          </Button>
                         </Box>
                       )}
                     </TableCell>
@@ -626,7 +656,11 @@ const Members: React.FC<MembersProps> = (subteamId) => {
           </TableContainer>
         </Box>
       )}
-      <Dialog sx={{height:"auto"}} open={isEditModalOpen} onClose={() => setEditModalOpen(false)}>
+      <Dialog
+        sx={{ height: "auto" }}
+        open={isEditModalOpen}
+        onClose={() => setEditModalOpen(false)}
+      >
         <Box sx={{ padding: "0 2em 0em 2em", fontFamily: "Roboto" }}>
           <DialogTitle>
             Člen
@@ -644,9 +678,13 @@ const Members: React.FC<MembersProps> = (subteamId) => {
               <form>
                 <Grid container spacing={2} alignItems="center">
                   <Grid item xs={4}>
-                    <Typography sx={{marginTop:"-1em"}} variant="subtitle1">Email:</Typography>
+                    <Typography sx={{ marginTop: "-1em" }} variant="subtitle1">
+                      Email:
+                    </Typography>
                     <Typography variant="subtitle1">Práva:</Typography>
-                    <Typography sx={{marginTop:"3em"}} variant="subtitle1">Pozice:</Typography>
+                    <Typography sx={{ marginTop: "3em" }} variant="subtitle1">
+                      Pozice:
+                    </Typography>
                   </Grid>
                   <Grid item xs={8}>
                     <Typography
@@ -655,10 +693,13 @@ const Members: React.FC<MembersProps> = (subteamId) => {
                     >
                       {selectedMember.email}
                     </Typography>
-                    <Typography sx={{paddingBottom:"2em"}} variant="subtitle1">
+                    <Typography
+                      sx={{ paddingBottom: "2em" }}
+                      variant="subtitle1"
+                    >
                       {getRoleText(selectedMember.role)}
                     </Typography>
-                    <FormControl  fullWidth>
+                    <FormControl fullWidth>
                       <Select
                         value={selectedMember.position}
                         onChange={(e) => {

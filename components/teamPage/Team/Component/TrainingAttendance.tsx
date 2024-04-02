@@ -86,7 +86,9 @@ const calculateAttendancePercentage = (
       (a: { player: string }) => a.player === memberEmail
     );
     if (attendance) {
+      if (attendance.hisAttendance !== 0){
       totalMatches++;
+      }
       if (attendance.hisAttendance === 1) {
         totalPresence++;
       }
@@ -168,30 +170,33 @@ const TrainingAttendance: React.FC<{ subteamId: string }> = ({ subteamId }) => {
   });
 
   const selectedMemberAttendance = selectedMember
-  ? filteredMatches.map((match) => {
+  ? filteredMatches.reduce((result, match) => {
       // Zjistěte, zda je vybraný člen pozván na tento zápas
       const isInvited = match.attendance?.some((a: { player: string }) => a.player === selectedMember);
       if (isInvited) {
         const attendance = match.attendance.find((a: { player: string }) => a.player === selectedMember);
-        return {
-          name: match.date,
-          hisAttendance: attendance ? attendance.hisAttendance : 0,
-        };
+        // Zkontrolujte, jestli je účast 1 nebo 2, jinak nepřidávejte tento zápas do výsledku
+        if (attendance && [1, 2].includes(attendance.hisAttendance)) {
+          result.push({
+            name: match.date,
+            hisAttendance: attendance.hisAttendance,
+          });
+        }
       }
-      // Pokud není pozván, vraťte null
-      return null;
-    }).filter(Boolean) // Odfiltrujte nullové hodnoty
+      return result;
+    }, [])
   : [];
+
 
 const pieChartData = selectedMemberAttendance.length > 0
   ? [
       {
         name: "Přítomen",
-        value: selectedMemberAttendance.filter((entry) => entry?.hisAttendance === 1).length,
+        value: selectedMemberAttendance.filter((entry: { hisAttendance: number; }) => entry?.hisAttendance === 1).length,
       },
       {
         name: "Nepřítomen",
-        value: selectedMemberAttendance.filter((entry) => entry?.hisAttendance === 2).length,
+        value: selectedMemberAttendance.filter((entry: { hisAttendance: number; }) => entry?.hisAttendance === 2).length,
       },
     ]
   : [];
