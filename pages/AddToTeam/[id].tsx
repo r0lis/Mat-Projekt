@@ -400,6 +400,9 @@ const AddToTeam: React.FC = () => {
                           boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.2)",
                           padding: "0.7em",
                           borderRadius: "4px",
+                          ":hover": {
+                            backgroundColor: "#b71dde",
+                          },
                         }}
                       >
                         Přihlásit se

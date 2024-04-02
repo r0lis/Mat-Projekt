@@ -272,6 +272,9 @@ const Invite: React.FC = () => {
                           boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.2)",
                           padding: "1em",
                           borderRadius: "4px",
+                          ":hover": {
+                            backgroundColor: "#b71dde",
+                          },
                         }}
                       >
                         Registrovat
@@ -299,6 +302,9 @@ const Invite: React.FC = () => {
                           boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.2)",
                           padding: "1em",
                           borderRadius: "4px",
+                          ":hover": {
+                            backgroundColor: "#b71dde",
+                          },
                         }}
                       >
                         Už mám účet
