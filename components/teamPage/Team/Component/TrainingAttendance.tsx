@@ -239,7 +239,7 @@ const pieChartData = selectedMemberAttendance.length > 0
                         })}
                     </TableCell>
                   ))}
-                  <TableCell>Průměr (%)</TableCell>
+                  <TableCell>Průměr (%) <Typography sx={{fontSize:"0.9em"}}>k dnešnímu dni</Typography></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
