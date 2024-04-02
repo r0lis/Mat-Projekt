@@ -2261,11 +2261,16 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                     borderBottom: "2px solid gray", // Change the color as needed
                     position: "absolute",
                     top:
+                    selectedMember?.Role === "1" && selectedMember?.Email !== currentUserEmail
+                    ? "76%"
+                    :
                       selectedMember?.Role === "1" ||
                       (selectedMember?.Role === "2" &&
                         selectedMember?.Email === currentUserEmail)
                         ? "80%"
-                        : selectedMember?.Role === "1" ||
+                        : 
+                       
+
                           selectedMember?.Role === "2"
                         ? "76%"
                         : selectedMember?.Email === currentUserEmail
@@ -2293,6 +2298,9 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                     borderBottom: "2px solid gray", // Change the color as needed
                     position: "absolute",
                     top:
+                    selectedMember?.Role === "1" && selectedMember?.Email !== currentUserEmail
+                    ? "59%"
+                    :
                       selectedMember?.Role === "1" ||
                       (selectedMember?.Role === "2" &&
                         selectedMember?.Email === currentUserEmail)
@@ -2317,6 +2325,9 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                     borderBottom: "2px solid gray", // Change the color as needed
                     position: "absolute",
                     top:
+                    selectedMember?.Role === "1" && selectedMember?.Email !== currentUserEmail
+                    ? "17%"
+                    :
                       selectedMember?.Role === "1" ||
                       (selectedMember?.Role === "2" &&
                         selectedMember?.Email === currentUserEmail)
