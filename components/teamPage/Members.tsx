@@ -358,6 +358,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
 
       const imageBase64 = selectedImage;
       console.log(imageBase64);
+      window.location.reload();
     } catch (error: any) {
       console.error("Error uploading user medical doc:", error.message);
     }
@@ -1258,8 +1259,8 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                                   : "Není zvoleno"}
                               </Typography>
                             </Box>
-                            {member.docDate === "No Date Assigned" ? (
-                              ""
+                            {member.doc == "No Doc Assigned" ? (
+                              <Box></Box>
                             ) : (
                               <Button
                                 onClick={handleOpenModalDoc}
@@ -1278,6 +1279,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                               </Button>
                             )}
                           </Box>
+
                           <Typography
                             sx={{ color: "black", fontWeight: "500" }}
                           >
@@ -1414,36 +1416,40 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                       </Button>
                     </Box>
                     <Modal
-                    open={modalOpenLeave}
-                    onClose={() => setModalOpenLeave(false)}
-                    aria-labelledby="modal-title"
-                    aria-describedby="modal-description"
-                  >
-                    <Box
-                      sx={{
-                        position: "absolute",
-                        width: 400,
-                        bgcolor: "background.paper",
-                        border: "2px solid #000",
-                        boxShadow: 24,
-                        p: 4,
-                        top: "50%",
-                        left: "50%",
-                        transform: "translate(-50%, -50%)",
-                      }}
+                      open={modalOpenLeave}
+                      onClose={() => setModalOpenLeave(false)}
+                      aria-labelledby="modal-title"
+                      aria-describedby="modal-description"
                     >
-                      <Typography id="modal-title" variant="h6" component="h2">
-                        Opravdu chcete opustit klub?
-                      </Typography>
-                      <Typography id="modal-description" sx={{ mt: 2 }}>
-                        Po opuštění klubu nebudete mít přístup k jeho zdrojům a
-                        informacím.
-                      </Typography>
-                      <Button onClick={handleLeaveTeam} sx={{ mt: 4 }}>
-                        Potvrdit
-                      </Button>
-                    </Box>
-                  </Modal>
+                      <Box
+                        sx={{
+                          position: "absolute",
+                          width: 400,
+                          bgcolor: "background.paper",
+                          border: "2px solid #000",
+                          boxShadow: 24,
+                          p: 4,
+                          top: "50%",
+                          left: "50%",
+                          transform: "translate(-50%, -50%)",
+                        }}
+                      >
+                        <Typography
+                          id="modal-title"
+                          variant="h6"
+                          component="h2"
+                        >
+                          Opravdu chcete opustit klub?
+                        </Typography>
+                        <Typography id="modal-description" sx={{ mt: 2 }}>
+                          Po opuštění klubu nebudete mít přístup k jeho zdrojům
+                          a informacím.
+                        </Typography>
+                        <Button onClick={handleLeaveTeam} sx={{ mt: 4 }}>
+                          Potvrdit
+                        </Button>
+                      </Box>
+                    </Modal>
                   </Box>
                   <Modal
                     open={modalOpenPlayer}
@@ -1491,8 +1497,8 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                         }}
                       >
                         <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                          Sem vložte fotku pro nahrání zdravotní
-                          prohlídky. Nenahrávejte velké soubory.
+                          Sem vložte fotku pro nahrání zdravotní prohlídky.
+                          Nenahrávejte velké soubory.
                         </Typography>
                         <InputLabel htmlFor="imageInput">
                           <Input
@@ -2255,16 +2261,19 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                     borderBottom: "2px solid gray", // Change the color as needed
                     position: "absolute",
                     top:
-                    selectedMember?.Role === "1" ||
-                    selectedMember?.Role === "2" && selectedMember?.Email === currentUserEmail ? "80%"
-                    :    selectedMember?.Role === "1" ||
-                    selectedMember?.Role === "2"
-                      ? "76%": selectedMember?.Email === currentUserEmail
-                    ? "79%"
-                    : selectedMember?.Role === "0" ||
-                      selectedMember?.Role === "No Role Assigned"
-                      ? "78%"
-                      : "77.5%",
+                      selectedMember?.Role === "1" ||
+                      (selectedMember?.Role === "2" &&
+                        selectedMember?.Email === currentUserEmail)
+                        ? "80%"
+                        : selectedMember?.Role === "1" ||
+                          selectedMember?.Role === "2"
+                        ? "76%"
+                        : selectedMember?.Email === currentUserEmail
+                        ? "79%"
+                        : selectedMember?.Role === "0" ||
+                          selectedMember?.Role === "No Role Assigned"
+                        ? "78%"
+                        : "77.5%",
                     transform: "translateY(-50%)",
                     marginLeft: "-3em",
                     zIndex: -1,
@@ -2284,11 +2293,14 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                     borderBottom: "2px solid gray", // Change the color as needed
                     position: "absolute",
                     top:
-                        selectedMember?.Role === "1" ||
-                        selectedMember?.Role === "2" && selectedMember?.Email === currentUserEmail ? "62%" 
-                        :    selectedMember?.Role === "1" ||
-                        selectedMember?.Role === "2"
-                          ? "60%" : selectedMember?.Email === currentUserEmail
+                      selectedMember?.Role === "1" ||
+                      (selectedMember?.Role === "2" &&
+                        selectedMember?.Email === currentUserEmail)
+                        ? "62%"
+                        : selectedMember?.Role === "1" ||
+                          selectedMember?.Role === "2"
+                        ? "60%"
+                        : selectedMember?.Email === currentUserEmail
                         ? "61%"
                         : selectedMember?.Role === "0" ||
                           selectedMember?.Role === "No Role Assigned"
@@ -2305,12 +2317,14 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                     borderBottom: "2px solid gray", // Change the color as needed
                     position: "absolute",
                     top:
-                    
-                        selectedMember?.Role === "1" ||
-                        selectedMember?.Role === "2" && selectedMember?.Email === currentUserEmail ? "18%" 
-                        :    selectedMember?.Role === "1" ||
-                        selectedMember?.Role === "2"
-                          ? "17%" : selectedMember?.Email === currentUserEmail
+                      selectedMember?.Role === "1" ||
+                      (selectedMember?.Role === "2" &&
+                        selectedMember?.Email === currentUserEmail)
+                        ? "18%"
+                        : selectedMember?.Role === "1" ||
+                          selectedMember?.Role === "2"
+                        ? "17%"
+                        : selectedMember?.Email === currentUserEmail
                         ? "17%"
                         : selectedMember?.Role === "0" ||
                           selectedMember?.Role === "No Role Assigned"
