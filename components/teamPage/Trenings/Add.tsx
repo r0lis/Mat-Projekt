@@ -348,6 +348,7 @@ const AddMatch: React.FC<Props> = ({ teamId, closeAddTraining }) => {
       console.log("Match added successfully:", data.addMatch);
 
       closeAddTraining();
+      window.location.reload();
     } catch (error) {
       console.error("Error adding match:", error);
     }
