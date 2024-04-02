@@ -23,6 +23,7 @@ const AppContent: React.FC = () => {
           }}
         >
           <Box
+          id="Obsah"
             sx={{
               fontSize: "1.2vw",
               color: "black",

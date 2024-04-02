@@ -62,6 +62,7 @@ const SwipeableTextMobileStepper: React.FC = () => {
         >
           <Box className="leftBorderDivText">
             <Box
+            id="Ukázky"
               sx={{
                 fontSize: "1.4vw",
                 color: "black",

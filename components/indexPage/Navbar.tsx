@@ -139,19 +139,19 @@ const Navbar: React.FC = () => {
 
   return (
     <AppBar
-      sx={{ backgroundColor: "#DA1AAD", height: "4.5em", minWidth: "100%",}}
+      sx={{ backgroundColor: "#DA1AAD", height: "4.5em", minWidth: "100%" }}
       position="static"
     >
-      <Container >
+      <Container>
         <Toolbar disableGutters>
           <Box>
             <img
               src={logo.src}
               alt="logo"
               style={{
-                width: isSmallView? "6em" : "10em",
+                width: isSmallView ? "6em" : "10em",
                 position: "absolute",
-                top: isSmallView? "1.25em" : "0.5em",
+                top: isSmallView ? "1.25em" : "0.5em",
                 marginLeft: "3em",
               }}
             />
@@ -167,34 +167,41 @@ const Navbar: React.FC = () => {
             }}
           >
             {pages.map((page, index) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{
-                  my: 2,
-                  marginRight: "2.5em",
-                  color: "white",
-                  display: "block",
-                  fontWeight: "bold",
-                  fontSize: "1em",
-                  position: "relative",
-                  lineHeight: "20px",
-                }}
+              <Link
+                style={{ textDecoration: "none" }}
+                key={index}
+                href={`/#${page}`}
+                passHref
               >
-                {page}
-                <span
-                  className="bottom-border"
-                  style={{
-                    position: "absolute",
-                    bottom: "-3px",
-                    left: "0",
-                    right: "0",
-                    height: "5px",
-                    borderRadius: "5px 5px 5px 5px",
-                    backgroundColor: "whiteSmoke",
+                <Button
+                  key={page}
+                  onClick={handleCloseNavMenu}
+                  sx={{
+                    my: 2,
+                    marginRight: "2.5em",
+                    color: "white",
+                    display: "block",
+                    fontWeight: "bold",
+                    fontSize: "1em",
+                    position: "relative",
+                    lineHeight: "20px",
                   }}
-                ></span>
-              </Button>
+                >
+                  {page}
+                  <span
+                    className="bottom-border"
+                    style={{
+                      position: "absolute",
+                      bottom: "-3px",
+                      left: "0",
+                      right: "0",
+                      height: "5px",
+                      borderRadius: "5px 5px 5px 5px",
+                      backgroundColor: "whiteSmoke",
+                    }}
+                  ></span>
+                </Button>
+              </Link>
             ))}
           </Box>
 
@@ -213,7 +220,7 @@ const Navbar: React.FC = () => {
               aria-controls="menu-appbar"
               aria-haspopup="true"
               onClick={handleOpenNavMenu}
-              sx={{marginTop: isSmallView? "0.2em" : "0" }}
+              sx={{ marginTop: isSmallView ? "0.2em" : "0" }}
               color="inherit"
             >
               <MenuIcon />
@@ -235,7 +242,14 @@ const Navbar: React.FC = () => {
             >
               {pages.map((page) => (
                 <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
+                  <Link
+                    style={{ textDecoration: "none" }}
+                    key={page}
+                    href={`/#${page}`}
+                    passHref
+                  >
+                    <Typography textAlign="center">{page}</Typography>
+                  </Link>
                 </MenuItem>
               ))}
             </Menu>
@@ -247,25 +261,25 @@ const Navbar: React.FC = () => {
                 height: "6%",
                 width: "6%",
                 position: "relative",
-                marginTop:isSmallView? "0.6em" : "0.4em",
-               
+                marginTop: isSmallView ? "0.6em" : "0.4em",
               }}
               onClick={handleOpenMenu}
             >
               <Avatar
                 sx={{
-                  height: isSmallView? "2em" : "2.7em",
-                  width: isSmallView? "2em" : "2.7em",
-                  marginTop: isSmallView? "0.6em" : "",
+                  height: isSmallView ? "2em" : "2.7em",
+                  width: isSmallView ? "2em" : "2.7em",
+                  marginTop: isSmallView ? "0.6em" : "",
                   marginLeft: "auto",
                   marginRight: ["0.5rem", "1.5rem", "1rem"],
                   "&:hover img": {
                     transform: "scale(1.1)",
                     transition: "transform 0.3s ease",
-                  },                }}
+                  },
+                }}
                 alt={initials}
                 src={user ? userPicture : LoginIcon.src}
-                 // Set src to user's picture URL if it exists
+                // Set src to user's picture URL if it exists
               />
             </Box>
             <Menu
@@ -469,7 +483,11 @@ const Navbar: React.FC = () => {
                       <img
                         src={logo2.src}
                         alt="logo"
-                        style={{ width: "15em", top: "0.5em",transition: "transform 0.3s ease" }}
+                        style={{
+                          width: "15em",
+                          top: "0.5em",
+                          transition: "transform 0.3s ease",
+                        }}
                       />
                     </Box>
                     <Box sx={{ borderBottom: "7px solid #b71dde " }}></Box>
@@ -544,9 +562,9 @@ const Navbar: React.FC = () => {
                   boxShadow: "0 0 10px rgba(51, 0, 45, 0.8)",
                   border: "1px solid #b71dde",
                   position: "relative",
-                  padding: isSmallView? "10px 6px" : "6px 16px",
-                  height: isSmallView? "0" : "3rem",
-                  marginTop: isSmallView? "0.3em" : "0",
+                  padding: isSmallView ? "10px 6px" : "6px 16px",
+                  height: isSmallView ? "0" : "3rem",
+                  marginTop: isSmallView ? "0.3em" : "0",
                   ":hover": {
                     backgroundColor: "gray",
                     boxShadow: "0 0 10px rgba(51, 0, 45, 0.8)",

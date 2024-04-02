@@ -11,6 +11,7 @@ const Footer: React.FC = () => {
   return (
     <Box sx={{ width: "100%" }}>
       <Box
+      id="Kontakt"
         sx={{
           borderTop: "6px solid #B71DDE",
           marginTop: "2%",

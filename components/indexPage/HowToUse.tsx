@@ -19,6 +19,7 @@ const HowToUse: React.FC = () => {
         }}
       >
         <Box
+          id="Použití"
           sx={{
             fontSize: "1.2vw",
             color: "black",
