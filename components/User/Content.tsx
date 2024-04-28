@@ -146,12 +146,12 @@ const Content: React.FC = () => {
   return (
     <Box
       sx={{
-        width: "75%",
+        width: isMobile ? "80%" : "75%",
         marginLeft: "auto",
         marginRight: "auto",
         boxShadow: "0px 3px 15px rgba(0, 0, 0, 0.3)",
         marginTop: "2em",
-        padding: isMobile ? "0.5em" : "3%",
+        padding: isMobile ? "1em" : "3%",
         paddingTop: isMobile ? "1em" : "",
         borderRadius: "10px",
         marginBottom: "2em",
@@ -251,7 +251,7 @@ const Content: React.FC = () => {
                   <Box
                     sx={{
                       marginBottom: "1em",
-                      padding: "2%",
+                      padding: isMobile? "5%" : "2%",
                       borderRadius: "10px",
                       ...hoverStyle,
                       border: "1px solid gray",

@@ -211,6 +211,8 @@ endOfWeek.setHours(23, 59, 59, 999);
     return itemDate >= startOfWeekMinusOne;
   });
 
+  const isMobile = window.innerWidth < 600;
+
   return (
     <Box
       sx={{
@@ -248,11 +250,11 @@ endOfWeek.setHours(23, 59, 59, 999);
               {endOfWeek.toLocaleDateString("cs-CZ")}
             </Typography>
           </Box>
-          <CardContent sx={{ paddingLeft: "2em", paddingRight: "2em" }}>
+          <CardContent sx={{ paddingLeft: isMobile? "0.5em" : "2em", paddingRight: isMobile? "0.5em" : "2em",}}>
             <Typography variant="h6">Tréninky tento týden</Typography>
             <Typography>{trainingCount}</Typography>
           </CardContent>
-          <CardContent sx={{ paddingLeft: "2em", paddingRight: "2em" }}>
+          <CardContent sx={{ paddingLeft: isMobile? "0.5em" : "2em", paddingRight: isMobile? "0.5em" : "2em",}}>
             <Typography variant="h6">Zápasy tento týden</Typography>
             <Typography>{matchCount}</Typography>
           </CardContent>
@@ -278,11 +280,11 @@ endOfWeek.setHours(23, 59, 59, 999);
             </Typography>
           </Box>
 
-          <CardContent sx={{ paddingLeft: "2em", paddingRight: "2em" }}>
+          <CardContent sx={{ paddingLeft: isMobile? "0.5em" : "2em", paddingRight: isMobile? "0.5em" : "2em",}}>
             <Typography variant="h6">Tréninky nadcházející týden</Typography>
             <Typography>{nextWeekTrainingCount}</Typography>
           </CardContent>
-          <CardContent sx={{ paddingLeft: "2em", paddingRight: "2em" }}>
+          <CardContent sx={{ paddingLeft: isMobile? "0.5em" : "2em", paddingRight: isMobile? "0.5em" : "2em",}}>
             <Typography variant="h6">Zápasy nadcházející týden</Typography>
             <Typography>{nextWeekMatchCount}</Typography>
           </CardContent>

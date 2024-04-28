@@ -370,6 +370,7 @@ const AddMatch: React.FC<Props> = ({ teamId, closeAddTraining }) => {
   if (subteamError || completeError || errorHalls)
     return <Typography>Chyba</Typography>;
 
+  const isMobile = window.innerWidth < 600;
   return (
     <Box sx={{ maxHeight: "100vh", overflowY: "auto" }}>
       <Box>
@@ -387,7 +388,7 @@ const AddMatch: React.FC<Props> = ({ teamId, closeAddTraining }) => {
             <Typography variant="body2">Zvolte tým</Typography>
             <Select
               value={subteamIdSelected || ""}
-              sx={{ width: "50%", marginTop: "1em" }}
+              sx={{ width: isMobile? "100%":"50%", marginTop: "1em" }}
               onChange={handleSubteamChange}
             >
               <MenuItem value="" disabled>
@@ -407,7 +408,7 @@ const AddMatch: React.FC<Props> = ({ teamId, closeAddTraining }) => {
               type="text"
               value={opponentName}
               onChange={handleOpponentNameChange}
-              sx={{ width: "50%", marginTop: "1em" }}
+              sx={{ width: isMobile? "100%":"50%", marginTop: "1em" }}
               InputLabelProps={{
                 shrink: true,
               }}
@@ -419,7 +420,7 @@ const AddMatch: React.FC<Props> = ({ teamId, closeAddTraining }) => {
               type="date"
               value={date}
               onChange={handleDateChange}
-              sx={{ width: "50%", marginTop: "1em" }}
+              sx={{ width: isMobile? "100%":"50%", marginTop: "1em" }}
               InputLabelProps={{
                 shrink: true,
               }}
@@ -431,7 +432,7 @@ const AddMatch: React.FC<Props> = ({ teamId, closeAddTraining }) => {
               type="time"
               value={time}
               onChange={handleTimeChange}
-              sx={{ width: "50%", marginTop: "1em" }}
+              sx={{ width: isMobile? "100%":"50%", marginTop: "1em" }}
               InputLabelProps={{
                 shrink: true,
               }}
@@ -450,7 +451,7 @@ const AddMatch: React.FC<Props> = ({ teamId, closeAddTraining }) => {
               type="time"
               value={endTime}
               onChange={(e) => setEndTime(e.target.value)}
-              sx={{ width: "50%", marginTop: "1em" }}
+              sx={{ width: isMobile? "100%":"50%", marginTop: "1em" }}
               InputLabelProps={{
                 shrink: true,
               }}
@@ -469,7 +470,7 @@ const AddMatch: React.FC<Props> = ({ teamId, closeAddTraining }) => {
               type="text"
               value={description}
               onChange={handleDescriptionChange}
-              sx={{ width: "50%", marginTop: "1em" }}
+              sx={{ width: isMobile? "100%":"50%", marginTop: "1em" }}
               InputLabelProps={{
                 shrink: true,
               }}

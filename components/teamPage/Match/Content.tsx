@@ -1299,6 +1299,8 @@ const HallInfo: React.FC<HallInfoProps> = ({ teamId, hallId }) => {
   if (error) return <Typography>Error loading hall information</Typography>;
 
   const hall = data.getHallByTeamAndHallId;
+  const isMobile = window.innerWidth < 600;
+
   return (
     <Box sx={{ paddingBottom: "0.5em" }}>
       <Grid container spacing={2}>
@@ -1307,8 +1309,8 @@ const HallInfo: React.FC<HallInfoProps> = ({ teamId, hallId }) => {
           <Typography sx={{ fontWeight: "500" }}>Umístení: </Typography>
         </Grid>
         <Grid item xs={6}>
-          <Typography>{hall.name}</Typography>
-          <Typography>{hall.location}</Typography>
+        <Typography sx={{marginLeft: isMobile? "40px":""}}>{hall.name}</Typography>
+        <Typography sx={{marginLeft: isMobile? "40px":""}}>{hall.location}</Typography>
         </Grid>
       </Grid>
     </Box>

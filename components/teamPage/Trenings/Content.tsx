@@ -444,6 +444,7 @@ const Content: React.FC<Props> = ({ teamId }) => {
     }
   };
 
+
   return (
     <Box>
       {subteamIds.map((subteamId) => {
@@ -1311,7 +1312,7 @@ const HallInfo: React.FC<HallInfoProps> = ({ teamId, treningHallId }) => {
   if (error) return <Typography>Error loading hall information</Typography>;
 
   const hall = data.getTrainingHallByTeamAndHallId;
-  console.log(hall);
+  const isMobile = window.innerWidth < 600;
   return (
     <Box sx={{ paddingBottom: "0.5em" }}>
       <Grid container spacing={2}>
@@ -1320,8 +1321,8 @@ const HallInfo: React.FC<HallInfoProps> = ({ teamId, treningHallId }) => {
           <Typography sx={{ fontWeight: "500" }}>Umístení: </Typography>
         </Grid>
         <Grid item xs={6}>
-          <Typography>{hall.name}</Typography>
-          <Typography>{hall.location}</Typography>
+          <Typography sx={{marginLeft: isMobile? "40px":""}}>{hall.name}</Typography>
+          <Typography sx={{marginLeft: isMobile? "40px":""}}>{hall.location}</Typography>
         </Grid>
       </Grid>
     </Box>

@@ -134,18 +134,25 @@ const Content: React.FC = () => {
   
   );
 
+  const isMobile = window.innerWidth < 600;
+
   return (
     <Box sx={{ margin: "0 auto", marginTop: 4 }}>
       <Box
         sx={{
           backgroundColor: "white",
-          width: "65%",
+
+          width: isMobile? "90%" : "65%",
           marginLeft: "auto",
           marginRight: "auto",
-          padding: "5%",
+          padding: isMobile? "1%": "5%",
           marginTop: "6em",
           borderRadius: "10px",
           boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
+          paddingBottom:  isMobile? "20px": "5%",
+          paddingTop: isMobile? "20px": "5%",
+         
+
         }}
       >
         <Typography
@@ -156,7 +163,7 @@ const Content: React.FC = () => {
           Přidání uživatele do týmu
         </Typography>
 
-        <Box sx={{ width: "50%", marginLeft: "auto", marginRight: "auto" }}>
+        <Box sx={{ width: isMobile?"70%" : "50%", marginLeft: "auto", marginRight: "auto" }}>
           {isCreated ? (
             <Alert severity="success">
             Uživatele byli přidáni!

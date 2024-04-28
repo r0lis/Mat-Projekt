@@ -395,7 +395,7 @@ const Content: React.FC<ContentProps> = ({ subteamId, idTeam }) => {
             >
               <Typography
                 sx={{
-                  fontSize: ["0.8rem", "1.1rem", "1.5rem"],
+                  fontSize: ["0.8rem", "1.1rem", "1.5em"],
                   marginLeft: ["0.6rem", "1rem", "1rem"],
                   fontWeight: "600",
                   paddingTop: ["1.4rem", "1rem", "0.5em"],
@@ -509,7 +509,7 @@ const Content: React.FC<ContentProps> = ({ subteamId, idTeam }) => {
             <Box sx={{}}>
               <Typography
                 sx={{
-                  fontSize: ["0.8rem", "1.1rem", "1.5rem"],
+                  fontSize: ["1.2em", "1.1rem", "1.5rem"],
                   marginLeft: "1rem",
                   fontWeight: "600",
                   paddingTop: ["1.4rem", "1rem", "0.5em"],
@@ -540,7 +540,7 @@ const Content: React.FC<ContentProps> = ({ subteamId, idTeam }) => {
             <Box sx={{}}>
               <Typography
                 sx={{
-                  fontSize: ["0.8rem", "1.1rem", "1.5rem"],
+                  fontSize: ["1.2em", "1.1rem", "1.5rem"],
                   marginLeft: "1rem",
                   fontWeight: "600",
                   paddingTop: ["1.4rem", "1rem", "0.5em"],

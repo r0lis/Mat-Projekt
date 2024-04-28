@@ -370,6 +370,8 @@ const AddMatch: React.FC<Props> = ({ teamId, closeAddMatch }) => {
     }
   };
 
+  const isMobile = window.innerWidth < 600;
+
   if (loading || completeLoading || loadingHalls)
     return (
       <Box
@@ -403,7 +405,7 @@ const AddMatch: React.FC<Props> = ({ teamId, closeAddMatch }) => {
             <Typography variant="body2">Zvolte tým</Typography>
             <Select
               value={subteamIdSelected || ""}
-              sx={{ width: "50%", marginTop: "1em" }}
+              sx={{ width: isMobile? "100%":"50%", marginTop: "1em" }}
               onChange={handleSubteamChange}
             >
               <MenuItem value="" disabled>
@@ -423,7 +425,7 @@ const AddMatch: React.FC<Props> = ({ teamId, closeAddMatch }) => {
               type="text"
               value={opponentName}
               onChange={handleOpponentNameChange}
-              sx={{ width: "50%", marginTop: "1em" }}
+              sx={{ width: isMobile? "100%":"50%", marginTop: "1em" }}
               InputLabelProps={{
                 shrink: true,
               }}
@@ -435,7 +437,7 @@ const AddMatch: React.FC<Props> = ({ teamId, closeAddMatch }) => {
               type="date"
               value={date}
               onChange={handleDateChange}
-              sx={{ width: "50%", marginTop: "1em" }}
+              sx={{ width: isMobile? "100%":"50%", marginTop: "1em" }}
               InputLabelProps={{
                 shrink: true,
               }}
@@ -447,7 +449,7 @@ const AddMatch: React.FC<Props> = ({ teamId, closeAddMatch }) => {
               type="time"
               value={time}
               onChange={handleTimeChange}
-              sx={{ width: "50%", marginTop: "1em" }}
+              sx={{ width: isMobile? "100%":"50%", marginTop: "1em" }}
               InputLabelProps={{
                 shrink: true,
               }}
@@ -466,7 +468,7 @@ const AddMatch: React.FC<Props> = ({ teamId, closeAddMatch }) => {
               type="time"
               value={endTime}
               onChange={(e) => setEndTime(e.target.value)}
-              sx={{ width: "50%", marginTop: "1em" }}
+              sx={{ width: isMobile? "100%":"50%", marginTop: "1em" }}
               InputLabelProps={{
                 shrink: true,
               }}

@@ -205,16 +205,17 @@ const Content: React.FC<Props> = (teamId) => {
   const teamImage = dataImg.getTeamImg;
   const isMediumWindow = window.innerWidth < 800;
   const role = roleData?.getUserRoleInTeam?.role || "";
+  const isMobile = window.innerWidth < 600;
 
   return (
     <Box
       sx={{
-        width: "80%",
+        width: isMobile? "90%" : "80%",
         boxShadow: "0px 3px 15px rgba(0, 0, 0, 0.3)",
         borderRadius: "10px",
         padding: "3%",
         marginTop: "1em",
-        marginLeft: "6%",
+        marginLeft: isMobile? "0": "6%",
         marginBottom: "2em",
         marginRight: "5%",
       }}

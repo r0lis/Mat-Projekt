@@ -265,6 +265,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
 
   const role = roleData?.getUserRoleInTeam.role || "";
   const allMembers = data?.getTeamMembersDetails || [];
+  const isMobile = window.innerWidth < 600;
 
   const handleCloseModal = () => {
     setSelectedMember(null);
@@ -501,9 +502,9 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
       {role == 1 && (
         <TableContainer
           sx={{
-            width: "90%",
+            width: isMobile? "100%" : "90%",
             marginLeft: "auto",
-            marginRight: "auto",
+            marginRight: isMobile? "5%" : "auto",
             marginTop: "2em",
             marginBottom: "3em",
           }}

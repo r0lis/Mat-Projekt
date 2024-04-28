@@ -295,10 +295,11 @@ const TreniningComponent: React.FC<Props> = (id) => {
             <Box sx={{ maxHeight: "50vh" }}>
               <Typography
                 sx={{
-                  fontSize: ["0.8rem", "1.1rem", "1.5rem"],
+                  fontSize: ["1.em", "1.1rem", "1.5rem"],
                   marginLeft: "1rem",
                   marginBottom: "2em",
                   fontWeight: "600",
+                  whiteSpace: "nowrap",
                   paddingTop: ["1.4rem", "1rem", "0.5em"],
                 }}
               >
@@ -328,7 +329,7 @@ const TreniningComponent: React.FC<Props> = (id) => {
             <Box sx={{ maxHeight: "50vh" }}>
               <Typography
                 sx={{
-                  fontSize: ["0.8rem", "1.1rem", "1.5rem"],
+                  fontSize: ["1.em", "1.1rem", "1.5rem"],
                   marginLeft: "1rem",
                   fontWeight: "600",
                   paddingTop: ["1.4rem", "1rem", "0.5em"],
