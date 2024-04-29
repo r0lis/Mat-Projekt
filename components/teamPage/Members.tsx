@@ -25,6 +25,7 @@ import {
   Input,
   InputLabel,
 } from "@mui/material";
+import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
 import Collapse from "@mui/material/Collapse";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
@@ -1263,6 +1264,12 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                             {member.doc == "No Doc Assigned" ? (
                               <Box></Box>
                             ) : (
+                              isMobile ? (<Box>
+                                <InsertPhotoIcon
+                                  onClick={handleOpenModalDoc}
+                                  sx={{ cursor: "pointer" }}  
+                                />
+                              </Box>) : (
                               <Button
                                 onClick={handleOpenModalDoc}
                                 sx={{
@@ -1278,7 +1285,7 @@ const MembersComponent: React.FC<MembersProps> = ({ id }) => {
                               >
                                 Zobrazit
                               </Button>
-                            )}
+                            ))}
                           </Box>
 
                           <Typography
