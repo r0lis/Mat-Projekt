@@ -389,6 +389,7 @@ const Step1: React.FC<Step1Props> = ({ onCompleteTeamCreation }) => {
                   onChange={(e) => setEmailValue(e.target.value)}
                   placeholder="Zadejte e-mail"
                   variant="outlined"
+                  sx={{ width: "100%" }}
                 />
                 <Button
                   variant="contained"
